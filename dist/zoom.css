@@ -35,6 +35,8 @@
 
 .zoom-overlay-loading {
   cursor: wait; }
+  .zoom-overlay-loading [data-zoom='zoom-in'], .zoom-overlay-loading [data-zoom='zoom-out'] {
+    cursor: wait; }
 
 .zoom-overlay-transitioning .zoom-overlay-open .zoom-overlay,
 .zoom-overlay-open .zoom-overlay {
