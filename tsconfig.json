@@ -1,0 +1,14 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "target": "es5",
+    "sourceRoot": "src/script",
+    "outDir": "dist/"
+  },
+  "files": [
+    "./src/script/index.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

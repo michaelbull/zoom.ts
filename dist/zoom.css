@@ -1,0 +1,32 @@
+[data-zoom='zoom-in'] {
+  cursor: pointer;
+  cursor: -webkit-zoom-in;
+  cursor: -moz-zoom-in; }
+
+.zoom-media,
+.zoom-media-wrap {
+  position: relative;
+  transition: transform 400ms;
+  z-index: 2000; }
+
+.zoom-media {
+  cursor: pointer;
+  cursor: -webkit-zoom-out;
+  cursor: -moz-zoom-out; }
+
+.zoom-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transition: opacity 400ms;
+  opacity: 0;
+  z-index: 1000;
+  background: white;
+  pointer-events: none;
+  filter: 'alpha(opacity=0)'; }
+
+.zoom-overlay-open .zoom-overlay {
+  opacity: 1;
+  filter: 'alpha(opacity=100)'; }

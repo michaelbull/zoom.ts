@@ -1,0 +1,44 @@
+$zoom-background-color: hsl(0, 0%, 100%) !default;
+$zoom-transition-duration: 400ms !default;
+$image-z-index: 2000 !default;
+$overlay-z-index: 1000 !default;
+
+[data-zoom='zoom-in'] {
+  cursor: pointer;
+  cursor: -webkit-zoom-in;
+  cursor: -moz-zoom-in;
+}
+
+.zoom-media,
+.zoom-media-wrap {
+  position: relative;
+  transition: transform $zoom-transition-duration;
+  z-index: $image-z-index;
+}
+
+.zoom-media {
+  cursor: pointer;
+  cursor: -webkit-zoom-out;
+  cursor: -moz-zoom-out;
+}
+
+.zoom-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  transition: opacity $zoom-transition-duration;
+  opacity: 0;
+
+  z-index: $overlay-z-index;
+  background: $zoom-background-color;
+  pointer-events: none;
+  filter: 'alpha(opacity=0)';
+}
+
+.zoom-overlay-open .zoom-overlay {
+  opacity: 1;
+  filter: 'alpha(opacity=100)';
+}
