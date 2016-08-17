@@ -50,22 +50,21 @@
     "optimize-scss": "postcss --use cssnano --cssnano.autoprefixer.add true --no-cssnano.autoprefixer.remove --output dist/zoom.min.css dist/zoom.css",
     "watch-ts": "nodemon --ext ts --watch src/script --exec \"npm run compile-ts && npm run optimize-ts\"",
     "watch-scss": "nodemon --ext scss --watch src/style --exec \"npm run compile-scss && npm run optimize-scss\"",
-    "watch": "concurrently --kill-others 'npm run watch-ts' 'npm run watch-scss'",
+    "watch": "concurrently --kill-others \"npm run watch-ts\" \"npm run watch-scss\"",
     "build": "npm run clean && npm run lint-ts && npm run lint-scss && npm run compile-ts && npm run optimize-ts && npm run compile-scss && npm run optimize-scss"
   },
   "dependencies": {},
   "devDependencies": {
-    "browserify": "13.1.0",
-    "concurrently": "2.2.0",
-    "cssnano": "3.7.4",
-    "minifyify": "7.3.3",
-    "node-sass": "3.8.0",
-    "nodemon": "1.10.0",
-    "postcss-cli": "2.5.2",
-    "sass-lint": "1.8.2",
-    "tslint": "3.14.0",
-    "typescript": "1.8.10",
-    "tsify": "1.0.3",
-    "watch": "0.19.2"
+    "browserify": "^13.1.0",
+    "concurrently": "^2.2.0",
+    "cssnano": "^3.7.4",
+    "minifyify": "^7.3.3",
+    "node-sass": "^3.8.0",
+    "nodemon": "^1.10.0",
+    "postcss-cli": "^2.5.2",
+    "sass-lint": "^1.8.2",
+    "tsify": "^1.0.3",
+    "tslint": "^3.14.0",
+    "typescript": "^1.8.10"
   }
 }
