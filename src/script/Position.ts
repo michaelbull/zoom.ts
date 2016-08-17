@@ -1,19 +1,18 @@
-/*!
- * http://www.quirksmode.org/js/findpos.html
- */
-
-const MEMO_ATTR_KEY: string = 'data-offset-memo-key';
+import { POSITION_MEMO_KEY } from './Attributes';
 
 export class Position {
     private static origin: Position = new Position(0, 0);
     private static cache: {[key: number]: Position} = {};
 
+    /*!
+     * http://www.quirksmode.org/js/findpos.html
+     */
     public static of(element: HTMLElement): Position {
         if (!element.offsetParent) {
             return Position.origin;
         }
 
-        let key: string = element.getAttribute(MEMO_ATTR_KEY);
+        let key: string = element.getAttribute(POSITION_MEMO_KEY);
         if (key) {
             return Position.cache[key];
         }
@@ -22,7 +21,7 @@ export class Position {
             key = String(Math.random());
         } while (Position.cache[key]);
 
-        element.setAttribute(MEMO_ATTR_KEY, key);
+        element.setAttribute(POSITION_MEMO_KEY, key);
         Position.cache[key] = new Position(0, 0);
 
         let parent: HTMLElement = element;

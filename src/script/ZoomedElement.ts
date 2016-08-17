@@ -8,8 +8,7 @@ import {
     OVERLAY_CLASS,
     OVERLAY_OPEN_CLASS,
     OVERLAY_TRANSITIONING_CLASS,
-    WRAP_CLASS,
-    ZOOMED_CLASS
+    WRAP_CLASS
 } from './Classes';
 import { Position } from './Position';
 import { Zoomable } from './Zoomable';
@@ -23,7 +22,6 @@ export abstract class ZoomedElement {
     protected _element: Zoomable;
     protected _fullSrc: string;
     protected _wrap: HTMLDivElement;
-    protected _clone: Zoomable;
     protected _overlay: HTMLDivElement;
 
     constructor(element: Zoomable) {
@@ -58,9 +56,10 @@ export abstract class ZoomedElement {
 
         if (this._wrap && this._wrap.parentNode) {
             this.zoomOutElement();
-            this._clone.parentNode.replaceChild(this._element, this._clone);
-            this._wrap.parentNode.removeChild(this._wrap);
+
+            this._wrap.parentNode.replaceChild(this._element, this._wrap);
             this._overlay.parentNode.removeChild(this._overlay);
+
             document.body.classList.remove(OVERLAY_TRANSITIONING_CLASS);
             this.disposed();
         }
@@ -74,13 +73,12 @@ export abstract class ZoomedElement {
 
     protected zoomOriginal(width: number, height: number): void {
         this.createWrap();
-        this.createHiddenClone();
-        this.zoomInElement();
-        this._element.parentNode.replaceChild(this._clone, this._element);
+        this._element.parentNode.insertBefore(this._wrap, this._element);
         this._wrap.appendChild(this._element);
+
+        this.zoomInElement();
         this.createOverlay();
 
-        document.body.appendChild(this._wrap);
         document.body.appendChild(this._overlay);
 
         this.scale(width, height);
@@ -92,16 +90,6 @@ export abstract class ZoomedElement {
     private createWrap(): void {
         this._wrap = document.createElement('div');
         this._wrap.className = WRAP_CLASS;
-        this._wrap.style.position = 'absolute';
-
-        const position: Position = Position.of(this._element);
-        this._wrap.style.top = position._top + 'px';
-        this._wrap.style.left = position._left + 'px';
-    }
-
-    private createHiddenClone(): void {
-        this._clone = this._element.cloneNode() as Zoomable;
-        this._clone.style.visibility = 'hidden';
     }
 
     private createOverlay(): void {
@@ -110,14 +98,10 @@ export abstract class ZoomedElement {
     }
 
     private zoomInElement(): void {
-        this._element.style.width = this._element.offsetWidth + 'px';
-        this._element.classList.add(ZOOMED_CLASS);
         this._element.setAttribute(ZOOM_FUNCTION_KEY, ZOOM_OUT_VALUE);
     }
 
     private zoomOutElement(): void {
-        this._element.style.width = '';
-        this._element.classList.remove(ZOOMED_CLASS);
         this._element.setAttribute(ZOOM_FUNCTION_KEY, ZOOM_IN_VALUE);
     }
 

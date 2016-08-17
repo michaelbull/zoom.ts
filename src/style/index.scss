@@ -2,34 +2,37 @@ $zoom-background-color: hsl(0, 0%, 100%) !default;
 $zoom-transition-duration: 300ms !default;
 $zoom-media-z-index: 2000 !default;
 $zoom-overlay-z-index: 1000 !default;
+$overlay-opacity: 100;
 
 @mixin transition($property, $duration) {
   transition: $property $duration;
-  -webkit-transition: $property $duration;
-  -moz-transition: $property $duration;
   -o-transition: $property $duration;
+  -moz-transition: $property $duration;
+  -webkit-transition: $property $duration;
 }
 
 [data-zoom='zoom-in'] {
   cursor: pointer;
-  cursor: -webkit-zoom-in;
   cursor: -moz-zoom-in;
+  cursor: -webkit-zoom-in;
 }
 
-.zoom-media,
-.zoom-media-wrap {
+[data-zoom='zoom-out'] {
+  cursor: pointer;
+  cursor: -moz-zoom-out;
+  cursor: -webkit-zoom-out;
+}
+
+// Ensure the wrap and the zoomed element appear above the overlay
+[data-zoom='zoom-out'],
+.zoom-wrap {
   @include transition(transform, $zoom-transition-duration);
 
   position: relative;
   z-index: $zoom-media-z-index;
 }
 
-.zoom-media {
-  cursor: pointer;
-  cursor: -webkit-zoom-out;
-  cursor: -moz-zoom-out;
-}
-
+// An overlay that fills the entire viewport with a background colour and disables click events below it
 .zoom-overlay {
   @include transition(opacity, $zoom-transition-duration);
 
@@ -47,15 +50,28 @@ $zoom-overlay-z-index: 1000 !default;
   filter: 'alpha(opacity=0)';
 }
 
-.zoom-overlay-open {
+// Disable pointer events in the background when overlay is open or transitioning
+.zoom-overlay-open,
+.zoom-overlay-transitioning {
+  cursor: default;
   pointer-events: none;
+  user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
 
-  .zoom-media {
+// Set on the body when zoomed in
+.zoom-overlay-open {
+
+  // Allow click events only on the zoomed element
+  [data-zoom='zoom-out'] {
     pointer-events: auto;
   }
 
+  // Make the overlay visible
   .zoom-overlay {
-    opacity: 1;
-    filter: 'alpha(opacity=100)';
+    opacity: $overlay-opacity / 100;
+    filter: 'alpha(opacity=' + $overlay-opacity + ')';
   }
 }

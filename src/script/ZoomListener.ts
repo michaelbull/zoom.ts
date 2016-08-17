@@ -1,7 +1,8 @@
 import {
     FULL_SRC_KEY,
     ZOOM_FUNCTION_KEY,
-    ZOOM_IN_VALUE
+    ZOOM_IN_VALUE,
+    ZOOM_OUT_VALUE
 } from './Attributes';
 import { OVERLAY_OPEN_CLASS } from './Classes';
 import { Zoomable } from './Zoomable';
@@ -43,6 +44,8 @@ export class ZoomListener {
 
                 if (target.getAttribute(ZOOM_FUNCTION_KEY) === ZOOM_IN_VALUE) {
                     this.zoom(event);
+                } else if (target.getAttribute(ZOOM_FUNCTION_KEY) === ZOOM_OUT_VALUE) {
+                    this.close();
                 }
             });
         });
@@ -97,16 +100,13 @@ export class ZoomListener {
     }
 
     private addCloseListeners(): void {
-        // todo(fat): probably worth throttling this
         window.addEventListener('scroll', this.scrollListener);
-        document.addEventListener('click', this.clickListener);
         document.addEventListener('keyup', this.keyboardListener);
         document.addEventListener('touchstart', this.touchStartListener);
     }
 
     private removeCloseListeners(): void {
         window.removeEventListener('scroll', this.scrollListener);
-        document.removeEventListener('click', this.clickListener);
         document.removeEventListener('keyup', this.keyboardListener);
         document.removeEventListener('touchstart', this.touchStartListener);
     }
@@ -115,12 +115,6 @@ export class ZoomListener {
         if (Math.abs(this._initialScrollPosition - window.scrollY) >= SCROLL_Y_DELTA) {
             this.close();
         }
-    };
-
-    private clickListener: EventListener = (event: MouseEvent) => {
-        event.stopPropagation();
-        event.preventDefault();
-        this.close();
     };
 
     private keyboardListener: EventListener = (event: KeyboardEvent) => {
