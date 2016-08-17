@@ -22,26 +22,18 @@
         max-width: 700px;
       }
 
-      main img {
-        width: 100%;
+      img {
+        width: 100%
       }
 
-      main .pull-left, main .pull-right {
+      .pull-left {
         max-width: 55%;
-      }
-
-      main .pull-left {
         float: left;
-        margin: 20px 20px 20px -80px;
-      }
-
-      main .pull-right {
-        float: right;
-        margin: 20px -80px 20px 20px;
+        margin-right: 20px;
       }
 
       @media (max-width: 768px) {
-        main .pull-left, main .pull-right {
+        .pull-left {
           max-width: none;
           float: none;
           margin: 0 auto;
@@ -68,7 +60,7 @@
         <![endif]-->
           <source srcset="img/city.webp" type="image/webp">
           <source srcset="img/city.jpg">
-          <img src="img/city.jpg" data-zoom="zoom-in" class="pull-right">
+          <img src="img/city.jpg" data-zoom="zoom-in">
         <!--[if IE 9]>
           </video>
         <![endif]-->

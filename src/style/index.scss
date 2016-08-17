@@ -1,7 +1,14 @@
 $zoom-background-color: hsl(0, 0%, 100%) !default;
-$zoom-transition-duration: 400ms !default;
-$image-z-index: 2000 !default;
-$overlay-z-index: 1000 !default;
+$zoom-transition-duration: 300ms !default;
+$zoom-media-z-index: 2000 !default;
+$zoom-overlay-z-index: 1000 !default;
+
+@mixin transition($property, $duration) {
+  transition: $property $duration;
+  -webkit-transition: $property $duration;
+  -moz-transition: $property $duration;
+  -o-transition: $property $duration;
+}
 
 [data-zoom='zoom-in'] {
   cursor: pointer;
@@ -11,9 +18,10 @@ $overlay-z-index: 1000 !default;
 
 .zoom-media,
 .zoom-media-wrap {
+  @include transition(transform, $zoom-transition-duration);
+
   position: relative;
-  transition: transform $zoom-transition-duration;
-  z-index: $image-z-index;
+  z-index: $zoom-media-z-index;
 }
 
 .zoom-media {
@@ -23,16 +31,17 @@ $overlay-z-index: 1000 !default;
 }
 
 .zoom-overlay {
+  @include transition(opacity, $zoom-transition-duration);
+
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
 
-  transition: opacity $zoom-transition-duration;
   opacity: 0;
 
-  z-index: $overlay-z-index;
+  z-index: $zoom-overlay-z-index;
   background: $zoom-background-color;
   pointer-events: none;
   filter: 'alpha(opacity=0)';

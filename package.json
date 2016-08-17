@@ -47,7 +47,7 @@
     "compile-ts": "browserify src/script/index.ts --plugin tsify > dist/zoom.js",
     "compile-scss": "node-sass src/style/index.scss dist/zoom.css",
     "optimize-ts": "browserify dist/zoom.js --debug --plugin [minifyify --no-map] > dist/zoom.min.js",
-    "optimize-scss": "postcss --use cssnano --cssnano.autoprefixer.add true --no-cssnano.autoprefixer.remove --output dist/zoom.min.css dist/zoom.css",
+    "optimize-scss": "postcss --use cssnano --no-cssnano.autoprefixer --output dist/zoom.min.css dist/zoom.css",
     "watch-ts": "nodemon --ext ts --watch src/script --exec \"npm run compile-ts && npm run optimize-ts\"",
     "watch-scss": "nodemon --ext scss --watch src/style --exec \"npm run compile-scss && npm run optimize-scss\"",
     "watch": "concurrently --kill-others \"npm run watch-ts\" \"npm run watch-scss\"",
