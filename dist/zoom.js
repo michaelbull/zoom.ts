@@ -28,7 +28,7 @@ var Position = (function () {
         this._top = top;
         this._left = left;
     }
-    Position.from = function (element) {
+    Position.of = function (element) {
         if (!element.offsetParent) {
             return Position.origin;
         }
@@ -216,7 +216,7 @@ var ZoomedElement = (function () {
         this._wrap = document.createElement('div');
         this._wrap.className = Classes_1.WRAP_CLASS;
         this._wrap.style.position = 'absolute';
-        var position = Position_1.Position.from(this._element);
+        var position = Position_1.Position.of(this._element);
         this._wrap.style.top = position._top + 'px';
         this._wrap.style.left = position._left + 'px';
         this._clone = this._element.cloneNode();
@@ -262,7 +262,7 @@ var ZoomedElement = (function () {
         this.repaint();
         var viewportX = window.innerWidth / 2;
         var viewportY = window.scrollY + (window.innerHeight / 2);
-        var position = Position_1.Position.from(this._element);
+        var position = Position_1.Position.of(this._element);
         var mediaCenterX = position._left + ((this._element.width || this._element.offsetWidth) / 2);
         var mediaCenterY = position._top + ((this._element.height || this._element.offsetHeight) / 2);
         var translateX = Math.round(viewportX - mediaCenterX);

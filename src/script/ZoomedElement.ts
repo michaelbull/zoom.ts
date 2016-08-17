@@ -80,7 +80,7 @@ export abstract class ZoomedElement {
         this._wrap.className = WRAP_CLASS;
         this._wrap.style.position = 'absolute';
 
-        const position: Position = Position.from(this._element);
+        const position: Position = Position.of(this._element);
         this._wrap.style.top = position._top + 'px';
         this._wrap.style.left = position._left + 'px';
 
@@ -142,7 +142,7 @@ export abstract class ZoomedElement {
         const viewportX: number = window.innerWidth / 2;
         const viewportY: number = window.scrollY + (window.innerHeight / 2);
 
-        const position: Position = Position.from(this._element);
+        const position: Position = Position.of(this._element);
         const mediaCenterX: number = position._left + ((this._element.width || this._element.offsetWidth) / 2);
         const mediaCenterY: number = position._top + ((this._element.height || this._element.offsetHeight) / 2);
 

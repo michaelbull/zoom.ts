@@ -8,7 +8,7 @@ export class Position {
     private static origin: Position = new Position(0, 0);
     private static cache: {[key: number]: Position} = {};
 
-    public static from(element: HTMLElement): Position {
+    public static of(element: HTMLElement): Position {
         if (!element.offsetParent) {
             return Position.origin;
         }
