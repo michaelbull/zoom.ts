@@ -18,17 +18,33 @@ const SCROLL_Y_DELTA: number = 70;
 const TOUCH_Y_DELTA: number = 30;
 
 export class ZoomListener {
+
+    /*!
+     * http://youmightnotneedjquery.com/#ready
+     */
+    private static ready(fn: Function): void {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                fn();
+            });
+        } else {
+            fn();
+        }
+    }
+
     private _current: ZoomedElement;
     private _initialScrollPosition: number;
     private _initialTouchPosition: number;
 
     listen(): void {
-        document.body.addEventListener('click', (event: MouseEvent) => {
-            const target: Zoomable = event.target as Zoomable;
+        ZoomListener.ready(() => {
+            document.body.addEventListener('click', (event: MouseEvent) => {
+                const target: Zoomable = event.target as Zoomable;
 
-            if (target.getAttribute(ZOOM_FUNCTION_KEY) === ZOOM_IN_VALUE) {
-                this.zoom(event);
-            }
+                if (target.getAttribute(ZOOM_FUNCTION_KEY) === ZOOM_IN_VALUE) {
+                    this.zoom(event);
+                }
+            });
         });
     }
 

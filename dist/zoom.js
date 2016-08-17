@@ -96,13 +96,28 @@ var ZoomListener = (function () {
             }
         };
     }
+    /*!
+     * http://youmightnotneedjquery.com/#ready
+     */
+    ZoomListener.ready = function (fn) {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function () {
+                fn();
+            });
+        }
+        else {
+            fn();
+        }
+    };
     ZoomListener.prototype.listen = function () {
         var _this = this;
-        document.body.addEventListener('click', function (event) {
-            var target = event.target;
-            if (target.getAttribute(Attributes_1.ZOOM_FUNCTION_KEY) === Attributes_1.ZOOM_IN_VALUE) {
-                _this.zoom(event);
-            }
+        ZoomListener.ready(function () {
+            document.body.addEventListener('click', function (event) {
+                var target = event.target;
+                if (target.getAttribute(Attributes_1.ZOOM_FUNCTION_KEY) === Attributes_1.ZOOM_IN_VALUE) {
+                    _this.zoom(event);
+                }
+            });
         });
     };
     ZoomListener.prototype.zoom = function (event) {
