@@ -6,7 +6,7 @@ export class ZoomedImageElement extends ZoomedElement {
         const image: HTMLImageElement = document.createElement('img');
 
         image.onload = (): any => {
-            this.zoomOriginal(image.width, image.height);
+            this.loaded(image.width, image.height);
             this._element.removeAttribute(FULL_SRC_KEY);
         };
 

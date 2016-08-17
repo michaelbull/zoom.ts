@@ -50,6 +50,10 @@ $overlay-opacity: 100;
   filter: 'alpha(opacity=0)';
 }
 
+.zoom-overlay-loading {
+  cursor: wait;
+}
+
 // During the opening transition, and once opened, show the overlay
 .zoom-overlay-transitioning .zoom-overlay-open,
 .zoom-overlay-open {

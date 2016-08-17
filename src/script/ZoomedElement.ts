@@ -5,6 +5,7 @@ import {
     ZOOM_OUT_VALUE
 } from './Attributes';
 import {
+    OVERLAY_LOADING_CLASS,
     OVERLAY_OPEN_CLASS,
     OVERLAY_TRANSITIONING_CLASS,
     WRAP_CLASS
@@ -21,7 +22,6 @@ export abstract class ZoomedElement {
     protected _element: Zoomable;
     protected _fullSrc: string;
     protected _wrap: HTMLDivElement;
-    protected _overlay: HTMLDivElement;
 
     constructor(element: Zoomable) {
         this._element = element;
@@ -29,8 +29,7 @@ export abstract class ZoomedElement {
     }
 
     open(): void {
-        document.body.classList.add(OVERLAY_TRANSITIONING_CLASS);
-        document.body.classList.add(OVERLAY_OPEN_CLASS);
+        document.body.classList.add(OVERLAY_LOADING_CLASS);
 
         this.zoomedIn();
         this._element.src = this._fullSrc;
@@ -66,7 +65,11 @@ export abstract class ZoomedElement {
 
     protected abstract width(): number;
 
-    protected zoomOriginal(width: number, height: number): void {
+    protected loaded(width: number, height: number): void {
+        document.body.classList.remove(OVERLAY_LOADING_CLASS);
+        document.body.classList.add(OVERLAY_TRANSITIONING_CLASS);
+        document.body.classList.add(OVERLAY_OPEN_CLASS);
+
         this._wrap = document.createElement('div');
         this._wrap.className = WRAP_CLASS;
 

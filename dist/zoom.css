@@ -33,6 +33,9 @@
   pointer-events: none;
   filter: 'alpha(opacity=0)'; }
 
+.zoom-overlay-loading {
+  cursor: wait; }
+
 .zoom-overlay-transitioning .zoom-overlay-open .zoom-overlay,
 .zoom-overlay-open .zoom-overlay {
   opacity: 1;

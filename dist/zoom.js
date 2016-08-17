@@ -14,6 +14,7 @@ exports.ALWAYS_PLAY_VIDEO_VALUE = 'always';
 "use strict";
 exports.OVERLAY_CLASS = 'zoom-overlay';
 exports.OVERLAY_OPEN_CLASS = 'zoom-overlay-open';
+exports.OVERLAY_LOADING_CLASS = 'zoom-overlay-loading';
 exports.OVERLAY_TRANSITIONING_CLASS = 'zoom-overlay-transitioning';
 exports.WRAP_CLASS = 'zoom-wrap';
 
@@ -188,8 +189,7 @@ var ZoomedElement = (function () {
         element.style.transform = style;
     };
     ZoomedElement.prototype.open = function () {
-        document.body.classList.add(Classes_1.OVERLAY_TRANSITIONING_CLASS);
-        document.body.classList.add(Classes_1.OVERLAY_OPEN_CLASS);
+        document.body.classList.add(Classes_1.OVERLAY_LOADING_CLASS);
         this.zoomedIn();
         this._element.src = this._fullSrc;
         if ('transition' in document.body.style) {
@@ -215,7 +215,10 @@ var ZoomedElement = (function () {
             this.closed();
         }
     };
-    ZoomedElement.prototype.zoomOriginal = function (width, height) {
+    ZoomedElement.prototype.loaded = function (width, height) {
+        document.body.classList.remove(Classes_1.OVERLAY_LOADING_CLASS);
+        document.body.classList.add(Classes_1.OVERLAY_TRANSITIONING_CLASS);
+        document.body.classList.add(Classes_1.OVERLAY_OPEN_CLASS);
         this._wrap = document.createElement('div');
         this._wrap.className = Classes_1.WRAP_CLASS;
         this._element.parentNode.insertBefore(this._wrap, this._element);
@@ -296,7 +299,7 @@ var ZoomedImageElement = (function (_super) {
         var _this = this;
         var image = document.createElement('img');
         image.onload = function () {
-            _this.zoomOriginal(image.width, image.height);
+            _this.loaded(image.width, image.height);
             _this._element.removeAttribute(Attributes_1.FULL_SRC_KEY);
         };
         image.src = this._fullSrc;
@@ -331,7 +334,7 @@ var ZoomedVideoElement = (function (_super) {
         var source = document.createElement('source');
         video.appendChild(source);
         video.addEventListener('canplay', function () {
-            _this.zoomOriginal(video.videoWidth, video.videoHeight);
+            _this.loaded(video.videoWidth, video.videoHeight);
             _this._element.play();
         });
         source.src = this._fullSrc;

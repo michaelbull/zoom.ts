@@ -11,7 +11,7 @@ export class ZoomedVideoElement extends ZoomedElement {
 
         video.appendChild(source);
         video.addEventListener('canplay', () => {
-            this.zoomOriginal(video.videoWidth, video.videoHeight);
+            this.loaded(video.videoWidth, video.videoHeight);
             (this._element as HTMLVideoElement).play();
         });
 
