@@ -52,6 +52,10 @@ $overlay-opacity: 100;
 
 .zoom-overlay-loading {
   cursor: wait;
+
+  [data-zoom='zoom-in'], [data-zoom='zoom-out'] {
+    cursor: wait;
+  }
 }
 
 // During the opening transition, and once opened, show the overlay
