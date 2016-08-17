@@ -1,5 +1,5 @@
 $zoom-background-color: hsl(0, 0%, 100%) !default;
-$zoom-transition-duration: 300ms !default;
+$zoom-transition-duration: 400ms !default;
 $zoom-media-z-index: 2000 !default;
 $zoom-overlay-z-index: 1000 !default;
 $overlay-opacity: 100;
@@ -50,28 +50,27 @@ $overlay-opacity: 100;
   filter: 'alpha(opacity=0)';
 }
 
+// During the opening transition, and once opened, show the overlay
+.zoom-overlay-transitioning .zoom-overlay-open,
+.zoom-overlay-open {
+  .zoom-overlay {
+    opacity: $overlay-opacity / 100;
+    filter: 'alpha(opacity=' + $overlay-opacity + ')';
+  }
+}
+
 // Disable pointer events in the background when overlay is open or transitioning
-.zoom-overlay-open,
-.zoom-overlay-transitioning {
+.zoom-overlay-transitioning,
+.zoom-overlay-open {
   cursor: default;
   pointer-events: none;
   user-select: none;
   -ms-user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
-}
 
-// Set on the body when zoomed in
-.zoom-overlay-open {
-
-  // Allow click events only on the zoomed element
+  [data-zoom='zoom-in'],
   [data-zoom='zoom-out'] {
     pointer-events: auto;
-  }
-
-  // Make the overlay visible
-  .zoom-overlay {
-    opacity: $overlay-opacity / 100;
-    filter: 'alpha(opacity=' + $overlay-opacity + ')';
   }
 }

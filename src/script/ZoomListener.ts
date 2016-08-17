@@ -4,7 +4,10 @@ import {
     ZOOM_IN_VALUE,
     ZOOM_OUT_VALUE
 } from './Attributes';
-import { OVERLAY_OPEN_CLASS } from './Classes';
+import {
+    OVERLAY_CLASS,
+    OVERLAY_OPEN_CLASS
+} from './Classes';
 import { Zoomable } from './Zoomable';
 import { ZoomedElement } from './ZoomedElement';
 import { ZoomedImageElement } from './ZoomedImageElement';
@@ -48,6 +51,10 @@ export class ZoomListener {
                     this.close();
                 }
             });
+
+            const overlay: HTMLDivElement = document.createElement('div');
+            overlay.className = OVERLAY_CLASS;
+            document.body.appendChild(overlay);
         });
     }
 
@@ -70,15 +77,13 @@ export class ZoomListener {
             return;
         }
 
-        this.dispose();
-
         if (target.tagName === 'IMG' || target.tagName === 'PICTURE') {
             this._current = new ZoomedImageElement(target);
         } else { /* target.tagName === 'VIDEO */
             this._current = new ZoomedVideoElement(target);
         }
 
-        this._current.zoom();
+        this._current.open();
         this.addCloseListeners();
         this._initialScrollPosition = window.scrollY;
     }
@@ -86,14 +91,6 @@ export class ZoomListener {
     private close(): void {
         if (this._current) {
             this._current.close();
-            this.removeCloseListeners();
-            this._current = undefined;
-        }
-    }
-
-    private dispose(): void {
-        if (this._current) {
-            this._current.dispose();
             this.removeCloseListeners();
             this._current = undefined;
         }

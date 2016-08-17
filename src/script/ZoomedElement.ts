@@ -5,7 +5,6 @@ import {
     ZOOM_OUT_VALUE
 } from './Attributes';
 import {
-    OVERLAY_CLASS,
     OVERLAY_OPEN_CLASS,
     OVERLAY_TRANSITIONING_CLASS,
     WRAP_CLASS
@@ -29,9 +28,20 @@ export abstract class ZoomedElement {
         this._fullSrc = element.getAttribute(FULL_SRC_KEY) || element.currentSrc || element.src;
     }
 
-    zoom(): void {
+    open(): void {
+        document.body.classList.add(OVERLAY_TRANSITIONING_CLASS);
+        document.body.classList.add(OVERLAY_OPEN_CLASS);
+
         this.zoomedIn();
         this._element.src = this._fullSrc;
+
+        if ('transition' in document.body.style) {
+            const element: HTMLElement = this._element as HTMLElement;
+            element.addEventListener('transitionend', this.openedListener);
+            element.addEventListener('webkitTransitionEnd', this.openedListener);
+        } else {
+            this.opened();
+        }
     }
 
     close(): void {
@@ -43,25 +53,10 @@ export abstract class ZoomedElement {
 
         if ('transition' in document.body.style) {
             const element: HTMLElement = this._element as HTMLElement;
-            element.addEventListener('transitionend', this.disposeListener);
-            element.addEventListener('webkitTransitionEnd', this.disposeListener);
+            element.addEventListener('transitionend', this.closedListener);
+            element.addEventListener('webkitTransitionEnd', this.closedListener);
         } else {
-            this.dispose();
-        }
-    }
-
-    dispose(): void {
-        this._element.removeEventListener('transitioned', this.disposeListener);
-        this._element.removeEventListener('webkitTransitionEnd', this.disposeListener);
-
-        if (this._wrap && this._wrap.parentNode) {
-            this.zoomOutElement();
-
-            this._wrap.parentNode.replaceChild(this._element, this._wrap);
-            this._overlay.parentNode.removeChild(this._overlay);
-
-            document.body.classList.remove(OVERLAY_TRANSITIONING_CLASS);
-            this.disposed();
+            this.closed();
         }
     }
 
@@ -72,37 +67,16 @@ export abstract class ZoomedElement {
     protected abstract width(): number;
 
     protected zoomOriginal(width: number, height: number): void {
-        this.createWrap();
+        this._wrap = document.createElement('div');
+        this._wrap.className = WRAP_CLASS;
+
         this._element.parentNode.insertBefore(this._wrap, this._element);
         this._wrap.appendChild(this._element);
 
-        this.zoomInElement();
-        this.createOverlay();
-
-        document.body.appendChild(this._overlay);
+        this._element.setAttribute(ZOOM_FUNCTION_KEY, ZOOM_OUT_VALUE);
 
         this.scale(width, height);
         this.translate();
-
-        document.body.classList.add(OVERLAY_OPEN_CLASS);
-    }
-
-    private createWrap(): void {
-        this._wrap = document.createElement('div');
-        this._wrap.className = WRAP_CLASS;
-    }
-
-    private createOverlay(): void {
-        this._overlay = document.createElement('div');
-        this._overlay.className = OVERLAY_CLASS;
-    }
-
-    private zoomInElement(): void {
-        this._element.setAttribute(ZOOM_FUNCTION_KEY, ZOOM_OUT_VALUE);
-    }
-
-    private zoomOutElement(): void {
-        this._element.setAttribute(ZOOM_FUNCTION_KEY, ZOOM_IN_VALUE);
     }
 
     private repaint(): void {
@@ -150,7 +124,32 @@ export abstract class ZoomedElement {
         ZoomedElement.transformStyle(this._wrap, 'translate(' + x + 'px, ' + y + 'px) translateZ(0)');
     }
 
-    private disposeListener: EventListener = () => {
-        this.dispose();
+    private opened(): void {
+        this._element.removeEventListener('transitionend', this.openedListener);
+        this._element.removeEventListener('webkitTransitionEnd', this.openedListener);
+
+        document.body.classList.remove(OVERLAY_TRANSITIONING_CLASS);
+    }
+
+    private closed(): void {
+        this._element.removeEventListener('transitionend', this.closedListener);
+        this._element.removeEventListener('webkitTransitionEnd', this.closedListener);
+
+        if (this._wrap && this._wrap.parentNode) {
+            this._element.setAttribute(ZOOM_FUNCTION_KEY, ZOOM_IN_VALUE);
+
+            this._wrap.parentNode.replaceChild(this._element, this._wrap);
+
+            document.body.classList.remove(OVERLAY_TRANSITIONING_CLASS);
+            this.disposed();
+        }
+    }
+
+    private openedListener: EventListener = () => {
+        this.opened();
+    };
+
+    private closedListener: EventListener = () => {
+        this.closed();
     };
 }
