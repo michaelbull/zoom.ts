@@ -5,7 +5,7 @@ import {
 import { ZoomedElement } from './ZoomedElement';
 
 export class ZoomedVideoElement extends ZoomedElement {
-    zoomedIn(src: string): void {
+    zoomedIn(): void {
         const video: HTMLVideoElement = document.createElement('video');
         const source: HTMLSourceElement = document.createElement('source');
 
@@ -15,7 +15,7 @@ export class ZoomedVideoElement extends ZoomedElement {
             (this._element as HTMLVideoElement).play();
         });
 
-        source.src = src;
+        source.src = this._fullSrc;
     }
 
     disposed(): void {

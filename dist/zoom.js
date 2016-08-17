@@ -173,16 +173,15 @@ var ZoomedElement = (function () {
             _this.dispose();
         };
         this._element = element;
+        this._fullSrc = element.getAttribute(Attributes_1.FULL_SRC_KEY) || element.currentSrc || element.src;
     }
     ZoomedElement.transformStyle = function (element, style) {
         element.style.webkitTransform = style;
         element.style.transform = style;
     };
     ZoomedElement.prototype.zoom = function () {
-        var element = this._element;
-        var src = element.getAttribute(Attributes_1.FULL_SRC_KEY) || element.currentSrc || element.src;
-        this.zoomedIn(src);
-        element.src = src;
+        this.zoomedIn();
+        this._element.src = this._fullSrc;
     };
     ZoomedElement.prototype.close = function () {
         document.body.classList.remove(Classes_1.OVERLAY_OPEN_CLASS);
@@ -202,9 +201,7 @@ var ZoomedElement = (function () {
         this._element.removeEventListener('transitioned', this.disposeListener);
         this._element.removeEventListener('webkitTransitionEnd', this.disposeListener);
         if (this._wrap && this._wrap.parentNode) {
-            this._element.classList.remove(Classes_1.ZOOMED_CLASS);
-            this._element.style.width = '';
-            this._element.setAttribute(Attributes_1.ZOOM_FUNCTION_KEY, Attributes_1.ZOOM_IN_VALUE);
+            this.zoomOutElement();
             this._clone.parentNode.replaceChild(this._element, this._clone);
             this._wrap.parentNode.removeChild(this._wrap);
             this._overlay.parentNode.removeChild(this._overlay);
@@ -213,26 +210,43 @@ var ZoomedElement = (function () {
         }
     };
     ZoomedElement.prototype.zoomOriginal = function (width, height) {
+        this.createWrap();
+        this.createHiddenClone();
+        this.zoomInElement();
+        this._element.parentNode.replaceChild(this._clone, this._element);
+        this._wrap.appendChild(this._element);
+        this.createOverlay();
+        document.body.appendChild(this._wrap);
+        document.body.appendChild(this._overlay);
+        this.scale(width, height);
+        this.translate();
+        document.body.classList.add(Classes_1.OVERLAY_OPEN_CLASS);
+    };
+    ZoomedElement.prototype.createWrap = function () {
         this._wrap = document.createElement('div');
         this._wrap.className = Classes_1.WRAP_CLASS;
         this._wrap.style.position = 'absolute';
         var position = Position_1.Position.of(this._element);
         this._wrap.style.top = position._top + 'px';
         this._wrap.style.left = position._left + 'px';
+    };
+    ZoomedElement.prototype.createHiddenClone = function () {
         this._clone = this._element.cloneNode();
         this._clone.style.visibility = 'hidden';
-        this._element.style.width = this._element.offsetWidth + 'px';
-        this._element.parentNode.replaceChild(this._clone, this._element);
-        document.body.appendChild(this._wrap);
-        this._wrap.appendChild(this._element);
-        this._element.classList.add(Classes_1.ZOOMED_CLASS);
-        this._element.setAttribute(Attributes_1.ZOOM_FUNCTION_KEY, Attributes_1.ZOOM_OUT_VALUE);
+    };
+    ZoomedElement.prototype.createOverlay = function () {
         this._overlay = document.createElement('div');
         this._overlay.className = Classes_1.OVERLAY_CLASS;
-        document.body.appendChild(this._overlay);
-        ZoomedElement.transformStyle(this._element, this.scale(width, height));
-        ZoomedElement.transformStyle(this._wrap, this.translate());
-        document.body.classList.add(Classes_1.OVERLAY_OPEN_CLASS);
+    };
+    ZoomedElement.prototype.zoomInElement = function () {
+        this._element.style.width = this._element.offsetWidth + 'px';
+        this._element.classList.add(Classes_1.ZOOMED_CLASS);
+        this._element.setAttribute(Attributes_1.ZOOM_FUNCTION_KEY, Attributes_1.ZOOM_OUT_VALUE);
+    };
+    ZoomedElement.prototype.zoomOutElement = function () {
+        this._element.style.width = '';
+        this._element.classList.remove(Classes_1.ZOOMED_CLASS);
+        this._element.setAttribute(Attributes_1.ZOOM_FUNCTION_KEY, Attributes_1.ZOOM_IN_VALUE);
     };
     ZoomedElement.prototype.repaint = function () {
         /* tslint:disable */
@@ -256,7 +270,7 @@ var ZoomedElement = (function () {
         else {
             factor = (viewportWidth / width) * maxFactor;
         }
-        return 'scale(' + factor + ')';
+        ZoomedElement.transformStyle(this._element, 'scale(' + factor + ')');
     };
     ZoomedElement.prototype.translate = function () {
         this.repaint();
@@ -265,9 +279,9 @@ var ZoomedElement = (function () {
         var position = Position_1.Position.of(this._element);
         var mediaCenterX = position._left + ((this._element.width || this._element.offsetWidth) / 2);
         var mediaCenterY = position._top + ((this._element.height || this._element.offsetHeight) / 2);
-        var translateX = Math.round(viewportX - mediaCenterX);
-        var translateY = Math.round(viewportY - mediaCenterY);
-        return 'translate(' + translateX + 'px, ' + translateY + 'px) translateZ(0)';
+        var x = Math.round(viewportX - mediaCenterX);
+        var y = Math.round(viewportY - mediaCenterY);
+        ZoomedElement.transformStyle(this._wrap, 'translate(' + x + 'px, ' + y + 'px) translateZ(0)');
     };
     return ZoomedElement;
 }());
@@ -287,14 +301,14 @@ var ZoomedImageElement = (function (_super) {
     function ZoomedImageElement() {
         _super.apply(this, arguments);
     }
-    ZoomedImageElement.prototype.zoomedIn = function (src) {
+    ZoomedImageElement.prototype.zoomedIn = function () {
         var _this = this;
         var image = document.createElement('img');
         image.onload = function () {
             _this.zoomOriginal(image.width, image.height);
             _this._element.removeAttribute(Attributes_1.FULL_SRC_KEY);
         };
-        image.src = src;
+        image.src = this._fullSrc;
     };
     ZoomedImageElement.prototype.disposed = function () {
         /* empty */
@@ -320,7 +334,7 @@ var ZoomedVideoElement = (function (_super) {
     function ZoomedVideoElement() {
         _super.apply(this, arguments);
     }
-    ZoomedVideoElement.prototype.zoomedIn = function (src) {
+    ZoomedVideoElement.prototype.zoomedIn = function () {
         var _this = this;
         var video = document.createElement('video');
         var source = document.createElement('source');
@@ -329,7 +343,7 @@ var ZoomedVideoElement = (function (_super) {
             _this.zoomOriginal(video.videoWidth, video.videoHeight);
             _this._element.play();
         });
-        source.src = src;
+        source.src = this._fullSrc;
     };
     ZoomedVideoElement.prototype.disposed = function () {
         var video = this._element;

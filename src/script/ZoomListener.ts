@@ -18,9 +18,9 @@ const SCROLL_Y_DELTA: number = 70;
 const TOUCH_Y_DELTA: number = 30;
 
 export class ZoomListener {
-    _current: ZoomedElement;
-    _initialScrollPosition: number;
-    _initialTouchPosition: number;
+    private _current: ZoomedElement;
+    private _initialScrollPosition: number;
+    private _initialTouchPosition: number;
 
     listen(): void {
         document.body.addEventListener('click', (event: MouseEvent) => {

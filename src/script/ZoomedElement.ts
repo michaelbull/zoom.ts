@@ -21,20 +21,19 @@ export abstract class ZoomedElement {
     }
 
     protected _element: Zoomable;
+    protected _fullSrc: string;
     protected _wrap: HTMLDivElement;
     protected _clone: Zoomable;
     protected _overlay: HTMLDivElement;
 
     constructor(element: Zoomable) {
         this._element = element;
+        this._fullSrc = element.getAttribute(FULL_SRC_KEY) || element.currentSrc || element.src;
     }
 
     zoom(): void {
-        const element: Zoomable = this._element;
-        const src: string = element.getAttribute(FULL_SRC_KEY) || element.currentSrc || element.src;
-
-        this.zoomedIn(src);
-        element.src = src;
+        this.zoomedIn();
+        this._element.src = this._fullSrc;
     }
 
     close(): void {
@@ -58,24 +57,39 @@ export abstract class ZoomedElement {
         this._element.removeEventListener('webkitTransitionEnd', this.disposeListener);
 
         if (this._wrap && this._wrap.parentNode) {
-            this._element.classList.remove(ZOOMED_CLASS);
-            this._element.style.width = '';
-            this._element.setAttribute(ZOOM_FUNCTION_KEY, ZOOM_IN_VALUE);
-
+            this.zoomOutElement();
             this._clone.parentNode.replaceChild(this._element, this._clone);
             this._wrap.parentNode.removeChild(this._wrap);
             this._overlay.parentNode.removeChild(this._overlay);
-
             document.body.classList.remove(OVERLAY_TRANSITIONING_CLASS);
             this.disposed();
         }
     }
 
-    protected abstract zoomedIn(src: string): void;
+    protected abstract zoomedIn(): void;
+
     protected abstract disposed(): void;
+
     protected abstract width(): number;
 
     protected zoomOriginal(width: number, height: number): void {
+        this.createWrap();
+        this.createHiddenClone();
+        this.zoomInElement();
+        this._element.parentNode.replaceChild(this._clone, this._element);
+        this._wrap.appendChild(this._element);
+        this.createOverlay();
+
+        document.body.appendChild(this._wrap);
+        document.body.appendChild(this._overlay);
+
+        this.scale(width, height);
+        this.translate();
+
+        document.body.classList.add(OVERLAY_OPEN_CLASS);
+    }
+
+    private createWrap(): void {
         this._wrap = document.createElement('div');
         this._wrap.className = WRAP_CLASS;
         this._wrap.style.position = 'absolute';
@@ -83,28 +97,28 @@ export abstract class ZoomedElement {
         const position: Position = Position.of(this._element);
         this._wrap.style.top = position._top + 'px';
         this._wrap.style.left = position._left + 'px';
+    }
 
+    private createHiddenClone(): void {
         this._clone = this._element.cloneNode() as Zoomable;
         this._clone.style.visibility = 'hidden';
+    }
 
-        this._element.style.width = this._element.offsetWidth + 'px';
-        this._element.parentNode.replaceChild(this._clone, this._element);
-
-        document.body.appendChild(this._wrap);
-        this._wrap.appendChild(this._element);
-
-        this._element.classList.add(ZOOMED_CLASS);
-        this._element.setAttribute(ZOOM_FUNCTION_KEY, ZOOM_OUT_VALUE);
-
+    private createOverlay(): void {
         this._overlay = document.createElement('div');
         this._overlay.className = OVERLAY_CLASS;
+    }
 
-        document.body.appendChild(this._overlay);
+    private zoomInElement(): void {
+        this._element.style.width = this._element.offsetWidth + 'px';
+        this._element.classList.add(ZOOMED_CLASS);
+        this._element.setAttribute(ZOOM_FUNCTION_KEY, ZOOM_OUT_VALUE);
+    }
 
-        ZoomedElement.transformStyle(this._element, this.scale(width, height));
-        ZoomedElement.transformStyle(this._wrap, this.translate());
-
-        document.body.classList.add(OVERLAY_OPEN_CLASS);
+    private zoomOutElement(): void {
+        this._element.style.width = '';
+        this._element.classList.remove(ZOOMED_CLASS);
+        this._element.setAttribute(ZOOM_FUNCTION_KEY, ZOOM_IN_VALUE);
     }
 
     private repaint(): void {
@@ -113,7 +127,7 @@ export abstract class ZoomedElement {
         /* tslint:enable */
     }
 
-    private scale(width: number, height: number): string {
+    private scale(width: number, height: number): void {
         this.repaint();
 
         const maxFactor: number = width / this.width();
@@ -133,10 +147,10 @@ export abstract class ZoomedElement {
             factor = (viewportWidth / width) * maxFactor;
         }
 
-        return 'scale(' + factor + ')';
+        ZoomedElement.transformStyle(this._element, 'scale(' + factor + ')');
     }
 
-    private translate(): string {
+    private translate(): void {
         this.repaint();
 
         const viewportX: number = window.innerWidth / 2;
@@ -146,10 +160,10 @@ export abstract class ZoomedElement {
         const mediaCenterX: number = position._left + ((this._element.width || this._element.offsetWidth) / 2);
         const mediaCenterY: number = position._top + ((this._element.height || this._element.offsetHeight) / 2);
 
-        const translateX: number = Math.round(viewportX - mediaCenterX);
-        const translateY: number = Math.round(viewportY - mediaCenterY);
+        const x: number = Math.round(viewportX - mediaCenterX);
+        const y: number = Math.round(viewportY - mediaCenterY);
 
-        return 'translate(' + translateX + 'px, ' + translateY + 'px) translateZ(0)';
+        ZoomedElement.transformStyle(this._wrap, 'translate(' + x + 'px, ' + y + 'px) translateZ(0)');
     }
 
     private disposeListener: EventListener = () => {

@@ -2,7 +2,7 @@ import { FULL_SRC_KEY } from './Attributes';
 import { ZoomedElement } from './ZoomedElement';
 
 export class ZoomedImageElement extends ZoomedElement {
-    zoomedIn(src: string): void {
+    zoomedIn(): void {
         const image: HTMLImageElement = document.createElement('img');
 
         image.onload = (): any => {
@@ -10,7 +10,7 @@ export class ZoomedImageElement extends ZoomedElement {
             this._element.removeAttribute(FULL_SRC_KEY);
         };
 
-        image.src = src;
+        image.src = this._fullSrc;
     }
 
     disposed(): void {

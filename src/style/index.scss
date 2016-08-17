@@ -47,7 +47,15 @@ $zoom-overlay-z-index: 1000 !default;
   filter: 'alpha(opacity=0)';
 }
 
-.zoom-overlay-open .zoom-overlay {
-  opacity: 1;
-  filter: 'alpha(opacity=100)';
+.zoom-overlay-open {
+  pointer-events: none;
+
+  .zoom-media {
+    pointer-events: auto;
+  }
+
+  .zoom-overlay {
+    opacity: 1;
+    filter: 'alpha(opacity=100)';
+  }
 }

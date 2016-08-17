@@ -33,6 +33,10 @@
   pointer-events: none;
   filter: 'alpha(opacity=0)'; }
 
-.zoom-overlay-open .zoom-overlay {
-  opacity: 1;
-  filter: 'alpha(opacity=100)'; }
+.zoom-overlay-open {
+  pointer-events: none; }
+  .zoom-overlay-open .zoom-media {
+    pointer-events: auto; }
+  .zoom-overlay-open .zoom-overlay {
+    opacity: 1;
+    filter: 'alpha(opacity=100)'; }
