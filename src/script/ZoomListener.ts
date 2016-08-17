@@ -6,6 +6,7 @@ import {
 } from './Attributes';
 import {
     OVERLAY_CLASS,
+    OVERLAY_LOADING_CLASS,
     OVERLAY_OPEN_CLASS
 } from './Classes';
 import { Zoomable } from './Zoomable';
@@ -61,7 +62,8 @@ export class ZoomListener {
     private zoom(event: MouseEvent): void {
         event.stopPropagation();
 
-        if (document.body.classList.contains(OVERLAY_OPEN_CLASS)) {
+        const bodyClassList: DOMTokenList = document.body.classList;
+        if (bodyClassList.contains(OVERLAY_OPEN_CLASS) || bodyClassList.contains(OVERLAY_LOADING_CLASS)) {
             return;
         }
 

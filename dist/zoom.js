@@ -124,7 +124,8 @@ var ZoomListener = (function () {
     };
     ZoomListener.prototype.zoom = function (event) {
         event.stopPropagation();
-        if (document.body.classList.contains(Classes_1.OVERLAY_OPEN_CLASS)) {
+        var bodyClassList = document.body.classList;
+        if (bodyClassList.contains(Classes_1.OVERLAY_OPEN_CLASS) || bodyClassList.contains(Classes_1.OVERLAY_LOADING_CLASS)) {
             return;
         }
         var target = event.target;
