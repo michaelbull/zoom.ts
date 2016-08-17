@@ -10,6 +10,9 @@
 # EditorConfig
 !.editorconfig
 
+# Sass Lint
+!.sass-lint.yml
+
 # IntelliJ Idea
 *.iml
 *.ipr
