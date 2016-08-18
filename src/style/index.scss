@@ -58,8 +58,6 @@ $overlay-opacity: 100;
   }
 }
 
-// During the opening transition, and once opened, show the overlay
-.zoom-overlay-transitioning .zoom-overlay-open,
 .zoom-overlay-open {
   .zoom-overlay {
     opacity: $overlay-opacity / 100;
@@ -67,7 +65,8 @@ $overlay-opacity: 100;
   }
 }
 
-// Disable pointer events in the background when overlay is open or transitioning
+// Disable pointer events in the background when overlay is loading, transitioning, or open
+.zoom-overlay-loading,
 .zoom-overlay-transitioning,
 .zoom-overlay-open {
   cursor: default;
@@ -77,6 +76,11 @@ $overlay-opacity: 100;
   -moz-user-select: none;
   -webkit-user-select: none;
 
+}
+
+// Re-enable pointer events once loaded and overlay is either transitioning or already opened
+.zoom-overlay-transitioning,
+.zoom-overlay-open {
   [data-zoom='zoom-in'],
   [data-zoom='zoom-out'] {
     pointer-events: auto;
