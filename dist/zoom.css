@@ -22,7 +22,10 @@
   -moz-transition: transform 400ms;
   -webkit-transition: transform 400ms;
   position: relative;
-  z-index: 2000; }
+  z-index: 2000;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden; }
 
 .zoom-overlay {
   transition: opacity 400ms;

@@ -39,6 +39,11 @@ $overlay-opacity: 100;
 
   position: relative;
   z-index: $zoom-media-z-index;
+
+  // improve animation in Chrome
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 // An overlay that fills the entire viewport with a background colour and disables click events below it
