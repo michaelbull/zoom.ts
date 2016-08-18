@@ -63,6 +63,13 @@ $overlay-opacity: 100;
     opacity: $overlay-opacity / 100;
     filter: 'alpha(opacity=' + $overlay-opacity + ')';
   }
+
+  // Once loaded & transitioned, enable pixelated image rendering to improve image sharpness
+  &:not(.zoom-overlay-loading) {
+    &:not(.zoom-overlay-transitioning) {
+      image-rendering: pixelated;
+    }
+  }
 }
 
 // Disable pointer events in the background when overlay is loading, transitioning, or open
