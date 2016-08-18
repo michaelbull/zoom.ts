@@ -220,10 +220,10 @@ var ZoomedElement = (function () {
         var viewportX = viewportWidth / 2;
         var viewportY = scrollTop + (viewportHeight / 2);
         var rect = this._element.getBoundingClientRect();
-        var mediaCenterX = rect.left + scrollLeft + (this._element.width / 2);
-        var mediaCenterY = rect.top + scrollTop + (this._element.height / 2);
-        var x = Math.round(viewportX - mediaCenterX);
-        var y = Math.round(viewportY - mediaCenterY);
+        var centerX = rect.left + scrollLeft + ((this._element.width || this._element.offsetWidth) / 2);
+        var centerY = rect.top + scrollTop + ((this._element.height || this._element.offsetHeight) / 2);
+        var x = Math.round(viewportX - centerX);
+        var y = Math.round(viewportY - centerY);
         ZoomedElement.transformStyle(this._wrap, 'translate(' + x + 'px, ' + y + 'px) translateZ(0)');
     };
     ZoomedElement.prototype.opened = function () {

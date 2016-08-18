@@ -123,11 +123,11 @@ export abstract class ZoomedElement {
         const viewportY: number = scrollTop + (viewportHeight / 2);
 
         const rect: ClientRect = this._element.getBoundingClientRect();
-        const mediaCenterX: number = rect.left + scrollLeft + (this._element.width / 2);
-        const mediaCenterY: number = rect.top + scrollTop + (this._element.height / 2);
+        const centerX: number = rect.left + scrollLeft + ((this._element.width || this._element.offsetWidth) / 2);
+        const centerY: number = rect.top + scrollTop + ((this._element.height || this._element.offsetHeight) / 2);
 
-        const x: number = Math.round(viewportX - mediaCenterX);
-        const y: number = Math.round(viewportY - mediaCenterY);
+        const x: number = Math.round(viewportX - centerX);
+        const y: number = Math.round(viewportY - centerY);
 
         ZoomedElement.transformStyle(this._wrap, 'translate(' + x + 'px, ' + y + 'px) translateZ(0)');
     }
