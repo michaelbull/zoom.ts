@@ -22,6 +22,9 @@ const SCROLL_Y_DELTA: number = 70;
 /* pixels required to scroll vertically with a touch screen for a zoomed image to be dismissed  */
 const TOUCH_Y_DELTA: number = 30;
 
+const overlay: HTMLDivElement = document.createElement('div');
+overlay.className = OVERLAY_CLASS;
+
 export class ZoomListener {
 
     /*!
@@ -38,8 +41,8 @@ export class ZoomListener {
     }
 
     private _current: ZoomedElement;
-    private _initialScrollPosition: number;
-    private _initialTouchPosition: number;
+    private _initialScrollY: number;
+    private _initialTouchY: number;
 
     listen(): void {
         ZoomListener.ready(() => {
@@ -53,8 +56,6 @@ export class ZoomListener {
                 }
             });
 
-            const overlay: HTMLDivElement = document.createElement('div');
-            overlay.className = OVERLAY_CLASS;
             document.body.appendChild(overlay);
         });
     }
@@ -76,6 +77,7 @@ export class ZoomListener {
         }
 
         if (target.width >= window.innerWidth) {
+            // target is already as big (or bigger), therefore we gain nothing from zooming in on it
             return;
         }
 
@@ -87,7 +89,7 @@ export class ZoomListener {
 
         this._current.open();
         this.addCloseListeners();
-        this._initialScrollPosition = window.scrollY;
+        this._initialScrollY = window.scrollY;
     }
 
     private close(): void {
@@ -111,7 +113,7 @@ export class ZoomListener {
     }
 
     private scrollListener: EventListener = () => {
-        if (Math.abs(this._initialScrollPosition - window.scrollY) >= SCROLL_Y_DELTA) {
+        if (Math.abs(this._initialScrollY - window.scrollY) >= SCROLL_Y_DELTA) {
             this.close();
         }
     };
@@ -123,12 +125,12 @@ export class ZoomListener {
     };
 
     private touchStartListener: EventListener = (event: TouchEvent) => {
-        this._initialTouchPosition = event.touches[0].pageY;
+        this._initialTouchY = event.touches[0].pageY;
         event.target.addEventListener('touchmove', this.touchMoveListener);
     };
 
     private touchMoveListener: EventListener = (event: TouchEvent) => {
-        if (Math.abs(event.touches[0].pageY - this._initialTouchPosition) > TOUCH_Y_DELTA) {
+        if (Math.abs(event.touches[0].pageY - this._initialTouchY) > TOUCH_Y_DELTA) {
             this.close();
             event.target.removeEventListener('touchmove', this.touchMoveListener);
         }

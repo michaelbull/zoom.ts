@@ -64,6 +64,29 @@ $overlay-opacity: 100;
   filter: 'alpha(opacity=0)';
 }
 
+.zoom-overlay-open {
+  .zoom-overlay {
+    opacity: $overlay-opacity / 100;
+    filter: 'alpha(opacity=' + $overlay-opacity + ')';
+  }
+
+  // Once loaded & transitioned, enable pixelated image rendering to improve image sharpness
+  &:not(.zoom-overlay-loading):not(.zoom-overlay-transitioning) {
+    image-rendering: pixelated;
+  }
+}
+
+// Disable text selection during the loading, transitioning, or open phases
+.zoom-overlay-loading,
+.zoom-overlay-transitioning,
+.zoom-overlay-open {
+  user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+
+// Show a waiting cursor during the loading phase
 .zoom-overlay-loading {
   cursor: wait;
 
@@ -72,36 +95,20 @@ $overlay-opacity: 100;
   }
 }
 
+// During an opening transition, or once opened: enable pointer events only on the media to zoom out
+.zoom-overlay-transitioning .zoom-overlay-open,
 .zoom-overlay-open {
-  .zoom-overlay {
-    opacity: $overlay-opacity / 100;
-    filter: 'alpha(opacity=' + $overlay-opacity + ')';
-  }
-
-  // Once loaded & transitioned, enable pixelated image rendering to improve image sharpness
-  &:not(.zoom-overlay-loading) {
-    &:not(.zoom-overlay-transitioning) {
-      image-rendering: pixelated;
-    }
-  }
-}
-
-// Disable pointer events in the background when overlay is loading, transitioning, or open
-.zoom-overlay-loading,
-.zoom-overlay-transitioning,
-.zoom-overlay-open {
-  cursor: default;
   pointer-events: none;
-  user-select: none;
-  -ms-user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
+
+  [data-zoom='zoom-out'] {
+    pointer-events: auto;
+  }
 }
 
-// Re-enable pointer events once loaded and overlay is either transitioning or already opened
-.zoom-overlay-transitioning,
-.zoom-overlay-open {
-  [data-zoom='zoom-in'],
+// During a closing transition: enable pointer events only on the media to zoom out
+.zoom-overlay-transitioning:not(.zoom-overlay-open) {
+  pointer-events: none;
+
   [data-zoom='zoom-out'] {
     pointer-events: auto;
   }

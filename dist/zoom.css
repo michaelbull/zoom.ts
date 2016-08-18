@@ -43,11 +43,6 @@
   pointer-events: none;
   filter: 'alpha(opacity=0)'; }
 
-.zoom-overlay-loading {
-  cursor: wait; }
-  .zoom-overlay-loading [data-zoom='zoom-in'], .zoom-overlay-loading [data-zoom='zoom-out'] {
-    cursor: wait; }
-
 .zoom-overlay-open .zoom-overlay {
   opacity: 1;
   filter: "alpha(opacity=100)"; }
@@ -58,15 +53,24 @@
 .zoom-overlay-loading,
 .zoom-overlay-transitioning,
 .zoom-overlay-open {
-  cursor: default;
-  pointer-events: none;
   user-select: none;
   -ms-user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none; }
 
-.zoom-overlay-transitioning [data-zoom='zoom-in'],
-.zoom-overlay-transitioning [data-zoom='zoom-out'],
-.zoom-overlay-open [data-zoom='zoom-in'],
-.zoom-overlay-open [data-zoom='zoom-out'] {
-  pointer-events: auto; }
+.zoom-overlay-loading {
+  cursor: wait; }
+  .zoom-overlay-loading [data-zoom='zoom-in'], .zoom-overlay-loading [data-zoom='zoom-out'] {
+    cursor: wait; }
+
+.zoom-overlay-transitioning .zoom-overlay-open,
+.zoom-overlay-open {
+  pointer-events: none; }
+  .zoom-overlay-transitioning .zoom-overlay-open [data-zoom='zoom-out'],
+  .zoom-overlay-open [data-zoom='zoom-out'] {
+    pointer-events: auto; }
+
+.zoom-overlay-transitioning:not(.zoom-overlay-open) {
+  pointer-events: none; }
+  .zoom-overlay-transitioning:not(.zoom-overlay-open) [data-zoom='zoom-out'] {
+    pointer-events: auto; }

@@ -12,19 +12,51 @@ import {
 } from './Classes';
 import { Zoomable } from './Zoomable';
 
+const wrap: HTMLDivElement = document.createElement('div');
+wrap.className = WRAP_CLASS;
+
 export abstract class ZoomedElement {
     private static transformStyle(element: HTMLElement, style: string): void {
         element.style.webkitTransform = style;
         element.style.transform = style;
     }
 
-    protected _element: Zoomable;
+    private static addTransitionEndListener(element: HTMLElement, listener: EventListener): void {
+        if ('transition' in document.body.style) {
+            element.addEventListener('transitionend', listener);
+            element.addEventListener('webkitTransitionEnd', listener);
+        } else {
+            listener(undefined);
+        }
+    }
+
+    private static removeTransitionEndListener(element: HTMLElement, listener: EventListener): void {
+        element.removeEventListener('transitionend', listener);
+        element.removeEventListener('webkitTransitionEnd', listener);
+    }
+
+    private static scrollOffsets(): [number, number] {
+        const documentElement: HTMLElement = document.documentElement;
+        return [
+            window.pageXOffset || documentElement.scrollLeft || 0,
+            window.pageYOffset || documentElement.scrollTop || 0
+        ];
+    }
+
+    private static viewportDimensions(): [number, number] {
+        const documentElement: HTMLElement = document.documentElement;
+        return [
+            window.innerWidth || documentElement.clientWidth || 0,
+            window.innerHeight || documentElement.clientHeight || 0
+        ];
+    }
+
     protected _fullSrc: string;
-    protected _wrap: HTMLDivElement;
+    private _element: Zoomable;
 
     constructor(element: Zoomable) {
-        this._element = element;
         this._fullSrc = element.getAttribute(FULL_SRC_KEY) || element.currentSrc || element.src;
+        this._element = element;
     }
 
     open(): void {
@@ -33,29 +65,17 @@ export abstract class ZoomedElement {
         this.zoomedIn();
         this._element.src = this._fullSrc;
 
-        if ('transition' in document.body.style) {
-            const element: HTMLElement = this._element as HTMLElement;
-            element.addEventListener('transitionend', this.openedListener);
-            element.addEventListener('webkitTransitionEnd', this.openedListener);
-        } else {
-            this.opened();
-        }
+        ZoomedElement.addTransitionEndListener(this._element, this.openedListener);
     }
 
     close(): void {
-        document.body.classList.remove(OVERLAY_OPEN_CLASS);
-        document.body.classList.add(OVERLAY_TRANSITIONING_CLASS);
+        const bodyClassList: DOMTokenList = document.body.classList;
+        bodyClassList.remove(OVERLAY_OPEN_CLASS);
+        bodyClassList.add(OVERLAY_TRANSITIONING_CLASS);
 
         ZoomedElement.transformStyle(this._element, '');
-        ZoomedElement.transformStyle(this._wrap, '');
-
-        if ('transition' in document.body.style) {
-            const element: HTMLElement = this._element as HTMLElement;
-            element.addEventListener('transitionend', this.closedListener);
-            element.addEventListener('webkitTransitionEnd', this.closedListener);
-        } else {
-            this.closed();
-        }
+        ZoomedElement.transformStyle(wrap, '');
+        ZoomedElement.addTransitionEndListener(this._element, this.closedListener);
     }
 
     protected abstract zoomedIn(): void;
@@ -65,20 +85,18 @@ export abstract class ZoomedElement {
     protected abstract width(): number;
 
     protected loaded(width: number, height: number): void {
-        document.body.classList.remove(OVERLAY_LOADING_CLASS);
-        document.body.classList.add(OVERLAY_TRANSITIONING_CLASS);
-        document.body.classList.add(OVERLAY_OPEN_CLASS);
+        const bodyClassList: DOMTokenList = document.body.classList;
+        bodyClassList.remove(OVERLAY_LOADING_CLASS);
+        bodyClassList.add(OVERLAY_TRANSITIONING_CLASS);
+        bodyClassList.add(OVERLAY_OPEN_CLASS);
 
-        this._wrap = document.createElement('div');
-        this._wrap.className = WRAP_CLASS;
-
-        this._element.parentNode.insertBefore(this._wrap, this._element);
-        this._wrap.appendChild(this._element);
+        this._element.parentNode.insertBefore(wrap, this._element);
+        wrap.appendChild(this._element);
 
         this._element.setAttribute(ZOOM_FUNCTION_KEY, ZOOM_OUT_VALUE);
 
-        this.scale(width, height);
-        this.translate();
+        this.scaleElement(width, height);
+        this.translateWrap();
     }
 
     private repaint(): void {
@@ -87,15 +105,17 @@ export abstract class ZoomedElement {
         /* tslint:enable */
     }
 
-    private scale(width: number, height: number): void {
+    private scaleElement(width: number, height: number): void {
         this.repaint();
+
+        const viewportDimensions: [number, number] = ZoomedElement.viewportDimensions();
+        const viewportWidth: number = viewportDimensions[0];
+        const viewportHeight: number = viewportDimensions[1];
+
+        const viewportAspectRatio: number = viewportWidth / viewportHeight;
 
         const maxScaleFactor: number = width / this.width();
         const aspectRatio: number = width / height;
-
-        const viewportWidth: number = window.innerWidth || document.documentElement.clientWidth || 0;
-        const viewportHeight: number = window.innerHeight || document.documentElement.clientHeight || 0;
-        const viewportAspectRatio: number = viewportWidth / viewportHeight;
 
         let scaleFactor: number;
 
@@ -110,44 +130,42 @@ export abstract class ZoomedElement {
         ZoomedElement.transformStyle(this._element, 'scale(' + scaleFactor + ')');
     }
 
-    private translate(): void {
+    private translateWrap(): void {
         this.repaint();
 
-        const scrollTop: number = window.pageYOffset || document.documentElement.scrollTop || 0;
-        const scrollLeft: number = window.pageXOffset || document.documentElement.scrollLeft || 0;
+        const scrollOffsets: [number, number] = ZoomedElement.scrollOffsets();
+        const scrollX: number = scrollOffsets[0];
+        const scrollY: number = scrollOffsets[1];
 
-        const viewportWidth: number = window.innerWidth || document.documentElement.clientWidth || 0;
-        const viewportHeight: number = window.innerHeight || document.documentElement.clientHeight || 0;
+        const viewportDimensions: [number, number] = ZoomedElement.viewportDimensions();
+        const viewportWidth: number = viewportDimensions[0];
+        const viewportHeight: number = viewportDimensions[1];
 
         const viewportX: number = viewportWidth / 2;
-        const viewportY: number = scrollTop + (viewportHeight / 2);
+        const viewportY: number = scrollY + (viewportHeight / 2);
 
-        const rect: ClientRect = this._element.getBoundingClientRect();
-        const centerX: number = rect.left + scrollLeft + ((this._element.width || this._element.offsetWidth) / 2);
-        const centerY: number = rect.top + scrollTop + ((this._element.height || this._element.offsetHeight) / 2);
+        const element: Zoomable = this._element;
+        const rect: ClientRect = element.getBoundingClientRect();
+        const centerX: number = rect.left + scrollX + ((element.width || element.offsetWidth) / 2);
+        const centerY: number = rect.top + scrollY + ((element.height || element.offsetHeight) / 2);
 
         const x: number = Math.round(viewportX - centerX);
         const y: number = Math.round(viewportY - centerY);
 
-        ZoomedElement.transformStyle(this._wrap, 'translate(' + x + 'px, ' + y + 'px) translateZ(0)');
+        ZoomedElement.transformStyle(wrap, 'translate(' + x + 'px, ' + y + 'px) translateZ(0)');
     }
 
     private opened(): void {
-        this._element.removeEventListener('transitionend', this.openedListener);
-        this._element.removeEventListener('webkitTransitionEnd', this.openedListener);
-
+        ZoomedElement.removeTransitionEndListener(this._element, this.openedListener);
         document.body.classList.remove(OVERLAY_TRANSITIONING_CLASS);
     }
 
     private closed(): void {
-        this._element.removeEventListener('transitionend', this.closedListener);
-        this._element.removeEventListener('webkitTransitionEnd', this.closedListener);
+        ZoomedElement.removeTransitionEndListener(this._element, this.closedListener);
 
-        if (this._wrap && this._wrap.parentNode) {
+        if (wrap.parentNode) {
             this._element.setAttribute(ZOOM_FUNCTION_KEY, ZOOM_IN_VALUE);
-
-            this._wrap.parentNode.replaceChild(this._element, this._wrap);
-
+            wrap.parentNode.replaceChild(this._element, wrap);
             document.body.classList.remove(OVERLAY_TRANSITIONING_CLASS);
             this.disposed();
         }
