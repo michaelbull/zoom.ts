@@ -1,18 +1,19 @@
+import { Zoomable } from './Zoomable';
+import { ZoomedElement } from './element/ZoomedElement';
+import { ZoomedImageElement } from './element/ZoomedImageElement';
+import { ZoomedVideoElement } from './element/ZoomedVideoElement';
 import {
     FULL_SRC_KEY,
     ZOOM_FUNCTION_KEY,
     ZOOM_IN_VALUE,
     ZOOM_OUT_VALUE
-} from './Attributes';
+} from './util/Attributes';
 import {
     OVERLAY_CLASS,
     OVERLAY_LOADING_CLASS,
     OVERLAY_OPEN_CLASS
-} from './Classes';
-import { Zoomable } from './Zoomable';
-import { ZoomedElement } from './ZoomedElement';
-import { ZoomedImageElement } from './ZoomedImageElement';
-import { ZoomedVideoElement } from './ZoomedVideoElement';
+} from './util/Classes';
+import { Dimensions } from './util/Dimensions';
 
 const ESCAPE_KEY_CODE: number = 27;
 
@@ -89,7 +90,7 @@ export class ZoomListener {
 
         this._current.open();
         this.addCloseListeners();
-        this._initialScrollY = window.scrollY;
+        this._initialScrollY = Dimensions.scrollY();
     }
 
     private close(): void {
@@ -113,7 +114,7 @@ export class ZoomListener {
     }
 
     private scrollListener: EventListener = () => {
-        if (Math.abs(this._initialScrollY - window.scrollY) >= SCROLL_Y_DELTA) {
+        if (Math.abs(this._initialScrollY - Dimensions.scrollY()) >= SCROLL_Y_DELTA) {
             this.close();
         }
     };

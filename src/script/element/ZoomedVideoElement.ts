@@ -1,8 +1,8 @@
+import { Zoomable } from '../Zoomable';
 import {
     ALWAYS_PLAY_VIDEO_VALUE,
     PLAY_VIDEO_KEY
-} from './Attributes';
-import { Zoomable } from './Zoomable';
+} from '../util/Attributes';
 import { ZoomedElement } from './ZoomedElement';
 
 export class ZoomedVideoElement extends ZoomedElement {

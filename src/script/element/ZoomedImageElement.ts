@@ -1,5 +1,5 @@
-import { FULL_SRC_KEY } from './Attributes';
-import { Zoomable } from './Zoomable';
+import { Zoomable } from '../Zoomable';
+import { FULL_SRC_KEY } from '../util/Attributes';
 import { ZoomedElement } from './ZoomedElement';
 
 export class ZoomedImageElement extends ZoomedElement {

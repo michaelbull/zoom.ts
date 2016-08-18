@@ -1,28 +1,10 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 "use strict";
-exports.ZOOM_FUNCTION_KEY = 'data-zoom';
-exports.ZOOM_IN_VALUE = 'zoom-in';
-exports.ZOOM_OUT_VALUE = 'zoom-out';
-/* the media in data-zoom-src="value" is loaded and displayed when the image is zoomed in */
-exports.FULL_SRC_KEY = 'data-zoom-src';
-/* when data-zoom-play="always" then the video will continue playing even after dismissed from zoom */
-exports.PLAY_VIDEO_KEY = 'data-zoom-play';
-exports.ALWAYS_PLAY_VIDEO_VALUE = 'always';
-
-},{}],2:[function(require,module,exports){
-"use strict";
-exports.OVERLAY_CLASS = 'zoom-overlay';
-exports.OVERLAY_OPEN_CLASS = 'zoom-overlay-open';
-exports.OVERLAY_LOADING_CLASS = 'zoom-overlay-loading';
-exports.OVERLAY_TRANSITIONING_CLASS = 'zoom-overlay-transitioning';
-exports.WRAP_CLASS = 'zoom-wrap';
-
-},{}],3:[function(require,module,exports){
-"use strict";
-var Attributes_1 = require('./Attributes');
-var Classes_1 = require('./Classes');
-var ZoomedImageElement_1 = require('./ZoomedImageElement');
-var ZoomedVideoElement_1 = require('./ZoomedVideoElement');
+var ZoomedImageElement_1 = require('./element/ZoomedImageElement');
+var ZoomedVideoElement_1 = require('./element/ZoomedVideoElement');
+var Attributes_1 = require('./util/Attributes');
+var Classes_1 = require('./util/Classes');
+var Dimensions_1 = require('./util/Dimensions');
 var ESCAPE_KEY_CODE = 27;
 /* pixels required to scroll vertically with a mouse/keyboard for a zoomed image to be dismissed */
 var SCROLL_Y_DELTA = 70;
@@ -34,7 +16,7 @@ var ZoomListener = (function () {
     function ZoomListener() {
         var _this = this;
         this.scrollListener = function () {
-            if (Math.abs(_this._initialScrollY - window.scrollY) >= SCROLL_Y_DELTA) {
+            if (Math.abs(_this._initialScrollY - Dimensions_1.Dimensions.scrollY()) >= SCROLL_Y_DELTA) {
                 _this.close();
             }
         };
@@ -106,7 +88,7 @@ var ZoomListener = (function () {
         }
         this._current.open();
         this.addCloseListeners();
-        this._initialScrollY = window.scrollY;
+        this._initialScrollY = Dimensions_1.Dimensions.scrollY();
     };
     ZoomListener.prototype.close = function () {
         if (this._current) {
@@ -129,10 +111,11 @@ var ZoomListener = (function () {
 }());
 exports.ZoomListener = ZoomListener;
 
-},{"./Attributes":1,"./Classes":2,"./ZoomedImageElement":5,"./ZoomedVideoElement":6}],4:[function(require,module,exports){
+},{"./element/ZoomedImageElement":3,"./element/ZoomedVideoElement":4,"./util/Attributes":6,"./util/Classes":7,"./util/Dimensions":8}],2:[function(require,module,exports){
 "use strict";
-var Attributes_1 = require('./Attributes');
-var Classes_1 = require('./Classes');
+var Attributes_1 = require('../util/Attributes');
+var Classes_1 = require('../util/Classes');
+var Dimensions_1 = require('../util/Dimensions');
 var wrap = document.createElement('div');
 wrap.className = Classes_1.WRAP_CLASS;
 var ZoomedElement = (function () {
@@ -163,20 +146,6 @@ var ZoomedElement = (function () {
     ZoomedElement.removeTransitionEndListener = function (element, listener) {
         element.removeEventListener('transitionend', listener);
         element.removeEventListener('webkitTransitionEnd', listener);
-    };
-    ZoomedElement.scrollOffsets = function () {
-        var documentElement = document.documentElement;
-        return [
-            window.pageXOffset || documentElement.scrollLeft || 0,
-            window.pageYOffset || documentElement.scrollTop || 0
-        ];
-    };
-    ZoomedElement.viewportDimensions = function () {
-        var documentElement = document.documentElement;
-        return [
-            window.innerWidth || documentElement.clientWidth || 0,
-            window.innerHeight || documentElement.clientHeight || 0
-        ];
     };
     ZoomedElement.prototype.open = function () {
         document.body.classList.add(Classes_1.OVERLAY_LOADING_CLASS);
@@ -210,9 +179,8 @@ var ZoomedElement = (function () {
     };
     ZoomedElement.prototype.scaleElement = function (width, height) {
         this.repaint();
-        var viewportDimensions = ZoomedElement.viewportDimensions();
-        var viewportWidth = viewportDimensions[0];
-        var viewportHeight = viewportDimensions[1];
+        var viewportWidth = Dimensions_1.Dimensions.viewportWidth();
+        var viewportHeight = Dimensions_1.Dimensions.viewportHeight();
         var viewportAspectRatio = viewportWidth / viewportHeight;
         var maxScaleFactor = width / this.width();
         var aspectRatio = width / height;
@@ -230,12 +198,10 @@ var ZoomedElement = (function () {
     };
     ZoomedElement.prototype.translateWrap = function () {
         this.repaint();
-        var scrollOffsets = ZoomedElement.scrollOffsets();
-        var scrollX = scrollOffsets[0];
-        var scrollY = scrollOffsets[1];
-        var viewportDimensions = ZoomedElement.viewportDimensions();
-        var viewportWidth = viewportDimensions[0];
-        var viewportHeight = viewportDimensions[1];
+        var scrollX = Dimensions_1.Dimensions.scrollX();
+        var scrollY = Dimensions_1.Dimensions.scrollY();
+        var viewportWidth = Dimensions_1.Dimensions.viewportWidth();
+        var viewportHeight = Dimensions_1.Dimensions.viewportHeight();
         var viewportX = viewportWidth / 2;
         var viewportY = scrollY + (viewportHeight / 2);
         var element = this._element;
@@ -263,14 +229,14 @@ var ZoomedElement = (function () {
 }());
 exports.ZoomedElement = ZoomedElement;
 
-},{"./Attributes":1,"./Classes":2}],5:[function(require,module,exports){
+},{"../util/Attributes":6,"../util/Classes":7,"../util/Dimensions":8}],3:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Attributes_1 = require('./Attributes');
+var Attributes_1 = require('../util/Attributes');
 var ZoomedElement_1 = require('./ZoomedElement');
 var ZoomedImageElement = (function (_super) {
     __extends(ZoomedImageElement, _super);
@@ -297,14 +263,14 @@ var ZoomedImageElement = (function (_super) {
 }(ZoomedElement_1.ZoomedElement));
 exports.ZoomedImageElement = ZoomedImageElement;
 
-},{"./Attributes":1,"./ZoomedElement":4}],6:[function(require,module,exports){
+},{"../util/Attributes":6,"./ZoomedElement":2}],4:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Attributes_1 = require('./Attributes');
+var Attributes_1 = require('../util/Attributes');
 var ZoomedElement_1 = require('./ZoomedElement');
 var ZoomedVideoElement = (function (_super) {
     __extends(ZoomedVideoElement, _super);
@@ -335,9 +301,51 @@ var ZoomedVideoElement = (function (_super) {
 }(ZoomedElement_1.ZoomedElement));
 exports.ZoomedVideoElement = ZoomedVideoElement;
 
-},{"./Attributes":1,"./ZoomedElement":4}],7:[function(require,module,exports){
+},{"../util/Attributes":6,"./ZoomedElement":2}],5:[function(require,module,exports){
 "use strict";
 var ZoomListener_1 = require('./ZoomListener');
 new ZoomListener_1.ZoomListener().listen();
 
-},{"./ZoomListener":3}]},{},[7]);
+},{"./ZoomListener":1}],6:[function(require,module,exports){
+"use strict";
+exports.ZOOM_FUNCTION_KEY = 'data-zoom';
+exports.ZOOM_IN_VALUE = 'zoom-in';
+exports.ZOOM_OUT_VALUE = 'zoom-out';
+/* the media in data-zoom-src="value" is loaded and displayed when the image is zoomed in */
+exports.FULL_SRC_KEY = 'data-zoom-src';
+/* when data-zoom-play="always" then the video will continue playing even after dismissed from zoom */
+exports.PLAY_VIDEO_KEY = 'data-zoom-play';
+exports.ALWAYS_PLAY_VIDEO_VALUE = 'always';
+
+},{}],7:[function(require,module,exports){
+"use strict";
+exports.OVERLAY_CLASS = 'zoom-overlay';
+exports.OVERLAY_OPEN_CLASS = 'zoom-overlay-open';
+exports.OVERLAY_LOADING_CLASS = 'zoom-overlay-loading';
+exports.OVERLAY_TRANSITIONING_CLASS = 'zoom-overlay-transitioning';
+exports.WRAP_CLASS = 'zoom-wrap';
+
+},{}],8:[function(require,module,exports){
+"use strict";
+var Dimensions = (function () {
+    function Dimensions() {
+    }
+    /* http://help.dottoro.com/ljnvjiow.php */
+    Dimensions.scrollX = function () {
+        return window.pageXOffset || document.body.scrollLeft || 0;
+    };
+    Dimensions.scrollY = function () {
+        return window.pageYOffset || document.body.scrollTop || 0;
+    };
+    /* http://stackoverflow.com/a/9410162 */
+    Dimensions.viewportWidth = function () {
+        return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth || 0;
+    };
+    Dimensions.viewportHeight = function () {
+        return window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight || 0;
+    };
+    return Dimensions;
+}());
+exports.Dimensions = Dimensions;
+
+},{}]},{},[5]);

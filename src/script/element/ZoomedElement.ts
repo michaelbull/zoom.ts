@@ -1,16 +1,17 @@
+import { Zoomable } from '../Zoomable';
 import {
     FULL_SRC_KEY,
     ZOOM_FUNCTION_KEY,
     ZOOM_IN_VALUE,
     ZOOM_OUT_VALUE
-} from './Attributes';
+} from '../util/Attributes';
 import {
     OVERLAY_LOADING_CLASS,
     OVERLAY_OPEN_CLASS,
     OVERLAY_TRANSITIONING_CLASS,
     WRAP_CLASS
-} from './Classes';
-import { Zoomable } from './Zoomable';
+} from '../util/Classes';
+import { Dimensions } from '../util/Dimensions';
 
 const wrap: HTMLDivElement = document.createElement('div');
 wrap.className = WRAP_CLASS;
@@ -33,22 +34,6 @@ export abstract class ZoomedElement {
     private static removeTransitionEndListener(element: HTMLElement, listener: EventListener): void {
         element.removeEventListener('transitionend', listener);
         element.removeEventListener('webkitTransitionEnd', listener);
-    }
-
-    private static scrollOffsets(): [number, number] {
-        const documentElement: HTMLElement = document.documentElement;
-        return [
-            window.pageXOffset || documentElement.scrollLeft || 0,
-            window.pageYOffset || documentElement.scrollTop || 0
-        ];
-    }
-
-    private static viewportDimensions(): [number, number] {
-        const documentElement: HTMLElement = document.documentElement;
-        return [
-            window.innerWidth || documentElement.clientWidth || 0,
-            window.innerHeight || documentElement.clientHeight || 0
-        ];
     }
 
     protected _fullSrc: string;
@@ -108,9 +93,8 @@ export abstract class ZoomedElement {
     private scaleElement(width: number, height: number): void {
         this.repaint();
 
-        const viewportDimensions: [number, number] = ZoomedElement.viewportDimensions();
-        const viewportWidth: number = viewportDimensions[0];
-        const viewportHeight: number = viewportDimensions[1];
+        const viewportWidth: number = Dimensions.viewportWidth();
+        const viewportHeight: number = Dimensions.viewportHeight();
 
         const viewportAspectRatio: number = viewportWidth / viewportHeight;
 
@@ -133,13 +117,11 @@ export abstract class ZoomedElement {
     private translateWrap(): void {
         this.repaint();
 
-        const scrollOffsets: [number, number] = ZoomedElement.scrollOffsets();
-        const scrollX: number = scrollOffsets[0];
-        const scrollY: number = scrollOffsets[1];
+        const scrollX: number = Dimensions.scrollX();
+        const scrollY: number = Dimensions.scrollY();
 
-        const viewportDimensions: [number, number] = ZoomedElement.viewportDimensions();
-        const viewportWidth: number = viewportDimensions[0];
-        const viewportHeight: number = viewportDimensions[1];
+        const viewportWidth: number = Dimensions.viewportWidth();
+        const viewportHeight: number = Dimensions.viewportHeight();
 
         const viewportX: number = viewportWidth / 2;
         const viewportY: number = scrollY + (viewportHeight / 2);
