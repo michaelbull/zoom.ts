@@ -1,0 +1,83 @@
+= zoom.ts
+
+`zoom.ts` is a lightweight library for image and video zooming, as seen on
+https://medium.design/image-zoom-on-medium-24d146fc0c20[Medium].
+
+Written in https://www.typescriptlang.org[TypeScript] with no dependencies,
+`zoom.ts` plugs into your website or application with ease with minimal
+overhead, providing smooth transitions and dismissals of both image and video
+elements. You can either use the ECMAScript 5 transpiled distribution files in
+`/dist` or import the library in an existing TypeScript project.
+
+== Usage
+
+A running demonstration can be found https://mikebull94.github.io/zoom.ts[here].
+
+Holding either the +++<kbd>⌘</kbd>+++ or +++<kbd>Ctrl</kbd>+++ key whilst
+clicking the element will open the image in a new tab.
+
+Zoomed elements can be dismissed either by clicking the element, scrolling away,
+or pressing +++<kbd>Esc</kbd>+++.
+
+== Installation
+
+Link the `zoom.min.js` and `zoom.min.css` files to your site or application,
+then proceed to add `data-zoom="zoom-in"` to your `<img>` or `<video>` tags to
+have them zoom in.
+
+The loading of a large resource can be deferred by specifying a `data-zoom-src`
+attribute, where the value assigned contains the resource to load once the
+user expands the element. The resource specified in the attribute is also the
+resource that will be loaded if the user opens the image by clicking with either
++++<kbd>⌘</kbd>+++ or +++<kbd>Ctrl</kbd>+++ held.
+
+In the example snippet below an image of a forest will be displayed. Once the
+user clicks to zoom in the image their browser will request the larger
+`forest-full.jpg` file and replace the original `<img>` with the full-resolution
+version.
+
+[source, html]
+--------------
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="zoom.min.css" />
+  </head>
+
+  <body>
+    <main>
+      <img src="forest.jpg" data-zoom="zoom-in" data-zoom-src="forest-full.jpg">
+    </main>
+
+    <script type="text/javascript" src="zoom.min.js"></script>
+  </body>
+</html>
+--------------
+
+== Building
+
+https://nodejs.org[node.js] is used to build the distribution.
+
+The following commands can be ran in the project:
+
+* `npm run build`
+-- Lint, compile, minify, and optimize the stylesheets and scripts.
+* `npm run watch`
+-- Watch the file-system for changes, triggering rebuild of the stylesheets or
+scripts if a change to the source of either is detected.
+* `npm run clean`
+-- Removes the output files under the `./dist` directory.
+
+== Credits
+
+- https://michael-bull.com[Michael Bull] (https://github.com/MikeBull94[@MikeBull94])
+- https://twitter.com/fat[Jacob Thornton] (https://github.com/fat[@fat]) - Author of https://github.com/fat/zoom.js[zoom.js]
+- http://sahil.me[Sahil Bajaj] (https://github.com/spinningarrow[@spinningarrow]) & http://heavybeard.it[Andrea Cognini] (https://github.com/heavybeard[@heavybeard]) - Authors of https://github.com/heavybeard/zoom-vanilla.js[zoom-vanilla.js]
+
+== Contributing
+Bug reports and pull requests are welcome on
+https://github.com/MikeBull94/zoom.ts[GitHub].
+
+== License
+This project is available under the terms of the MIT license. See the
+link:/LICENSE[`LICENSE`] file for the copyright information and licensing terms.
