@@ -21,45 +21,6 @@ exports.WRAP_CLASS = 'zoom-wrap';
 },{}],3:[function(require,module,exports){
 "use strict";
 var Attributes_1 = require('./Attributes');
-var Position = (function () {
-    function Position(top, left) {
-        this._top = top;
-        this._left = left;
-    }
-    /*!
-     * http://www.quirksmode.org/js/findpos.html
-     */
-    Position.of = function (element) {
-        if (!element.offsetParent) {
-            return Position.origin;
-        }
-        var key = element.getAttribute(Attributes_1.POSITION_MEMO_KEY);
-        if (key) {
-            return Position.cache[key];
-        }
-        do {
-            key = String(Math.random());
-        } while (Position.cache[key]);
-        element.setAttribute(Attributes_1.POSITION_MEMO_KEY, key);
-        Position.cache[key] = new Position(0, 0);
-        var parent = element;
-        do {
-            var position = Position.cache[key];
-            position._top += parent.offsetTop;
-            position._left += parent.offsetLeft;
-            parent = parent.offsetParent;
-        } while (parent);
-        return Position.cache[key];
-    };
-    Position.origin = new Position(0, 0);
-    Position.cache = {};
-    return Position;
-}());
-exports.Position = Position;
-
-},{"./Attributes":1}],4:[function(require,module,exports){
-"use strict";
-var Attributes_1 = require('./Attributes');
 var Classes_1 = require('./Classes');
 var ZoomedImageElement_1 = require('./ZoomedImageElement');
 var ZoomedVideoElement_1 = require('./ZoomedVideoElement');
@@ -168,11 +129,10 @@ var ZoomListener = (function () {
 }());
 exports.ZoomListener = ZoomListener;
 
-},{"./Attributes":1,"./Classes":2,"./ZoomedImageElement":6,"./ZoomedVideoElement":7}],5:[function(require,module,exports){
+},{"./Attributes":1,"./Classes":2,"./ZoomedImageElement":5,"./ZoomedVideoElement":6}],4:[function(require,module,exports){
 "use strict";
 var Attributes_1 = require('./Attributes');
 var Classes_1 = require('./Classes');
-var Position_1 = require('./Position');
 var ZoomedElement = (function () {
     function ZoomedElement(element) {
         var _this = this;
@@ -235,30 +195,34 @@ var ZoomedElement = (function () {
     };
     ZoomedElement.prototype.scale = function (width, height) {
         this.repaint();
-        var maxFactor = width / this.width();
+        var maxScaleFactor = width / this.width();
+        var viewportWidth = window.innerWidth || document.documentElement.clientWidth || 0;
+        var viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
         var aspectRatio = width / height;
-        var viewportWidth = window.innerWidth;
-        var viewportHeight = window.innerHeight;
         var viewportAspectRatio = viewportWidth / viewportHeight;
-        var factor;
+        var scaleFactor;
         if (width < viewportWidth && height < viewportHeight) {
-            factor = maxFactor;
+            scaleFactor = maxScaleFactor;
         }
         else if (aspectRatio < viewportAspectRatio) {
-            factor = (viewportHeight / height) * maxFactor;
+            scaleFactor = (viewportHeight / height) * maxScaleFactor;
         }
         else {
-            factor = (viewportWidth / width) * maxFactor;
+            scaleFactor = (viewportWidth / width) * maxScaleFactor;
         }
-        ZoomedElement.transformStyle(this._element, 'scale(' + factor + ')');
+        ZoomedElement.transformStyle(this._element, 'scale(' + scaleFactor + ')');
     };
     ZoomedElement.prototype.translate = function () {
         this.repaint();
-        var viewportX = window.innerWidth / 2;
-        var viewportY = window.scrollY + (window.innerHeight / 2);
-        var position = Position_1.Position.of(this._element);
-        var mediaCenterX = position._left + ((this._element.width || this._element.offsetWidth) / 2);
-        var mediaCenterY = position._top + ((this._element.height || this._element.offsetHeight) / 2);
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
+        var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft || 0;
+        var viewportWidth = window.innerWidth || document.documentElement.clientWidth || 0;
+        var viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
+        var viewportX = viewportWidth / 2;
+        var viewportY = scrollTop + (viewportHeight / 2);
+        var rect = this._element.getBoundingClientRect();
+        var mediaCenterX = rect.left + scrollLeft + (this._element.width / 2);
+        var mediaCenterY = rect.top + scrollTop + (this._element.height / 2);
         var x = Math.round(viewportX - mediaCenterX);
         var y = Math.round(viewportY - mediaCenterY);
         ZoomedElement.transformStyle(this._wrap, 'translate(' + x + 'px, ' + y + 'px) translateZ(0)');
@@ -282,7 +246,7 @@ var ZoomedElement = (function () {
 }());
 exports.ZoomedElement = ZoomedElement;
 
-},{"./Attributes":1,"./Classes":2,"./Position":3}],6:[function(require,module,exports){
+},{"./Attributes":1,"./Classes":2}],5:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -315,7 +279,7 @@ var ZoomedImageElement = (function (_super) {
 }(ZoomedElement_1.ZoomedElement));
 exports.ZoomedImageElement = ZoomedImageElement;
 
-},{"./Attributes":1,"./ZoomedElement":5}],7:[function(require,module,exports){
+},{"./Attributes":1,"./ZoomedElement":4}],6:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -353,9 +317,9 @@ var ZoomedVideoElement = (function (_super) {
 }(ZoomedElement_1.ZoomedElement));
 exports.ZoomedVideoElement = ZoomedVideoElement;
 
-},{"./Attributes":1,"./ZoomedElement":5}],8:[function(require,module,exports){
+},{"./Attributes":1,"./ZoomedElement":4}],7:[function(require,module,exports){
 "use strict";
 var ZoomListener_1 = require('./ZoomListener');
 new ZoomListener_1.ZoomListener().listen();
 
-},{"./ZoomListener":4}]},{},[8]);
+},{"./ZoomListener":3}]},{},[7]);

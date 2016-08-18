@@ -10,7 +10,6 @@ import {
     OVERLAY_TRANSITIONING_CLASS,
     WRAP_CLASS
 } from './Classes';
-import { Position } from './Position';
 import { Zoomable } from './Zoomable';
 
 export abstract class ZoomedElement {
@@ -91,35 +90,41 @@ export abstract class ZoomedElement {
     private scale(width: number, height: number): void {
         this.repaint();
 
-        const maxFactor: number = width / this.width();
+        const maxScaleFactor: number = width / this.width();
         const aspectRatio: number = width / height;
 
-        const viewportWidth: number = window.innerWidth;
-        const viewportHeight: number = window.innerHeight;
+        const viewportWidth: number = window.innerWidth || document.documentElement.clientWidth || 0;
+        const viewportHeight: number = window.innerHeight || document.documentElement.clientHeight || 0;
         const viewportAspectRatio: number = viewportWidth / viewportHeight;
 
-        let factor: number;
+        let scaleFactor: number;
 
         if (width < viewportWidth && height < viewportHeight) {
-            factor = maxFactor;
+            scaleFactor = maxScaleFactor;
         } else if (aspectRatio < viewportAspectRatio) {
-            factor = (viewportHeight / height) * maxFactor;
+            scaleFactor = (viewportHeight / height) * maxScaleFactor;
         } else {
-            factor = (viewportWidth / width) * maxFactor;
+            scaleFactor = (viewportWidth / width) * maxScaleFactor;
         }
 
-        ZoomedElement.transformStyle(this._element, 'scale(' + factor + ')');
+        ZoomedElement.transformStyle(this._element, 'scale(' + scaleFactor + ')');
     }
 
     private translate(): void {
         this.repaint();
 
-        const viewportX: number = window.innerWidth / 2;
-        const viewportY: number = window.scrollY + (window.innerHeight / 2);
+        const scrollTop: number = window.pageYOffset || document.documentElement.scrollTop || 0;
+        const scrollLeft: number = window.pageXOffset || document.documentElement.scrollLeft || 0;
 
-        const position: Position = Position.of(this._element);
-        const mediaCenterX: number = position._left + ((this._element.width || this._element.offsetWidth) / 2);
-        const mediaCenterY: number = position._top + ((this._element.height || this._element.offsetHeight) / 2);
+        const viewportWidth: number = window.innerWidth || document.documentElement.clientWidth || 0;
+        const viewportHeight: number = window.innerHeight || document.documentElement.clientHeight || 0;
+
+        const viewportX: number = viewportWidth / 2;
+        const viewportY: number = scrollTop + (viewportHeight / 2);
+
+        const rect: ClientRect = this._element.getBoundingClientRect();
+        const mediaCenterX: number = rect.left + scrollLeft + (this._element.width / 2);
+        const mediaCenterY: number = rect.top + scrollTop + (this._element.height / 2);
 
         const x: number = Math.round(viewportX - mediaCenterX);
         const y: number = Math.round(viewportY - mediaCenterY);
