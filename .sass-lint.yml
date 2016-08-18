@@ -108,6 +108,7 @@ rules:
       - 'display'
       - 'background-color'
       - 'cursor'
+      - 'filter'
 
   no-empty-rulesets:
     - 2

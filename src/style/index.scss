@@ -18,9 +18,18 @@ $overlay-opacity: 100;
 }
 
 [data-zoom='zoom-out'] {
+  transform: translateZ(0);
   cursor: pointer;
   cursor: -moz-zoom-out;
   cursor: -webkit-zoom-out;
+
+  // force hardware acceleration
+  filter: none;
+  filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius='0');
+  -webkit-filter: blur(0);
+  -moz-filter: blur(0);
+  -ms-filter: blur(0);
+  backface-visibility: hidden;
 }
 
 // Ensure the wrap and the zoomed element appear above the overlay
@@ -82,7 +91,6 @@ $overlay-opacity: 100;
   -ms-user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
-
 }
 
 // Re-enable pointer events once loaded and overlay is either transitioning or already opened

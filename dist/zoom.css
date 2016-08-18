@@ -4,9 +4,16 @@
   cursor: -webkit-zoom-in; }
 
 [data-zoom='zoom-out'] {
+  transform: translateZ(0);
   cursor: pointer;
   cursor: -moz-zoom-out;
-  cursor: -webkit-zoom-out; }
+  cursor: -webkit-zoom-out;
+  filter: none;
+  filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius='0');
+  -webkit-filter: blur(0);
+  -moz-filter: blur(0);
+  -ms-filter: blur(0);
+  backface-visibility: hidden; }
 
 [data-zoom='zoom-out'],
 .zoom-wrap {
