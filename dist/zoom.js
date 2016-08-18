@@ -3,7 +3,6 @@
 exports.ZOOM_FUNCTION_KEY = 'data-zoom';
 exports.ZOOM_IN_VALUE = 'zoom-in';
 exports.ZOOM_OUT_VALUE = 'zoom-out';
-exports.POSITION_MEMO_KEY = 'data-zoom-offset-key';
 /* the media in data-zoom-src="value" is loaded and displayed when the image is zoomed in */
 exports.FULL_SRC_KEY = 'data-zoom-src';
 /* when data-zoom-play="always" then the video will continue playing even after dismissed from zoom */
@@ -196,9 +195,9 @@ var ZoomedElement = (function () {
     ZoomedElement.prototype.scale = function (width, height) {
         this.repaint();
         var maxScaleFactor = width / this.width();
+        var aspectRatio = width / height;
         var viewportWidth = window.innerWidth || document.documentElement.clientWidth || 0;
         var viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
-        var aspectRatio = width / height;
         var viewportAspectRatio = viewportWidth / viewportHeight;
         var scaleFactor;
         if (width < viewportWidth && height < viewportHeight) {
