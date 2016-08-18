@@ -12,16 +12,12 @@ import {
     WRAP_CLASS
 } from '../util/Classes';
 import { Dimensions } from '../util/Dimensions';
+import { Style } from '../util/Style';
 
 const wrap: HTMLDivElement = document.createElement('div');
 wrap.className = WRAP_CLASS;
 
 export abstract class ZoomedElement {
-    private static transformStyle(element: HTMLElement, style: string): void {
-        element.style.webkitTransform = style;
-        element.style.transform = style;
-    }
-
     private static addTransitionEndListener(element: HTMLElement, listener: EventListener): void {
         if ('transition' in document.body.style) {
             element.addEventListener('transitionend', listener);
@@ -58,8 +54,8 @@ export abstract class ZoomedElement {
         bodyClassList.remove(OVERLAY_OPEN_CLASS);
         bodyClassList.add(OVERLAY_TRANSITIONING_CLASS);
 
-        ZoomedElement.transformStyle(this._element, '');
-        ZoomedElement.transformStyle(wrap, '');
+        Style.transform(this._element, '');
+        Style.transform(wrap, '');
         ZoomedElement.addTransitionEndListener(this._element, this.closedListener);
     }
 
@@ -111,7 +107,7 @@ export abstract class ZoomedElement {
             scaleFactor = (viewportWidth / width) * maxScaleFactor;
         }
 
-        ZoomedElement.transformStyle(this._element, 'scale(' + scaleFactor + ')');
+        Style.transform(this._element, 'scale(' + scaleFactor + ')');
     }
 
     private translateWrap(): void {
@@ -134,7 +130,7 @@ export abstract class ZoomedElement {
         const x: number = Math.round(viewportX - centerX);
         const y: number = Math.round(viewportY - centerY);
 
-        ZoomedElement.transformStyle(wrap, 'translate(' + x + 'px, ' + y + 'px) translateZ(0)');
+        Style.transform(wrap, 'translate(' + x + 'px, ' + y + 'px) translateZ(0)');
     }
 
     private opened(): void {
