@@ -4,12 +4,11 @@
 https://medium.design/image-zoom-on-medium-24d146fc0c20[Medium].
 
 Written in https://www.typescriptlang.org[TypeScript] with no dependencies,
-`zoom.ts` plugs into your website or application with ease with minimal
+`zoom.ts` plugs into your website or application with ease and minimal
 overhead, providing smooth transitions and dismissals of both image and video
-elements. You can either use the ECMAScript 5 transpiled distribution files in
-`/dist` or import the library in an existing TypeScript project.
+elements that expand to fit your window's viewport.
 
-== Usage
+== Demo
 
 A running demonstration can be found https://mikebull94.github.io/zoom.ts[here].
 
@@ -21,15 +20,36 @@ or pressing +++<kbd>Esc</kbd>+++.
 
 == Installation
 
-Link the `zoom.min.js` and `zoom.min.css` files to your site or application,
-then proceed to add `data-zoom="zoom-in"` to your `<img>` or `<video>` tags to
-have them zoom in.
+Install the library by either importing the
+https://github.com/MikeBull94/zoom.ts/blob/master/src/script/ZoomListener.ts[`ZoomListener`]
+TypeScript module and calling `new ZoomListener().listen()`, or
+linking/requiring the
+https://github.com/MikeBull94/zoom.ts/blob/master/dist/zoom.js[distribution
+file].
+
+Install the stylesheet by either importing
+https://github.com/MikeBull94/zoom.ts/blob/master/src/style/index.scss[`index.scss`]
+file or including/linking the
+https://github.com/MikeBull94/zoom.ts/blob/master/dist/zoom.css[distribution
+stylesheet].
+
+Minified/optimized versions of both the
+https://github.com/MikeBull94/zoom.ts/blob/master/dist/zoom.min.js[library] and
+https://github.com/MikeBull94/zoom.ts/blob/master/dist/zoom.min.css[stylesheet]
+are also available.
+
+== Usage
+
+Add the `data-zoom="zoom-in"` attribute to an `<img>` or `<video>` to have it
+zoom in when clicked by a user.
 
 The loading of a large resource can be deferred by specifying a `data-zoom-src`
-attribute, where the value assigned contains the resource to load once the
-user expands the element. The resource specified in the attribute is also the
+attribute, where the value assigned contains the resource to load once the user
+expands the element. The resource specified in the attribute is also the
 resource that will be loaded if the user opens the image by clicking with either
 +++<kbd>⌘</kbd>+++ or +++<kbd>Ctrl</kbd>+++ held.
+
+== Example
 
 In the example snippet below an image of a forest will be displayed. Once the
 user clicks to zoom in the image their browser will request the larger
@@ -56,7 +76,7 @@ version.
 
 == Building
 
-https://nodejs.org[node.js] is used to build the distribution.
+https://nodejs.org[Node.js] is used to build the distribution.
 
 The following commands can be ran in the project:
 
@@ -80,4 +100,5 @@ https://github.com/MikeBull94/zoom.ts[GitHub].
 
 == License
 This project is available under the terms of the MIT license. See the
-link:/LICENSE[`LICENSE`] file for the copyright information and licensing terms.
+https://github.com/MikeBull94/zoom.ts/blob/master/LICENSE[`LICENSE`] file for
+the copyright information and licensing terms.
