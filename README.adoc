@@ -4,8 +4,8 @@
 https://medium.design/image-zoom-on-medium-24d146fc0c20[Medium].
 
 Written in https://www.typescriptlang.org[TypeScript] with no dependencies,
-`zoom.ts` plugs into your website or application with ease and minimal
-overhead, providing smooth transitions and dismissals of both image and video
+`zoom.ts` plugs into your website or application with ease and minimal overhead
+(<11kB), providing smooth transitions and dismissals of both image and video
 elements that expand to fit your window's viewport.
 
 == Demo
