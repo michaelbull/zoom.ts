@@ -1,7 +1,7 @@
 {
   "name": "zoom.ts",
   "version": "1.0.0",
-  "description": "Beautiful image zooming, made with TypeScript.",
+  "description": "A lightweight TypeScript library for image and video zooming, as seen on Medium.",
   "keywords": [
     "zoom.ts",
     "zoom.js",
