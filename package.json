@@ -42,7 +42,6 @@
     "url": "https://github.com/MikeBull94/zoom.ts"
   },
   "scripts": {
-    "clean": "rm -rf dist/*",
     "lint-ts": "tslint src/script/**/*.ts",
     "lint-scss": "sass-lint --config .sass-lint.yml \"src/style/**/*.scss\" --verbose --no-exit",
     "compile-ts": "browserify src/script/index.ts --plugin tsify > dist/zoom.js",
@@ -51,8 +50,10 @@
     "optimize-scss": "postcss --use cssnano --no-cssnano.autoprefixer --output dist/zoom.min.css dist/zoom.css",
     "watch-ts": "nodemon --ext ts --watch src/script --exec \"npm run compile-ts && npm run optimize-ts\"",
     "watch-scss": "nodemon --ext scss --watch src/style --exec \"npm run compile-scss && npm run optimize-scss\"",
+    "docs-ts": "typedoc src/script --mode modules --target ES5 --readme none --out docs/",
+    "clean": "rm -rf dist/* && rm -rf docs/*",
     "watch": "concurrently --kill-others \"npm run watch-ts\" \"npm run watch-scss\"",
-    "build": "npm run clean && npm run lint-ts && npm run lint-scss && npm run compile-ts && npm run optimize-ts && npm run compile-scss && npm run optimize-scss"
+    "build": "npm run clean && npm run lint-ts && npm run lint-scss && npm run compile-ts && npm run optimize-ts && npm run compile-scss && npm run optimize-scss && npm run docs-ts"
   },
   "dependencies": {},
   "devDependencies": {
@@ -67,6 +68,7 @@
     "sass-lint": "^1.8.2",
     "tsify": "^1.0.3",
     "tslint": "^3.14.0",
+    "typedoc": "^0.4.5",
     "typescript": "^1.8.10"
   }
 }

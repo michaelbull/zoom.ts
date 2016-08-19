@@ -2,12 +2,11 @@
   "compileOnSave": false,
   "compilerOptions": {
     "target": "es5",
-    "sourceRoot": "src/script",
-    "outDir": "dist/"
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "sourceMap": false,
+    "noImplicitAny": true
   },
-  "files": [
-    "./src/script/index.ts"
-  ],
   "exclude": [
     "node_modules"
   ]
