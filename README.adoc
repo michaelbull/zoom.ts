@@ -34,7 +34,7 @@ file or including/linking the
 https://github.com/MikeBull94/zoom.ts/blob/master/dist/zoom.css[distribution
 stylesheet].
 
-Minified/optimized versions of both the
+Minified and optimized versions of both the
 https://github.com/MikeBull94/zoom.ts/blob/master/dist/zoom.min.js[library] and
 https://github.com/MikeBull94/zoom.ts/blob/master/dist/zoom.min.css[stylesheet]
 are also available.
