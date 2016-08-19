@@ -5,7 +5,8 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": false,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "removeComments": false
   },
   "exclude": [
     "node_modules"

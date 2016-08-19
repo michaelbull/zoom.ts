@@ -50,7 +50,7 @@
     "optimize-scss": "postcss --use cssnano --no-cssnano.autoprefixer --output dist/zoom.min.css dist/zoom.css",
     "watch-ts": "nodemon --ext ts --watch src/script --exec \"npm run compile-ts && npm run optimize-ts\"",
     "watch-scss": "nodemon --ext scss --watch src/style --exec \"npm run compile-scss && npm run optimize-scss\"",
-    "docs-ts": "typedoc src/script --mode modules --target ES5 --readme none --out docs/",
+    "docs-ts": "typedoc src/script --includeDeclarations --mode file --target ES5 --readme none --out docs/",
     "clean": "rm -rf dist/* && rm -rf docs/*",
     "watch": "concurrently --kill-others \"npm run watch-ts\" \"npm run watch-scss\"",
     "build": "npm run clean && npm run lint-ts && npm run lint-scss && npm run compile-ts && npm run optimize-ts && npm run compile-scss && npm run optimize-scss && npm run docs-ts"

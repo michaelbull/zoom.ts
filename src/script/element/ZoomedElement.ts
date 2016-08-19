@@ -17,7 +17,16 @@ import { Style } from '../util/Style';
 const wrap: HTMLDivElement = document.createElement('div');
 wrap.className = WRAP_CLASS;
 
+/**
+ * Represents a {@link Zoomable} element that may be opened or closed.
+ */
 export abstract class ZoomedElement {
+
+    /**
+     * Adds an event listener that is called on the end of a transition.
+     * @param element The element whose events should be listened to.
+     * @param listener The listener to call once an event is received.
+     */
     private static addTransitionEndListener(element: HTMLElement, listener: EventListener): void {
         if ('transition' in document.body.style) {
             element.addEventListener('transitionend', listener);
@@ -27,19 +36,38 @@ export abstract class ZoomedElement {
         }
     }
 
+    /**
+     * Removes an event listener that is called on the end of a transition.
+     * @param element The element whose events should no longer be listened to.
+     * @param listener The listener to remove.
+     */
     private static removeTransitionEndListener(element: HTMLElement, listener: EventListener): void {
         element.removeEventListener('transitionend', listener);
         element.removeEventListener('webkitTransitionEnd', listener);
     }
 
+    /**
+     * The full src of the element.
+     */
     protected _fullSrc: string;
+
+    /**
+     * The underlying HTMLElement.
+     */
     private _element: Zoomable;
 
+    /**
+     * Creates a new {@link ZoomedElement}
+     * @param element The underlying HTMLElement.
+     */
     constructor(element: Zoomable) {
         this._fullSrc = element.getAttribute(FULL_SRC_KEY) || element.currentSrc || element.src;
         this._element = element;
     }
 
+    /**
+     * Opens the zoomed view.
+     */
     open(): void {
         document.body.classList.add(OVERLAY_LOADING_CLASS);
 
@@ -49,6 +77,9 @@ export abstract class ZoomedElement {
         ZoomedElement.addTransitionEndListener(this._element, this.openedListener);
     }
 
+    /**
+     * Closes the zoomed view.
+     */
     close(): void {
         const bodyClassList: DOMTokenList = document.body.classList;
         bodyClassList.remove(OVERLAY_OPEN_CLASS);
@@ -59,12 +90,26 @@ export abstract class ZoomedElement {
         ZoomedElement.addTransitionEndListener(this._element, this.closedListener);
     }
 
+    /**
+     * Called when the zoomed view is opened.
+     */
     protected abstract zoomedIn(): void;
 
-    protected abstract disposed(): void;
+    /**
+     * Called when the zoomed view is closed.
+     */
+    protected abstract zoomedOut(): void;
 
+    /**
+     * Calculates the actual width of the {@link _element}
+     */
     protected abstract width(): number;
 
+    /**
+     * Called once the {@link _fullSrc} src of the {@link _element} is loaded.
+     * @param width The width of the {@link _element}.
+     * @param height The height of the {@link _element}.
+     */
     protected loaded(width: number, height: number): void {
         const bodyClassList: DOMTokenList = document.body.classList;
         bodyClassList.remove(OVERLAY_LOADING_CLASS);
@@ -80,12 +125,20 @@ export abstract class ZoomedElement {
         this.translateWrap();
     }
 
+    /**
+     * Forces the {@link _element} to repaint on the canvas.
+     */
     private repaint(): void {
         /* tslint:disable */
         this._element.offsetWidth;
         /* tslint:enable */
     }
 
+    /**
+     * Scales the {@link _element} to fill the dimensions of the viewport.
+     * @param width The width of the {@link _element}.
+     * @param height The height of the {@link _element}.
+     */
     private scaleElement(width: number, height: number): void {
         this.repaint();
 
@@ -110,6 +163,9 @@ export abstract class ZoomedElement {
         Style.transform(this._element, 'scale(' + scaleFactor + ')');
     }
 
+    /**
+     * Translates the coordinates of the {@link wrap} to offset the {@link _element} to the center of the page.
+     */
     private translateWrap(): void {
         this.repaint();
 
@@ -133,27 +189,25 @@ export abstract class ZoomedElement {
         Style.transform(wrap, 'translate(' + x + 'px, ' + y + 'px) translateZ(0)');
     }
 
-    private opened(): void {
+    /**
+     * An event lister that adds the {@link OVERLAY_TRANSITIONING_CLASS} to the document body.
+     */
+    private openedListener: EventListener = () => {
         ZoomedElement.removeTransitionEndListener(this._element, this.openedListener);
         document.body.classList.remove(OVERLAY_TRANSITIONING_CLASS);
-    }
+    };
 
-    private closed(): void {
+    /**
+     * An event listener that closes the zoomed view.
+     */
+    private closedListener: EventListener = () => {
         ZoomedElement.removeTransitionEndListener(this._element, this.closedListener);
 
         if (wrap.parentNode) {
             this._element.setAttribute(ZOOM_FUNCTION_KEY, ZOOM_IN_VALUE);
             wrap.parentNode.replaceChild(this._element, wrap);
             document.body.classList.remove(OVERLAY_TRANSITIONING_CLASS);
-            this.disposed();
+            this.zoomedOut();
         }
-    }
-
-    private openedListener: EventListener = () => {
-        this.opened();
-    };
-
-    private closedListener: EventListener = () => {
-        this.closed();
     };
 }
