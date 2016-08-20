@@ -23,10 +23,10 @@ var TOUCH_Y_DELTA = 30;
 var overlay = document.createElement('div');
 overlay.className = Classes_1.OVERLAY_CLASS;
 /**
- * Entry point to the library that can will listen for click events on zoomable elements.
+ * Entry point to the library.
  */
-var ZoomListener = (function () {
-    function ZoomListener() {
+var Zoom = (function () {
+    function Zoom() {
         var _this = this;
         /**
          * An event listener that calls {@link close} if the difference between the {@link _initialScrollY} and
@@ -71,7 +71,7 @@ var ZoomListener = (function () {
      * @param fn The function to execute.
      * @see http://youmightnotneedjquery.com/#ready
      */
-    ZoomListener.ready = function (fn) {
+    Zoom.ready = function (fn) {
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', function () {
                 fn();
@@ -84,9 +84,9 @@ var ZoomListener = (function () {
     /**
      * Listens for click events on {@link Zoomable} elements and appends the {@link overlay} to the document.
      */
-    ZoomListener.prototype.listen = function () {
+    Zoom.prototype.listen = function () {
         var _this = this;
-        ZoomListener.ready(function () {
+        Zoom.ready(function () {
             document.body.addEventListener('click', function (event) {
                 var target = event.target;
                 if (target.getAttribute(Attributes_1.ZOOM_FUNCTION_KEY) === Attributes_1.ZOOM_IN_VALUE) {
@@ -103,7 +103,7 @@ var ZoomListener = (function () {
      * Zooms in on an element.
      * @param event The click event that occurred when interacting with the element.
      */
-    ZoomListener.prototype.zoom = function (event) {
+    Zoom.prototype.zoom = function (event) {
         event.stopPropagation();
         var bodyClassList = document.body.classList;
         if (bodyClassList.contains(Classes_1.OVERLAY_OPEN_CLASS) || bodyClassList.contains(Classes_1.OVERLAY_LOADING_CLASS)) {
@@ -132,7 +132,7 @@ var ZoomListener = (function () {
     /**
      * Closes {@link _current}.
      */
-    ZoomListener.prototype.close = function () {
+    Zoom.prototype.close = function () {
         if (this._current) {
             this._current.close();
             this.removeCloseListeners();
@@ -142,7 +142,7 @@ var ZoomListener = (function () {
     /**
      * Adds event listeners to the page to listen for element dismissal.
      */
-    ZoomListener.prototype.addCloseListeners = function () {
+    Zoom.prototype.addCloseListeners = function () {
         window.addEventListener('scroll', this.scrollListener);
         document.addEventListener('keyup', this.keyboardListener);
         document.addEventListener('touchstart', this.touchStartListener);
@@ -150,14 +150,14 @@ var ZoomListener = (function () {
     /**
      * Removes the event listeners that were listening for element dismissal.
      */
-    ZoomListener.prototype.removeCloseListeners = function () {
+    Zoom.prototype.removeCloseListeners = function () {
         window.removeEventListener('scroll', this.scrollListener);
         document.removeEventListener('keyup', this.keyboardListener);
         document.removeEventListener('touchstart', this.touchStartListener);
     };
-    return ZoomListener;
+    return Zoom;
 }());
-exports.ZoomListener = ZoomListener;
+exports.Zoom = Zoom;
 
 },{"./element/ZoomedImageElement":3,"./element/ZoomedVideoElement":4,"./util/Attributes":6,"./util/Classes":7,"./util/Dimensions":8}],2:[function(require,module,exports){
 "use strict";
@@ -419,10 +419,10 @@ exports.ZoomedVideoElement = ZoomedVideoElement;
 
 },{"../util/Attributes":6,"./ZoomedElement":2}],5:[function(require,module,exports){
 "use strict";
-var ZoomListener_1 = require('./ZoomListener');
-new ZoomListener_1.ZoomListener().listen();
+var Zoom_1 = require('./Zoom');
+new Zoom_1.Zoom().listen();
 
-},{"./ZoomListener":1}],6:[function(require,module,exports){
+},{"./Zoom":1}],6:[function(require,module,exports){
 "use strict";
 /**
  * The attribute key used to indicate which zoom function (in or out) should occur once the element is clicked.

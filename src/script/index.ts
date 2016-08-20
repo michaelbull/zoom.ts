@@ -1,3 +1,3 @@
-import { ZoomListener } from './ZoomListener';
+import { Zoom } from './Zoom';
 
-new ZoomListener().listen();
+new Zoom().listen();

@@ -37,9 +37,9 @@ const overlay: HTMLDivElement = document.createElement('div');
 overlay.className = OVERLAY_CLASS;
 
 /**
- * Entry point to the library that can will listen for click events on zoomable elements.
+ * Entry point to the library.
  */
-export class ZoomListener {
+export class Zoom {
 
     /**
      * Executes a function when the DOM is fully loaded.
@@ -75,7 +75,7 @@ export class ZoomListener {
      * Listens for click events on {@link Zoomable} elements and appends the {@link overlay} to the document.
      */
     listen(): void {
-        ZoomListener.ready(() => {
+        Zoom.ready(() => {
             document.body.addEventListener('click', (event: MouseEvent) => {
                 const target: Zoomable = event.target as Zoomable;
 

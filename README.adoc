@@ -22,9 +22,8 @@ or pressing +++<kbd>Esc</kbd>+++.
 == Installation
 
 Install the library by either importing the
-https://github.com/MikeBull94/zoom.ts/blob/master/src/script/ZoomListener.ts[`ZoomListener`]
-TypeScript module and calling `new ZoomListener().listen()`, or
-linking/requiring the
+https://github.com/MikeBull94/zoom.ts/blob/master/src/script/Zoom.ts[`Zoom`]
+TypeScript module and calling `new Zoom().listen()`, or linking/requiring the
 https://github.com/MikeBull94/zoom.ts/blob/master/dist/zoom.js[distribution
 file].
 
