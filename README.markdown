@@ -37,7 +37,7 @@ new Zoom().listen();
 ```
 
 Or the [JavaScript distribution][dist.js] can be linked, which will register
-`zoom` as a global which can be accessed by the browser:
+`zoom` as a global that can be accessed by the browser:
 
 ```html
 <script type="text/javascript" src="dist/zoom.js"></script>
