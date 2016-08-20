@@ -1,7 +1,8 @@
 [data-zoom='zoom-in'] {
   cursor: pointer;
   cursor: -moz-zoom-in;
-  cursor: -webkit-zoom-in; }
+  cursor: -webkit-zoom-in;
+}
 
 [data-zoom='zoom-out'] {
   transform: translateZ(0);
@@ -13,7 +14,8 @@
   -webkit-filter: blur(0);
   -moz-filter: blur(0);
   -ms-filter: blur(0);
-  backface-visibility: hidden; }
+  backface-visibility: hidden;
+}
 
 [data-zoom='zoom-out'],
 .zoom-wrap {
@@ -25,7 +27,8 @@
   z-index: 2000;
   will-change: transform;
   backface-visibility: hidden;
-  -webkit-backface-visibility: hidden; }
+  -webkit-backface-visibility: hidden;
+}
 
 .zoom-overlay {
   transition: opacity 400ms;
@@ -41,14 +44,17 @@
   z-index: 1000;
   background: white;
   pointer-events: none;
-  filter: 'alpha(opacity=0)'; }
+  filter: 'alpha(opacity=0)';
+}
 
 .zoom-overlay-open .zoom-overlay {
   opacity: 1;
-  filter: "alpha(opacity=100)"; }
+  filter: "alpha(opacity=100)";
+}
 
 .zoom-overlay-open:not(.zoom-overlay-loading):not(.zoom-overlay-transitioning) {
-  image-rendering: pixelated; }
+  image-rendering: pixelated;
+}
 
 .zoom-overlay-loading,
 .zoom-overlay-transitioning,
@@ -56,21 +62,31 @@
   user-select: none;
   -ms-user-select: none;
   -moz-user-select: none;
-  -webkit-user-select: none; }
+  -webkit-user-select: none;
+}
 
 .zoom-overlay-loading {
-  cursor: wait; }
-  .zoom-overlay-loading [data-zoom='zoom-in'], .zoom-overlay-loading [data-zoom='zoom-out'] {
-    cursor: wait; }
+  cursor: wait;
+}
+
+.zoom-overlay-loading [data-zoom='zoom-in'], .zoom-overlay-loading [data-zoom='zoom-out'] {
+  cursor: wait;
+}
 
 .zoom-overlay-transitioning .zoom-overlay-open,
 .zoom-overlay-open {
-  pointer-events: none; }
-  .zoom-overlay-transitioning .zoom-overlay-open [data-zoom='zoom-out'],
-  .zoom-overlay-open [data-zoom='zoom-out'] {
-    pointer-events: auto; }
+  pointer-events: none;
+}
+
+.zoom-overlay-transitioning .zoom-overlay-open [data-zoom='zoom-out'],
+.zoom-overlay-open [data-zoom='zoom-out'] {
+  pointer-events: auto;
+}
 
 .zoom-overlay-transitioning:not(.zoom-overlay-open) {
-  pointer-events: none; }
-  .zoom-overlay-transitioning:not(.zoom-overlay-open) [data-zoom='zoom-out'] {
-    pointer-events: auto; }
+  pointer-events: none;
+}
+
+.zoom-overlay-transitioning:not(.zoom-overlay-open) [data-zoom='zoom-out'] {
+  pointer-events: auto;
+}

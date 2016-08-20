@@ -9,8 +9,8 @@ A lightweight TypeScript library for image and video zooming, as seen on
 [![peerDependencies status][peerDependencies-image]][peerDependencies-url]
 
 `zoom.ts` easily plugs into your application with minimal overhead by including
-no third-party dependencies and requiring less than 11kB of bandwidth when
-minified. Once marked as zoomable, clicking an image or video will smoothly
+no third-party dependencies and requiring just 8kB of bandwidth when
+optimized. Once marked as zoomable, clicking an image or video will smoothly
 expand it to fit the browser's entire viewport. The zoomed element will then
 await dismissal from the user, either by clicking or scrolling away.
 
@@ -31,7 +31,7 @@ or pressing <kbd>Esc</kbd>.
 The [TypeScript library][zoom.ts] can be imported and instantiated:
 
 ```javascript
-import 'zoom.ts';
+import { Zoom } from 'zoom.ts/lib/Zoom';
 
 new Zoom().listen();
 ```
