@@ -58,18 +58,18 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "browserify": "^13.1.0",
-    "concurrently": "^2.2.0",
-    "cssnano": "^3.7.4",
-    "minifyify": "^7.3.3",
-    "node-sass": "^3.8.0",
-    "nodemon": "^1.10.0",
-    "npm-check-updates": "^2.8.0",
-    "postcss-cli": "^2.5.2",
-    "sass-lint": "^1.8.2",
-    "tsify": "^1.0.3",
-    "tslint": "^3.14.0",
-    "typedoc": "^0.4.5",
-    "typescript": "^1.8.10"
+    "browserify": "13.1.0",
+    "concurrently": "2.2.0",
+    "cssnano": "3.7.4",
+    "minifyify": "7.3.3",
+    "node-sass": "3.8.0",
+    "nodemon": "1.10.0",
+    "npm-check-updates": "2.8.0",
+    "postcss-cli": "2.5.2",
+    "sass-lint": "1.8.2",
+    "tsify": "1.0.3",
+    "tslint": "3.14.0",
+    "typedoc": "0.4.5",
+    "typescript": "1.8.10"
   }
 }
