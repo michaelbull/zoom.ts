@@ -1,3 +1,1 @@
-import { Zoom } from './Zoom';
-
-new Zoom().listen();
+export { Zoom } from './Zoom';

@@ -1,6 +1,6 @@
 {
   "name": "zoom.ts",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "A lightweight TypeScript library for image and video zooming, as seen on Medium.",
   "keywords": [
     "zoom.ts",
@@ -37,7 +37,7 @@
       "url": "http://heavybeard.it"
     }
   ],
-  "main": "dist/zoom.min.js",
+  "main": "lib/index.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/MikeBull94/zoom.ts"
@@ -45,9 +45,9 @@
   "scripts": {
     "lint-ts": "tslint lib/**/*.ts",
     "lint-scss": "sass-lint --config .sass-lint.yml \"style/**/*.scss\" --verbose --no-exit",
-    "compile-ts": "browserify lib/index.ts --plugin tsify > dist/zoom.js",
+    "compile-ts": "browserify lib/index.ts --standalone zoom --plugin tsify > dist/zoom.js",
     "compile-scss": "node-sass style/zoom.scss dist/zoom.css",
-    "optimize-ts": "browserify dist/zoom.js --debug --plugin [minifyify --no-map] > dist/zoom.min.js",
+    "optimize-ts": "browserify dist/zoom.js --debug --standalone zoom --plugin [minifyify --no-map] > dist/zoom.min.js",
     "optimize-scss": "postcss --use cssnano --no-cssnano.autoprefixer --output dist/zoom.min.css dist/zoom.css",
     "watch-ts": "nodemon --ext ts --watch lib --exec \"npm run compile-ts && npm run optimize-ts\"",
     "watch-scss": "nodemon --ext scss --watch style --exec \"npm run compile-scss && npm run optimize-scss\"",

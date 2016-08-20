@@ -26,15 +26,45 @@ or pressing <kbd>Esc</kbd>.
 
 ## Installation
 
-Install the library by either importing the [`Zoom`][Zoom.ts] TypeScript module
-and calling `new Zoom().listen()`, or linking/requiring the [distribution
-file][dist.js].
+### Library
 
-Install the stylesheet by either importing [`zoom.scss`][zoom.scss] file or
-including/linking the [distribution stylesheet][dist.css].
+The [TypeScript library][zoom.ts] can be imported and instantiated:
 
-Minified and optimized versions of both the [library][min.js] and
-[stylesheet][min.css] are also available.
+```javascript
+import 'zoom.ts';
+
+new Zoom().listen();
+```
+
+Or the [JavaScript distribution][dist.js] can be linked, which will register
+`zoom` as a global which can be accessed by the browser:
+
+```html
+<script type="text/javascript" src="dist/zoom.js"></script>
+<script type="text/javascript">
+  new window.zoom.Zoom().listen();
+</script>
+```
+
+A minified version of the JavaScript distribution is available at
+[`./dist/zoom.min.js`][min.js].
+
+### Stylesheet
+
+The [SCSS][zoom.scss] file can be imported:
+
+```scss
+@import '~zoom.ts/style/zoom';
+```
+
+Or the [CSS distribution][dist.css] can be linked:
+
+```html
+<link rel="stylesheet" type="text/css" href="dist/zoom.css" />
+```
+
+A minified version of the CSS distribution is aviailable at
+[`./dist/zoom.min.css`][min.css].
 
 ## Usage
 
@@ -66,7 +96,10 @@ version.
       <img src="forest.jpg" data-zoom="zoom-in" data-zoom-src="forest-full.jpg">
     </main>
 
-    <script type="text/javascript" src="zoom.min.js"></script>
+    <script type="text/javascript" src="dist/zoom.min.js"></script>
+    <script type="text/javascript">
+      new window.zoom.Zoom().listen();
+    </script>
   </body>
 </html>
 ```
@@ -114,11 +147,11 @@ This project is available under the terms of the MIT license. See the
 [peerDependencies-image]: https://david-dm.org/MikeBull94/zoom.ts/peer-status.svg
 [peerDependencies-url]: https://david-dm.org/MikeBull94/zoom.ts#info=peerDependencies
 [demo]: https://mikebull94.github.io/zoom.ts
-[Zoom.ts]: https://github.com/MikeBull94/zoom.ts/blob/master/lib/Zoom.ts
+[zoom.ts]: https://github.com/MikeBull94/zoom.ts/blob/master/lib/Zoom.ts
 [dist.js]: https://github.com/MikeBull94/zoom.ts/blob/master/dist/zoom.js
+[min.js]: https://github.com/MikeBull94/zoom.ts/blob/master/dist/zoom.min.js
 [zoom.scss]: https://github.com/MikeBull94/zoom.ts/blob/master/style/zoom.scss
 [dist.css]: https://github.com/MikeBull94/zoom.ts/blob/master/dist/zoom.css
-[min.js]: https://github.com/MikeBull94/zoom.ts/blob/master/dist/zoom.min.js
 [min.css]: https://github.com/MikeBull94/zoom.ts/blob/master/dist/zoom.min.css
 [typedoc]: https://github.com/TypeStrong/typedoc
 [docs]: https://mikebull94.github.io/zoom.ts/docs
