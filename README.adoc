@@ -3,6 +3,11 @@
 A lightweight TypeScript library for image and video zooming, as seen on
 https://medium.design/image-zoom-on-medium-24d146fc0c20[Medium].
 
+image:https://img.shields.io/npm/v/zoom.ts.svg["npm version", link="https://www.npmjs.com/package/zoom.ts"]
+image:https://david-dm.org/MikeBull94/zoom.ts.svg["dependencies status", link="https://david-dm.org/MikeBull94/zoom.ts"]
+image:https://david-dm.org/MikeBull94/zoom.ts/dev-status.svg["devDependencies status", link="https://david-dm.org/MikeBull94/zoom.ts#info=devDependencies"]
+image:https://david-dm.org/MikeBull94/zoom.ts/peer-status.svg["peerDependencies status", link="https://david-dm.org/MikeBull94/zoom.ts#info=peerDependencies"]
+
 `zoom.ts` easily plugs into your application with minimal overhead by including
 no third-party dependencies and requiring less than 11kB of bandwidth when
 minified. Once marked as zoomable, clicking an image or video will smoothly
