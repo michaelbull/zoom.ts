@@ -51,7 +51,7 @@ A minified version of the JavaScript distribution is available at
 
 ### Stylesheet
 
-The [SCSS][zoom.scss] file can be imported:
+The [SCSS file][zoom.scss] can be imported:
 
 ```scss
 @import '~zoom.ts/style/zoom';
