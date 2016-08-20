@@ -46,7 +46,7 @@ are also available.
 == Usage
 
 Add the `data-zoom="zoom-in"` attribute to an `<img>` or `<video>` to have it
-zoom in when clicked by a user.
+zoom in when clicked.
 
 The loading of a large resource can be deferred by specifying a `data-zoom-src`
 attribute, where the value assigned contains the resource to load once the user
