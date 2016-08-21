@@ -53,7 +53,7 @@
     "watch-scss": "nodemon --ext scss --watch style --exec \"npm run compile-scss && npm run optimize-scss\"",
     "docs-ts": "typedoc lib --includeDeclarations --mode file --target ES5 --readme none --out docs/",
     "check-updates": "ncu",
-    "update-dependencies": "ncu -u && npm install",
+    "update-dependencies": "ncu --upgrade && npm install",
     "clean": "rm -rf build/* && rm -rf dist/* && rm -rf docs/*",
     "watch": "concurrently --kill-others \"npm run watch-ts\" \"npm run watch-scss\"",
     "build": "npm run clean && npm run lint-ts && npm run lint-scss && npm run compile-ts && npm run optimize-ts && npm run compile-scss && npm run optimize-scss && npm run docs-ts"
