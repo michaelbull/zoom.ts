@@ -7,6 +7,7 @@ A lightweight TypeScript library for image and video zooming, as seen on
 [![npm downloads][downloads-image]][downloads-url]
 [![dependencies status][dependencies-image]][dependencies-url]
 [![devDependencies status][devDependencies-image]][devDependencies-url]
+[![peerDependencies status][peerDependencies-image]][peerDependencies-url]
 
 `zoom.ts` easily plugs into your application with minimal overhead by including
 no third-party dependencies and requiring just 8kB of bandwidth when
@@ -146,6 +147,8 @@ This project is available under the terms of the MIT license. See the
 [dependencies-url]: https://david-dm.org/MikeBull94/zoom.ts
 [devDependencies-image]: https://david-dm.org/MikeBull94/zoom.ts/dev-status.svg
 [devDependencies-url]: https://david-dm.org/MikeBull94/zoom.ts?type=dev
+[peerDependencies-image]: https://david-dm.org/MikeBull94/zoom.ts/peer-status.svg
+[peerDependencies-url]: https://david-dm.org/MikeBull94/zoom.ts?type=peer
 [demo]: https://mikebull94.github.io/zoom.ts
 [zoom.ts]: https://github.com/MikeBull94/zoom.ts/blob/master/lib/Zoom.ts
 [dist.js]: https://github.com/MikeBull94/zoom.ts/blob/master/dist/zoom.js
