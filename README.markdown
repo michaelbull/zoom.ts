@@ -30,7 +30,7 @@ or pressing <kbd>Esc</kbd>.
 
 The [TypeScript library][zoom.ts] can be imported and instantiated:
 
-```javascript
+```typescript
 import { Zoom } from 'zoom.ts/lib/Zoom';
 
 new Zoom().listen();
