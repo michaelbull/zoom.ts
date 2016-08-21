@@ -73,6 +73,5 @@
     "typedoc": "0.4.5",
     "typescript": "1.8.10",
     "uglify-js": "2.7.3"
-  },
-  "peerDependencies": {}
+  }
 }
