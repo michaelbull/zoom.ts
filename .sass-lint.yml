@@ -2,6 +2,10 @@ options:
   merge-default-rules: false
 
 rules:
+  attribute-quotes:
+    - 2
+    - include: true
+
   bem-depth:
     - 0
 
@@ -87,6 +91,12 @@ rules:
   nesting-depth:
     - 0
 
+  no-attribute-selectors:
+    - 0
+
+  no-color-hex:
+    - 2
+
   no-color-keywords:
     - 2
 
@@ -96,11 +106,17 @@ rules:
     - allow-rgba: false
     - allow-variable-identifiers: true
 
+  no-combinators:
+    - 0
+
   no-css-comments:
     - 2
 
   no-debug:
     - 2
+
+  no-disallowed-properties:
+    - 0
 
   no-duplicate-properties:
     - 2
@@ -158,6 +174,9 @@ rules:
   no-transition-all:
     - 2
 
+  no-universal-selectors:
+    - 0
+
   no-url-protocols:
     - 0
 
@@ -183,6 +202,9 @@ rules:
 
   property-units:
     - 0
+
+  pseudo-element:
+    - 2
 
   quotes:
     - 2
@@ -224,6 +246,7 @@ rules:
 
   space-between-parens:
     - 2
+    - include: false
     - include: false
 
   trailing-semicolon:
