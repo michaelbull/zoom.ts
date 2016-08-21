@@ -63,7 +63,7 @@ Or the [CSS distribution][dist.css] can be linked:
 <link rel="stylesheet" type="text/css" href="dist/zoom.css" />
 ```
 
-A minified version of the CSS distribution is aviailable at
+A minified version of the CSS distribution is available at
 [`./dist/zoom.min.css`][min.css].
 
 ## Usage
