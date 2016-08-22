@@ -51,7 +51,6 @@ export class ElementUtils {
     public static addTransitionEndListener(element: HTMLElement, listener: EventListener): void {
         if ('transition' in document.body.style) {
             for (let event of transitionEndEvents) {
-                console.log('add event listener to event: ' + event);
                 element.addEventListener(event, listener);
             }
         } else {
