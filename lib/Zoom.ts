@@ -1,3 +1,4 @@
+import { Overlay } from './Overlay';
 import { Zoomable } from './Zoomable';
 import { ZoomedElement } from './element/ZoomedElement';
 import { ZoomedImageElement } from './element/ZoomedImageElement';
@@ -8,11 +9,6 @@ import {
     ZOOM_IN_VALUE,
     ZOOM_OUT_VALUE
 } from './util/Attributes';
-import {
-    OVERLAY_CLASS,
-    OVERLAY_LOADING_CLASS,
-    OVERLAY_OPEN_CLASS
-} from './util/Classes';
 import { Dimensions } from './util/Dimensions';
 
 /**
@@ -29,12 +25,6 @@ const SCROLL_Y_DELTA: number = 70;
  * The amount of pixels required to scroll vertically with a touch screen to dismiss a zoomed element.
  */
 const TOUCH_Y_DELTA: number = 30;
-
-/**
- * The overlay element.
- */
-const overlay: HTMLDivElement = document.createElement('div');
-overlay.className = OVERLAY_CLASS;
 
 /**
  * Entry point to the library.
@@ -57,6 +47,11 @@ export class Zoom {
     }
 
     /**
+     * The {@link Overlay}.
+     */
+    private _overlay: Overlay = new Overlay();
+
+    /**
      * The current {@link ZoomedElement}.
      */
     private _current: ZoomedElement;
@@ -72,21 +67,22 @@ export class Zoom {
     private _initialTouchY: number;
 
     /**
-     * Listens for click events on {@link Zoomable} elements and appends the {@link overlay} to the document.
+     * Listens for click events on {@link Zoomable} elements and adds the {@link _overlay} to the document.
      */
     listen(): void {
         Zoom.ready(() => {
             document.body.addEventListener('click', (event: MouseEvent) => {
                 const target: Zoomable = event.target as Zoomable;
+                const operation: string = target.getAttribute(ZOOM_FUNCTION_KEY);
 
-                if (target.getAttribute(ZOOM_FUNCTION_KEY) === ZOOM_IN_VALUE) {
+                if (operation === ZOOM_IN_VALUE) {
                     this.zoom(event);
-                } else if (target.getAttribute(ZOOM_FUNCTION_KEY) === ZOOM_OUT_VALUE) {
+                } else if (operation === ZOOM_OUT_VALUE) {
                     this.close();
                 }
             });
 
-            document.body.appendChild(overlay);
+            this._overlay.add();
         });
     }
 
@@ -97,8 +93,7 @@ export class Zoom {
     private zoom(event: MouseEvent): void {
         event.stopPropagation();
 
-        const bodyClassList: DOMTokenList = document.body.classList;
-        if (bodyClassList.contains(OVERLAY_OPEN_CLASS) || bodyClassList.contains(OVERLAY_LOADING_CLASS)) {
+        if (this._overlay.state !== 'hidden') {
             return;
         }
 
@@ -116,9 +111,9 @@ export class Zoom {
         }
 
         if (target.tagName === 'IMG' || target.tagName === 'PICTURE') {
-            this._current = new ZoomedImageElement(target);
+            this._current = new ZoomedImageElement(target, this._overlay);
         } else { /* target.tagName === 'VIDEO */
-            this._current = new ZoomedVideoElement(target);
+            this._current = new ZoomedVideoElement(target, this._overlay);
         }
 
         this._current.open();

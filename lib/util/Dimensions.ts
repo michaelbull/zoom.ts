@@ -1,5 +1,5 @@
 /**
- * Contains utility methods relating to calculation of {@link Dimensions}.
+ * Contains utility methods for calculating {@link Dimensions}.
  */
 export class Dimensions {
 

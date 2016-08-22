@@ -1,14 +1,15 @@
 $zoom-background-color: hsl(0, 0%, 100%) !default;
-$zoom-transition-duration: 400ms !default;
+$zoom-transition-duration: 300ms !default;
 $zoom-media-z-index: 2000 !default;
 $zoom-overlay-z-index: 1000 !default;
-$overlay-opacity: 100;
+$zoom-transition-timing-function: cubic-bezier(0.2, 0, 0.2, 1) !default;
+$zoom-overlay-opacity: 100 !default;
 
 @mixin transition($property, $duration) {
-  transition: $property $duration;
-  -o-transition: $property $duration;
-  -moz-transition: $property $duration;
-  -webkit-transition: $property $duration;
+  transition: $property $duration $zoom-transition-timing-function;
+  -o-transition: $property $duration $zoom-transition-timing-function;
+  -moz-transition: $property $duration $zoom-transition-timing-function;
+  -webkit-transition: $property $duration $zoom-transition-timing-function;
 }
 
 [data-zoom='zoom-in'] {
@@ -18,32 +19,14 @@ $overlay-opacity: 100;
 }
 
 [data-zoom='zoom-out'] {
-  transform: translateZ(0);
-  cursor: pointer;
-  cursor: -moz-zoom-out;
-  cursor: -webkit-zoom-out;
-
-  // force hardware acceleration
-  filter: none;
-  filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius='0');
-  -webkit-filter: blur(0);
-  -moz-filter: blur(0);
-  -ms-filter: blur(0);
-  backface-visibility: hidden;
-}
-
-// Ensure the wrap and the zoomed element appear above the overlay
-[data-zoom='zoom-out'],
-.zoom-wrap {
   @include transition(transform, $zoom-transition-duration);
 
   position: relative;
   z-index: $zoom-media-z-index;
 
-  // improve animation in Chrome
-  will-change: transform;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  cursor: pointer;
+  cursor: -moz-zoom-out;
+  cursor: -webkit-zoom-out;
 }
 
 // An overlay that fills the entire viewport with a background colour and disables click events below it
@@ -64,49 +47,48 @@ $overlay-opacity: 100;
   filter: 'alpha(opacity=0)';
 }
 
+// Show a waiting cursor during the loading phase and prevent users from clicking anything
+.zoom-overlay-loading {
+  cursor: wait;
+  pointer-events: none;
+
+  [data-zoom='zoom-in'],
+  [data-zoom='zoom-out'] {
+    cursor: wait;
+  }
+}
+
+// Show the overlay during opening and when opened
+.zoom-overlay-opening,
 .zoom-overlay-open {
   .zoom-overlay {
-    opacity: $overlay-opacity / 100;
-    filter: 'alpha(opacity=' + $overlay-opacity + ')';
+    opacity: $zoom-overlay-opacity / 100;
+    filter: 'alpha(opacity=' + $zoom-overlay-opacity + ')';
   }
+}
 
-  // Once loaded & transitioned, enable pixelated image rendering to improve image sharpness
-  &:not(.zoom-overlay-loading):not(.zoom-overlay-transitioning) {
+// Improve image rendering once opened
+.zoom-overlay-open {
+  [data-zoom='zoom-out'] {
     image-rendering: pixelated;
   }
 }
 
-// Disable text selection during the loading, transitioning, or open phases
+// Disable text selection if the overlay isn't hidden
 .zoom-overlay-loading,
-.zoom-overlay-transitioning,
-.zoom-overlay-open {
+.zoom-overlay-opening,
+.zoom-overlay-opening,
+.zoom-overlay-closing {
   user-select: none;
   -ms-user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
 }
 
-// Show a waiting cursor during the loading phase
-.zoom-overlay-loading {
-  cursor: wait;
-
-  [data-zoom='zoom-in'], [data-zoom='zoom-out'] {
-    cursor: wait;
-  }
-}
-
-// During an opening transition, or once opened: enable pointer events only on the media to zoom out
-.zoom-overlay-transitioning .zoom-overlay-open,
-.zoom-overlay-open {
-  pointer-events: none;
-
-  [data-zoom='zoom-out'] {
-    pointer-events: auto;
-  }
-}
-
-// During a closing transition: enable pointer events only on the media to zoom out
-.zoom-overlay-transitioning:not(.zoom-overlay-open) {
+// Allow the user to only click on the media when overlay is opened
+.zoom-overlay-opening,
+.zoom-overlay-open,
+.zoom-overlay-closing {
   pointer-events: none;
 
   [data-zoom='zoom-out'] {

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ZoomedVideoElement | zoom.ts</title>
+	<title>ElementUtils | zoom.ts</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -57,10 +57,10 @@
 					<a href="../index.html">Globals</a>
 				</li>
 				<li>
-					<a href="zoomedvideoelement.html">ZoomedVideoElement</a>
+					<a href="elementutils.html">ElementUtils</a>
 				</li>
 			</ul>
-			<h1>Class ZoomedVideoElement</h1>
+			<h1>Class ElementUtils</h1>
 		</div>
 	</div>
 </header>
@@ -70,7 +70,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Represents a <a href="zoomedelement.html">ZoomedElement</a> whose underlying element is a HTMLVideoElement.</p>
+						<p>Contains utility methods for HTMLElements.</p>
 					</div>
 				</div>
 			</section>
@@ -78,12 +78,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="zoomedelement.html" class="tsd-signature-type">ZoomedElement</a>
-						<ul class="tsd-hierarchy">
-							<li>
-								<span class="target">ZoomedVideoElement</span>
-							</li>
-						</ul>
+						<span class="target">ElementUtils</span>
 					</li>
 				</ul>
 			</section>
@@ -92,51 +87,252 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Constructors</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="zoomedvideoelement.html#constructor" class="tsd-kind-icon">constructor</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section tsd-is-private-protected">
-							<h3>Properties</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="zoomedvideoelement.html#_fullsrc" class="tsd-kind-icon">_full<wbr>Src</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="zoomedvideoelement.html#_video" class="tsd-kind-icon">_video</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="zoomedvideoelement.html#close" class="tsd-kind-icon">close</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="zoomedvideoelement.html#loaded" class="tsd-kind-icon">loaded</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="zoomedvideoelement.html#open" class="tsd-kind-icon">open</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="zoomedvideoelement.html#width" class="tsd-kind-icon">width</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="zoomedvideoelement.html#zoomedin" class="tsd-kind-icon">zoomed<wbr>In</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="zoomedvideoelement.html#zoomedout" class="tsd-kind-icon">zoomed<wbr>Out</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="elementutils.html#addtransitionendlistener" class="tsd-kind-icon">add<wbr>Transition<wbr>End<wbr>Listener</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="elementutils.html#removetransform" class="tsd-kind-icon">remove<wbr>Transform</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="elementutils.html#removetransitionendlistener" class="tsd-kind-icon">remove<wbr>Transition<wbr>End<wbr>Listener</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="elementutils.html#repaint" class="tsd-kind-icon">repaint</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="elementutils.html#scaletoviewport" class="tsd-kind-icon">scale<wbr>ToViewport</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="elementutils.html#transform" class="tsd-kind-icon">transform</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="elementutils.html#translatetocenter" class="tsd-kind-icon">translate<wbr>ToCenter</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-					<a name="constructor" class="tsd-anchor"></a>
-					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Zoomed<wbr>Video<wbr>Element<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><a href="../index.html#zoomable" class="tsd-signature-type">Zoomable</a>, overlay<span class="tsd-signature-symbol">: </span><a href="overlay.html" class="tsd-signature-type">Overlay</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="zoomedvideoelement.html" class="tsd-signature-type">ZoomedVideoElement</a></li>
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="addtransitionendlistener" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> add<wbr>Transition<wbr>End<wbr>Listener</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Transition<wbr>End<wbr>Listener<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span>, listener<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">EventListener</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overwrites <a href="zoomedelement.html">ZoomedElement</a>.<a href="zoomedelement.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/element/ZoomedVideoElement.ts#L17">element/ZoomedVideoElement.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/util/Elements.ts#L51">util/Elements.ts:51</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Creates a new <a href="zoomedvideoelement.html">ZoomedVideoElement</a>.</p>
+									<p>Adds an event listener that is called on the end of a transition.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>element: <span class="tsd-signature-type">HTMLElement</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The element whose events should be listened to.</p>
+									</div>
+								</li>
+								<li>
+									<h5>listener: <span class="tsd-signature-type">EventListener</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The listener to call once an event is received.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="removetransform" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> remove<wbr>Transform</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">remove<wbr>Transform<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/util/Elements.ts#L41">util/Elements.ts:41</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Removes an element&#39;s transform style property.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>element: <span class="tsd-signature-type">HTMLElement</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The element.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="removetransitionendlistener" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> remove<wbr>Transition<wbr>End<wbr>Listener</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">remove<wbr>Transition<wbr>End<wbr>Listener<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span>, listener<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">EventListener</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/util/Elements.ts#L67">util/Elements.ts:67</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Removes an event listener that is called on the end of a transition.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>element: <span class="tsd-signature-type">HTMLElement</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The element whose events should no longer be listened to.</p>
+									</div>
+								</li>
+								<li>
+									<h5>listener: <span class="tsd-signature-type">EventListener</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The listener to remove.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="repaint" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> repaint</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">repaint<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/util/Elements.ts#L21">util/Elements.ts:21</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Forces an element to repaint on the canvas.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>element: <span class="tsd-signature-type">HTMLElement</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="scaletoviewport" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> scale<wbr>ToViewport</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">scale<wbr>ToViewport<span class="tsd-signature-symbol">(</span>originalWidth<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, width<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, height<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/util/Elements.ts#L105">util/Elements.ts:105</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Calculates the required scale to fill the viewport with an element.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>originalWidth: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The original width of the element.</p>
+									</div>
+								</li>
+								<li>
+									<h5>width: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The width of the element.</p>
+									</div>
+								</li>
+								<li>
+									<h5>height: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The height of the element.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+							<p>The calculated scale.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="transform" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> transform</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">transform<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span>, style<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/util/Elements.ts#L32">util/Elements.ts:32</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Sets an element&#39;s transform style property.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>element: <span class="tsd-signature-type">HTMLElement</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The element.</p>
+									</div>
+								</li>
+								<li>
+									<h5>style: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The style to apply to the transform property.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="translatetocenter" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> translate<wbr>ToCenter</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">translate<wbr>ToCenter<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><a href="../index.html#zoomable" class="tsd-signature-type">Zoomable</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/util/Elements.ts#L78">util/Elements.ts:78</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Calculates the required translation to place an element in the center of the viewport.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -144,196 +340,12 @@
 								<li>
 									<h5>element: <a href="../index.html#zoomable" class="tsd-signature-type">Zoomable</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>The underlying video element.</p>
-										</div>
-									</div>
-								</li>
-								<li>
-									<h5>overlay: <a href="overlay.html" class="tsd-signature-type">Overlay</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>The <a href="overlay.html">Overlay</a>.</p>
-										</div>
+										<p>The element.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="zoomedvideoelement.html" class="tsd-signature-type">ZoomedVideoElement</a></h4>
-						</li>
-					</ul>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-private-protected">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-					<a name="_fullsrc" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _full<wbr>Src</h3>
-					<div class="tsd-signature tsd-kind-icon">_full<wbr>Src<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from <a href="zoomedelement.html">ZoomedElement</a>.<a href="zoomedelement.html#_fullsrc">_fullSrc</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/element/ZoomedElement.ts#L19">element/ZoomedElement.ts:19</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The full src of the element.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_video" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _video</h3>
-					<div class="tsd-signature tsd-kind-icon">_video<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">HTMLVideoElement</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/element/ZoomedVideoElement.ts#L17">element/ZoomedVideoElement.ts:17</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The underlying video element.</p>
-						</div>
-					</div>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-					<a name="close" class="tsd-anchor"></a>
-					<h3>close</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">close<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Inherited from <a href="zoomedelement.html">ZoomedElement</a>.<a href="zoomedelement.html#close">close</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/element/ZoomedElement.ts#L57">element/ZoomedElement.ts:57</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Closes the zoomed view.</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-					<a name="loaded" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> loaded</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">loaded<span class="tsd-signature-symbol">(</span>width<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, height<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Inherited from <a href="zoomedelement.html">ZoomedElement</a>.<a href="zoomedelement.html#loaded">loaded</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/element/ZoomedElement.ts#L84">element/ZoomedElement.ts:84</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Called once the <a href="zoomedvideoelement.html#_fullsrc">_fullSrc</a> of the <a href="overlay.html#_element">_element</a> is loaded.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>width: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The width of the <a href="zoomedvideoelement.html#_fullsrc">_fullSrc</a> element.</p>
-									</div>
-								</li>
-								<li>
-									<h5>height: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The height of the <a href="zoomedvideoelement.html#_fullsrc">_fullSrc</a> element.</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-					<a name="open" class="tsd-anchor"></a>
-					<h3>open</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">open<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Inherited from <a href="zoomedelement.html">ZoomedElement</a>.<a href="zoomedelement.html#open">open</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/element/ZoomedElement.ts#L45">element/ZoomedElement.ts:45</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Opens the zoomed view.</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-					<a name="width" class="tsd-anchor"></a>
-					<h3>width</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">width<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Overwrites <a href="zoomedelement.html">ZoomedElement</a>.<a href="zoomedelement.html#width">width</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/element/ZoomedVideoElement.ts#L48">element/ZoomedVideoElement.ts:48</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-					<a name="zoomedin" class="tsd-anchor"></a>
-					<h3>zoomed<wbr>In</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">zoomed<wbr>In<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Overwrites <a href="zoomedelement.html">ZoomedElement</a>.<a href="zoomedelement.html#zoomedin">zoomedIn</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/element/ZoomedVideoElement.ts#L29">element/ZoomedVideoElement.ts:29</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-					<a name="zoomedout" class="tsd-anchor"></a>
-					<h3>zoomed<wbr>Out</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">zoomed<wbr>Out<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Overwrites <a href="zoomedelement.html">ZoomedElement</a>.<a href="zoomedelement.html#zoomedout">zoomedOut</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/element/ZoomedVideoElement.ts#L42">element/ZoomedVideoElement.ts:42</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+							<p>The calculated translation.</p>
 						</li>
 					</ul>
 				</section>
@@ -352,9 +364,36 @@
 					<li class=" tsd-kind-class">
 						<a href="dimensions.html" class="tsd-kind-icon">Dimensions</a>
 					</li>
-					<li class=" tsd-kind-class">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class">
 						<a href="elementutils.html" class="tsd-kind-icon">Element<wbr>Utils</a>
+						<ul>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="elementutils.html#addtransitionendlistener" class="tsd-kind-icon">add<wbr>Transition<wbr>End<wbr>Listener</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="elementutils.html#removetransform" class="tsd-kind-icon">remove<wbr>Transform</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="elementutils.html#removetransitionendlistener" class="tsd-kind-icon">remove<wbr>Transition<wbr>End<wbr>Listener</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="elementutils.html#repaint" class="tsd-kind-icon">repaint</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="elementutils.html#scaletoviewport" class="tsd-kind-icon">scale<wbr>ToViewport</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="elementutils.html#transform" class="tsd-kind-icon">transform</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="elementutils.html#translatetocenter" class="tsd-kind-icon">translate<wbr>ToCenter</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-class">
 						<a href="overlay.html" class="tsd-kind-icon">Overlay</a>
 					</li>
@@ -367,42 +406,9 @@
 					<li class=" tsd-kind-class">
 						<a href="zoomedimageelement.html" class="tsd-kind-icon">Zoomed<wbr>Image<wbr>Element</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-class">
+					<li class=" tsd-kind-class">
 						<a href="zoomedvideoelement.html" class="tsd-kind-icon">Zoomed<wbr>Video<wbr>Element</a>
-						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-								<a href="zoomedvideoelement.html#constructor" class="tsd-kind-icon">constructor</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="zoomedvideoelement.html#_fullsrc" class="tsd-kind-icon">_full<wbr>Src</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="zoomedvideoelement.html#_video" class="tsd-kind-icon">_video</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="zoomedvideoelement.html#close" class="tsd-kind-icon">close</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="zoomedvideoelement.html#loaded" class="tsd-kind-icon">loaded</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="zoomedvideoelement.html#open" class="tsd-kind-icon">open</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-								<a href="zoomedvideoelement.html#width" class="tsd-kind-icon">width</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-								<a href="zoomedvideoelement.html#zoomedin" class="tsd-kind-icon">zoomed<wbr>In</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-								<a href="zoomedvideoelement.html#zoomedout" class="tsd-kind-icon">zoomed<wbr>Out</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-type-alias">
 						<a href="../index.html#state" class="tsd-kind-icon">State</a>
 					</li>

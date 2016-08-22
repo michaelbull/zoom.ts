@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Style | zoom.ts</title>
+	<title>Overlay | zoom.ts</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -57,10 +57,10 @@
 					<a href="../index.html">Globals</a>
 				</li>
 				<li>
-					<a href="style.html">Style</a>
+					<a href="overlay.html">Overlay</a>
 				</li>
 			</ul>
-			<h1>Class Style</h1>
+			<h1>Class Overlay</h1>
 		</div>
 	</div>
 </header>
@@ -70,7 +70,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Contains <a href="style.html">Style</a> related utility methods.</p>
+						<p>Represents an overlay that is appended to the document and creates a backdrop behind the zoomed element.</p>
 					</div>
 				</div>
 			</section>
@@ -78,7 +78,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Style</span>
+						<span class="target">Overlay</span>
 					</li>
 				</ul>
 			</section>
@@ -87,49 +87,163 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
+							<h3>Constructors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="overlay.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="overlay.html#_element" class="tsd-kind-icon">_element</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="overlay.html#_state" class="tsd-kind-icon">_state</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Accessors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="overlay.html#state" class="tsd-kind-icon">state</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="style.html#transform" class="tsd-kind-icon">transform</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="overlay.html#add" class="tsd-kind-icon">add</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="transform" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> transform</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">transform<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span>, style<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Overlay<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="overlay.html" class="tsd-signature-type">Overlay</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/util/Style.ts#L11">util/Style.ts:11</a></li>
+									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/Overlay.ts#L24">Overlay.ts:24</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Sets an elements transform style property.</p>
+									<p>Creates a new <a href="overlay.html">Overlay</a>.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <a href="overlay.html" class="tsd-signature-type">Overlay</a></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="_element" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _element</h3>
+					<div class="tsd-signature tsd-kind-icon">_element<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">HTMLDivElement</span><span class="tsd-signature-symbol"> =&nbsp;document.createElement(&#x27;div&#x27;)</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/Overlay.ts#L19">Overlay.ts:19</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The underlying element.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="_state" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _state</h3>
+					<div class="tsd-signature tsd-kind-icon">_state<span class="tsd-signature-symbol">:</span> <a href="../index.html#state" class="tsd-signature-type">State</a><span class="tsd-signature-symbol"> =&nbsp;&quot;hidden&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/Overlay.ts#L24">Overlay.ts:24</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The current state.</p>
+						</div>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class">
+					<a name="state" class="tsd-anchor"></a>
+					<h3>state</h3>
+					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> state<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../index.html#state" class="tsd-signature-type">State</a></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> state<span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><a href="../index.html#state" class="tsd-signature-type">State</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/Overlay.ts#L45">Overlay.ts:45</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets the current state.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <a href="../index.html#state" class="tsd-signature-type">State</a></h4>
+							<p>The current state.</p>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/Overlay.ts#L53">Overlay.ts:53</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Sets the current state.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>element: <span class="tsd-signature-type">HTMLElement</span></h5>
+									<h5>state: <a href="../index.html#state" class="tsd-signature-type">State</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The element to style.</p>
-									</div>
-								</li>
-								<li>
-									<h5>style: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The style to apply to the transform property.</p>
+										<div class="lead">
+											<p>The state to set.</p>
+										</div>
 									</div>
 								</li>
 							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<p>The current state.</p>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="add" class="tsd-anchor"></a>
+					<h3>add</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">add<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/Overlay.ts#L36">Overlay.ts:36</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Adds the <a href="overlay.html#_element">_element</a> to the document&#39;s body.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -149,13 +263,28 @@
 					<li class=" tsd-kind-class">
 						<a href="dimensions.html" class="tsd-kind-icon">Dimensions</a>
 					</li>
+					<li class=" tsd-kind-class">
+						<a href="elementutils.html" class="tsd-kind-icon">Element<wbr>Utils</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class">
-						<a href="style.html" class="tsd-kind-icon">Style</a>
+						<a href="overlay.html" class="tsd-kind-icon">Overlay</a>
 						<ul>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="style.html#transform" class="tsd-kind-icon">transform</a>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="overlay.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="overlay.html#_element" class="tsd-kind-icon">_element</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="overlay.html#_state" class="tsd-kind-icon">_state</a>
+							</li>
+							<li class=" tsd-kind-accessor tsd-parent-kind-class">
+								<a href="overlay.html#state" class="tsd-kind-icon">state</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="overlay.html#add" class="tsd-kind-icon">add</a>
 							</li>
 						</ul>
 					</li>
@@ -174,28 +303,22 @@
 						<a href="zoomedvideoelement.html" class="tsd-kind-icon">Zoomed<wbr>Video<wbr>Element</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
+						<a href="../index.html#state" class="tsd-kind-icon">State</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
 						<a href="../index.html#zoomable" class="tsd-kind-icon">Zoomable</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="../index.html#always_play_video_value" class="tsd-kind-icon">ALWAYS_<wbr>PLAY_<wbr>VIDEO_<wbr>VALUE</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="../index.html#class" class="tsd-kind-icon">CLASS</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
 						<a href="../index.html#escape_key_code" class="tsd-kind-icon">ESCAPE_<wbr>KEY_<wbr>CODE</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="../index.html#full_src_key" class="tsd-kind-icon">FULL_<wbr>SRC_<wbr>KEY</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../index.html#overlay_class" class="tsd-kind-icon">OVERLAY_<wbr>CLASS</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../index.html#overlay_loading_class" class="tsd-kind-icon">OVERLAY_<wbr>LOADING_<wbr>CLASS</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../index.html#overlay_open_class" class="tsd-kind-icon">OVERLAY_<wbr>OPEN_<wbr>CLASS</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../index.html#overlay_transitioning_class" class="tsd-kind-icon">OVERLAY_<wbr>TRANSITIONING_<wbr>CLASS</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="../index.html#play_video_key" class="tsd-kind-icon">PLAY_<wbr>VIDEO_<wbr>KEY</a>
@@ -207,9 +330,6 @@
 						<a href="../index.html#touch_y_delta" class="tsd-kind-icon">TOUCH_<wbr><wbr>Y_DELTA</a>
 					</li>
 					<li class=" tsd-kind-variable">
-						<a href="../index.html#wrap_class" class="tsd-kind-icon">WRAP_<wbr>CLASS</a>
-					</li>
-					<li class=" tsd-kind-variable">
 						<a href="../index.html#zoom_function_key" class="tsd-kind-icon">ZOOM_<wbr>FUNCTION_<wbr>KEY</a>
 					</li>
 					<li class=" tsd-kind-variable">
@@ -219,10 +339,7 @@
 						<a href="../index.html#zoom_out_value" class="tsd-kind-icon">ZOOM_<wbr>OUT_<wbr>VALUE</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../index.html#overlay" class="tsd-kind-icon">overlay</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../index.html#wrap" class="tsd-kind-icon">wrap</a>
+						<a href="../index.html#transitionendevents" class="tsd-kind-icon">transition<wbr>End<wbr>Events</a>
 					</li>
 				</ul>
 			</nav>

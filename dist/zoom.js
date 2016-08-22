@@ -20,6 +20,58 @@ function __extends(d, b) {
 }
 
 /**
+ * The class name of the {@link Overlay}'s {@link _element}.
+ */
+var CLASS = 'zoom-overlay';
+/**
+ * Represents an overlay that is appended to the document and creates a backdrop behind the zoomed element.
+ */
+var Overlay = (function () {
+    /**
+     * Creates a new {@link Overlay}.
+     */
+    function Overlay() {
+        /**
+         * The underlying element.
+         */
+        this._element = document.createElement('div');
+        /**
+         * The current state.
+         */
+        this._state = 'hidden';
+        this._element.className = CLASS;
+    }
+    /**
+     * Adds the {@link _element} to the document's body.
+     */
+    Overlay.prototype.add = function () {
+        document.body.classList.add(CLASS + '-' + this._state);
+        document.body.appendChild(this._element);
+    };
+    Object.defineProperty(Overlay.prototype, "state", {
+        /**
+         * Gets the current state.
+         * @returns The current state.
+         */
+        get: function () {
+            return this._state;
+        },
+        /**
+         * Sets the current state.
+         * @param state The state to set.
+         */
+        set: function (state) {
+            document.body.classList.remove(CLASS + '-' + this._state);
+            this._state = state;
+            document.body.classList.add(CLASS + '-' + this._state);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return Overlay;
+}());
+
+/**
  * The attribute key used to indicate which zoom function (in or out) should occur once the element is clicked.
  */
 var ZOOM_FUNCTION_KEY = 'data-zoom';
@@ -28,7 +80,7 @@ var ZOOM_FUNCTION_KEY = 'data-zoom';
  */
 var ZOOM_IN_VALUE = 'zoom-in';
 /**
- * An attribute value that indicates this element should be zoomed out when clicked.
+ * An attribute value that indicates this element should zoom out when clicked.
  */
 var ZOOM_OUT_VALUE = 'zoom-out';
 /**
@@ -45,28 +97,7 @@ var PLAY_VIDEO_KEY = 'data-zoom-play';
 var ALWAYS_PLAY_VIDEO_VALUE = 'always';
 
 /**
- * The class name of the overlay element.
- */
-var OVERLAY_CLASS = 'zoom-overlay';
-/**
- * The class named added to the body when the zoom overlay is open.
- */
-var OVERLAY_OPEN_CLASS = 'zoom-overlay-open';
-/**
- * The class named added to the body when the zoom overlay is loading.
- */
-var OVERLAY_LOADING_CLASS = 'zoom-overlay-loading';
-/**
- * The class named added to the body when the zoom overlay is transitioning.
- */
-var OVERLAY_TRANSITIONING_CLASS = 'zoom-overlay-transitioning';
-/**
- * The class name of the wrap element.
- */
-var WRAP_CLASS = 'zoom-wrap';
-
-/**
- * Contains utility methods relating to calculation of {@link Dimensions}.
+ * Contains utility methods for calculating {@link Dimensions}.
  */
 var Dimensions = (function () {
     function Dimensions() {
@@ -127,66 +158,56 @@ var Dimensions = (function () {
 }());
 
 /**
- * Contains {@link Style} related utility methods.
+ * The event types to listen for that trigger at the end of an element's transition.
  */
-var Style = (function () {
-    function Style() {
+var transitionEndEvents = [
+    'transitionend',
+    'webkitTransitionEnd',
+    'oTransitionEnd'
+];
+/**
+ * Contains utility methods for HTMLElements.
+ */
+var ElementUtils = (function () {
+    function ElementUtils() {
     }
     /**
-     * Sets an elements transform style property.
-     * @param element The element to style.
+     * Forces an element to repaint on the canvas.
+     */
+    ElementUtils.repaint = function (element) {
+        /* tslint:disable */
+        element.offsetWidth;
+        /* tslint:enable */
+    };
+    /**
+     * Sets an element's transform style property.
+     * @param element The element.
      * @param style The style to apply to the transform property.
      */
-    Style.transform = function (element, style) {
+    ElementUtils.transform = function (element, style) {
         element.style.webkitTransform = style;
         element.style.transform = style;
     };
-    return Style;
-}());
-
-var wrap = document.createElement('div');
-wrap.className = WRAP_CLASS;
-/**
- * Represents a {@link Zoomable} element that may be opened or closed.
- */
-var ZoomedElement = (function () {
     /**
-     * Creates a new {@link ZoomedElement}
-     * @param element The underlying HTMLElement.
+     * Removes an element's transform style property.
+     * @param element The element.
      */
-    function ZoomedElement(element) {
-        var _this = this;
-        /**
-         * An event lister that adds the {@link OVERLAY_TRANSITIONING_CLASS} to the document body.
-         */
-        this.openedListener = function () {
-            ZoomedElement.removeTransitionEndListener(_this._element, _this.openedListener);
-            document.body.classList.remove(OVERLAY_TRANSITIONING_CLASS);
-        };
-        /**
-         * An event listener that closes the zoomed view.
-         */
-        this.closedListener = function () {
-            ZoomedElement.removeTransitionEndListener(_this._element, _this.closedListener);
-            if (wrap.parentNode) {
-                _this._element.setAttribute(ZOOM_FUNCTION_KEY, ZOOM_IN_VALUE);
-                wrap.parentNode.replaceChild(_this._element, wrap);
-                document.body.classList.remove(OVERLAY_TRANSITIONING_CLASS);
-                _this.zoomedOut();
-            }
-        };
-        this._fullSrc = element.getAttribute(FULL_SRC_KEY) || element.currentSrc || element.src;
-        this._element = element;
-    }
+    ElementUtils.removeTransform = function (element) {
+        element.style.removeProperty('webkitTransform');
+        element.style.removeProperty('transform');
+    };
     /**
      * Adds an event listener that is called on the end of a transition.
      * @param element The element whose events should be listened to.
      * @param listener The listener to call once an event is received.
      */
-    ZoomedElement.addTransitionEndListener = function (element, listener) {
+    ElementUtils.addTransitionEndListener = function (element, listener) {
         if ('transition' in document.body.style) {
-            element.addEventListener('transitionend', listener);
-            element.addEventListener('webkitTransitionEnd', listener);
+            for (var _i = 0, transitionEndEvents_1 = transitionEndEvents; _i < transitionEndEvents_1.length; _i++) {
+                var event = transitionEndEvents_1[_i];
+                console.log('add event listener to event: ' + event);
+                element.addEventListener(event, listener);
+            }
         }
         else {
             listener(undefined);
@@ -197,65 +218,43 @@ var ZoomedElement = (function () {
      * @param element The element whose events should no longer be listened to.
      * @param listener The listener to remove.
      */
-    ZoomedElement.removeTransitionEndListener = function (element, listener) {
-        element.removeEventListener('transitionend', listener);
-        element.removeEventListener('webkitTransitionEnd', listener);
+    ElementUtils.removeTransitionEndListener = function (element, listener) {
+        for (var _i = 0, transitionEndEvents_2 = transitionEndEvents; _i < transitionEndEvents_2.length; _i++) {
+            var event = transitionEndEvents_2[_i];
+            element.removeEventListener(event, listener);
+        }
     };
     /**
-     * Opens the zoomed view.
+     * Calculates the required translation to place an element in the center of the viewport.
+     * @param element The element.
+     * @returns The calculated translation.
      */
-    ZoomedElement.prototype.open = function () {
-        document.body.classList.add(OVERLAY_LOADING_CLASS);
-        this.zoomedIn();
-        this._element.src = this._fullSrc;
-        ZoomedElement.addTransitionEndListener(this._element, this.openedListener);
+    ElementUtils.translateToCenter = function (element) {
+        var viewportWidth = Dimensions.viewportWidth();
+        var viewportHeight = Dimensions.viewportHeight();
+        var scrollX = Dimensions.scrollX();
+        var scrollY = Dimensions.scrollY();
+        var viewportX = viewportWidth / 2;
+        var viewportY = scrollY + (viewportHeight / 2);
+        var rect = element.getBoundingClientRect();
+        var centerX = rect.left + scrollX + ((element.width || element.offsetWidth) / 2);
+        var centerY = rect.top + scrollY + ((element.height || element.offsetHeight) / 2);
+        var x = Math.round(viewportX - centerX);
+        var y = Math.round(viewportY - centerY);
+        return 'translate(' + x + 'px, ' + y + 'px) translateZ(0)';
     };
     /**
-     * Closes the zoomed view.
+     * Calculates the required scale to fill the viewport with an element.
+     * @param originalWidth The original width of the element.
+     * @param width The width of the element.
+     * @param height The height of the element.
+     * @returns The calculated scale.
      */
-    ZoomedElement.prototype.close = function () {
-        var bodyClassList = document.body.classList;
-        bodyClassList.remove(OVERLAY_OPEN_CLASS);
-        bodyClassList.add(OVERLAY_TRANSITIONING_CLASS);
-        Style.transform(this._element, '');
-        Style.transform(wrap, '');
-        ZoomedElement.addTransitionEndListener(this._element, this.closedListener);
-    };
-    /**
-     * Called once the {@link _fullSrc} src of the {@link _element} is loaded.
-     * @param width The width of the {@link _element}.
-     * @param height The height of the {@link _element}.
-     */
-    ZoomedElement.prototype.loaded = function (width, height) {
-        var bodyClassList = document.body.classList;
-        bodyClassList.remove(OVERLAY_LOADING_CLASS);
-        bodyClassList.add(OVERLAY_TRANSITIONING_CLASS);
-        bodyClassList.add(OVERLAY_OPEN_CLASS);
-        this._element.parentNode.insertBefore(wrap, this._element);
-        wrap.appendChild(this._element);
-        this._element.setAttribute(ZOOM_FUNCTION_KEY, ZOOM_OUT_VALUE);
-        this.scaleElement(width, height);
-        this.translateWrap();
-    };
-    /**
-     * Forces the {@link _element} to repaint on the canvas.
-     */
-    ZoomedElement.prototype.repaint = function () {
-        /* tslint:disable */
-        this._element.offsetWidth;
-        /* tslint:enable */
-    };
-    /**
-     * Scales the {@link _element} to fill the dimensions of the viewport.
-     * @param width The width of the {@link _element}.
-     * @param height The height of the {@link _element}.
-     */
-    ZoomedElement.prototype.scaleElement = function (width, height) {
-        this.repaint();
+    ElementUtils.scaleToViewport = function (originalWidth, width, height) {
         var viewportWidth = Dimensions.viewportWidth();
         var viewportHeight = Dimensions.viewportHeight();
         var viewportAspectRatio = viewportWidth / viewportHeight;
-        var maxScaleFactor = width / this.width();
+        var maxScaleFactor = width / originalWidth;
         var aspectRatio = width / height;
         var scaleFactor;
         if (width < viewportWidth && height < viewportHeight) {
@@ -267,26 +266,72 @@ var ZoomedElement = (function () {
         else {
             scaleFactor = (viewportWidth / width) * maxScaleFactor;
         }
-        Style.transform(this._element, 'scale(' + scaleFactor + ')');
+        return 'scale(' + scaleFactor + ')';
+    };
+    return ElementUtils;
+}());
+
+/**
+ * Represents a {@link Zoomable} element that may be opened or closed.
+ */
+var ZoomedElement = (function () {
+    /**
+     * Creates a new {@link ZoomedElement}
+     * @param element The underlying HTMLElement.
+     * @param overlay The {@link Overlay}.
+     */
+    function ZoomedElement(element, overlay) {
+        var _this = this;
+        /**
+         * An event lister that sets the {@link Overlay}'s {@link State} to open.
+         */
+        this.openedListener = function () {
+            ElementUtils.removeTransitionEndListener(_this._element, _this.openedListener);
+            _this._overlay.state = 'open';
+        };
+        /**
+         * An event listener that sets the {@link Overlay}'s {@link State} to hidden and sets the {@link _element}'s
+         * {@link ZOOM_FUNCTION_KEY} attribute to {@link ZOOM_IN_VALUE}.
+         */
+        this.closedListener = function () {
+            ElementUtils.removeTransitionEndListener(_this._element, _this.closedListener);
+            _this._overlay.state = 'hidden';
+            _this._element.setAttribute(ZOOM_FUNCTION_KEY, ZOOM_IN_VALUE);
+            _this.zoomedOut();
+        };
+        this._fullSrc = element.getAttribute(FULL_SRC_KEY) || element.currentSrc || element.src;
+        this._element = element;
+        this._overlay = overlay;
+    }
+    /**
+     * Opens the zoomed view.
+     */
+    ZoomedElement.prototype.open = function () {
+        this._overlay.state = 'loading';
+        this.zoomedIn();
+        this._element.src = this._fullSrc;
+        ElementUtils.addTransitionEndListener(this._element, this.openedListener);
     };
     /**
-     * Translates the coordinates of the {@link wrap} to offset the {@link _element} to the center of the page.
+     * Closes the zoomed view.
      */
-    ZoomedElement.prototype.translateWrap = function () {
-        this.repaint();
-        var scrollX = Dimensions.scrollX();
-        var scrollY = Dimensions.scrollY();
-        var viewportWidth = Dimensions.viewportWidth();
-        var viewportHeight = Dimensions.viewportHeight();
-        var viewportX = viewportWidth / 2;
-        var viewportY = scrollY + (viewportHeight / 2);
-        var element = this._element;
-        var rect = element.getBoundingClientRect();
-        var centerX = rect.left + scrollX + ((element.width || element.offsetWidth) / 2);
-        var centerY = rect.top + scrollY + ((element.height || element.offsetHeight) / 2);
-        var x = Math.round(viewportX - centerX);
-        var y = Math.round(viewportY - centerY);
-        Style.transform(wrap, 'translate(' + x + 'px, ' + y + 'px) translateZ(0)');
+    ZoomedElement.prototype.close = function () {
+        this._overlay.state = 'closing';
+        ElementUtils.removeTransform(this._element);
+        ElementUtils.addTransitionEndListener(this._element, this.closedListener);
+    };
+    /**
+     * Called once the {@link _fullSrc} of the {@link _element} is loaded.
+     * @param width The width of the {@link _fullSrc} element.
+     * @param height The height of the {@link _fullSrc} element.
+     */
+    ZoomedElement.prototype.loaded = function (width, height) {
+        this._overlay.state = 'opening';
+        this._element.setAttribute(ZOOM_FUNCTION_KEY, ZOOM_OUT_VALUE);
+        var translation = ElementUtils.translateToCenter(this._element);
+        var scale = ElementUtils.scaleToViewport(this.width(), width, height);
+        ElementUtils.repaint(this._element);
+        ElementUtils.transform(this._element, translation + ' ' + scale);
     };
     return ZoomedElement;
 }());
@@ -299,14 +344,12 @@ var ZoomedImageElement = (function (_super) {
     /**
      * Creates a new {@link ZoomedImageElement}.
      * @param element The underlying image element.
+     * @param overlay The {@link Overlay}.
      */
-    function ZoomedImageElement(element) {
-        _super.call(this, element);
+    function ZoomedImageElement(element, overlay) {
+        _super.call(this, element, overlay);
         this._image = element;
     }
-    /**
-     * @inheritDoc
-     */
     ZoomedImageElement.prototype.zoomedIn = function () {
         var _this = this;
         var image = document.createElement('img');
@@ -316,15 +359,9 @@ var ZoomedImageElement = (function (_super) {
         };
         image.src = this._fullSrc;
     };
-    /**
-     * @inheritDoc
-     */
     ZoomedImageElement.prototype.zoomedOut = function () {
         /* empty */
     };
-    /**
-     * @inheritDoc
-     */
     ZoomedImageElement.prototype.width = function () {
         return this._image.width;
     };
@@ -339,14 +376,12 @@ var ZoomedVideoElement = (function (_super) {
     /**
      * Creates a new {@link ZoomedVideoElement}.
      * @param element The underlying video element.
+     * @param overlay The {@link Overlay}.
      */
-    function ZoomedVideoElement(element) {
-        _super.call(this, element);
+    function ZoomedVideoElement(element, overlay) {
+        _super.call(this, element, overlay);
         this._video = element;
     }
-    /**
-     * @inheritDoc
-     */
     ZoomedVideoElement.prototype.zoomedIn = function () {
         var _this = this;
         var video = document.createElement('video');
@@ -358,17 +393,11 @@ var ZoomedVideoElement = (function (_super) {
         });
         source.src = this._fullSrc;
     };
-    /**
-     * @inheritDoc
-     */
     ZoomedVideoElement.prototype.zoomedOut = function () {
         if (this._video.getAttribute(PLAY_VIDEO_KEY) === ALWAYS_PLAY_VIDEO_VALUE) {
             this._video.play();
         }
     };
-    /**
-     * @inheritDoc
-     */
     ZoomedVideoElement.prototype.width = function () {
         return this._video.width || this._video.videoWidth;
     };
@@ -388,16 +417,15 @@ var SCROLL_Y_DELTA = 70;
  */
 var TOUCH_Y_DELTA = 30;
 /**
- * The overlay element.
- */
-var overlay = document.createElement('div');
-overlay.className = OVERLAY_CLASS;
-/**
  * Entry point to the library.
  */
 var Zoom = (function () {
     function Zoom() {
         var _this = this;
+        /**
+         * The {@link Overlay}.
+         */
+        this._overlay = new Overlay();
         /**
          * An event listener that calls {@link close} if the difference between the {@link _initialScrollY} and
          * {@link Dimensions.scrollY} is more than {@link SCROLL_Y_DELTA}.
@@ -452,21 +480,22 @@ var Zoom = (function () {
         }
     };
     /**
-     * Listens for click events on {@link Zoomable} elements and appends the {@link overlay} to the document.
+     * Listens for click events on {@link Zoomable} elements and adds the {@link _overlay} to the document.
      */
     Zoom.prototype.listen = function () {
         var _this = this;
         Zoom.ready(function () {
             document.body.addEventListener('click', function (event) {
                 var target = event.target;
-                if (target.getAttribute(ZOOM_FUNCTION_KEY) === ZOOM_IN_VALUE) {
+                var operation = target.getAttribute(ZOOM_FUNCTION_KEY);
+                if (operation === ZOOM_IN_VALUE) {
                     _this.zoom(event);
                 }
-                else if (target.getAttribute(ZOOM_FUNCTION_KEY) === ZOOM_OUT_VALUE) {
+                else if (operation === ZOOM_OUT_VALUE) {
                     _this.close();
                 }
             });
-            document.body.appendChild(overlay);
+            _this._overlay.add();
         });
     };
     /**
@@ -475,8 +504,7 @@ var Zoom = (function () {
      */
     Zoom.prototype.zoom = function (event) {
         event.stopPropagation();
-        var bodyClassList = document.body.classList;
-        if (bodyClassList.contains(OVERLAY_OPEN_CLASS) || bodyClassList.contains(OVERLAY_LOADING_CLASS)) {
+        if (this._overlay.state !== 'hidden') {
             return;
         }
         var target = event.target;
@@ -490,10 +518,10 @@ var Zoom = (function () {
             return;
         }
         if (target.tagName === 'IMG' || target.tagName === 'PICTURE') {
-            this._current = new ZoomedImageElement(target);
+            this._current = new ZoomedImageElement(target, this._overlay);
         }
         else {
-            this._current = new ZoomedVideoElement(target);
+            this._current = new ZoomedVideoElement(target, this._overlay);
         }
         this._current.open();
         this.addCloseListeners();

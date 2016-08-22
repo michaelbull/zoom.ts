@@ -72,7 +72,8 @@
 							<h3>Classes</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-class"><a href="classes/dimensions.html" class="tsd-kind-icon">Dimensions</a></li>
-								<li class="tsd-kind-class"><a href="classes/style.html" class="tsd-kind-icon">Style</a></li>
+								<li class="tsd-kind-class"><a href="classes/elementutils.html" class="tsd-kind-icon">Element<wbr>Utils</a></li>
+								<li class="tsd-kind-class"><a href="classes/overlay.html" class="tsd-kind-icon">Overlay</a></li>
 								<li class="tsd-kind-class"><a href="classes/zoom.html" class="tsd-kind-icon">Zoom</a></li>
 								<li class="tsd-kind-class"><a href="classes/zoomedelement.html" class="tsd-kind-icon">Zoomed<wbr>Element</a></li>
 								<li class="tsd-kind-class"><a href="classes/zoomedimageelement.html" class="tsd-kind-icon">Zoomed<wbr>Image<wbr>Element</a></li>
@@ -82,6 +83,7 @@
 						<section class="tsd-index-section ">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias"><a href="index.html#state" class="tsd-kind-icon">State</a></li>
 								<li class="tsd-kind-type-alias"><a href="index.html#zoomable" class="tsd-kind-icon">Zoomable</a></li>
 							</ul>
 						</section>
@@ -89,21 +91,16 @@
 							<h3>Variables</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-variable"><a href="index.html#always_play_video_value" class="tsd-kind-icon">ALWAYS_<wbr>PLAY_<wbr>VIDEO_<wbr>VALUE</a></li>
+								<li class="tsd-kind-variable tsd-is-not-exported"><a href="index.html#class" class="tsd-kind-icon">CLASS</a></li>
 								<li class="tsd-kind-variable tsd-is-not-exported"><a href="index.html#escape_key_code" class="tsd-kind-icon">ESCAPE_<wbr>KEY_<wbr>CODE</a></li>
 								<li class="tsd-kind-variable"><a href="index.html#full_src_key" class="tsd-kind-icon">FULL_<wbr>SRC_<wbr>KEY</a></li>
-								<li class="tsd-kind-variable"><a href="index.html#overlay_class" class="tsd-kind-icon">OVERLAY_<wbr>CLASS</a></li>
-								<li class="tsd-kind-variable"><a href="index.html#overlay_loading_class" class="tsd-kind-icon">OVERLAY_<wbr>LOADING_<wbr>CLASS</a></li>
-								<li class="tsd-kind-variable"><a href="index.html#overlay_open_class" class="tsd-kind-icon">OVERLAY_<wbr>OPEN_<wbr>CLASS</a></li>
-								<li class="tsd-kind-variable"><a href="index.html#overlay_transitioning_class" class="tsd-kind-icon">OVERLAY_<wbr>TRANSITIONING_<wbr>CLASS</a></li>
 								<li class="tsd-kind-variable"><a href="index.html#play_video_key" class="tsd-kind-icon">PLAY_<wbr>VIDEO_<wbr>KEY</a></li>
 								<li class="tsd-kind-variable tsd-is-not-exported"><a href="index.html#scroll_y_delta" class="tsd-kind-icon">SCROLL_<wbr><wbr>Y_DELTA</a></li>
 								<li class="tsd-kind-variable tsd-is-not-exported"><a href="index.html#touch_y_delta" class="tsd-kind-icon">TOUCH_<wbr><wbr>Y_DELTA</a></li>
-								<li class="tsd-kind-variable"><a href="index.html#wrap_class" class="tsd-kind-icon">WRAP_<wbr>CLASS</a></li>
 								<li class="tsd-kind-variable"><a href="index.html#zoom_function_key" class="tsd-kind-icon">ZOOM_<wbr>FUNCTION_<wbr>KEY</a></li>
 								<li class="tsd-kind-variable"><a href="index.html#zoom_in_value" class="tsd-kind-icon">ZOOM_<wbr>IN_<wbr>VALUE</a></li>
 								<li class="tsd-kind-variable"><a href="index.html#zoom_out_value" class="tsd-kind-icon">ZOOM_<wbr>OUT_<wbr>VALUE</a></li>
-								<li class="tsd-kind-variable tsd-is-not-exported"><a href="index.html#overlay" class="tsd-kind-icon">overlay</a></li>
-								<li class="tsd-kind-variable tsd-is-not-exported"><a href="index.html#wrap" class="tsd-kind-icon">wrap</a></li>
+								<li class="tsd-kind-variable tsd-is-not-exported"><a href="index.html#transitionendevents" class="tsd-kind-icon">transition<wbr>End<wbr>Events</a></li>
 							</ul>
 						</section>
 					</div>
@@ -112,12 +109,27 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Type aliases</h2>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="state" class="tsd-anchor"></a>
+					<h3>State</h3>
+					<div class="tsd-signature tsd-kind-icon">State<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"hidden"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"loading"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"opening"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"open"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"closing"</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/Overlay.ts#L4">Overlay.ts:4</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Represents a state that an <a href="classes/overlay.html">Overlay</a> can be in.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
 					<a name="zoomable" class="tsd-anchor"></a>
 					<h3>Zoomable</h3>
 					<div class="tsd-signature tsd-kind-icon">Zoomable<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">HTMLImageElement</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">HTMLVideoElement</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/Zoomable.ts#L4">Zoomable.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/Zoomable.ts#L4">Zoomable.ts:4</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -135,7 +147,7 @@
 					<div class="tsd-signature tsd-kind-icon">ALWAYS_<wbr>PLAY_<wbr>VIDEO_<wbr>VALUE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;always&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/util/Attributes.ts#L29">util/Attributes.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/util/Attributes.ts#L29">util/Attributes.ts:29</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -145,12 +157,27 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-is-not-exported">
+					<a name="class" class="tsd-anchor"></a>
+					<h3>CLASS</h3>
+					<div class="tsd-signature tsd-kind-icon">CLASS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;zoom-overlay&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/Overlay.ts#L9">Overlay.ts:9</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The class name of the <a href="classes/overlay.html">Overlay</a>&#39;s <a href="classes/overlay.html#_element">_element</a>.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-is-not-exported">
 					<a name="escape_key_code" class="tsd-anchor"></a>
 					<h3>ESCAPE_<wbr>KEY_<wbr>CODE</h3>
 					<div class="tsd-signature tsd-kind-icon">ESCAPE_<wbr>KEY_<wbr>CODE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;27</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/Zoom.ts#L21">Zoom.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/Zoom.ts#L17">Zoom.ts:17</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -165,7 +192,7 @@
 					<div class="tsd-signature tsd-kind-icon">FULL_<wbr>SRC_<wbr>KEY<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;data-zoom-src&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/util/Attributes.ts#L19">util/Attributes.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/util/Attributes.ts#L19">util/Attributes.ts:19</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -175,72 +202,12 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable">
-					<a name="overlay_class" class="tsd-anchor"></a>
-					<h3>OVERLAY_<wbr>CLASS</h3>
-					<div class="tsd-signature tsd-kind-icon">OVERLAY_<wbr>CLASS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;zoom-overlay&quot;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/util/Classes.ts#L4">util/Classes.ts:4</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The class name of the overlay element.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable">
-					<a name="overlay_loading_class" class="tsd-anchor"></a>
-					<h3>OVERLAY_<wbr>LOADING_<wbr>CLASS</h3>
-					<div class="tsd-signature tsd-kind-icon">OVERLAY_<wbr>LOADING_<wbr>CLASS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;zoom-overlay-loading&quot;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/util/Classes.ts#L14">util/Classes.ts:14</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The class named added to the body when the zoom overlay is loading.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable">
-					<a name="overlay_open_class" class="tsd-anchor"></a>
-					<h3>OVERLAY_<wbr>OPEN_<wbr>CLASS</h3>
-					<div class="tsd-signature tsd-kind-icon">OVERLAY_<wbr>OPEN_<wbr>CLASS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;zoom-overlay-open&quot;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/util/Classes.ts#L9">util/Classes.ts:9</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The class named added to the body when the zoom overlay is open.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable">
-					<a name="overlay_transitioning_class" class="tsd-anchor"></a>
-					<h3>OVERLAY_<wbr>TRANSITIONING_<wbr>CLASS</h3>
-					<div class="tsd-signature tsd-kind-icon">OVERLAY_<wbr>TRANSITIONING_<wbr>CLASS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;zoom-overlay-transitioning&quot;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/util/Classes.ts#L19">util/Classes.ts:19</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The class named added to the body when the zoom overlay is transitioning.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable">
 					<a name="play_video_key" class="tsd-anchor"></a>
 					<h3>PLAY_<wbr>VIDEO_<wbr>KEY</h3>
 					<div class="tsd-signature tsd-kind-icon">PLAY_<wbr>VIDEO_<wbr>KEY<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;data-zoom-play&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/util/Attributes.ts#L24">util/Attributes.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/util/Attributes.ts#L24">util/Attributes.ts:24</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -255,7 +222,7 @@
 					<div class="tsd-signature tsd-kind-icon">SCROLL_<wbr><wbr>Y_DELTA<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;70</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/Zoom.ts#L26">Zoom.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/Zoom.ts#L22">Zoom.ts:22</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -270,7 +237,7 @@
 					<div class="tsd-signature tsd-kind-icon">TOUCH_<wbr><wbr>Y_DELTA<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;30</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/Zoom.ts#L31">Zoom.ts:31</a></li>
+							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/Zoom.ts#L27">Zoom.ts:27</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -280,27 +247,12 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable">
-					<a name="wrap_class" class="tsd-anchor"></a>
-					<h3>WRAP_<wbr>CLASS</h3>
-					<div class="tsd-signature tsd-kind-icon">WRAP_<wbr>CLASS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;zoom-wrap&quot;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/util/Classes.ts#L24">util/Classes.ts:24</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The class name of the wrap element.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable">
 					<a name="zoom_function_key" class="tsd-anchor"></a>
 					<h3>ZOOM_<wbr>FUNCTION_<wbr>KEY</h3>
 					<div class="tsd-signature tsd-kind-icon">ZOOM_<wbr>FUNCTION_<wbr>KEY<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;data-zoom&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/util/Attributes.ts#L4">util/Attributes.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/util/Attributes.ts#L4">util/Attributes.ts:4</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -315,7 +267,7 @@
 					<div class="tsd-signature tsd-kind-icon">ZOOM_<wbr>IN_<wbr>VALUE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;zoom-in&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/util/Attributes.ts#L9">util/Attributes.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/util/Attributes.ts#L9">util/Attributes.ts:9</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -330,39 +282,29 @@
 					<div class="tsd-signature tsd-kind-icon">ZOOM_<wbr>OUT_<wbr>VALUE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;zoom-out&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/util/Attributes.ts#L14">util/Attributes.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/util/Attributes.ts#L14">util/Attributes.ts:14</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>An attribute value that indicates this element should be zoomed out when clicked.</p>
+							<p>An attribute value that indicates this element should zoom out when clicked.</p>
 						</div>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-is-not-exported">
-					<a name="overlay" class="tsd-anchor"></a>
-					<h3>overlay</h3>
-					<div class="tsd-signature tsd-kind-icon">overlay<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">HTMLDivElement</span><span class="tsd-signature-symbol"> =&nbsp;document.createElement(&#x27;div&#x27;)</span></div>
+					<a name="transitionendevents" class="tsd-anchor"></a>
+					<h3>transition<wbr>End<wbr>Events</h3>
+					<div class="tsd-signature tsd-kind-icon">transition<wbr>End<wbr>Events<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[&#x27;transitionend&#x27;,&#x27;webkitTransitionEnd&#x27;,&#x27;oTransitionEnd&#x27;]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/Zoom.ts#L36">Zoom.ts:36</a></li>
+							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/util/Elements.ts#L7">util/Elements.ts:7</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The overlay element.</p>
+							<p>The event types to listen for that trigger at the end of an element&#39;s transition.</p>
 						</div>
 					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-is-not-exported">
-					<a name="wrap" class="tsd-anchor"></a>
-					<h3>wrap</h3>
-					<div class="tsd-signature tsd-kind-icon">wrap<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">HTMLDivElement</span><span class="tsd-signature-symbol"> =&nbsp;document.createElement(&#x27;div&#x27;)</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/element/ZoomedElement.ts#L17">element/ZoomedElement.ts:17</a></li>
-						</ul>
-					</aside>
 				</section>
 			</section>
 		</div>
@@ -380,7 +322,10 @@
 						<a href="classes/dimensions.html" class="tsd-kind-icon">Dimensions</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="classes/style.html" class="tsd-kind-icon">Style</a>
+						<a href="classes/elementutils.html" class="tsd-kind-icon">Element<wbr>Utils</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/overlay.html" class="tsd-kind-icon">Overlay</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/zoom.html" class="tsd-kind-icon">Zoom</a>
@@ -395,28 +340,22 @@
 						<a href="classes/zoomedvideoelement.html" class="tsd-kind-icon">Zoomed<wbr>Video<wbr>Element</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
+						<a href="index.html#state" class="tsd-kind-icon">State</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
 						<a href="index.html#zoomable" class="tsd-kind-icon">Zoomable</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="index.html#always_play_video_value" class="tsd-kind-icon">ALWAYS_<wbr>PLAY_<wbr>VIDEO_<wbr>VALUE</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="index.html#class" class="tsd-kind-icon">CLASS</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
 						<a href="index.html#escape_key_code" class="tsd-kind-icon">ESCAPE_<wbr>KEY_<wbr>CODE</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="index.html#full_src_key" class="tsd-kind-icon">FULL_<wbr>SRC_<wbr>KEY</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="index.html#overlay_class" class="tsd-kind-icon">OVERLAY_<wbr>CLASS</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="index.html#overlay_loading_class" class="tsd-kind-icon">OVERLAY_<wbr>LOADING_<wbr>CLASS</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="index.html#overlay_open_class" class="tsd-kind-icon">OVERLAY_<wbr>OPEN_<wbr>CLASS</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="index.html#overlay_transitioning_class" class="tsd-kind-icon">OVERLAY_<wbr>TRANSITIONING_<wbr>CLASS</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="index.html#play_video_key" class="tsd-kind-icon">PLAY_<wbr>VIDEO_<wbr>KEY</a>
@@ -428,9 +367,6 @@
 						<a href="index.html#touch_y_delta" class="tsd-kind-icon">TOUCH_<wbr><wbr>Y_DELTA</a>
 					</li>
 					<li class=" tsd-kind-variable">
-						<a href="index.html#wrap_class" class="tsd-kind-icon">WRAP_<wbr>CLASS</a>
-					</li>
-					<li class=" tsd-kind-variable">
 						<a href="index.html#zoom_function_key" class="tsd-kind-icon">ZOOM_<wbr>FUNCTION_<wbr>KEY</a>
 					</li>
 					<li class=" tsd-kind-variable">
@@ -440,10 +376,7 @@
 						<a href="index.html#zoom_out_value" class="tsd-kind-icon">ZOOM_<wbr>OUT_<wbr>VALUE</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="index.html#overlay" class="tsd-kind-icon">overlay</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="index.html#wrap" class="tsd-kind-icon">wrap</a>
+						<a href="index.html#transitionendevents" class="tsd-kind-icon">transition<wbr>End<wbr>Events</a>
 					</li>
 				</ul>
 			</nav>

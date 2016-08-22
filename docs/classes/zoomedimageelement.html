@@ -124,14 +124,14 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Zoomed<wbr>Image<wbr>Element<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><a href="../index.html#zoomable" class="tsd-signature-type">Zoomable</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="zoomedimageelement.html" class="tsd-signature-type">ZoomedImageElement</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Zoomed<wbr>Image<wbr>Element<span class="tsd-signature-symbol">(</span>element<span class="tsd-signature-symbol">: </span><a href="../index.html#zoomable" class="tsd-signature-type">Zoomable</a>, overlay<span class="tsd-signature-symbol">: </span><a href="overlay.html" class="tsd-signature-type">Overlay</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="zoomedimageelement.html" class="tsd-signature-type">ZoomedImageElement</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overwrites <a href="zoomedelement.html">ZoomedElement</a>.<a href="zoomedelement.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/element/ZoomedImageElement.ts#L13">element/ZoomedImageElement.ts:13</a></li>
+									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/element/ZoomedImageElement.ts#L14">element/ZoomedImageElement.ts:14</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -146,6 +146,14 @@
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>The underlying image element.</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5>overlay: <a href="overlay.html" class="tsd-signature-type">Overlay</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>The <a href="overlay.html">Overlay</a>.</p>
 										</div>
 									</div>
 								</li>
@@ -164,7 +172,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="zoomedelement.html">ZoomedElement</a>.<a href="zoomedelement.html#_fullsrc">_fullSrc</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/element/ZoomedElement.ts#L52">element/ZoomedElement.ts:52</a></li>
+							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/element/ZoomedElement.ts#L19">element/ZoomedElement.ts:19</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -179,7 +187,7 @@
 					<div class="tsd-signature tsd-kind-icon">_image<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">HTMLImageElement</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/element/ZoomedImageElement.ts#L13">element/ZoomedImageElement.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/element/ZoomedImageElement.ts#L14">element/ZoomedImageElement.ts:14</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -202,7 +210,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="zoomedelement.html">ZoomedElement</a>.<a href="zoomedelement.html#close">close</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/element/ZoomedElement.ts#L83">element/ZoomedElement.ts:83</a></li>
+									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/element/ZoomedElement.ts#L57">element/ZoomedElement.ts:57</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -225,12 +233,12 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="zoomedelement.html">ZoomedElement</a>.<a href="zoomedelement.html#loaded">loaded</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/element/ZoomedElement.ts#L113">element/ZoomedElement.ts:113</a></li>
+									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/element/ZoomedElement.ts#L84">element/ZoomedElement.ts:84</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Called once the <a href="zoomedimageelement.html#_fullsrc">_fullSrc</a> src of the <a href="zoomedelement.html#_element">_element</a> is loaded.</p>
+									<p>Called once the <a href="zoomedimageelement.html#_fullsrc">_fullSrc</a> of the <a href="overlay.html#_element">_element</a> is loaded.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -238,13 +246,13 @@
 								<li>
 									<h5>width: <span class="tsd-signature-type">number</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The width of the <a href="zoomedelement.html#_element">_element</a>.</p>
+										<p>The width of the <a href="zoomedimageelement.html#_fullsrc">_fullSrc</a> element.</p>
 									</div>
 								</li>
 								<li>
 									<h5>height: <span class="tsd-signature-type">number</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The height of the <a href="zoomedelement.html#_element">_element</a>.</p>
+										<p>The height of the <a href="zoomedimageelement.html#_fullsrc">_fullSrc</a> element.</p>
 									</div>
 								</li>
 							</ul>
@@ -263,7 +271,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="zoomedelement.html">ZoomedElement</a>.<a href="zoomedelement.html#open">open</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/element/ZoomedElement.ts#L71">element/ZoomedElement.ts:71</a></li>
+									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/element/ZoomedElement.ts#L45">element/ZoomedElement.ts:45</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -286,15 +294,9 @@
 							<aside class="tsd-sources">
 								<p>Overwrites <a href="zoomedelement.html">ZoomedElement</a>.<a href="zoomedelement.html#width">width</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/element/ZoomedImageElement.ts#L48">element/ZoomedImageElement.ts:48</a></li>
+									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/element/ZoomedImageElement.ts#L41">element/ZoomedImageElement.ts:41</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<dl class="tsd-comment-tags">
-									<dt>inheritdoc</dt>
-									<dd></dd>
-								</dl>
-							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						</li>
 					</ul>
@@ -310,15 +312,9 @@
 							<aside class="tsd-sources">
 								<p>Overwrites <a href="zoomedelement.html">ZoomedElement</a>.<a href="zoomedelement.html#zoomedin">zoomedIn</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/element/ZoomedImageElement.ts#L27">element/ZoomedImageElement.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/element/ZoomedImageElement.ts#L26">element/ZoomedImageElement.ts:26</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<dl class="tsd-comment-tags">
-									<dt>inheritdoc</dt>
-									<dd></dd>
-								</dl>
-							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -334,15 +330,9 @@
 							<aside class="tsd-sources">
 								<p>Overwrites <a href="zoomedelement.html">ZoomedElement</a>.<a href="zoomedelement.html#zoomedout">zoomedOut</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/d8dea9f/lib/element/ZoomedImageElement.ts#L41">element/ZoomedImageElement.ts:41</a></li>
+									<li>Defined in <a href="https://github.com/MikeBull94/zoom.ts/blob/ded83d8/lib/element/ZoomedImageElement.ts#L37">element/ZoomedImageElement.ts:37</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<dl class="tsd-comment-tags">
-									<dt>inheritdoc</dt>
-									<dd></dd>
-								</dl>
-							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -363,7 +353,10 @@
 						<a href="dimensions.html" class="tsd-kind-icon">Dimensions</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="style.html" class="tsd-kind-icon">Style</a>
+						<a href="elementutils.html" class="tsd-kind-icon">Element<wbr>Utils</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="overlay.html" class="tsd-kind-icon">Overlay</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="zoom.html" class="tsd-kind-icon">Zoom</a>
@@ -411,28 +404,22 @@
 						<a href="zoomedvideoelement.html" class="tsd-kind-icon">Zoomed<wbr>Video<wbr>Element</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
+						<a href="../index.html#state" class="tsd-kind-icon">State</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
 						<a href="../index.html#zoomable" class="tsd-kind-icon">Zoomable</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="../index.html#always_play_video_value" class="tsd-kind-icon">ALWAYS_<wbr>PLAY_<wbr>VIDEO_<wbr>VALUE</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="../index.html#class" class="tsd-kind-icon">CLASS</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
 						<a href="../index.html#escape_key_code" class="tsd-kind-icon">ESCAPE_<wbr>KEY_<wbr>CODE</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="../index.html#full_src_key" class="tsd-kind-icon">FULL_<wbr>SRC_<wbr>KEY</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../index.html#overlay_class" class="tsd-kind-icon">OVERLAY_<wbr>CLASS</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../index.html#overlay_loading_class" class="tsd-kind-icon">OVERLAY_<wbr>LOADING_<wbr>CLASS</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../index.html#overlay_open_class" class="tsd-kind-icon">OVERLAY_<wbr>OPEN_<wbr>CLASS</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../index.html#overlay_transitioning_class" class="tsd-kind-icon">OVERLAY_<wbr>TRANSITIONING_<wbr>CLASS</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="../index.html#play_video_key" class="tsd-kind-icon">PLAY_<wbr>VIDEO_<wbr>KEY</a>
@@ -444,9 +431,6 @@
 						<a href="../index.html#touch_y_delta" class="tsd-kind-icon">TOUCH_<wbr><wbr>Y_DELTA</a>
 					</li>
 					<li class=" tsd-kind-variable">
-						<a href="../index.html#wrap_class" class="tsd-kind-icon">WRAP_<wbr>CLASS</a>
-					</li>
-					<li class=" tsd-kind-variable">
 						<a href="../index.html#zoom_function_key" class="tsd-kind-icon">ZOOM_<wbr>FUNCTION_<wbr>KEY</a>
 					</li>
 					<li class=" tsd-kind-variable">
@@ -456,10 +440,7 @@
 						<a href="../index.html#zoom_out_value" class="tsd-kind-icon">ZOOM_<wbr>OUT_<wbr>VALUE</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../index.html#overlay" class="tsd-kind-icon">overlay</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../index.html#wrap" class="tsd-kind-icon">wrap</a>
+						<a href="../index.html#transitionendevents" class="tsd-kind-icon">transition<wbr>End<wbr>Events</a>
 					</li>
 				</ul>
 			</nav>

@@ -1,3 +1,4 @@
+import { Overlay } from '../Overlay';
 import { Zoomable } from '../Zoomable';
 import {
     ALWAYS_PLAY_VIDEO_VALUE,
@@ -18,15 +19,13 @@ export class ZoomedVideoElement extends ZoomedElement {
     /**
      * Creates a new {@link ZoomedVideoElement}.
      * @param element The underlying video element.
+     * @param overlay The {@link Overlay}.
      */
-    constructor(element: Zoomable) {
-        super(element);
+    constructor(element: Zoomable, overlay: Overlay) {
+        super(element, overlay);
         this._video = element as HTMLVideoElement;
     }
 
-    /**
-     * @inheritDoc
-     */
     zoomedIn(): void {
         const video: HTMLVideoElement = document.createElement('video');
         const source: HTMLSourceElement = document.createElement('source');
@@ -40,18 +39,12 @@ export class ZoomedVideoElement extends ZoomedElement {
         source.src = this._fullSrc;
     }
 
-    /**
-     * @inheritDoc
-     */
     zoomedOut(): void {
         if (this._video.getAttribute(PLAY_VIDEO_KEY) === ALWAYS_PLAY_VIDEO_VALUE) {
             this._video.play();
         }
     }
 
-    /**
-     * @inheritDoc
-     */
     width(): number {
         return this._video.width || this._video.videoWidth;
     }

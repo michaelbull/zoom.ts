@@ -1,3 +1,4 @@
+import { Overlay } from '../Overlay';
 import { Zoomable } from '../Zoomable';
 import { FULL_SRC_KEY } from '../util/Attributes';
 import { ZoomedElement } from './ZoomedElement';
@@ -15,15 +16,13 @@ export class ZoomedImageElement extends ZoomedElement {
     /**
      * Creates a new {@link ZoomedImageElement}.
      * @param element The underlying image element.
+     * @param overlay The {@link Overlay}.
      */
-    constructor(element: Zoomable) {
-        super(element);
+    constructor(element: Zoomable, overlay: Overlay) {
+        super(element, overlay);
         this._image = element as HTMLImageElement;
     }
 
-    /**
-     * @inheritDoc
-     */
     zoomedIn(): void {
         const image: HTMLImageElement = document.createElement('img');
 
@@ -35,16 +34,10 @@ export class ZoomedImageElement extends ZoomedElement {
         image.src = this._fullSrc;
     }
 
-    /**
-     * @inheritDoc
-     */
     zoomedOut(): void {
         /* empty */
     }
 
-    /**
-     * @inheritDoc
-     */
     width(): number {
         return this._image.width;
     }

@@ -9,7 +9,7 @@ export const ZOOM_FUNCTION_KEY: string = 'data-zoom';
 export const ZOOM_IN_VALUE: string = 'zoom-in';
 
 /**
- * An attribute value that indicates this element should be zoomed out when clicked.
+ * An attribute value that indicates this element should zoom out when clicked.
  */
 export const ZOOM_OUT_VALUE: string = 'zoom-out';
 
