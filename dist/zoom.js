@@ -1,5 +1,5 @@
 /*!
- * zoom.ts v3.0.0
+ * zoom.ts v3.0.1
  * https://michael-bull.com/projects/zoom.ts
  * 
  * Copyright (c) 2016 Michael Bull (https://michael-bull.com)
@@ -305,10 +305,11 @@ var ZoomedElement = (function () {
     }
     /**
      * Opens the zoomed view.
+     * @param loaded A function to call once the {@link _element}'s {@link _fullSrc} has loaded.
      */
-    ZoomedElement.prototype.open = function () {
+    ZoomedElement.prototype.open = function (loaded) {
         this._overlay.state = 'loading';
-        this.zoomedIn();
+        this.zoomedIn(loaded);
         this._element.src = this._fullSrc;
         ElementUtils.addTransitionEndListener(this._element, this.openedListener);
     };
@@ -350,12 +351,13 @@ var ZoomedImageElement = (function (_super) {
         _super.call(this, element, overlay);
         this._image = element;
     }
-    ZoomedImageElement.prototype.zoomedIn = function () {
+    ZoomedImageElement.prototype.zoomedIn = function (loaded) {
         var _this = this;
         var image = document.createElement('img');
         image.onload = function () {
             _this.loaded(image.width, image.height);
             _this._image.removeAttribute(FULL_SRC_KEY);
+            loaded();
         };
         image.src = this._fullSrc;
     };
@@ -382,7 +384,7 @@ var ZoomedVideoElement = (function (_super) {
         _super.call(this, element, overlay);
         this._video = element;
     }
-    ZoomedVideoElement.prototype.zoomedIn = function () {
+    ZoomedVideoElement.prototype.zoomedIn = function (loaded) {
         var _this = this;
         var video = document.createElement('video');
         var source = document.createElement('source');
@@ -390,6 +392,7 @@ var ZoomedVideoElement = (function (_super) {
         video.addEventListener('canplay', function () {
             _this.loaded(video.videoWidth, video.videoHeight);
             _this._video.play();
+            loaded();
         });
         source.src = this._fullSrc;
     };
@@ -503,6 +506,7 @@ var Zoom = (function () {
      * @param event The click event that occurred when interacting with the element.
      */
     Zoom.prototype.zoom = function (event) {
+        var _this = this;
         event.stopPropagation();
         if (this._overlay.state !== 'hidden') {
             return;
@@ -523,9 +527,10 @@ var Zoom = (function () {
         else {
             this._current = new ZoomedVideoElement(target, this._overlay);
         }
-        this._current.open();
-        this.addCloseListeners();
-        this._initialScrollY = Dimensions.scrollY();
+        this._current.open(function () {
+            _this.addCloseListeners();
+            _this._initialScrollY = Dimensions.scrollY();
+        });
     };
     /**
      * Closes {@link _current}.

@@ -23,12 +23,13 @@ export class ZoomedImageElement extends ZoomedElement {
         this._image = element as HTMLImageElement;
     }
 
-    zoomedIn(): void {
+    zoomedIn(loaded: Function): void {
         const image: HTMLImageElement = document.createElement('img');
 
         image.onload = (): any => {
             this.loaded(image.width, image.height);
             this._image.removeAttribute(FULL_SRC_KEY);
+            loaded();
         };
 
         image.src = this._fullSrc;

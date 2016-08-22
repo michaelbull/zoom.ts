@@ -41,11 +41,12 @@ export abstract class ZoomedElement {
 
     /**
      * Opens the zoomed view.
+     * @param loaded A function to call once the {@link _element}'s {@link _fullSrc} has loaded.
      */
-    open(): void {
+    open(loaded: Function): void {
         this._overlay.state = 'loading';
 
-        this.zoomedIn();
+        this.zoomedIn(loaded);
         this._element.src = this._fullSrc;
 
         ElementUtils.addTransitionEndListener(this._element, this.openedListener);
@@ -63,8 +64,9 @@ export abstract class ZoomedElement {
 
     /**
      * Called when the zoomed view is opened.
+     * @param callback A function to call once the {@link _element}'s {@link _fullSrc} has loaded.
      */
-    protected abstract zoomedIn(): void;
+    protected abstract zoomedIn(callback: Function): void;
 
     /**
      * Called when the zoomed view is closed.

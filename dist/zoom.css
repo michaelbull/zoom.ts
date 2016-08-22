@@ -33,11 +33,6 @@
   filter: 'alpha(opacity=0)';
 }
 
-.zoom-overlay-loading {
-  cursor: wait;
-  pointer-events: none;
-}
-
 .zoom-overlay-loading [data-zoom='zoom-in'],
 .zoom-overlay-loading [data-zoom='zoom-out'] {
   cursor: wait;

@@ -116,9 +116,10 @@ export class Zoom {
             this._current = new ZoomedVideoElement(target, this._overlay);
         }
 
-        this._current.open();
-        this.addCloseListeners();
-        this._initialScrollY = Dimensions.scrollY();
+        this._current.open(() => {
+            this.addCloseListeners();
+            this._initialScrollY = Dimensions.scrollY();
+        });
     }
 
     /**

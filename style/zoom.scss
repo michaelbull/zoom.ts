@@ -47,11 +47,8 @@ $zoom-overlay-opacity: 100 !default;
   filter: 'alpha(opacity=0)';
 }
 
-// Show a waiting cursor during the loading phase and prevent users from clicking anything
+// Show a waiting cursor during the loading phase
 .zoom-overlay-loading {
-  cursor: wait;
-  pointer-events: none;
-
   [data-zoom='zoom-in'],
   [data-zoom='zoom-out'] {
     cursor: wait;
