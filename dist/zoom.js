@@ -1,5 +1,5 @@
 /*!
- * zoom.ts v3.0.1
+ * zoom.ts v3.0.2
  * https://michael-bull.com/projects/zoom.ts
  * 
  * Copyright (c) 2016 Michael Bull (https://michael-bull.com)
@@ -205,7 +205,6 @@ var ElementUtils = (function () {
         if ('transition' in document.body.style) {
             for (var _i = 0, transitionEndEvents_1 = transitionEndEvents; _i < transitionEndEvents_1.length; _i++) {
                 var event = transitionEndEvents_1[_i];
-                console.log('add event listener to event: ' + event);
                 element.addEventListener(event, listener);
             }
         }
