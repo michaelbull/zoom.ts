@@ -1,5 +1,5 @@
 /*!
- * zoom.ts v3.0.3
+ * zoom.ts v3.0.4
  * https://michael-bull.com/projects/zoom.ts
  * 
  * Copyright (c) 2016 Michael Bull (https://michael-bull.com)
@@ -61,9 +61,12 @@ var Overlay = (function () {
          * @param state The state to set.
          */
         set: function (state) {
-            document.body.classList.remove(CLASS + '-' + this._state);
-            this._state = state;
-            document.body.classList.add(CLASS + '-' + this._state);
+            var _this = this;
+            window.requestAnimationFrame(function () {
+                document.body.classList.remove(CLASS + '-' + _this._state);
+                _this._state = state;
+                document.body.classList.add(CLASS + '-' + _this._state);
+            });
         },
         enumerable: true,
         configurable: true
@@ -171,14 +174,6 @@ var transitionEndEvents = [
 var Elements = (function () {
     function Elements() {
     }
-    /**
-     * Forces an element to repaint on the canvas.
-     */
-    Elements.repaint = function (element) {
-        /* tslint:disable */
-        element.offsetWidth;
-        /* tslint:enable */
-    };
     /**
      * Sets an element's transform style property.
      * @param element The element.
@@ -316,9 +311,12 @@ var ZoomedElement = (function () {
      * Closes the zoomed view.
      */
     ZoomedElement.prototype.close = function () {
+        var _this = this;
         this._overlay.state = 'closing';
-        Elements.removeTransform(this._element);
-        Elements.addTransitionEndListener(this._element, this.closedListener);
+        window.requestAnimationFrame(function () {
+            Elements.removeTransform(_this._element);
+            Elements.addTransitionEndListener(_this._element, _this.closedListener);
+        });
     };
     /**
      * Called once the {@link _fullSrc} of the {@link _element} is loaded.
@@ -326,12 +324,14 @@ var ZoomedElement = (function () {
      * @param height The height of the {@link _fullSrc} element.
      */
     ZoomedElement.prototype.loaded = function (width, height) {
+        var _this = this;
         this._overlay.state = 'opening';
         this._element.setAttribute(ZOOM_FUNCTION_KEY, ZOOM_OUT_VALUE);
         var translation = Elements.translateToCenter(this._element);
         var scale = Elements.scaleToViewport(this.width(), width, height);
-        Elements.repaint(this._element);
-        Elements.transform(this._element, translation + ' ' + scale);
+        window.requestAnimationFrame(function () {
+            Elements.transform(_this._element, translation + ' ' + scale);
+        });
     };
     return ZoomedElement;
 }());

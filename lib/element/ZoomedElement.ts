@@ -58,8 +58,10 @@ export abstract class ZoomedElement {
     close(): void {
         this._overlay.state = 'closing';
 
-        Elements.removeTransform(this._element);
-        Elements.addTransitionEndListener(this._element, this.closedListener);
+        window.requestAnimationFrame(() => {
+            Elements.removeTransform(this._element);
+            Elements.addTransitionEndListener(this._element, this.closedListener);
+        });
     }
 
     /**
@@ -90,8 +92,9 @@ export abstract class ZoomedElement {
         const translation: string = Elements.translateToCenter(this._element);
         const scale: string = Elements.scaleToViewport(this.width(), width, height);
 
-        Elements.repaint(this._element);
-        Elements.transform(this._element, translation + ' ' + scale);
+        window.requestAnimationFrame(() => {
+            Elements.transform(this._element, translation + ' ' + scale);
+        });
     }
 
     /**

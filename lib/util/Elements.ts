@@ -16,15 +16,6 @@ const transitionEndEvents: string[] = [
 export class Elements {
 
     /**
-     * Forces an element to repaint on the canvas.
-     */
-    public static repaint(element: HTMLElement): void {
-        /* tslint:disable */
-        element.offsetWidth;
-        /* tslint:enable */
-    }
-
-    /**
      * Sets an element's transform style property.
      * @param element The element.
      * @param style The style to apply to the transform property.

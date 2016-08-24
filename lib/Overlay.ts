@@ -51,8 +51,10 @@ export class Overlay {
      * @param state The state to set.
      */
     set state(state: State) {
-        document.body.classList.remove(CLASS + '-' + this._state);
-        this._state = state;
-        document.body.classList.add(CLASS + '-' + this._state);
+        window.requestAnimationFrame(() => {
+            document.body.classList.remove(CLASS + '-' + this._state);
+            this._state = state;
+            document.body.classList.add(CLASS + '-' + this._state);
+        });
     }
 }
