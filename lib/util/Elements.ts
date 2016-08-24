@@ -13,7 +13,7 @@ const transitionEndEvents: string[] = [
 /**
  * Contains utility methods for HTMLElements.
  */
-export class ElementUtils {
+export class Elements {
 
     /**
      * Forces an element to repaint on the canvas.

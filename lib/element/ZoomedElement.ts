@@ -6,7 +6,7 @@ import {
     ZOOM_IN_VALUE,
     ZOOM_OUT_VALUE
 } from '../util/Attributes';
-import { ElementUtils } from '../util/Elements';
+import { Elements } from '../util/Elements';
 
 /**
  * Represents a {@link Zoomable} element that may be opened or closed.
@@ -49,7 +49,7 @@ export abstract class ZoomedElement {
         this.zoomedIn(loaded);
         this._element.src = this._fullSrc;
 
-        ElementUtils.addTransitionEndListener(this._element, this.openedListener);
+        Elements.addTransitionEndListener(this._element, this.openedListener);
     }
 
     /**
@@ -58,8 +58,8 @@ export abstract class ZoomedElement {
     close(): void {
         this._overlay.state = 'closing';
 
-        ElementUtils.removeTransform(this._element);
-        ElementUtils.addTransitionEndListener(this._element, this.closedListener);
+        Elements.removeTransform(this._element);
+        Elements.addTransitionEndListener(this._element, this.closedListener);
     }
 
     /**
@@ -87,18 +87,18 @@ export abstract class ZoomedElement {
         this._overlay.state = 'opening';
         this._element.setAttribute(ZOOM_FUNCTION_KEY, ZOOM_OUT_VALUE);
 
-        const translation: string = ElementUtils.translateToCenter(this._element);
-        const scale: string = ElementUtils.scaleToViewport(this.width(), width, height);
+        const translation: string = Elements.translateToCenter(this._element);
+        const scale: string = Elements.scaleToViewport(this.width(), width, height);
 
-        ElementUtils.repaint(this._element);
-        ElementUtils.transform(this._element, translation + ' ' + scale);
+        Elements.repaint(this._element);
+        Elements.transform(this._element, translation + ' ' + scale);
     }
 
     /**
      * An event lister that sets the {@link Overlay}'s {@link State} to open.
      */
     private openedListener: EventListener = () => {
-        ElementUtils.removeTransitionEndListener(this._element, this.openedListener);
+        Elements.removeTransitionEndListener(this._element, this.openedListener);
         this._overlay.state = 'open';
     };
 
@@ -107,7 +107,7 @@ export abstract class ZoomedElement {
      * {@link ZOOM_FUNCTION_KEY} attribute to {@link ZOOM_IN_VALUE}.
      */
     private closedListener: EventListener = () => {
-        ElementUtils.removeTransitionEndListener(this._element, this.closedListener);
+        Elements.removeTransitionEndListener(this._element, this.closedListener);
 
         this._overlay.state = 'hidden';
         this._element.setAttribute(ZOOM_FUNCTION_KEY, ZOOM_IN_VALUE);

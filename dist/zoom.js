@@ -1,5 +1,5 @@
 /*!
- * zoom.ts v3.0.2
+ * zoom.ts v3.0.3
  * https://michael-bull.com/projects/zoom.ts
  * 
  * Copyright (c) 2016 Michael Bull (https://michael-bull.com)
@@ -168,13 +168,13 @@ var transitionEndEvents = [
 /**
  * Contains utility methods for HTMLElements.
  */
-var ElementUtils = (function () {
-    function ElementUtils() {
+var Elements = (function () {
+    function Elements() {
     }
     /**
      * Forces an element to repaint on the canvas.
      */
-    ElementUtils.repaint = function (element) {
+    Elements.repaint = function (element) {
         /* tslint:disable */
         element.offsetWidth;
         /* tslint:enable */
@@ -184,7 +184,7 @@ var ElementUtils = (function () {
      * @param element The element.
      * @param style The style to apply to the transform property.
      */
-    ElementUtils.transform = function (element, style) {
+    Elements.transform = function (element, style) {
         element.style.webkitTransform = style;
         element.style.transform = style;
     };
@@ -192,7 +192,7 @@ var ElementUtils = (function () {
      * Removes an element's transform style property.
      * @param element The element.
      */
-    ElementUtils.removeTransform = function (element) {
+    Elements.removeTransform = function (element) {
         element.style.removeProperty('webkitTransform');
         element.style.removeProperty('transform');
     };
@@ -201,7 +201,7 @@ var ElementUtils = (function () {
      * @param element The element whose events should be listened to.
      * @param listener The listener to call once an event is received.
      */
-    ElementUtils.addTransitionEndListener = function (element, listener) {
+    Elements.addTransitionEndListener = function (element, listener) {
         if ('transition' in document.body.style) {
             for (var _i = 0, transitionEndEvents_1 = transitionEndEvents; _i < transitionEndEvents_1.length; _i++) {
                 var event = transitionEndEvents_1[_i];
@@ -217,7 +217,7 @@ var ElementUtils = (function () {
      * @param element The element whose events should no longer be listened to.
      * @param listener The listener to remove.
      */
-    ElementUtils.removeTransitionEndListener = function (element, listener) {
+    Elements.removeTransitionEndListener = function (element, listener) {
         for (var _i = 0, transitionEndEvents_2 = transitionEndEvents; _i < transitionEndEvents_2.length; _i++) {
             var event = transitionEndEvents_2[_i];
             element.removeEventListener(event, listener);
@@ -228,7 +228,7 @@ var ElementUtils = (function () {
      * @param element The element.
      * @returns The calculated translation.
      */
-    ElementUtils.translateToCenter = function (element) {
+    Elements.translateToCenter = function (element) {
         var viewportWidth = Dimensions.viewportWidth();
         var viewportHeight = Dimensions.viewportHeight();
         var scrollX = Dimensions.scrollX();
@@ -249,7 +249,7 @@ var ElementUtils = (function () {
      * @param height The height of the element.
      * @returns The calculated scale.
      */
-    ElementUtils.scaleToViewport = function (originalWidth, width, height) {
+    Elements.scaleToViewport = function (originalWidth, width, height) {
         var viewportWidth = Dimensions.viewportWidth();
         var viewportHeight = Dimensions.viewportHeight();
         var viewportAspectRatio = viewportWidth / viewportHeight;
@@ -267,7 +267,7 @@ var ElementUtils = (function () {
         }
         return 'scale(' + scaleFactor + ')';
     };
-    return ElementUtils;
+    return Elements;
 }());
 
 /**
@@ -285,7 +285,7 @@ var ZoomedElement = (function () {
          * An event lister that sets the {@link Overlay}'s {@link State} to open.
          */
         this.openedListener = function () {
-            ElementUtils.removeTransitionEndListener(_this._element, _this.openedListener);
+            Elements.removeTransitionEndListener(_this._element, _this.openedListener);
             _this._overlay.state = 'open';
         };
         /**
@@ -293,7 +293,7 @@ var ZoomedElement = (function () {
          * {@link ZOOM_FUNCTION_KEY} attribute to {@link ZOOM_IN_VALUE}.
          */
         this.closedListener = function () {
-            ElementUtils.removeTransitionEndListener(_this._element, _this.closedListener);
+            Elements.removeTransitionEndListener(_this._element, _this.closedListener);
             _this._overlay.state = 'hidden';
             _this._element.setAttribute(ZOOM_FUNCTION_KEY, ZOOM_IN_VALUE);
             _this.zoomedOut();
@@ -310,15 +310,15 @@ var ZoomedElement = (function () {
         this._overlay.state = 'loading';
         this.zoomedIn(loaded);
         this._element.src = this._fullSrc;
-        ElementUtils.addTransitionEndListener(this._element, this.openedListener);
+        Elements.addTransitionEndListener(this._element, this.openedListener);
     };
     /**
      * Closes the zoomed view.
      */
     ZoomedElement.prototype.close = function () {
         this._overlay.state = 'closing';
-        ElementUtils.removeTransform(this._element);
-        ElementUtils.addTransitionEndListener(this._element, this.closedListener);
+        Elements.removeTransform(this._element);
+        Elements.addTransitionEndListener(this._element, this.closedListener);
     };
     /**
      * Called once the {@link _fullSrc} of the {@link _element} is loaded.
@@ -328,10 +328,10 @@ var ZoomedElement = (function () {
     ZoomedElement.prototype.loaded = function (width, height) {
         this._overlay.state = 'opening';
         this._element.setAttribute(ZOOM_FUNCTION_KEY, ZOOM_OUT_VALUE);
-        var translation = ElementUtils.translateToCenter(this._element);
-        var scale = ElementUtils.scaleToViewport(this.width(), width, height);
-        ElementUtils.repaint(this._element);
-        ElementUtils.transform(this._element, translation + ' ' + scale);
+        var translation = Elements.translateToCenter(this._element);
+        var scale = Elements.scaleToViewport(this.width(), width, height);
+        Elements.repaint(this._element);
+        Elements.transform(this._element, translation + ' ' + scale);
     };
     return ZoomedElement;
 }());
