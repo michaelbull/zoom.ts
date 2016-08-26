@@ -1,4 +1,4 @@
-# zoom.ts
+# ![zoom.ts][logo]
 
 A lightweight TypeScript library for image and video zooming, as seen on
 [Medium][medium].
@@ -138,6 +138,7 @@ Bug reports and pull requests are welcome on [GitHub][github].
 This project is available under the terms of the MIT license. See the
 [`LICENSE`][license] file for the copyright information and licensing terms.
 
+[logo]: /img/logo.png
 [medium]: https://medium.design/image-zoom-on-medium-24d146fc0c20
 [npm-image]: https://img.shields.io/npm/v/zoom.ts.svg
 [npm-url]: https://www.npmjs.com/package/zoom.ts
