@@ -37,42 +37,39 @@
       "url": "http://heavybeard.it"
     }
   ],
-  "main": "dist/zoom.min.js",
+  "main": "dist/zoom.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/MikeBull94/zoom.ts"
   },
   "scripts": {
-    "lint-ts": "tslint lib/**/*.ts",
-    "lint-scss": "sass-lint --config .sass-lint.yml \"style/**/*.scss\" --verbose --no-exit",
-    "compile-ts": "tsc && rollup --config",
-    "compile-scss": "node-sass --output-style expanded style/zoom.scss dist/zoom.css",
-    "optimize-ts": "uglifyjs dist/zoom.js --comments --compress --mangle --output dist/zoom.min.js",
-    "optimize-scss": "postcss --use cssnano --no-cssnano.autoprefixer --output dist/zoom.min.css dist/zoom.css",
-    "watch-ts": "nodemon --ext ts --watch lib --exec \"npm run compile-ts && npm run optimize-ts\"",
-    "watch-scss": "nodemon --ext scss --watch style --exec \"npm run compile-scss && npm run optimize-scss\"",
-    "docs-ts": "typedoc lib --includeDeclarations --mode file --target ES5 --readme none --out docs/",
     "check-updates": "ncu",
     "update-dependencies": "ncu --upgrade && npm install",
-    "clean": "rm -rf build/* && rm -rf dist/* && rm -rf docs/*",
-    "watch": "concurrently --kill-others \"npm run watch-ts\" \"npm run watch-scss\"",
-    "build": "npm run clean && npm run lint-ts && npm run lint-scss && npm run compile-ts && npm run optimize-ts && npm run compile-scss && npm run optimize-scss && npm run docs-ts"
+    "clean": "rm -rf dist/*",
+    "dev": "webpack-dev-server --inline --hot",
+    "build": "webpack --progress --hide-modules",
+    "dist": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {},
   "devDependencies": {
-    "concurrently": "2.2.0",
+    "awesome-typescript-loader": "2.2.4",
+    "cross-env": "3.0.0",
+    "css-loader": "0.25.0",
     "cssnano": "3.7.4",
     "node-sass": "3.8.0",
-    "nodemon": "1.10.2",
     "npm-check-updates": "2.8.0",
-    "postcss-cli": "2.5.2",
-    "rollup": "0.34.10",
-    "rollup-plugin-typescript": "0.8.1",
-    "sass-lint": "1.9.0",
+    "sass-lint": "1.9.1",
+    "sass-loader": "4.0.2",
+    "sasslint-webpack-plugin": "1.0.4",
+    "style-loader": "0.13.1",
     "tslint": "3.14.0",
+    "tslint-loader": "2.1.5",
     "typedoc": "0.4.5",
-    "typescript": "1.8.10",
-    "uglify-js": "2.7.3"
+    "typedoc-webpack-plugin": "1.0.10",
+    "typescript": "2.0.3",
+    "webpack": "1.13.2",
+    "webpack-dev-server": "1.16.1",
+    "webpack-fail-plugin": "1.0.5"
   },
   "peerDependencies": {}
 }

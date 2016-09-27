@@ -21,6 +21,3 @@
 # npm
 node_modules/
 npm-debug.log
-
-# Output files
-build/

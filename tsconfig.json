@@ -2,15 +2,13 @@
   "compileOnSave": false,
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "declaration": true,
-    "sourceMap": true,
     "noImplicitAny": true,
-    "removeComments": false,
-    "outDir": "build"
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist",
+    "webpack.config.js"
   ]
 }

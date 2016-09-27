@@ -10,6 +10,7 @@ import {
     ZOOM_OUT_VALUE
 } from './util/Attributes';
 import { Dimensions } from './util/Dimensions';
+import './zoom.scss';
 
 /**
  * The key code for the Esc key.
@@ -29,7 +30,7 @@ const TOUCH_Y_DELTA: number = 30;
 /**
  * Entry point to the library.
  */
-export class Zoom {
+export class Listener {
 
     /**
      * Executes a function when the DOM is fully loaded.
@@ -70,7 +71,7 @@ export class Zoom {
      * Listens for click events on {@link Zoomable} elements and adds the {@link _overlay} to the document.
      */
     listen(): void {
-        Zoom.ready(() => {
+        Listener.ready(() => {
             document.body.addEventListener('click', (event: MouseEvent) => {
                 const target: Zoomable = event.target as Zoomable;
                 const operation: string = target.getAttribute(ZOOM_FUNCTION_KEY);

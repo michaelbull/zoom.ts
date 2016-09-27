@@ -10,7 +10,7 @@ A lightweight TypeScript library for image and video zooming, as seen on
 [![peerDependencies status][peerDependencies-image]][peerDependencies-url]
 
 `zoom.ts` easily plugs into your application with minimal overhead by including
-no third-party dependencies and requiring under 8kB of bandwidth when
+no third-party dependencies and requiring under 13kB of bandwidth when
 optimized. Once marked as zoomable, clicking an image or video will smoothly
 expand it to fit the browser's entire viewport. The zoomed element will then
 await dismissal from the user, either by clicking or scrolling away.
@@ -29,12 +29,12 @@ or pressing <kbd>Esc</kbd>.
 
 ### Library
 
-The [TypeScript library][zoom.ts] can be imported and instantiated:
+The [TypeScript library][listener.ts] can be imported and instantiated:
 
 ```typescript
-import { Zoom } from 'zoom.ts/lib/Zoom';
+import { Listener } from 'zoom.ts/lib/Listener';
 
-new Zoom().listen();
+new Listener().listen();
 ```
 
 Or the [JavaScript distribution][dist.js] can be linked, which will register
@@ -43,29 +43,9 @@ Or the [JavaScript distribution][dist.js] can be linked, which will register
 ```html
 <script type="text/javascript" src="dist/zoom.js"></script>
 <script type="text/javascript">
-  new window.zoom.Zoom().listen();
+  new zoom.Listener().listen();
 </script>
 ```
-
-A minified version of the JavaScript distribution is available at
-[`./dist/zoom.min.js`][min.js].
-
-### Stylesheet
-
-The [SCSS file][zoom.scss] can be imported:
-
-```scss
-@import '~zoom.ts/style/zoom';
-```
-
-Or the [CSS distribution][dist.css] can be linked:
-
-```html
-<link rel="stylesheet" type="text/css" href="dist/zoom.css" />
-```
-
-A minified version of the CSS distribution is available at
-[`./dist/zoom.min.css`][min.css].
 
 ## Usage
 
@@ -88,18 +68,12 @@ version.
 ```html
 <!DOCTYPE html>
 <html>
-  <head>
-    <link rel="stylesheet" type="text/css" href="zoom.min.css" />
-  </head>
-
   <body>
-    <main>
-      <img src="forest.jpg" data-zoom="zoom-in" data-zoom-src="forest-full.jpg">
-    </main>
+    <img src="forest.jpg" data-zoom="zoom-in" data-zoom-src="forest-full.jpg">
 
-    <script type="text/javascript" src="dist/zoom.min.js"></script>
+    <script type="text/javascript" src="dist/zoom.js"></script>
     <script type="text/javascript">
-      new window.zoom.Zoom().listen();
+      new zoom.Listener().listen();
     </script>
   </body>
 </html>
@@ -107,8 +81,8 @@ version.
 
 ## Documentation
 
-Documentation is generated in the `./docs` directory by [TypeDoc][typedoc] and
-can be viewed online [here][docs].
+Documentation is generated in the `./dist/docs` directory by [TypeDoc][typedoc]
+and can be viewed online [here][docs].
 
 ## Building
 
@@ -116,13 +90,16 @@ can be viewed online [here][docs].
 
 The following commands can be ran in the project:
 
-- `npm run build`
-  - Lint, compile, minify, and optimize the stylesheets and scripts.
-- `npm run watch`
-  - Watch the file-system for changes, triggering rebuild of the stylesheets or
-scripts if a change to the source of either is detected.
 - `npm run clean`
   - Removes the output files under the `./dist` directory.
+- `npm run dev`
+  - Runs the [webpack-dev-server][dev-server] at
+[`http://localhost:8080/`](http://localhost:8080/)
+- `npm run build`
+  - Builds the library with documentation under the `./dist` directory.
+- `npm run dist`
+  - Builds, minifies, and optimizes the library with documentation under the
+`./dist` directory.
 
 ## Credits
 
@@ -151,14 +128,11 @@ This project is available under the terms of the MIT license. See the
 [peerDependencies-image]: https://david-dm.org/MikeBull94/zoom.ts/peer-status.svg
 [peerDependencies-url]: https://david-dm.org/MikeBull94/zoom.ts?type=peer
 [demo]: https://mikebull94.github.io/zoom.ts
-[zoom.ts]: https://github.com/MikeBull94/zoom.ts/blob/master/lib/Zoom.ts
+[listener.ts]: https://github.com/MikeBull94/zoom.ts/blob/master/lib/Listener.ts
 [dist.js]: https://github.com/MikeBull94/zoom.ts/blob/master/dist/zoom.js
-[min.js]: https://github.com/MikeBull94/zoom.ts/blob/master/dist/zoom.min.js
-[zoom.scss]: https://github.com/MikeBull94/zoom.ts/blob/master/style/zoom.scss
-[dist.css]: https://github.com/MikeBull94/zoom.ts/blob/master/dist/zoom.css
-[min.css]: https://github.com/MikeBull94/zoom.ts/blob/master/dist/zoom.min.css
 [typedoc]: https://github.com/TypeStrong/typedoc
-[docs]: https://mikebull94.github.io/zoom.ts/docs
+[docs]: https://mikebull94.github.io/zoom.ts/dist/docs
+[dev-server]: https://github.com/webpack/webpack-dev-server
 [node]: https://nodejs.org
 [github]: https://github.com/MikeBull94/zoom.ts
 [license]: https://github.com/MikeBull94/zoom.ts/blob/master/LICENSE
