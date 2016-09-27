@@ -45,7 +45,7 @@ export class Elements {
                 element.addEventListener(event, listener);
             }
         } else {
-            listener(undefined);
+            listener(new Event('transitionend'));
         }
     }
 
