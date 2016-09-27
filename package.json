@@ -58,6 +58,7 @@
     "cssnano": "3.7.4",
     "node-sass": "3.8.0",
     "npm-check-updates": "2.8.0",
+    "release-it": "2.4.3",
     "sass-lint": "1.9.1",
     "sass-loader": "4.0.2",
     "sasslint-webpack-plugin": "1.0.4",
