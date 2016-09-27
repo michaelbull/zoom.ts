@@ -92,7 +92,7 @@ The following commands can be ran in the project:
   - Removes the output files under the `./dist` directory.
 - `npm run dev`
   - Runs the [webpack-dev-server][dev-server] at
-[`http://localhost:8080/`](http://localhost:8080/)
+[`http://localhost:8080/`](http://localhost:8080/).
 - `npm run build`
   - Builds the library with documentation under the `./dist` directory.
 - `npm run dist`
