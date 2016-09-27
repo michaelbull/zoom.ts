@@ -27,8 +27,6 @@ or pressing <kbd>Esc</kbd>.
 
 ## Installation
 
-### Library
-
 The [TypeScript library][listener.ts] can be imported and instantiated:
 
 ```typescript
