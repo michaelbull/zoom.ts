@@ -84,7 +84,7 @@ and can be viewed online [here][docs].
 
 ## Building
 
-[Node.js][node] is used to build the distribution.
+[Webpack][webpack] is used to build the distribution.
 
 The following commands can be ran in the project:
 
@@ -131,6 +131,6 @@ This project is available under the terms of the MIT license. See the
 [typedoc]: https://github.com/TypeStrong/typedoc
 [docs]: https://mikebull94.github.io/zoom.ts/dist/docs
 [dev-server]: https://github.com/webpack/webpack-dev-server
-[node]: https://nodejs.org
+[webpack]: https://webpack.github.io/
 [github]: https://github.com/MikeBull94/zoom.ts
 [license]: https://github.com/MikeBull94/zoom.ts/blob/master/LICENSE
