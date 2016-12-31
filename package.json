@@ -11,14 +11,14 @@
     "zooming",
     "medium"
   ],
-  "homepage": "https://michael-bull.com/projects/zoom.ts",
+  "homepage": "https://www.michael-bull.com/projects/zoom.ts",
   "bugs": {
     "url": "https://github.com/MikeBull94/zoom.ts/issues"
   },
   "license": "MIT",
   "author": {
     "name": "Michael Bull",
-    "url": "https://michael-bull.com"
+    "url": "https://www.michael-bull.com"
   },
   "contributors": [
     {
