@@ -7,7 +7,7 @@ var banner = [
     'zoom.ts v' + require('./package.json').version,
     'https://michael-bull.com/projects/zoom.ts',
     '',
-    'Copyright (c) 2016 Michael Bull (https://michael-bull.com)',
+    'Copyright (c) 2016 Michael Bull (https://www.michael-bull.com)',
     'Copyright (c) 2013 @fat',
     '@license MIT'
 ];

@@ -73,8 +73,8 @@ export class Listener {
     listen(): void {
         Listener.ready(() => {
             document.body.addEventListener('click', (event: MouseEvent) => {
-                const target: Zoomable = event.target as Zoomable;
-                const operation: string = target.getAttribute(ZOOM_FUNCTION_KEY);
+                let target: Zoomable = event.target as Zoomable;
+                let operation: string = target.getAttribute(ZOOM_FUNCTION_KEY);
 
                 if (operation === ZOOM_IN_VALUE) {
                     this.zoom(event);
@@ -98,10 +98,10 @@ export class Listener {
             return;
         }
 
-        const target: Zoomable = event.target as Zoomable;
+        let target: Zoomable = event.target as Zoomable;
 
         if (event.metaKey || event.ctrlKey) {
-            const url: string = target.getAttribute(FULL_SRC_KEY) || target.currentSrc || target.src;
+            let url: string = target.getAttribute(FULL_SRC_KEY) || target.currentSrc || target.src;
             window.open(url, '_blank');
             return;
         }

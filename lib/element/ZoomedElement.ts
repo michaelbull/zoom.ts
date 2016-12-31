@@ -89,8 +89,8 @@ export abstract class ZoomedElement {
         this._overlay.state = 'opening';
         this._element.setAttribute(ZOOM_FUNCTION_KEY, ZOOM_OUT_VALUE);
 
-        const translation: string = Elements.translateToCenter(this._element);
-        const scale: string = Elements.scaleToViewport(this.width(), width, height);
+        let translation: string = Elements.translateToCenter(this._element);
+        let scale: string = Elements.scaleToViewport(this.width(), width, height);
 
         window.requestAnimationFrame(() => {
             Elements.transform(this._element, translation + ' ' + scale);

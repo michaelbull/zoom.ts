@@ -4,7 +4,7 @@ import { Dimensions } from './Dimensions';
 /**
  * The event types to listen for that trigger at the end of an element's transition.
  */
-const transitionEndEvents: string[] = [
+const TRANSITION_END_EVENTS: string[] = [
     'transitionend',
     'webkitTransitionEnd',
     'oTransitionEnd'
@@ -41,7 +41,7 @@ export class Elements {
      */
     public static addTransitionEndListener(element: HTMLElement, listener: EventListener): void {
         if ('transition' in document.body.style) {
-            for (let event of transitionEndEvents) {
+            for (let event of TRANSITION_END_EVENTS) {
                 element.addEventListener(event, listener);
             }
         } else {
@@ -55,7 +55,7 @@ export class Elements {
      * @param listener The listener to remove.
      */
     public static removeTransitionEndListener(element: HTMLElement, listener: EventListener): void {
-        for (let event of transitionEndEvents) {
+        for (let event of TRANSITION_END_EVENTS) {
             element.removeEventListener(event, listener);
         }
     }
@@ -66,21 +66,21 @@ export class Elements {
      * @returns The calculated translation.
      */
     public static translateToCenter(element: Zoomable): string {
-        const viewportWidth: number = Dimensions.viewportWidth();
-        const viewportHeight: number = Dimensions.viewportHeight();
+        let viewportWidth: number = Dimensions.viewportWidth();
+        let viewportHeight: number = Dimensions.viewportHeight();
 
-        const scrollX: number = Dimensions.scrollX();
-        const scrollY: number = Dimensions.scrollY();
+        let scrollX: number = Dimensions.scrollX();
+        let scrollY: number = Dimensions.scrollY();
 
-        const viewportX: number = viewportWidth / 2;
-        const viewportY: number = scrollY + (viewportHeight / 2);
+        let viewportX: number = viewportWidth / 2;
+        let viewportY: number = scrollY + (viewportHeight / 2);
 
-        const rect: ClientRect = element.getBoundingClientRect();
-        const centerX: number = rect.left + scrollX + ((element.width || element.offsetWidth) / 2);
-        const centerY: number = rect.top + scrollY + ((element.height || element.offsetHeight) / 2);
+        let rect: ClientRect = element.getBoundingClientRect();
+        let centerX: number = rect.left + scrollX + ((element.width || element.offsetWidth) / 2);
+        let centerY: number = rect.top + scrollY + ((element.height || element.offsetHeight) / 2);
 
-        const x: number = Math.round(viewportX - centerX);
-        const y: number = Math.round(viewportY - centerY);
+        let x: number = Math.round(viewportX - centerX);
+        let y: number = Math.round(viewportY - centerY);
 
         return 'translate(' + x + 'px, ' + y + 'px) translateZ(0)';
     }
@@ -93,13 +93,13 @@ export class Elements {
      * @returns The calculated scale.
      */
     public static scaleToViewport(originalWidth: number, width: number, height: number): string {
-        const viewportWidth: number = Dimensions.viewportWidth();
-        const viewportHeight: number = Dimensions.viewportHeight();
+        let viewportWidth: number = Dimensions.viewportWidth();
+        let viewportHeight: number = Dimensions.viewportHeight();
 
-        const viewportAspectRatio: number = viewportWidth / viewportHeight;
+        let viewportAspectRatio: number = viewportWidth / viewportHeight;
 
-        const maxScaleFactor: number = width / originalWidth;
-        const aspectRatio: number = width / height;
+        let maxScaleFactor: number = width / originalWidth;
+        let aspectRatio: number = width / height;
 
         let scaleFactor: number;
 

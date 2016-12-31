@@ -27,8 +27,8 @@ export class ZoomedVideoElement extends ZoomedElement {
     }
 
     zoomedIn(loaded: Function): void {
-        const video: HTMLVideoElement = document.createElement('video');
-        const source: HTMLSourceElement = document.createElement('source');
+        let video: HTMLVideoElement = document.createElement('video');
+        let source: HTMLSourceElement = document.createElement('source');
 
         video.appendChild(source);
         video.addEventListener('canplay', () => {

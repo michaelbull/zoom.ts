@@ -24,7 +24,7 @@ export class ZoomedImageElement extends ZoomedElement {
     }
 
     zoomedIn(loaded: Function): void {
-        const image: HTMLImageElement = document.createElement('img');
+        let image: HTMLImageElement = document.createElement('img');
 
         image.onload = (): any => {
             this.loaded(image.width, image.height);
