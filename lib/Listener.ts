@@ -3,12 +3,7 @@ import { Zoomable } from './Zoomable';
 import { ZoomedElement } from './element/ZoomedElement';
 import { ZoomedImageElement } from './element/ZoomedImageElement';
 import { ZoomedVideoElement } from './element/ZoomedVideoElement';
-import {
-    FULL_SRC_KEY,
-    ZOOM_FUNCTION_KEY,
-    ZOOM_IN_VALUE,
-    ZOOM_OUT_VALUE
-} from './util/Attributes';
+import { FULL_SRC_KEY, ZOOM_FUNCTION_KEY, ZOOM_IN_VALUE, ZOOM_OUT_VALUE } from './util/Attributes';
 import { Dimensions } from './util/Dimensions';
 import './zoom.scss';
 

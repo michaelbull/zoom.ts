@@ -1,9 +1,6 @@
 import { Overlay } from '../Overlay';
 import { Zoomable } from '../Zoomable';
-import {
-    ALWAYS_PLAY_VIDEO_VALUE,
-    PLAY_VIDEO_KEY
-} from '../util/Attributes';
+import { ALWAYS_PLAY_VIDEO_VALUE, PLAY_VIDEO_KEY } from '../util/Attributes';
 import { ZoomedElement } from './ZoomedElement';
 
 /**

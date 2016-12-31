@@ -1,11 +1,6 @@
 import { Overlay } from '../Overlay';
 import { Zoomable } from '../Zoomable';
-import {
-    FULL_SRC_KEY,
-    ZOOM_FUNCTION_KEY,
-    ZOOM_IN_VALUE,
-    ZOOM_OUT_VALUE
-} from '../util/Attributes';
+import { FULL_SRC_KEY, ZOOM_FUNCTION_KEY, ZOOM_IN_VALUE, ZOOM_OUT_VALUE } from '../util/Attributes';
 import { Elements } from '../util/Elements';
 
 /**

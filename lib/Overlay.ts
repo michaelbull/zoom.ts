@@ -1,7 +1,4 @@
-/**
- * Represents a state that an {@link Overlay} can be in.
- */
-export type State = 'hidden' | 'loading' | 'opening' | 'open' | 'closing';
+import { State } from './State';
 
 /**
  * The base class name.
