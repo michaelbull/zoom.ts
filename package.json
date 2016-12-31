@@ -46,7 +46,7 @@
     "check-updates": "ncu",
     "update-dependencies": "ncu --upgrade && npm install",
     "clean": "rm -rf dist/*",
-    "dev": "webpack-dev-server --inline --hot",
+    "start": "webpack-dev-server --inline --hot",
     "build": "webpack --progress --hide-modules",
     "dist": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
