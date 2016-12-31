@@ -30,7 +30,7 @@ $zoom-overlay-opacity: 100 !default;
 }
 
 // An overlay that fills the entire viewport with a background colour and disables click events below it
-.zoom-overlay {
+.zoom__overlay {
   @include transition(opacity, $zoom-transition-duration);
 
   position: fixed;
@@ -39,16 +39,15 @@ $zoom-overlay-opacity: 100 !default;
   bottom: 0;
   left: 0;
 
-  opacity: 0;
-
   z-index: $zoom-overlay-z-index;
   background: $zoom-background-color;
   pointer-events: none;
+  opacity: 0;
   filter: 'alpha(opacity=0)';
 }
 
 // Show a waiting cursor during the loading phase
-.zoom-overlay-loading {
+.zoom--loading {
   [data-zoom='zoom-in'],
   [data-zoom='zoom-out'] {
     cursor: wait;
@@ -56,26 +55,26 @@ $zoom-overlay-opacity: 100 !default;
 }
 
 // Show the overlay during opening and when opened
-.zoom-overlay-opening,
-.zoom-overlay-open {
-  .zoom-overlay {
+.zoom--opening,
+.zoom--open {
+  .zoom__overlay {
     opacity: $zoom-overlay-opacity / 100;
     filter: 'alpha(opacity=' + $zoom-overlay-opacity + ')';
   }
 }
 
 // Improve image rendering once opened
-.zoom-overlay-open {
+.zoom--open {
   [data-zoom='zoom-out'] {
     image-rendering: pixelated;
   }
 }
 
 // Disable text selection if the overlay isn't hidden
-.zoom-overlay-loading,
-.zoom-overlay-opening,
-.zoom-overlay-opening,
-.zoom-overlay-closing {
+.zoom--loading,
+.zoom--opening,
+.zoom--opening,
+.zoom--closing {
   user-select: none;
   -ms-user-select: none;
   -moz-user-select: none;
@@ -83,9 +82,9 @@ $zoom-overlay-opacity: 100 !default;
 }
 
 // Allow the user to only click on the media when overlay is opened
-.zoom-overlay-opening,
-.zoom-overlay-open,
-.zoom-overlay-closing {
+.zoom--opening,
+.zoom--open,
+.zoom--closing {
   pointer-events: none;
 
   [data-zoom='zoom-out'] {
