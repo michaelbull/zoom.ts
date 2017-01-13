@@ -1,5 +1,5 @@
 /*!
- * zoom.ts v4.0.0
+ * zoom.ts v4.1.0
  * https://michael-bull.com/projects/zoom.ts
  * 
  * Copyright (c) 2016 Michael Bull (https://www.michael-bull.com)
