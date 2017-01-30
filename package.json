@@ -13,7 +13,7 @@
   ],
   "homepage": "https://www.michael-bull.com/projects/zoom.ts",
   "bugs": {
-    "url": "https://github.com/MikeBull94/zoom.ts/issues"
+    "url": "https://github.com/michaelbull/zoom.ts/issues"
   },
   "license": "MIT",
   "author": {
@@ -40,7 +40,7 @@
   "main": "dist/zoom.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MikeBull94/zoom.ts"
+    "url": "https://github.com/michaelbull/zoom.ts"
   },
   "scripts": {
     "check-updates": "ncu",

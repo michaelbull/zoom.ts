@@ -101,7 +101,7 @@ The following commands can be ran in the project:
 
 ## Credits
 
-- [Michael Bull](https://michael-bull.com) ([@MikeBull94](https://github.com/MikeBull94))
+- [Michael Bull](https://michael-bull.com) ([@michaelbull](https://github.com/michaelbull))
 - [Jacob Thornton](https://twitter.com/fat) ([@fat](https://github.com/fat)) - Author of [zoom.js](https://github.com/fat/zoom.js)
 - [Sahil Bajaj](http://sahil.me) ([@spinningarrow](https://github.com/spinningarrow)) \& [Andrea Cognini](http://heavybeard.it) ([@heavybeard](https://github.com/heavybeard)) - Authors of [zoom-vanilla.js](https://github.com/heavybeard/zoom-vanilla.js)
 
@@ -119,18 +119,18 @@ This project is available under the terms of the MIT license. See the
 [npm-url]: https://www.npmjs.com/package/zoom.ts
 [downloads-image]: https://img.shields.io/npm/dt/zoom.ts.svg
 [downloads-url]: https://www.npmjs.com/package/zoom.ts
-[dependencies-image]: https://david-dm.org/MikeBull94/zoom.ts.svg
-[dependencies-url]: https://david-dm.org/MikeBull94/zoom.ts
-[devDependencies-image]: https://david-dm.org/MikeBull94/zoom.ts/dev-status.svg
-[devDependencies-url]: https://david-dm.org/MikeBull94/zoom.ts?type=dev
-[peerDependencies-image]: https://david-dm.org/MikeBull94/zoom.ts/peer-status.svg
-[peerDependencies-url]: https://david-dm.org/MikeBull94/zoom.ts?type=peer
-[demo]: https://mikebull94.github.io/zoom.ts
-[listener.ts]: https://github.com/MikeBull94/zoom.ts/blob/master/lib/Listener.ts
-[dist.js]: https://github.com/MikeBull94/zoom.ts/blob/master/dist/zoom.js
+[dependencies-image]: https://david-dm.org/michaelbull/zoom.ts.svg
+[dependencies-url]: https://david-dm.org/michaelbull/zoom.ts
+[devDependencies-image]: https://david-dm.org/michaelbull/zoom.ts/dev-status.svg
+[devDependencies-url]: https://david-dm.org/michaelbull/zoom.ts?type=dev
+[peerDependencies-image]: https://david-dm.org/michaelbull/zoom.ts/peer-status.svg
+[peerDependencies-url]: https://david-dm.org/michaelbull/zoom.ts?type=peer
+[demo]: https://michaelbull.github.io/zoom.ts
+[listener.ts]: https://github.com/michaelbull/zoom.ts/blob/master/lib/Listener.ts
+[dist.js]: https://github.com/michaelbull/zoom.ts/blob/master/dist/zoom.js
 [typedoc]: https://github.com/TypeStrong/typedoc
-[docs]: https://mikebull94.github.io/zoom.ts/dist/docs
+[docs]: https://michaelbull.github.io/zoom.ts/dist/docs
 [dev-server]: https://github.com/webpack/webpack-dev-server
 [webpack]: https://webpack.github.io/
-[github]: https://github.com/MikeBull94/zoom.ts
-[license]: https://github.com/MikeBull94/zoom.ts/blob/master/LICENSE
+[github]: https://github.com/michaelbull/zoom.ts
+[license]: https://github.com/michaelbull/zoom.ts/blob/master/LICENSE
