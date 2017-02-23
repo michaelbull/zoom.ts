@@ -10,7 +10,6 @@ A running demonstration can be found [here][demo].
 [![npm downloads][downloads-badge]][downloads]
 [![dependencies status][dependencies-badge]][dependencies]
 [![devDependencies status][devDependencies-badge]][devDependencies]
-[![peerDependencies status][peerDependencies-badge]][peerDependencies]
 
 `zoom.ts` easily plugs into your application and starts listening to zoom events
 as soon as the DOM is ready. The library requires just 4.2kB of bandwidth once
@@ -115,8 +114,6 @@ This project is available under the terms of the ISC license. See the
 [dependencies]: https://david-dm.org/michaelbull/zoom.ts
 [devDependencies-badge]: https://david-dm.org/michaelbull/zoom.ts/dev-status.svg?style=flat-square
 [devDependencies]: https://david-dm.org/michaelbull/zoom.ts?type=dev
-[peerDependencies-badge]: https://david-dm.org/michaelbull/zoom.ts/peer-status.svg?style=flat-square
-[peerDependencies]: https://david-dm.org/michaelbull/zoom.ts?type=peer
 
 [demo]: https://michaelbull.github.io/zoom.ts
 [npm]: https://www.npmjs.com/
