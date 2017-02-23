@@ -5,11 +5,12 @@ A lightweight TypeScript library for image and video zooming, as seen on
 
 A running demonstration can be found [here][demo].
 
-[![npm version][npm-image]][npm-url]
-[![npm downloads][downloads-image]][downloads-url]
-[![dependencies status][dependencies-image]][dependencies-url]
-[![devDependencies status][devDependencies-image]][devDependencies-url]
-[![peerDependencies status][peerDependencies-image]][peerDependencies-url]
+[![license][license-badge]][license]
+[![npm version][npm-badge]][npm]
+[![npm downloads][downloads-badge]][downloads]
+[![dependencies status][dependencies-badge]][dependencies]
+[![devDependencies status][devDependencies-badge]][devDependencies]
+[![peerDependencies status][peerDependencies-badge]][peerDependencies]
 
 `zoom.ts` easily plugs into your application and starts listening to zoom events
 as soon as the DOM is ready. The library requires just 4.2kB of bandwidth once
@@ -21,123 +22,105 @@ image, scrolling away, or pressing <kbd>Esc</kbd>.
 
 ## Installation
 
+Install the package via [npm][npm]:
+
 ```
 npm install --save zoom.ts
 ```
 
-## Usage
+Then you can either link the [JavaScript distribution][dist] file to have
+`zoom.ts` listen on your webpage, or you can configure and include the library
+itself your existing application.
 
-To get up and running quickly, you may link the
-[JavaScript distribution][dist.js] which will immediately start `zoom.ts` as
-soon as the DOM has loaded.
+To include and configure the library yourself, you will need to first `@import`
+the [stylesheet][stylesheet]. Remember to define any overrides **before**
+importing the stylesheet, for example:
 
+```sass
+$zoom-overlay-background-color: blue; // change overlay background to blue
+$zoom-transition-duration: 1000; // slow down the transitions
 
-### Source Code
+@import '~zoom.ts/src/style';
+```
 
-The [TypeScript library][listener.ts] can be imported and instantiated:
+Next you will need to import the library itself. In the example below, the
+`ready` function will apply a callback as soon as the DOM has loaded, and the
+`addListeners` function will start `zoom.ts` listening for click events on
+zoomable elements.
 
 ```typescript
-import { Listener } from 'zoom.ts/lib/Listener';
+import { ready } from 'zoom.ts/src/Document';
+import { addListeners } from 'zoom.ts/src/Listener';
 
-new Listener().listen();
-```
-
-Or the [JavaScript distribution][dist.js] can be linked, which will register
-`zoom` as a global that can be accessed by the browser:
-
-```html
-<script type="text/javascript" src="dist/zoom.js"></script>
-<script type="text/javascript">
-  new zoom.Listener().listen();
-</script>
+ready(() => {
+    console.log('zoom.ts loaded!');
+    addListeners();
+});
 ```
 
 ## Usage
 
-Add the `data-zoom="zoom-in"` attribute to an `<img>` or `<video>` to have it
-zoom in when clicked.
-
-The loading of a large resource can be deferred by specifying a `data-zoom-src`
-attribute, where the value assigned contains the resource to load once the user
-expands the element. The resource specified in the attribute is also the
-resource that will be loaded if the user opens the image by clicking with either
-<kbd>⌘</kbd> or <kbd>Ctrl</kbd> held.
-
-## Example
-
-In the example snippet below an image of a forest will be displayed. Once the
-user clicks to zoom in the image their browser will request the larger
-`forest-full.jpg` file and replace the original `<img>` with the full-resolution
-version.
+1. Add the class `zoom__element` to your `<img>`.
+2. Wrap your `<img>` in a `div` with a class of `zoom` (i.e. `<div class="zoom">`)
+3. A width and height can be configured to specify the dimensions that the expanded image should size to by add the `data-width` and `data-height` attributes to the wrapper `div`.
+4. The loading of a big image can be deferred by adding the `data-src` attribute to the wrapper `div`.
 
 ```html
 <!DOCTYPE html>
 <html>
   <body>
-    <img src="forest.jpg" data-zoom="zoom-in" data-zoom-src="forest-full.jpg">
+    <div class="zoom" data-width="3500" data-height="2333" data-src="img/forest-full.jpg">
+      <img class="zoom__element" src="img/forest.jpg">
+    </div>
 
     <script type="text/javascript" src="dist/zoom.js"></script>
-    <script type="text/javascript">
-      new zoom.Listener().listen();
-    </script>
   </body>
 </html>
 ```
 
-## Documentation
-
-Documentation is generated in the `./dist/docs` directory by [TypeDoc][typedoc]
-and can be viewed online [here][docs].
-
 ## Building
 
-[Webpack][webpack] is used to build the distribution.
+The following scripts are configured to run via [npm][npm]:
 
-The following commands can be ran in the project:
-
-- `npm run clean`
-  - Removes the output files under the `./dist` directory.
 - `npm start`
-  - Starts the [webpack-dev-server][dev-server] at
-[`http://localhost:8080`](http://localhost:8080).
+  - Runs the [webpack-dev-server][dev-server] at
+    [`http://localhost:8080`][localhost]
 - `npm run build`
-  - Builds the library with documentation under the `./dist` directory.
+  - Builds the distribution and places it under the `./dist` directory.
 - `npm run dist`
-  - Builds, minifies, and optimizes the library with documentation under the
-`./dist` directory.
-
-## Credits
-
-- [Michael Bull](https://michael-bull.com) ([@michaelbull](https://github.com/michaelbull))
-- [Jacob Thornton](https://twitter.com/fat) ([@fat](https://github.com/fat)) - Author of [zoom.js](https://github.com/fat/zoom.js)
-- [Sahil Bajaj](http://sahil.me) ([@spinningarrow](https://github.com/spinningarrow)) \& [Andrea Cognini](http://heavybeard.it) ([@heavybeard](https://github.com/heavybeard)) - Authors of [zoom-vanilla.js](https://github.com/heavybeard/zoom-vanilla.js)
+  - Builds, minifies, and optimizes the distirbution and places it under the
+    `./dist` directory.
+- `npm run clean`
+  - Cleans the `./dist` directory.
 
 ## Contributing
 
 Bug reports and pull requests are welcome on [GitHub][github].
 
 ## License
-This project is available under the terms of the MIT license. See the
+
+This project is available under the terms of the ISC license. See the
 [`LICENSE`][license] file for the copyright information and licensing terms.
 
 [logo]: /img/logo.png
 [medium]: https://medium.design/image-zoom-on-medium-24d146fc0c20
-[npm-image]: https://img.shields.io/npm/v/zoom.ts.svg
-[npm-url]: https://www.npmjs.com/package/zoom.ts
-[downloads-image]: https://img.shields.io/npm/dt/zoom.ts.svg
-[downloads-url]: https://www.npmjs.com/package/zoom.ts
-[dependencies-image]: https://david-dm.org/michaelbull/zoom.ts.svg
-[dependencies-url]: https://david-dm.org/michaelbull/zoom.ts
-[devDependencies-image]: https://david-dm.org/michaelbull/zoom.ts/dev-status.svg
-[devDependencies-url]: https://david-dm.org/michaelbull/zoom.ts?type=dev
-[peerDependencies-image]: https://david-dm.org/michaelbull/zoom.ts/peer-status.svg
-[peerDependencies-url]: https://david-dm.org/michaelbull/zoom.ts?type=peer
-[demo]: https://michaelbull.github.io/zoom.ts
-[listener.ts]: https://github.com/michaelbull/zoom.ts/blob/master/lib/Listener.ts
-[dist.js]: https://github.com/michaelbull/zoom.ts/blob/master/dist/zoom.js
-[typedoc]: https://github.com/TypeStrong/typedoc
-[docs]: https://michaelbull.github.io/zoom.ts/dist/docs
-[dev-server]: https://github.com/webpack/webpack-dev-server
-[webpack]: https://webpack.github.io/
-[github]: https://github.com/michaelbull/zoom.ts
+
+[license-badge]: https://img.shields.io/github/license/michaelbull/zoom.ts.svg?style=flat-square
 [license]: https://github.com/michaelbull/zoom.ts/blob/master/LICENSE
+[npm-badge]: https://img.shields.io/npm/v/zoom.ts.svg?style=flat-square
+[npm]: https://www.npmjs.com/package/zoom.ts
+[downloads-badge]: https://img.shields.io/npm/dt/zoom.ts.svg?style=flat-square
+[downloads]: https://www.npmjs.com/package/zoom.ts
+[dependencies-badge]: https://david-dm.org/michaelbull/zoom.ts.svg?style=flat-square
+[dependencies]: https://david-dm.org/michaelbull/zoom.ts
+[devDependencies-badge]: https://david-dm.org/michaelbull/zoom.ts/dev-status.svg?style=flat-square
+[devDependencies]: https://david-dm.org/michaelbull/zoom.ts?type=dev
+[peerDependencies-badge]: https://david-dm.org/michaelbull/zoom.ts/peer-status.svg?style=flat-square
+[peerDependencies]: https://david-dm.org/michaelbull/zoom.ts?type=peer
+
+[demo]: https://michaelbull.github.io/zoom.ts
+[npm]: https://www.npmjs.com/
+[dist]: https://github.com/michaelbull/zoom.ts/blob/master/dist/zoom.js
+[stylesheet]: https://github.com/michaelbull/zoom.ts/blob/master/src/zoom.scss
+[localhost]: http://localhost:8080
+[github]: https://github.com/michaelbull/zoom.ts

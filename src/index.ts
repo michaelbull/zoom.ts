@@ -1,5 +1,8 @@
-import './zoom.scss';
+import './style.scss';
 import { ready } from './Document';
 import { addListeners } from './Listener';
 
-ready(addListeners);
+ready(() => {
+    console.log('zoom.ts loaded!');
+    addListeners();
+});

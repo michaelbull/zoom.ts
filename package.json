@@ -26,8 +26,6 @@
     "url": "https://github.com/michaelbull/zoom.ts"
   },
   "scripts": {
-    "check-updates": "ncu",
-    "update-dependencies": "ncu --upgrade && npm install",
     "clean": "rm -rf dist/*",
     "start": "webpack-dev-server --inline --hot",
     "build": "webpack --progress --hide-modules",

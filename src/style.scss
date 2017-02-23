@@ -1,9 +1,11 @@
-$zoom-background-color: hsl(0, 0%, 100%) !default;
+$zoom-z-index: 2000 !default;
+
 $zoom-transition-duration: 300ms !default;
-$zoom-media-z-index: 2000 !default;
-$zoom-overlay-z-index: 1000 !default;
 $zoom-transition-timing-function: cubic-bezier(0.2, 0, 0.2, 1) !default;
-$zoom-overlay-opacity: 100 !default;
+
+$zoom-overlay-z-index: 1000 !default;
+$zoom-overlay-background-color: hsl(0, 0%, 100%) !default;
+$zoom-overlay-visible-opacity: 100 !default;
 
 .zoom {
   position: relative;
@@ -14,7 +16,7 @@ $zoom-overlay-opacity: 100 !default;
 }
 
 .zoom--active {
-  z-index: $zoom-media-z-index;
+  z-index: $zoom-z-index;
 }
 
 .zoom__element {
@@ -43,7 +45,7 @@ $zoom-overlay-opacity: 100 !default;
   left: 0;
 
   z-index: $zoom-overlay-z-index;
-  background: $zoom-background-color;
+  background: $zoom-overlay-background-color;
 
   opacity: 0;
   filter: 'alpha(opacity=0)';
@@ -52,6 +54,6 @@ $zoom-overlay-opacity: 100 !default;
 }
 
 .zoom__overlay--visible {
-  opacity: $zoom-overlay-opacity / 100;
-  filter: 'alpha(opacity=' + $zoom-overlay-opacity + ')';
+  opacity: $zoom-overlay-visible-opacity / 100;
+  filter: 'alpha(opacity=' + $zoom-overlay-visible-opacity + ')';
 }
