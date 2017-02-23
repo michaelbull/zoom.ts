@@ -1,6 +1,6 @@
 # ![zoom.ts][logo]
 
-A lightweight TypeScript library for image and video zooming, as seen on
+A lightweight TypeScript library for image zooming, as seen on
 [Medium][medium].
 
 A running demonstration can be found [here][demo].
