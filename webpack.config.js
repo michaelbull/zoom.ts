@@ -1,33 +1,27 @@
-var webpack = require('webpack'),
-    SassLintPlugin = require('sasslint-webpack-plugin'),
-    TypedocWebpackPlugin = require('typedoc-webpack-plugin'),
-    FailPlugin = require('webpack-fail-plugin');
+var path = require('path'),
+    webpack = require('webpack');
 
 var banner = [
     'zoom.ts v' + require('./package.json').version,
-    'https://michael-bull.com/projects/zoom.ts',
+    'https://www.michael-bull.com/projects/zoom.ts',
     '',
-    'Copyright (c) 2016 Michael Bull (https://www.michael-bull.com)',
-    'Copyright (c) 2013 @fat',
-    '@license MIT'
+    'Copyright (c) 2017 Michael Bull (https://www.michael-bull.com)',
+    '@license ISC'
 ];
 
 module.exports = {
     entry: {
-        zoom: './lib/Listener.ts',
+        zoom: './src/index.ts'
     },
 
     output: {
-        path: './dist',
+        path: path.join(__dirname, 'dist'),
         publicPath: 'dist/',
-        filename: '[name].js',
-        library: 'zoom',
-        libraryTarget: 'var'
+        filename: '[name].js'
     },
 
     resolve: {
         extensions: [
-            '',
             '.webpack.js',
             '.web.js',
             '.js',
@@ -38,64 +32,69 @@ module.exports = {
     },
 
     module: {
-        preLoaders: [
+        rules: [
             {
                 test: /\.ts$/,
-                loader: 'tslint'
-            }
-        ],
-        loaders: [
+                enforce: 'pre',
+                loader: 'tslint-loader'
+            },
             {
                 test: /\.ts$/,
                 loader: 'awesome-typescript-loader'
             },
             {
                 test: /\.scss$/,
-                loader: 'style!css!sass'
-            },
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'postcss-loader',
+                    'sass-loader'
+                ]
+            }
         ]
     },
 
     plugins: [
-        new SassLintPlugin({
-            configFile: '.sass-lint.yml',
-            glob: 'src/**/*.s?(a|c)ss',
-            failOnWarning: true,
-            failOnError: true
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+            }
         }),
-        new TypedocWebpackPlugin({
-            name: 'zoom.ts',
-            mode: 'file',
-            includeDeclarations: false,
-            ignoreCompilerErrors: false,
-            readme: 'none'
+        new webpack.LoaderOptionsPlugin({
+            options: {
+                context: __dirname,
+                output: {
+                    path: './'
+                },
+                tslint: {
+                    emitErrors: true,
+                    failOnHint: true,
+                    fileOutput: {
+                        dir: 'reports/tslint',
+                        clean: true
+                    }
+                },
+                postcss: [
+                    require('cssnano')({
+                        autoprefixer: {
+                            add: true,
+                            remove: false
+                        }
+                    })
+                ]
+            }
         }),
-        new webpack.BannerPlugin(banner.join('\n'), {
+        new webpack.BannerPlugin({
+            banner: banner.join('\n'),
             entryOnly: true
         })
-    ],
-
-    tslint: {
-        emitErrors: true,
-        failOnHint: true
-    }
+    ]
 };
 
 if (process.env.NODE_ENV === 'production') {
     module.exports.plugins.push(
-        new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: JSON.stringify('production')
-            }
-        }),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false
-            }
-        }),
-        new webpack.optimize.OccurenceOrderPlugin(),
-        FailPlugin
+        new webpack.optimize.UglifyJsPlugin()
     );
 } else {
-    module.exports.devtool = 'source-map';
+    module.exports.devtool = '#source-map';
 }

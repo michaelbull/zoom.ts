@@ -1,6 +1,6 @@
 {
   "name": "zoom.ts",
-  "version": "4.1.1",
+  "version": "5.0.0",
   "description": "A lightweight TypeScript library for image and video zooming, as seen on Medium.",
   "keywords": [
     "zoom.ts",
@@ -15,28 +15,11 @@
   "bugs": {
     "url": "https://github.com/michaelbull/zoom.ts/issues"
   },
-  "license": "MIT",
+  "license": "ISC",
   "author": {
     "name": "Michael Bull",
     "url": "https://www.michael-bull.com"
   },
-  "contributors": [
-    {
-      "name": "Jacob Thornton",
-      "email": "jacobthornton@gmail.com",
-      "url": "https://twitter.com/fat"
-    },
-    {
-      "name": "Sahil Bajaj",
-      "email": "sahil29@gmail.com",
-      "url": "http://sahil.me"
-    },
-    {
-      "name": "Andrea Cognini",
-      "email": "info@heavybeard.it",
-      "url": "http://heavybeard.it"
-    }
-  ],
   "main": "dist/zoom.js",
   "repository": {
     "type": "git",
@@ -50,27 +33,29 @@
     "build": "webpack --progress --hide-modules",
     "dist": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
-  "dependencies": {},
+  "dependencies": {
+    "has-transitions": "0.3.0",
+    "has-translate3d": "0.0.3",
+    "transform-property": "0.0.1"
+  },
   "devDependencies": {
-    "awesome-typescript-loader": "2.2.4",
-    "cross-env": "3.0.0",
-    "css-loader": "0.25.0",
-    "cssnano": "3.7.4",
-    "node-sass": "3.8.0",
-    "npm-check-updates": "2.8.0",
+    "@types/core-js": "0.9.35",
+    "@types/webpack": "2.2.4",
+    "@types/webpack-env": "1.13.0",
+    "awesome-typescript-loader": "3.0.0-beta.18",
+    "cross-env": "3.1.4",
+    "css-loader": "0.26.1",
+    "cssnano": "3.8.0",
+    "node-sass": "4.5.0",
+    "postcss-loader": "1.2.2",
     "release-it": "2.4.3",
-    "sass-lint": "1.9.1",
     "sass-loader": "4.0.2",
-    "sasslint-webpack-plugin": "1.0.4",
     "style-loader": "0.13.1",
     "tslint": "3.14.0",
     "tslint-loader": "2.1.5",
-    "typedoc": "0.4.5",
-    "typedoc-webpack-plugin": "1.0.10",
-    "typescript": "2.0.3",
-    "webpack": "1.13.2",
-    "webpack-dev-server": "1.16.1",
-    "webpack-fail-plugin": "1.0.5"
+    "typescript": "2.1.5",
+    "webpack": "2.2.1",
+    "webpack-dev-server": "2.3.0"
   },
   "peerDependencies": {}
 }

@@ -17,7 +17,7 @@
         margin-left: auto;
         margin-right: auto;
         min-width: 320px;
-        max-width: 732px;
+        max-width: 632px;
       }
 
       main {
@@ -25,7 +25,7 @@
       }
 
       img {
-        width: 100%;
+        max-width: 100%;
       }
 
       .pull-left, .pull-right {
@@ -57,37 +57,33 @@
     <main>
       <h1>zoom.ts</h1>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque euismod elit eu lacus luctus, eget maximus augue viverra. Ut sed lectus eros. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Ut nec feugiat nunc. Etiam et elit vel odio consectetur lacinia nec ut felis. Nulla facilisi. Duis sodales mattis sem, ac consectetur eros tempor vitae. Phasellus eget lorem justo. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque quis placerat sem. Pellentesque at consectetur metus. Nullam a elit at libero rhoncus laoreet. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-      <img src="img/wave.jpg" data-zoom="zoom-in">
+
+      <div class="zoom" data-width="1480" data-height="403">
+        <img class="zoom__element" src="http://i.imgur.com/MOjSJ38.png">
+      </div>
+
       <p>Aliquam tincidunt convallis vestibulum. Aliquam placerat massa laoreet placerat sagittis. Nulla non mauris eu sem finibus bibendum at iaculis nibh. Aenean pretium augue id tellus ullamcorper, eget egestas nunc sagittis. Quisque tempor arcu dui, vel venenatis tellus molestie in. Proin ut enim nunc. Nam placerat quis eros ut aliquet. Nam nec lectus sapien. Sed aliquam lectus eget vehicula vehicula. Phasellus diam est, dignissim et semper eget, aliquet a nunc. Integer eget ante at ante rutrum fermentum. Proin elit nibh, fermentum vel maximus ut, bibendum in ante. Nam vehicula laoreet sagittis.</p>
       <p>Nam dignissim mollis ipsum quis iaculis. Nullam quam quam, pharetra sed ipsum ac, varius ullamcorper nibh. Sed varius mi vel arcu aliquam iaculis. Mauris mattis tellus quis congue condimentum. Vestibulum ac massa a leo sodales condimentum. Phasellus dictum eros eget eleifend varius. Fusce ut pulvinar nisl. Nulla nunc augue, suscipit iaculis rhoncus in, lobortis id odio. Integer ut felis mollis, eleifend neque at, eleifend tellus.</p>
-      <img class="pull-left" src="img/forest.jpg" data-zoom="zoom-in" data-zoom-src="img/forest-full.jpg">
+
+      <div class="pull-left">
+        <div class="zoom" data-width="3500" data-height="2333" data-src="img/forest-full.jpg">
+          <img class="zoom__element" src="img/forest.jpg">
+        </div>
+      </div>
+
       <p>Praesent interdum ex sit amet laoreet varius. Nam gravida massa odio, vitae facilisis nisi pretium eget. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam condimentum lacinia lacus vitae pulvinar. Suspendisse vestibulum nulla et diam mattis auctor. Duis pretium non neque rhoncus dictum. Sed ac arcu tempus, ultrices enim at, sagittis sapien. Donec dapibus fermentum arcu in rutrum. Curabitur feugiat tempus dolor et ullamcorper. Ut viverra, lectus non porttitor pellentesque, arcu mi consectetur nibh, vel faucibus neque massa eget mauris. In vulputate felis ac viverra feugiat. Morbi ut faucibus dui. Integer lobortis eros orci, rutrum feugiat leo dictum at. Curabitur ultricies leo nulla, eget ultrices augue dapibus non. Nullam eu felis ac nisl semper fringilla et ut magna.</p>
-      <picture>
-        <!--[if IE 9]>
-        <video style="display: none;">
-        <![endif]-->
-        <source srcset="img/city.webp" type="image/webp">
-          <source srcset="img/city.jpg">
-          <img class="pull-right" src="img/city.jpg" data-zoom="zoom-in">
-        <!--[if IE 9]>
-        </video>
-        <![endif]-->
-      </picture>
+
+      <div class="pull-right">
+        <div class="zoom" data-width="960" data-height="1931">
+          <img class="zoom__element" src="img/city.jpg">
+        </div>
+      </div>
+
       <p>Pellentesque consectetur risus eu ligula laoreet, at semper nulla cursus. Duis semper, arcu non sagittis eleifend, arcu turpis sodales lacus, eu fermentum justo mauris congue purus. Quisque quis pellentesque lacus, vel venenatis leo. Donec sollicitudin nisi ut felis maximus commodo. Maecenas scelerisque magna nisi, vel mollis quam molestie eget. Etiam vehicula scelerisque elit, fringilla convallis ipsum dignissim at. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Morbi convallis hendrerit eros.</p>
       <p>Proin ut aliquet massa. Duis sit amet auctor nibh, vel interdum dui. Morbi ac magna nisi. Sed at fringilla leo, et ornare ipsum. Praesent scelerisque convallis justo nec blandit. Nunc in leo at massa tempus ullamcorper eu et massa. Nulla sagittis neque vitae neque facilisis luctus. Sed nec augue id tellus convallis vehicula faucibus at lorem. Nullam auctor turpis ac orci elementum, et volutpat magna tempor. Cras pellentesque nunc eget velit porta congue in a enim. Nunc egestas malesuada massa, et vulputate dui elementum sed. Etiam vitae sodales libero. Aliquam erat volutpat.</p>
-      <div class="pull-left">
-        <video preload width="290" poster="video/thumbnail.png" data-zoom="zoom-in" data-zoom-src="video/storm.mp4">
-          <source src="video/storm.webm" type="video/webm">
-          <source src="video/storm.ogv" type="video/ogg">
-          <source src="video/storm.mp4" type="video/mp4">
-        </video>
-      </div>
       <p>Nullam egestas volutpat placerat. Proin dignissim tellus id quam hendrerit pharetra. Vestibulum non rutrum urna. Sed at convallis diam, vitae dictum lectus. Morbi in euismod odio, vel luctus libero. Aliquam euismod, justo ac dignissim elementum, quam metus feugiat turpis, id tincidunt turpis nunc in erat. Nam nec mi arcu. Vivamus lacinia rutrum augue, ac commodo leo. Integer congue tortor ut ultrices tincidunt. Vestibulum tempus, leo quis pretium aliquet, erat risus aliquam mi, nec dignissim mauris est feugiat ante. Maecenas diam ligula, efficitur a justo at, dapibus rhoncus dolor. Nullam ac porttitor turpis. Pellentesque ante orci, blandit eget nibh quis, pretium congue velit. Etiam lacus lacus, ullamcorper in vehicula aliquet, pretium eget eros. Proin sit amet finibus lorem. Quisque id tristique erat.</p>
     </main>
 
     <script type="text/javascript" src="dist/zoom.js"></script>
-    <script type="text/javascript">
-      new zoom.Listener().listen();
-    </script>
   </body>
 </html>

@@ -1,0 +1,57 @@
+$zoom-background-color: hsl(0, 0%, 100%) !default;
+$zoom-transition-duration: 300ms !default;
+$zoom-media-z-index: 2000 !default;
+$zoom-overlay-z-index: 1000 !default;
+$zoom-transition-timing-function: cubic-bezier(0.2, 0, 0.2, 1) !default;
+$zoom-overlay-opacity: 100 !default;
+
+.zoom {
+  position: relative;
+  line-height: 0;
+  text-align: center;
+  transition: transform $zoom-transition-duration $zoom-transition-timing-function;
+  will-change: transition;
+}
+
+.zoom--active {
+  z-index: $zoom-media-z-index;
+}
+
+.zoom__element {
+  cursor: pointer;
+  cursor: -moz-zoom-in;
+  cursor: -webkit-zoom-in;
+}
+
+.zoom__clone {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  cursor: pointer;
+  cursor: -moz-zoom-out;
+  cursor: -webkit-zoom-out;
+}
+
+.zoom__overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  z-index: $zoom-overlay-z-index;
+  background: $zoom-background-color;
+
+  opacity: 0;
+  filter: 'alpha(opacity=0)';
+  transition: opacity $zoom-transition-duration;
+  will-change: opacity, filter;
+}
+
+.zoom__overlay--visible {
+  opacity: $zoom-overlay-opacity / 100;
+  filter: 'alpha(opacity=' + $zoom-overlay-opacity + ')';
+}

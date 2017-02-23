@@ -4,7 +4,8 @@
     "target": "es5",
     "noImplicitAny": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "strictNullChecks": true
   },
   "exclude": [
     "node_modules",
