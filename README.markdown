@@ -3,29 +3,36 @@
 A lightweight TypeScript library for image and video zooming, as seen on
 [Medium][medium].
 
+A running demonstration can be found [here][demo].
+
 [![npm version][npm-image]][npm-url]
 [![npm downloads][downloads-image]][downloads-url]
 [![dependencies status][dependencies-image]][dependencies-url]
 [![devDependencies status][devDependencies-image]][devDependencies-url]
 [![peerDependencies status][peerDependencies-image]][peerDependencies-url]
 
-`zoom.ts` easily plugs into your application with minimal overhead by including
-no third-party dependencies and requiring under 13kB of bandwidth when
-optimized. Once marked as zoomable, clicking an image or video will smoothly
-expand it to fit the browser's entire viewport. The zoomed element will then
-await dismissal from the user, either by clicking or scrolling away.
+`zoom.ts` easily plugs into your application and starts listening to zoom events
+as soon as the DOM is ready. The library requires just 4.2kB of bandwidth once
+gzipped and requires no external bootstrapping.
 
-## Demo
-
-A running demonstration can be found [here][demo].
-
-Holding either the <kbd>⌘</kbd> or <kbd>Ctrl</kbd> key whilst clicking the
-element will open the image in a new tab.
-
-Zoomed elements can be dismissed either by clicking the element, scrolling away,
-or pressing <kbd>Esc</kbd>.
+Holding either the <kbd>⌘</kbd> or <kbd>Ctrl</kbd> key will open the image in a
+new tab when clicked. Zoomed images can be dismissed either by clicking the
+image, scrolling away, or pressing <kbd>Esc</kbd>.
 
 ## Installation
+
+```
+npm install --save zoom.ts
+```
+
+## Usage
+
+To get up and running quickly, you may link the
+[JavaScript distribution][dist.js] which will immediately start `zoom.ts` as
+soon as the DOM has loaded.
+
+
+### Source Code
 
 The [TypeScript library][listener.ts] can be imported and instantiated:
 
