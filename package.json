@@ -1,6 +1,6 @@
 {
   "name": "zoom.ts",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "A lightweight TypeScript library for image and video zooming, as seen on Medium.",
   "keywords": [
     "zoom.ts",
@@ -46,7 +46,6 @@
     "cssnano": "3.8.0",
     "node-sass": "4.5.0",
     "postcss-loader": "1.2.2",
-    "release-it": "2.4.3",
     "sass-loader": "4.0.2",
     "style-loader": "0.13.1",
     "tslint": "3.14.0",
