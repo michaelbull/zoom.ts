@@ -120,4 +120,5 @@ This project is available under the terms of the ISC license. See the
 [dist]: https://github.com/michaelbull/zoom.ts/blob/master/dist/zoom.js
 [stylesheet]: https://github.com/michaelbull/zoom.ts/blob/master/src/zoom.scss
 [localhost]: http://localhost:8080
+[dev-server]: https://github.com/webpack/webpack-dev-server
 [github]: https://github.com/michaelbull/zoom.ts
