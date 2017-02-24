@@ -14,13 +14,6 @@ const TRANSITION_END_EVENTS: string[] = [
     'MSTransitionEnd'
 ];
 
-export const CONTAINER_CLASS: string = 'zoom';
-export const CONTAINER_ACTIVE_CLASS: string = 'zoom--active';
-export const OVERLAY_CLASS: string = 'zoom__overlay';
-export const OVERLAY_VISIBLE_CLASS: string = 'zoom__overlay--visible';
-export const ELEMENT_CLASS: string = 'zoom__element';
-export const CLONE_CLASS: string = 'zoom__clone';
-
 export function repaint(element: HTMLElement): void {
     // tslint:disable-next-line
     element.offsetHeight;

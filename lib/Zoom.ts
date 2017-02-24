@@ -6,10 +6,7 @@ import {
     fillViewportScale,
     srcAttribute,
     translate,
-    dimensions,
-    OVERLAY_VISIBLE_CLASS,
-    CONTAINER_ACTIVE_CLASS,
-    CLONE_CLASS
+    dimensions
 } from './Element';
 import {
     viewportHeight,
@@ -79,16 +76,16 @@ export class Zoom {
     private showOverlay(): void {
         document.body.appendChild(this.overlay);
         repaint(this.overlay);
-        this.overlay.classList.add(OVERLAY_VISIBLE_CLASS);
+        this.overlay.classList.add('zoom__overlay--visible');
     }
 
     private hideOverlay(): void {
-        this.overlay.classList.remove(OVERLAY_VISIBLE_CLASS);
+        this.overlay.classList.remove('zoom__overlay--visible');
         removeTransitionEndListener(this.container, this.finishedExpandingContainer);
     }
 
     private expandContainer(): void {
-        this.container.classList.add(CONTAINER_ACTIVE_CLASS);
+        this.container.classList.add('zoom--active');
         addTransitionEndListener(this.container, this.finishedExpandingContainer);
         this.transforming = true;
         this.scaleContainer();
@@ -126,14 +123,14 @@ export class Zoom {
 
         document.body.removeChild(this.overlay);
         this.element.style.opacity = '';
-        this.container.classList.remove(CONTAINER_ACTIVE_CLASS);
+        this.container.classList.remove('zoom--active');
 
         this.removeClone();
     };
 
     private addClone(): void {
         this.clone = document.createElement('img');
-        this.clone.classList.add(CLONE_CLASS);
+        this.clone.classList.add('zoom__clone');
 
         this.clone.onload = (): any => {
             this.element.style.opacity = '0';
