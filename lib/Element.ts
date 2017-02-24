@@ -4,9 +4,6 @@ import {
     viewportHeight
 } from './Document';
 
-const hasTransitions: boolean = require('has-transitions');
-const has3d: boolean = require('has-translate3d');
-
 const TRANSITION_END_EVENTS: string[] = [
     'transitionend',
     'webkitTransitionEnd',
@@ -20,6 +17,7 @@ export function repaint(element: HTMLElement): void {
 }
 
 export function translate(x: number, y: number): string {
+    const has3d: boolean = require('has-translate3d');
     return has3d ? `translate3d(${x}px, ${y}px, 0)` : `translate(${x}px, ${y}px)`;
 }
 
@@ -29,6 +27,8 @@ export function dimensions(element: HTMLElement): Dimension {
 }
 
 export function addTransitionEndListener(element: HTMLElement, listener: EventListener): void {
+    const hasTransitions: boolean = require('has-transitions');
+
     if (hasTransitions) {
         for (let eventName of TRANSITION_END_EVENTS) {
             element.addEventListener(eventName, listener);
