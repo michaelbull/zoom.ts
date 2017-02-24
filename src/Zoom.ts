@@ -14,8 +14,7 @@ import {
 } from './Document';
 
 const ESCAPE_KEY_CODE: number = 27;
-const SCROLL_Y_DELTA: number = 70;
-const TOUCH_Y_DELTA: number = 30;
+const SCROLL_Y_DELTA: number = 50;
 
 export class Zoom {
     private readonly overlay: HTMLDivElement;
@@ -24,7 +23,6 @@ export class Zoom {
     private readonly original: Dimension;
 
     private initialScrollY: number;
-    private initialTouchY: number;
     private transforming: boolean = false;
     private clone: HTMLImageElement;
 
@@ -135,7 +133,6 @@ export class Zoom {
         window.addEventListener('resize', this.resizeListener);
         window.addEventListener('scroll', this.scrollListener);
         document.addEventListener('keyup', this.keyboardListener);
-        document.addEventListener('touchstart', this.touchStartListener);
         this.clone.addEventListener('click', this.clickListener);
     }
 
@@ -143,8 +140,6 @@ export class Zoom {
         window.removeEventListener('resize', this.resizeListener);
         window.removeEventListener('scroll', this.scrollListener);
         document.removeEventListener('keyup', this.keyboardListener);
-        document.removeEventListener('touchstart', this.touchStartListener);
-        document.removeEventListener('touchmove', this.touchMoveListener);
         this.clone.removeEventListener('click', this.clickListener);
     }
 
@@ -172,17 +167,6 @@ export class Zoom {
 
     private keyboardListener: EventListener = (event: KeyboardEvent) => {
         if (event.keyCode === ESCAPE_KEY_CODE) {
-            this.hide();
-        }
-    };
-
-    private touchStartListener: EventListener = (event: TouchEvent) => {
-        this.initialTouchY = event.touches[0].pageY;
-        event.target.addEventListener('touchmove', this.touchMoveListener);
-    };
-
-    private touchMoveListener: EventListener = (event: TouchEvent) => {
-        if (Math.abs(event.touches[0].pageY - this.initialTouchY) > TOUCH_Y_DELTA) {
             this.hide();
         }
     };
