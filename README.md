@@ -39,21 +39,23 @@ importing the stylesheet, for example:
 $zoom-overlay-background-color: blue; // change overlay background to blue
 $zoom-transition-duration: 1000; // slow down the transitions
 
-@import '~zoom.ts/src/style';
+@import '~zoom.ts/style';
 ```
 
 Next you will need to import the library itself. In the example below, the
-`ready` function will apply a callback as soon as the DOM has loaded, and the
-`addListeners` function will start `zoom.ts` listening for click events on
-zoomable elements.
+`ready` function will apply a callback as soon as the DOM has loaded, and 
+calling `listener.start()` will add an event listener to the DOM that will
+respond to clicks on images marked as zoomable.
 
 ```typescript
-import { ready } from 'zoom.ts/src/Document';
-import { addListeners } from 'zoom.ts/src/Listener';
+import { ready } from 'zoom.ts/lib/Document';
+import { Listener } from 'zoom.ts/lib/Listener';
+
+let listener: Listener = new Listener();
 
 ready(() => {
-    console.log('zoom.ts loaded!');
-    addListeners();
+    listener.start();
+    console.log('zoom.ts started listening for click events...');
 });
 ```
 
@@ -87,7 +89,7 @@ The following scripts are configured to run via [npm][npm]:
 - `npm run build`
   - Builds the distribution and places it under the `./dist` directory.
 - `npm run dist`
-  - Builds, minifies, and optimizes the distirbution and places it under the
+  - Builds, minifies, and optimizes the distribution and places it under the
     `./dist` directory.
 - `npm run clean`
   - Cleans the `./dist` directory.
@@ -103,7 +105,6 @@ This project is available under the terms of the ISC license. See the
 
 [logo]: /img/logo.png
 [medium]: https://medium.design/image-zoom-on-medium-24d146fc0c20
-
 [license-badge]: https://img.shields.io/github/license/michaelbull/zoom.ts.svg?style=flat-square
 [license]: https://github.com/michaelbull/zoom.ts/blob/master/LICENSE
 [npm-badge]: https://img.shields.io/npm/v/zoom.ts.svg?style=flat-square
@@ -114,11 +115,10 @@ This project is available under the terms of the ISC license. See the
 [dependencies]: https://david-dm.org/michaelbull/zoom.ts
 [devDependencies-badge]: https://david-dm.org/michaelbull/zoom.ts/dev-status.svg?style=flat-square
 [devDependencies]: https://david-dm.org/michaelbull/zoom.ts?type=dev
-
 [demo]: https://michaelbull.github.io/zoom.ts
 [npm]: https://www.npmjs.com/
 [dist]: https://github.com/michaelbull/zoom.ts/blob/master/dist/zoom.js
-[stylesheet]: https://github.com/michaelbull/zoom.ts/blob/master/src/zoom.scss
+[stylesheet]: https://github.com/michaelbull/zoom.ts/blob/master/style.scss
 [localhost]: http://localhost:8080
 [dev-server]: https://github.com/webpack/webpack-dev-server
 [github]: https://github.com/michaelbull/zoom.ts

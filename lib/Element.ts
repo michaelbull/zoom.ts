@@ -14,6 +14,13 @@ const TRANSITION_END_EVENTS: string[] = [
     'MSTransitionEnd'
 ];
 
+export const CONTAINER_CLASS: string = 'zoom';
+export const CONTAINER_ACTIVE_CLASS: string = 'zoom--active';
+export const OVERLAY_CLASS: string = 'zoom__overlay';
+export const OVERLAY_VISIBLE_CLASS: string = 'zoom__overlay--visible';
+export const ELEMENT_CLASS: string = 'zoom__element';
+export const CLONE_CLASS: string = 'zoom__clone';
+
 export function repaint(element: HTMLElement): void {
     // tslint:disable-next-line
     element.offsetHeight;
@@ -58,7 +65,7 @@ export function srcAttribute(element: HTMLImageElement): string {
     return element.src as string;
 }
 
-export function scaleToMaxViewport(container: HTMLElement, original: Dimension): number {
+export function fillViewportScale(container: HTMLElement, original: Dimension): number {
     let targetWidth: number = Number(container.getAttribute('data-width') || Infinity);
     let targetHeight: number = Number(container.getAttribute('data-height') || Infinity);
     let scaleX: number = Math.min(viewportWidth(), targetWidth) / original.width;

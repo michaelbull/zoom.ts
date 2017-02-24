@@ -11,7 +11,7 @@ var banner = [
 
 module.exports = {
     entry: {
-        zoom: './src/index.ts'
+        zoom: './index.ts'
     },
 
     output: {

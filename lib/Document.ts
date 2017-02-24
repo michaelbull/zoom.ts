@@ -5,9 +5,7 @@
  */
 export function ready(callback: Function): void {
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            callback();
-        });
+        document.addEventListener('DOMContentLoaded', () => callback());
     } else {
         callback();
     }

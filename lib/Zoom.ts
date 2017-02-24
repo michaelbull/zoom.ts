@@ -3,9 +3,13 @@ import {
     addTransitionEndListener,
     removeTransitionEndListener,
     repaint,
-    scaleToMaxViewport,
+    fillViewportScale,
     srcAttribute,
-    translate
+    translate,
+    dimensions,
+    OVERLAY_VISIBLE_CLASS,
+    CONTAINER_ACTIVE_CLASS,
+    CLONE_CLASS
 } from './Element';
 import {
     viewportHeight,
@@ -26,11 +30,11 @@ export class Zoom {
     private transforming: boolean = false;
     private clone: HTMLImageElement;
 
-    constructor(overlay: HTMLDivElement, container: HTMLElement, element: HTMLImageElement, original: Dimension) {
+    constructor(overlay: HTMLDivElement, container: HTMLElement, element: HTMLImageElement) {
         this.overlay = overlay;
         this.container = container;
         this.element = element;
-        this.original = original;
+        this.original = dimensions(element);
     }
 
     show(): void {
@@ -47,7 +51,7 @@ export class Zoom {
     }
 
     private scaleContainer(): void {
-        let scale: number = scaleToMaxViewport(this.container, this.original);
+        let scale: number = fillViewportScale(this.container, this.original);
 
         let scaledWidth: number = this.original.width * scale;
         let scaledHeight: number = this.original.height * scale;
@@ -66,32 +70,43 @@ export class Zoom {
             this.container.style.transform = '';
             this.container.style.left = `${centreX - this.original.left}px`;
             this.container.style.top = `${centreY - this.original.top}px`;
-            this.container.style.width = `${Math.round(scaledWidth)}px`;
-            this.container.style.maxWidth = `${Math.round(scaledWidth)}px`;
-            this.container.style.height = `${Math.round(scaledHeight)}px`;
+            this.container.style.width = `${scaledWidth}px`;
+            this.container.style.maxWidth = `${scaledWidth}px`;
+            this.container.style.height = `${scaledHeight}px`;
         }
     }
 
     private showOverlay(): void {
         document.body.appendChild(this.overlay);
         repaint(this.overlay);
-        this.overlay.classList.add('zoom__overlay--visible');
+        this.overlay.classList.add(OVERLAY_VISIBLE_CLASS);
     }
 
     private hideOverlay(): void {
-        this.overlay.classList.remove('zoom__overlay--visible');
+        this.overlay.classList.remove(OVERLAY_VISIBLE_CLASS);
         removeTransitionEndListener(this.container, this.finishedExpandingContainer);
-        addTransitionEndListener(this.container, this.closeListener);
     }
 
     private expandContainer(): void {
-        this.container.classList.add('zoom--active');
+        this.container.classList.add(CONTAINER_ACTIVE_CLASS);
         addTransitionEndListener(this.container, this.finishedExpandingContainer);
         this.transforming = true;
         this.scaleContainer();
     }
 
+    private finishedExpandingContainer: EventListener = () => {
+        removeTransitionEndListener(this.container, this.finishedExpandingContainer);
+
+        this.container.style.transition = 'initial';
+        this.transforming = false;
+        this.scaleContainer();
+        repaint(this.container);
+        this.container.style.transition = '';
+    };
+
     private collapseContainer(): void {
+        addTransitionEndListener(this.container, this.finishedCollapsingContainer);
+
         this.container.style.transition = 'initial';
         this.transforming = true;
         this.scaleContainer();
@@ -106,18 +121,19 @@ export class Zoom {
         this.container.style.height = '';
     }
 
-    private finishedExpandingContainer: EventListener = () => {
-        this.container.style.transition = 'initial';
-        this.transforming = false;
-        this.scaleContainer();
-        repaint(this.container);
-        this.container.style.transition = '';
-        removeTransitionEndListener(this.container, this.finishedExpandingContainer);
+    private finishedCollapsingContainer: EventListener = () => {
+        removeTransitionEndListener(this.container, this.finishedCollapsingContainer);
+
+        document.body.removeChild(this.overlay);
+        this.element.style.opacity = '';
+        this.container.classList.remove(CONTAINER_ACTIVE_CLASS);
+
+        this.removeClone();
     };
 
     private addClone(): void {
         this.clone = document.createElement('img');
-        this.clone.classList.add('zoom__clone');
+        this.clone.classList.add(CLONE_CLASS);
 
         this.clone.onload = (): any => {
             this.element.style.opacity = '0';
@@ -127,20 +143,26 @@ export class Zoom {
         this.clone.src = srcAttribute(this.element);
     }
 
+    private removeClone(): void {
+        if (this.container.contains(this.clone)) { // may not have loaded the clone yet
+            this.container.removeChild(this.clone);
+        }
+    }
+
     private addEventListeners(): void {
         this.initialScrollY = scrollY();
 
         window.addEventListener('resize', this.resizeListener);
         window.addEventListener('scroll', this.scrollListener);
         document.addEventListener('keyup', this.keyboardListener);
-        this.clone.addEventListener('click', this.clickListener);
+        this.container.addEventListener('click', this.clickListener);
     }
 
     private removeEventListeners(): void {
         window.removeEventListener('resize', this.resizeListener);
         window.removeEventListener('scroll', this.scrollListener);
         document.removeEventListener('keyup', this.keyboardListener);
-        this.clone.removeEventListener('click', this.clickListener);
+        this.container.removeEventListener('click', this.clickListener);
     }
 
     private resizeListener: EventListener = () => {
@@ -151,14 +173,6 @@ export class Zoom {
         if (Math.abs(this.initialScrollY - scrollY()) > SCROLL_Y_DELTA) {
             this.hide();
         }
-    };
-
-    private closeListener: EventListener = () => {
-        document.body.removeChild(this.overlay);
-        this.element.style.opacity = '1';
-        this.container.removeChild(this.clone);
-        this.container.classList.remove('zoom--active');
-        removeTransitionEndListener(this.container, this.closeListener);
     };
 
     private clickListener: EventListener = () => {
