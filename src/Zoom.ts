@@ -48,7 +48,7 @@ export class Zoom {
         this.collapseContainer();
     }
 
-    private zoom(): void {
+    private scaleContainer(): void {
         let scale: number = scaleToMaxViewport(this.container, this.original);
 
         let scaledWidth: number = this.original.width * scale;
@@ -90,13 +90,13 @@ export class Zoom {
         this.container.classList.add('zoom--active');
         addTransitionEndListener(this.container, this.finishedExpandingContainer);
         this.transforming = true;
-        this.zoom();
+        this.scaleContainer();
     }
 
     private collapseContainer(): void {
         this.container.style.transition = 'initial';
         this.transforming = true;
-        this.zoom();
+        this.scaleContainer();
         repaint(this.container);
         this.container.style.transition = '';
 
@@ -111,7 +111,7 @@ export class Zoom {
     private finishedExpandingContainer: EventListener = () => {
         this.container.style.transition = 'initial';
         this.transforming = false;
-        this.zoom();
+        this.scaleContainer();
         repaint(this.container);
         this.container.style.transition = '';
         removeTransitionEndListener(this.container, this.finishedExpandingContainer);
@@ -149,7 +149,7 @@ export class Zoom {
     }
 
     private resizeListener: EventListener = () => {
-        this.zoom();
+        this.scaleContainer();
     };
 
     private scrollListener: EventListener = () => {
