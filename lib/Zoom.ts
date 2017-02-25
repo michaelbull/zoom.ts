@@ -17,14 +17,18 @@ import {
 const ESCAPE_KEY_CODE: number = 27;
 const SCROLL_Y_DELTA: number = 50;
 
+type State = 'collapsed' | 'expanding' | 'expanded' | 'collapsing';
+
 export class Zoom {
     private readonly overlay: HTMLDivElement;
     private readonly container: HTMLElement;
     private readonly element: HTMLImageElement;
     private readonly original: Dimension;
 
+    private state: State = 'collapsed';
+    private loaded: boolean = false;
+
     private initialScrollY: number;
-    private transforming: boolean = false;
     private clone: HTMLImageElement;
 
     constructor(overlay: HTMLDivElement, container: HTMLElement, element: HTMLImageElement) {
@@ -59,7 +63,7 @@ export class Zoom {
         let offsetX: number = this.original.left + (this.original.width - scaledWidth) / 2;
         let offsetY: number = this.original.top + (this.original.height - scaledHeight) / 2;
 
-        if (this.transforming) {
+        if (this.state === 'expanding' || this.state === 'collapsing') {
             let translateX: number = (centreX - offsetX) / scale;
             let translateY: number = (centreY - offsetY) / scale;
             this.container.style.transform = `scale(${scale}) ${translate(translateX, translateY)}`;
@@ -89,28 +93,31 @@ export class Zoom {
         this.container.classList.add('zoom--active');
         this.element.classList.add('zoom__element--active');
         addTransitionEndListener(this.container, this.finishedExpandingContainer);
-        this.transforming = true;
+        this.state = 'expanding';
         this.scaleContainer();
     }
 
     private finishedExpandingContainer: EventListener = () => {
         removeTransitionEndListener(this.container, this.finishedExpandingContainer);
+        this.state = 'expanded';
 
+        if (this.loaded) {
+            this.repaintContainer();
+        }
+    };
+
+    private repaintContainer(): void {
         this.container.style.transition = 'initial';
-        this.transforming = false;
         this.scaleContainer();
         repaint(this.container);
         this.container.style.transition = '';
-    };
+    }
 
     private collapseContainer(): void {
         addTransitionEndListener(this.container, this.finishedCollapsingContainer);
+        this.state = 'collapsing';
 
-        this.container.style.transition = 'initial';
-        this.transforming = true;
-        this.scaleContainer();
-        repaint(this.container);
-        this.container.style.transition = '';
+        this.repaintContainer();
         this.container.style.transform = '';
 
         this.clone.style.left = '';
@@ -140,6 +147,11 @@ export class Zoom {
     private finishedLoadingClone: EventListener = () => {
         this.container.appendChild(this.clone);
         this.element.style.opacity = '0';
+        this.loaded = true;
+
+        if (this.state === 'expanded') {
+            this.repaintContainer();
+        }
     };
 
     private removeClone(): void {
