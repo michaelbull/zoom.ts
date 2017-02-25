@@ -65,11 +65,12 @@ export class Zoom {
             this.container.style.transform = `scale(${scale}) ${translate(translateX, translateY)}`;
         } else {
             this.container.style.transform = '';
-            this.container.style.left = `${centreX - this.original.left}px`;
-            this.container.style.top = `${centreY - this.original.top}px`;
-            this.container.style.width = `${scaledWidth}px`;
-            this.container.style.maxWidth = `${scaledWidth}px`;
-            this.container.style.height = `${scaledHeight}px`;
+
+            this.clone.style.left = `${centreX - this.original.left}px`;
+            this.clone.style.top = `${centreY - this.original.top}px`;
+            this.clone.style.width = `${scaledWidth}px`;
+            this.clone.style.maxWidth = `${scaledWidth}px`;
+            this.clone.style.height = `${scaledHeight}px`;
         }
     }
 
@@ -110,13 +111,13 @@ export class Zoom {
         this.scaleContainer();
         repaint(this.container);
         this.container.style.transition = '';
-
         this.container.style.transform = '';
-        this.container.style.left = '';
-        this.container.style.top = '';
-        this.container.style.width = '';
-        this.container.style.maxWidth = '';
-        this.container.style.height = '';
+
+        this.clone.style.left = '';
+        this.clone.style.top = '';
+        this.clone.style.width = '';
+        this.clone.style.maxWidth = '';
+        this.clone.style.height = '';
     }
 
     private finishedCollapsingContainer: EventListener = () => {
