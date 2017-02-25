@@ -25,6 +25,10 @@ $zoom-overlay-visible-opacity: 100 !default;
   cursor: -webkit-zoom-in;
 }
 
+.zoom__element--active {
+  width: 100%;
+}
+
 .zoom__clone {
   position: absolute;
   top: 0;
