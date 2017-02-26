@@ -25,6 +25,7 @@ export class Zoom {
     private readonly element: HTMLImageElement;
     private readonly original: Dimension;
 
+    private loaded: boolean = false;
     private state: State = 'collapsed';
 
     private initialScrollY: number;
@@ -47,14 +48,35 @@ export class Zoom {
     hide(): void {
         this.removeEventListeners();
         this.hideOverlay();
+        this.hideClone();
         this.collapseContainer();
     }
 
     private addClone(): void {
         this.clone = document.createElement('img');
         this.clone.classList.add('zoom__clone');
+        this.clone.addEventListener('load', this.finishedLoadingClone);
         this.clone.src = srcAttribute(this.element);
         this.container.appendChild(this.clone);
+    }
+
+    private finishedLoadingClone: EventListener = () => {
+        this.clone.removeEventListener('load', this.finishedLoadingClone);
+        this.loaded = true;
+
+        if (this.state === 'expanded') {
+            this.showClone();
+        }
+    };
+
+    private showClone(): void {
+        this.element.classList.add('zoom__element--hidden');
+        this.clone.classList.add('zoom__clone--visible');
+    }
+
+    private hideClone(): void {
+        this.element.classList.remove('zoom__element--hidden');
+        this.clone.classList.remove('zoom__clone--visible');
     }
 
     private showOverlay(): void {
@@ -109,6 +131,10 @@ export class Zoom {
         removeTransitionEndListener(this.container, this.finishedExpandingContainer);
         this.state = 'expanded';
         this.repaintContainer();
+
+        if (this.loaded) {
+            this.showClone();
+        }
     };
 
     private repaintContainer(): void {

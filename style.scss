@@ -7,6 +7,18 @@ $zoom-overlay-z-index: 1000 !default;
 $zoom-overlay-background-color: hsl(0, 0%, 100%) !default;
 $zoom-overlay-visible-opacity: 100 !default;
 
+@mixin zoom-hidden() {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s linear 500ms, opacity 100ms 400ms;
+}
+
+@mixin zoom-visible() {
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 0s linear 0s, opacity 400ms 0s;
+}
+
 .zoom {
   position: relative;
   line-height: 0;
@@ -20,6 +32,8 @@ $zoom-overlay-visible-opacity: 100 !default;
 }
 
 .zoom__element {
+  @include zoom-visible();
+
   cursor: pointer;
   cursor: -moz-zoom-in;
   cursor: -webkit-zoom-in;
@@ -29,16 +43,28 @@ $zoom-overlay-visible-opacity: 100 !default;
   width: 100%;
 }
 
+.zoom__element--hidden {
+  @include zoom-hidden();
+}
+
 .zoom__clone {
+  @include zoom-hidden();
+
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
 
+  width: 100%;
+
   cursor: pointer;
   cursor: -moz-zoom-out;
   cursor: -webkit-zoom-out;
+}
+
+.zoom__clone--visible {
+  @include zoom-visible();
 }
 
 .zoom__overlay {
