@@ -38,9 +38,9 @@ export class Zoom {
     }
 
     show(): void {
+        this.addClone();
         this.showOverlay();
         this.expandContainer();
-        this.addClone();
         this.addEventListeners();
     }
 
@@ -48,6 +48,34 @@ export class Zoom {
         this.removeEventListeners();
         this.hideOverlay();
         this.collapseContainer();
+    }
+
+    private addClone(): void {
+        this.clone = document.createElement('img');
+        this.clone.classList.add('zoom__clone');
+        this.clone.src = srcAttribute(this.element);
+        this.container.appendChild(this.clone);
+    }
+
+    private showOverlay(): void {
+        document.body.appendChild(this.overlay);
+        repaint(this.overlay);
+        this.overlay.classList.add('zoom__overlay--visible');
+    }
+
+    private hideOverlay(): void {
+        this.overlay.classList.remove('zoom__overlay--visible');
+        removeTransitionEndListener(this.container, this.finishedExpandingContainer);
+    }
+
+    private expandContainer(): void {
+        this.state = 'expanding';
+
+        this.container.classList.add('zoom--active');
+        this.element.classList.add('zoom__element--active');
+
+        addTransitionEndListener(this.container, this.finishedExpandingContainer);
+        this.scaleContainer();
     }
 
     private scaleContainer(): void {
@@ -75,27 +103,6 @@ export class Zoom {
             this.container.style.maxWidth = `${scaledWidth}px`;
             this.container.style.height = `${scaledHeight}px`;
         }
-    }
-
-    private showOverlay(): void {
-        document.body.appendChild(this.overlay);
-        repaint(this.overlay);
-        this.overlay.classList.add('zoom__overlay--visible');
-    }
-
-    private hideOverlay(): void {
-        this.overlay.classList.remove('zoom__overlay--visible');
-        removeTransitionEndListener(this.container, this.finishedExpandingContainer);
-    }
-
-    private expandContainer(): void {
-        this.state = 'expanding';
-
-        this.container.classList.add('zoom--active');
-        this.element.classList.add('zoom__element--active');
-
-        addTransitionEndListener(this.container, this.finishedExpandingContainer);
-        this.scaleContainer();
     }
 
     private finishedExpandingContainer: EventListener = () => {
@@ -134,13 +141,6 @@ export class Zoom {
 
         this.container.removeChild(this.clone);
     };
-
-    private addClone(): void {
-        this.clone = document.createElement('img');
-        this.clone.classList.add('zoom__clone');
-        this.clone.src = srcAttribute(this.element);
-        this.container.appendChild(this.clone);
-    }
 
     private addEventListeners(): void {
         this.initialScrollY = scrollY();
