@@ -132,7 +132,7 @@ export class Zoom {
         this.container.classList.remove('zoom--active');
         this.element.classList.remove('zoom__element--active');
 
-        this.removeClone();
+        this.container.removeChild(this.clone);
     };
 
     private addClone(): void {
@@ -140,12 +140,6 @@ export class Zoom {
         this.clone.classList.add('zoom__clone');
         this.clone.src = srcAttribute(this.element);
         this.container.appendChild(this.clone);
-    }
-
-    private removeClone(): void {
-        if (this.container.contains(this.clone)) {
-            this.container.removeChild(this.clone);
-        }
     }
 
     private addEventListeners(): void {
