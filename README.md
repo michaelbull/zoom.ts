@@ -12,7 +12,7 @@ A running demonstration can be found [here][demo].
 [![devDependencies status][devDependencies-badge]][devDependencies]
 
 `zoom.ts` easily plugs into your application and starts listening to zoom events
-as soon as the DOM is ready. The library accounts for just 4.2kB of bandwidth
+as soon as the DOM is ready. The library accounts for just 4.4kB of bandwidth
 once gzipped and requires no external bootstrapping.
 
 Holding either the <kbd>⌘</kbd> or <kbd>Ctrl</kbd> key will open the image in a
