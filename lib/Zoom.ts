@@ -60,12 +60,13 @@ export class Zoom {
         let centreX: number = (viewportWidth() - scaledWidth) / 2;
         let centreY: number = (viewportHeight() - scaledHeight) / 2;
 
-        let offsetX: number = this.original.left + (this.original.width - scaledWidth) / 2;
-        let offsetY: number = this.original.top + (this.original.height - scaledHeight) / 2;
-
         if (this.state === 'expanding' || this.state === 'collapsing') {
+            let offsetX: number = this.original.left + (this.original.width - scaledWidth) / 2;
+            let offsetY: number = this.original.top + (this.original.height - scaledHeight) / 2;
+
             let translateX: number = (centreX - offsetX) / scale;
             let translateY: number = (centreY - offsetY) / scale;
+
             this.container.style.transform = `scale(${scale}) ${translate(translateX, translateY)}`;
         } else {
             this.container.style.transform = '';
