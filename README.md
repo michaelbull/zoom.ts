@@ -42,20 +42,17 @@ $zoom-transition-duration: 1000; // slow down the transitions
 @import '~zoom.ts/style';
 ```
 
-Next you will need to import the library itself. In the example below, the
-`ready` function will apply a callback as soon as the DOM has loaded, and 
-calling `listener.start()` will add an event listener to the DOM that will
-respond to clicks on images marked as zoomable.
+Next you will need to import the library itself. In the example below, when
+the document is `ready` the library will `start` by adding an event listener
+that responds to click events on images marked as zoomable.
 
 ```typescript
 import { ready } from 'zoom.ts/lib/Document';
-import { Listener } from 'zoom.ts/lib/Listener';
-
-let listener: Listener = new Listener();
+import { start } from 'zoom.ts/lib/Zoom';
 
 ready(() => {
-    listener.start();
-    console.log('zoom.ts started listening for click events...');
+    start();
+    console.log('zoom.ts started');
 });
 ```
 
