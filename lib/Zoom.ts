@@ -154,13 +154,6 @@ function removeClone(): void {
     container.removeChild(clone);
 }
 
-function repaintContainer(): void {
-    container.style.transition = 'initial';
-    scaleContainer();
-    repaint(container);
-    container.style.transition = '';
-}
-
 function showClone(): void {
     image.classList.add('zoom__element--hidden');
     clone.classList.add('zoom__clone--visible');
@@ -169,6 +162,13 @@ function showClone(): void {
 function hideClone(): void {
     image.classList.remove('zoom__element--hidden');
     clone.classList.remove('zoom__clone--visible');
+}
+
+function repaintContainer(): void {
+    container.style.transition = 'initial';
+    scaleContainer();
+    repaint(container);
+    container.style.transition = '';
 }
 
 function scaleContainer(): void {
@@ -225,16 +225,6 @@ function expandContainer(): void {
     scaleContainer();
 }
 
-function zoomActive(): void {
-    container.classList.add('zoom--active');
-    image.classList.add('zoom__element--active');
-}
-
-function zoomInactive(): void {
-    container.classList.remove('zoom--active');
-    image.classList.remove('zoom__element--active');
-}
-
 function collapseContainer(): void {
     state = 'collapsing';
 
@@ -248,6 +238,16 @@ function collapseContainer(): void {
     style.width = '';
     style.maxWidth = '';
     style.height = '';
+}
+
+function zoomActive(): void {
+    container.classList.add('zoom--active');
+    image.classList.add('zoom__element--active');
+}
+
+function zoomInactive(): void {
+    container.classList.remove('zoom--active');
+    image.classList.remove('zoom__element--active');
 }
 
 export function start(): void {
