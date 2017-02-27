@@ -44,6 +44,12 @@ export function removeTransitionEndListener(element: HTMLElement, listener: Even
     }
 }
 
+export function createOverlay(): HTMLDivElement {
+    let overlay: HTMLDivElement = document.createElement('div');
+    overlay.classList.add('zoom__overlay');
+    return overlay;
+}
+
 export function srcAttribute(element: HTMLImageElement): string {
     let parent: HTMLElement | null = element.parentElement;
 

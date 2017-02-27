@@ -1,13 +1,15 @@
-import { srcAttribute } from './Element';
+import {
+    srcAttribute,
+    createOverlay
+} from './Element';
 import { Zoom } from './Zoom';
 
 const transform: boolean = require('transform-property');
 
 export class Listener {
-    private readonly overlay: HTMLDivElement = document.createElement('div');
+    private readonly overlay: HTMLDivElement = createOverlay();
 
     start(): void {
-        this.overlay.classList.add('zoom__overlay');
         document.body.addEventListener('click', this.clickListener);
     }
 
