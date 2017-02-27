@@ -1,7 +1,6 @@
 # ![zoom.ts][logo]
 
-A lightweight TypeScript library for image zooming, as seen on
-[Medium][medium].
+A lightweight TypeScript library for image zooming, as seen on [Medium][medium].
 
 A running demonstration can be found [here][demo].
 
@@ -12,8 +11,8 @@ A running demonstration can be found [here][demo].
 [![devDependencies status][devDependencies-badge]][devDependencies]
 
 `zoom.ts` easily plugs into your application and starts listening to zoom events
-as soon as the DOM is ready. The library accounts for just 4.4kB of bandwidth
-once gzipped and requires no external bootstrapping.
+as soon as the DOM is ready. The library accounts for just 4kB of bandwidth once
+gzipped and requires no external bootstrapping.
 
 Holding either the <kbd>⌘</kbd> or <kbd>Ctrl</kbd> key will open the image in a
 new tab when clicked. Zoomed images can be dismissed either by clicking the
@@ -59,9 +58,13 @@ ready(() => {
 ## Usage
 
 1. Add the class `zoom__element` to your `<img>`.
-2. Wrap your `<img>` in a `div` with a class of `zoom` (i.e. `<div class="zoom">`)
-3. A width and height can be configured to specify the dimensions that the expanded image should size to by add the `data-width` and `data-height` attributes to the wrapper `div`.
-4. The loading of a big image can be deferred by adding the `data-src` attribute to the wrapper `div`.
+2. Wrap your `<img>` in a `div` with a class of `zoom` (i.e.
+`<div class="zoom">`)
+3. A width and height can be configured to specify the dimensions that the
+expanded image should size to by add the `data-width` and `data-height`
+attributes to the wrapper `div`.
+4. The loading of a big image can be deferred by adding the `data-src` attribute
+to the wrapper `div`.
 
 ```html
 <!DOCTYPE html>
