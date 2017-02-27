@@ -109,6 +109,8 @@ export class Zoom {
         let centreX: number = (viewportWidth() - scaledWidth) / 2;
         let centreY: number = (viewportHeight() - scaledHeight) / 2;
 
+        let style: CSSStyleDeclaration = this.container.style;
+
         if (this.state === 'expanding' || this.state === 'collapsing') {
             let offsetX: number = this.original.left + (this.original.width - scaledWidth) / 2;
             let offsetY: number = this.original.top + (this.original.height - scaledHeight) / 2;
@@ -116,14 +118,14 @@ export class Zoom {
             let translateX: number = (centreX - offsetX) / scale;
             let translateY: number = (centreY - offsetY) / scale;
 
-            this.container.style.transform = `scale(${scale}) ${translate(translateX, translateY)}`;
+            style.transform = `scale(${scale}) ${translate(translateX, translateY)}`;
         } else {
-            this.container.style.transform = '';
-            this.container.style.left = `${centreX - this.original.left}px`;
-            this.container.style.top = `${centreY - this.original.top}px`;
-            this.container.style.width = `${scaledWidth}px`;
-            this.container.style.maxWidth = `${scaledWidth}px`;
-            this.container.style.height = `${scaledHeight}px`;
+            style.transform = '';
+            style.left = `${centreX - this.original.left}px`;
+            style.top = `${centreY - this.original.top}px`;
+            style.width = `${scaledWidth}px`;
+            style.maxWidth = `${scaledWidth}px`;
+            style.height = `${scaledHeight}px`;
         }
     }
 
@@ -150,12 +152,13 @@ export class Zoom {
 
         this.repaintContainer();
 
-        this.container.style.transform = '';
-        this.container.style.left = '';
-        this.container.style.top = '';
-        this.container.style.width = '';
-        this.container.style.maxWidth = '';
-        this.container.style.height = '';
+        let style: CSSStyleDeclaration = this.container.style;
+        style.transform = '';
+        style.left = '';
+        style.top = '';
+        style.width = '';
+        style.maxWidth = '';
+        style.height = '';
     }
 
     private finishedCollapsingContainer: EventListener = () => {
