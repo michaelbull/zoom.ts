@@ -93,7 +93,13 @@ module.exports = {
 
 if (process.env.NODE_ENV === 'production') {
     module.exports.plugins.push(
-        new webpack.optimize.UglifyJsPlugin()
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false,
+                unsafe: true,
+                hoist_vars: true
+            }
+        })
     );
 } else {
     module.exports.devtool = '#source-map';
