@@ -16,6 +16,7 @@ import {
 import { Dimension } from './Dimension';
 
 const transform: any = require('transform-property');
+const eventListener: any = require('eventlistener');
 
 const ESCAPE_KEY_CODE: number = 27;
 const SCROLL_Y_DELTA: number = 50;
@@ -67,7 +68,7 @@ let zoomOutListener: EventListener = (): void => {
 };
 
 let finishedLoadingClone: EventListener = (): void => {
-    clone.removeEventListener('load', finishedLoadingClone);
+    eventListener.remove(clone, 'load', finishedLoadingClone);
     loaded = true;
 
     if (state === 'expanded') {
@@ -129,23 +130,23 @@ function hide(): void {
 
 function addEventListeners(): void {
     initialScrollY = scrollY();
-    window.addEventListener('resize', resizeListener);
-    window.addEventListener('scroll', scrollListener);
-    document.addEventListener('keyup', keyboardListener);
-    container.addEventListener('click', zoomOutListener);
+    eventListener.add(window, 'resize', resizeListener);
+    eventListener.add(window, 'scroll', scrollListener);
+    eventListener.add(document, 'keyup', keyboardListener);
+    eventListener.add(container, 'click', zoomOutListener);
 }
 
 function removeEventListeners(): void {
-    window.removeEventListener('resize', resizeListener);
-    window.removeEventListener('scroll', scrollListener);
-    document.removeEventListener('keyup', keyboardListener);
-    container.removeEventListener('click', zoomOutListener);
+    eventListener.remove(window, 'resize', resizeListener);
+    eventListener.remove(window, 'scroll', scrollListener);
+    eventListener.remove(document, 'keyup', keyboardListener);
+    eventListener.remove(container, 'click', zoomOutListener);
 }
 
 function addClone(): void {
     clone = document.createElement('img');
     clone.classList.add('zoom__clone');
-    clone.addEventListener('load', finishedLoadingClone);
+    eventListener.add(clone, 'load', finishedLoadingClone);
     clone.src = srcAttribute(image);
     container.appendChild(clone);
 }
@@ -251,5 +252,9 @@ function zoomInactive(): void {
 }
 
 export function start(): void {
-    document.body.addEventListener('click', zoomInListener);
+    eventListener.add(document.body, 'click', zoomInListener);
+}
+
+export function stop(): void {
+    eventListener.remove(document.body, 'click', zoomInListener);
 }
