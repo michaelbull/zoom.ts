@@ -20,20 +20,28 @@ $zoom-overlay-visible-opacity: 100 !default;
 }
 
 .zoom {
+  display: block;
   position: relative;
+  width: 100%;
   line-height: 0;
   text-align: center;
-  transition: transform $zoom-transition-duration $zoom-transition-timing-function;
-  will-change: transform, transition;
 }
 
 .zoom--active {
   z-index: $zoom-z-index;
 }
 
+.zoom__container {
+  position: relative;
+  transition: transform $zoom-transition-duration $zoom-transition-timing-function;
+  will-change: transform;
+}
+
 .zoom__element {
   @include zoom-visible();
+  will-change: visibility, opacity;
 
+  max-width: 100%;
   cursor: pointer;
   cursor: -moz-zoom-in;
   cursor: -webkit-zoom-in;
@@ -49,6 +57,7 @@ $zoom-overlay-visible-opacity: 100 !default;
 
 .zoom__clone {
   @include zoom-hidden();
+  will-change: visibility, opacity;
 
   position: absolute;
   top: 0;

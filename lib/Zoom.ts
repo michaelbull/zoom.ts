@@ -1,17 +1,18 @@
 import {
-    srcAttribute,
-    createOverlay,
-    removeTransitionEndListener,
-    fillViewportScale,
-    translate,
+    addTransitionEndListener,
+    createClone,
+    createDiv,
     dimensions,
-    repaint,
-    addTransitionEndListener
+    fillViewportScale,
+    removeTransitionEndListener,
+    srcAttribute,
+    translate,
+    repaint
 } from './Element';
 import {
     scrollY,
-    viewportWidth,
-    viewportHeight
+    viewportHeight,
+    viewportWidth
 } from './Document';
 import { Dimension } from './Dimension';
 
@@ -23,7 +24,8 @@ const SCROLL_Y_DELTA: number = 50;
 
 type State = 'collapsed' | 'expanding' | 'expanded' | 'collapsing';
 
-let overlay: HTMLDivElement = createOverlay();
+let overlay: HTMLDivElement = createDiv('zoom__overlay');
+let wrapper: HTMLElement;
 let container: HTMLElement;
 let image: HTMLImageElement;
 let clone: HTMLImageElement;
@@ -53,13 +55,42 @@ let zoomInListener: EventListener = (event: MouseEvent): void => {
     let target: EventTarget = event.target;
 
     if (target instanceof HTMLImageElement && target.classList.contains('zoom__element')) {
+        let parent: HTMLElement | null = target.parentElement;
+        if (parent === null) {
+            return;
+        }
+
+        let grandParent: HTMLElement | null = parent.parentElement;
+        if (grandParent === null) {
+            return;
+        }
+
         event.preventDefault();
 
-        if (transform && !event.metaKey && !event.ctrlKey) {
-            zoomImage(target);
-        } else {
-            window.open(srcAttribute(target), '_blank');
+        let containerExists: boolean = parent.classList.contains('zoom__container');
+        let targetWrapper: HTMLElement = containerExists ? grandParent : parent;
+
+        if (targetWrapper.classList.contains('zoom--active')) {
+            return;
         }
+
+        let src: string = srcAttribute(targetWrapper, target);
+
+        if (transform === undefined || event.metaKey || event.ctrlKey) {
+            window.open(src, '_blank');
+            return;
+        }
+
+        wrapper = targetWrapper;
+
+        if (containerExists) {
+            useExistingContainer(parent, target);
+        } else {
+            addContainer(target);
+            addClone(src);
+        }
+
+        show();
     }
 };
 
@@ -89,31 +120,26 @@ let finishedExpandingContainer: EventListener = (): void => {
 
 let finishedCollapsingContainer: EventListener = (): void => {
     removeTransitionEndListener(container, finishedCollapsingContainer);
-
     removeOverlay();
-    zoomInactive();
-    removeClone();
+    deactivateZoom();
 };
 
-function zoomImage(element: HTMLImageElement): void {
-    let parent: HTMLElement | null = element.parentElement;
+function addContainer(target: HTMLImageElement): void {
+    image = target.cloneNode(true) as HTMLImageElement;
+    container = createDiv('zoom__container');
+    container.appendChild(image);
+    wrapper.replaceChild(container, target);
+}
 
-    if (parent === null) {
-        return;
-    }
-
-    let parentClasses: DOMTokenList = parent.classList;
-
-    if (parentClasses.contains('zoom') && !parentClasses.contains('zoom--active')) {
-        container = parent;
-        image = element;
-        original = dimensions(image);
-        show();
-    }
+function useExistingContainer(parent: HTMLElement, target: HTMLImageElement): void {
+    loaded = true;
+    image = target;
+    container = parent;
+    clone = container.children.item(1) as HTMLImageElement;
 }
 
 function show(): void {
-    addClone();
+    freezeWrapperHeight();
     addOverlay();
     showOverlay();
     expandContainer();
@@ -122,10 +148,20 @@ function show(): void {
 
 function hide(): void {
     loaded = false;
+
     removeEventListeners();
     collapseContainer();
     hideOverlay();
     hideClone();
+    unfreezeWrapperHeight();
+}
+
+function freezeWrapperHeight(): void {
+    wrapper.style.height = `${image.height}px`;
+}
+
+function unfreezeWrapperHeight(): void {
+    wrapper.style.height = '';
 }
 
 function addEventListeners(): void {
@@ -143,16 +179,10 @@ function removeEventListeners(): void {
     eventListener.remove(container, 'click', zoomOutListener);
 }
 
-function addClone(): void {
-    clone = document.createElement('img');
-    clone.classList.add('zoom__clone');
+function addClone(src: string): void {
+    clone = createClone(src);
     eventListener.add(clone, 'load', finishedLoadingClone);
-    clone.src = srcAttribute(image);
     container.appendChild(clone);
-}
-
-function removeClone(): void {
-    container.removeChild(clone);
 }
 
 function showClone(): void {
@@ -173,7 +203,7 @@ function repaintContainer(): void {
 }
 
 function scaleContainer(): void {
-    let scale: number = fillViewportScale(container, original);
+    let scale: number = fillViewportScale(wrapper, original);
 
     let scaledWidth: number = original.width * scale;
     let scaledHeight: number = original.height * scale;
@@ -221,7 +251,10 @@ function hideOverlay(): void {
 
 function expandContainer(): void {
     state = 'expanding';
-    zoomActive();
+
+    original = dimensions(image);
+    activateZoom();
+
     addTransitionEndListener(container, finishedExpandingContainer);
     scaleContainer();
 }
@@ -241,13 +274,13 @@ function collapseContainer(): void {
     style.height = '';
 }
 
-function zoomActive(): void {
-    container.classList.add('zoom--active');
+function activateZoom(): void {
+    wrapper.classList.add('zoom--active');
     image.classList.add('zoom__element--active');
 }
 
-function zoomInactive(): void {
-    container.classList.remove('zoom--active');
+function deactivateZoom(): void {
+    wrapper.classList.remove('zoom--active');
     image.classList.remove('zoom__element--active');
 }
 

@@ -44,29 +44,32 @@ export function removeTransitionEndListener(element: HTMLElement, listener: Even
     }
 }
 
-export function createOverlay(): HTMLDivElement {
+export function createDiv(className: string): HTMLDivElement {
     let overlay: HTMLDivElement = document.createElement('div');
-    overlay.classList.add('zoom__overlay');
+    overlay.className = className;
     return overlay;
 }
 
-export function srcAttribute(element: HTMLImageElement): string {
-    let parent: HTMLElement | null = element.parentElement;
-
-    if (parent !== null) {
-        let attribute: string | null = parent.getAttribute('data-src');
-
-        if (attribute !== null) {
-            return attribute;
-        }
-    }
-
-    return element.src as string;
+export function createClone(src: string): HTMLImageElement {
+    let clone: HTMLImageElement = document.createElement('img');
+    clone.className = 'zoom__clone';
+    clone.src = src;
+    return clone;
 }
 
-export function fillViewportScale(container: HTMLElement, original: Dimension): number {
-    let targetWidth: number = Number(container.getAttribute('data-width') || Infinity);
-    let targetHeight: number = Number(container.getAttribute('data-height') || Infinity);
+export function srcAttribute(wrapper: HTMLElement, image: HTMLImageElement): string {
+    let attribute: string | null = wrapper.getAttribute('data-src');
+
+    if (attribute !== null) {
+        return attribute;
+    }
+
+    return image.src as string;
+}
+
+export function fillViewportScale(wrapper: HTMLElement, original: Dimension): number {
+    let targetWidth: number = Number(wrapper.getAttribute('data-width') || Infinity);
+    let targetHeight: number = Number(wrapper.getAttribute('data-height') || Infinity);
     let scaleX: number = Math.min(viewportWidth(), targetWidth) / original.width;
     let scaleY: number = Math.min(viewportHeight(), targetHeight) / original.height;
     return Math.min(scaleX, scaleY);
