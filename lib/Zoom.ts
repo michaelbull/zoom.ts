@@ -218,8 +218,6 @@ function scaleContainer(): void {
     let centreX: number = (viewportWidth() - scaledWidth) / 2;
     let centreY: number = (viewportHeight() - scaledHeight) / 2;
 
-    let style: CSSStyleDeclaration = container.style;
-
     if (state === 'expanding' || state === 'collapsing') {
         let offsetX: number = rect.left + (rect.width - scaledWidth) / 2;
         let offsetY: number = rect.top + (rect.height - scaledHeight) / 2;
@@ -230,6 +228,8 @@ function scaleContainer(): void {
         transform(container, `scale(${scale}) ${translate(translateX, translateY)}`);
     } else {
         transform(container, '');
+
+        let style: CSSStyleDeclaration = container.style;
         style.left = `${centreX - rect.left}px`;
         style.top = `${centreY - rect.top}px`;
         style.width = `${scaledWidth}px`;
@@ -239,8 +239,9 @@ function scaleContainer(): void {
 }
 
 function resetScale(): void {
-    let style: CSSStyleDeclaration = container.style;
     transform(container, '');
+
+    let style: CSSStyleDeclaration = container.style;
     style.left = '';
     style.top = '';
     style.width = '';
