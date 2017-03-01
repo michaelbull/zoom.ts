@@ -26,7 +26,6 @@ import {
 const ESCAPE_KEY_CODE: number = 27;
 const SCROLL_Y_DELTA: number = 50;
 const transform: string | null = transformProperty();
-let translate3d: boolean;
 
 type State = 'collapsed' | 'expanding' | 'expanded' | 'collapsing';
 
@@ -37,6 +36,7 @@ let image: HTMLImageElement;
 let clone: HTMLImageElement;
 
 let state: State = 'collapsed';
+let translate3d: boolean;
 let loaded: boolean = false;
 let initialScrollY: number;
 
@@ -85,6 +85,10 @@ let zoomInListener: EventListener = (event: MouseEvent): void => {
         if (transform === null || event.metaKey || event.ctrlKey) {
             window.open(src, '_blank');
             return;
+        }
+
+        if (translate3d === undefined) {
+            translate3d = supportsTranslate3d(transform as string);
         }
 
         wrapper = targetWrapper;
@@ -145,10 +149,6 @@ function useExistingContainer(parent: HTMLElement, target: HTMLImageElement): vo
 }
 
 function show(): void {
-    if (translate3d === undefined) {
-        translate3d = supportsTranslate3d(transform as string);
-    }
-
     freezeWrapperHeight();
     addOverlay();
     showOverlay();
