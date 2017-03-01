@@ -1,4 +1,7 @@
 import {
+    addClass,
+    hasClass,
+    removeClass,
     repaint,
     srcAttribute
 } from './Element';
@@ -55,7 +58,7 @@ let keyboardListener: EventListener = (event: KeyboardEvent): void => {
 let zoomInListener: EventListener = (event: MouseEvent): void => {
     let target: EventTarget = event.target;
 
-    if (target instanceof HTMLImageElement && target.classList.contains('zoom__element')) {
+    if (target instanceof HTMLImageElement && hasClass(target, 'zoom__element')) {
         let parent: HTMLElement | null = target.parentElement;
         if (parent === null) {
             return;
@@ -68,10 +71,10 @@ let zoomInListener: EventListener = (event: MouseEvent): void => {
 
         event.preventDefault();
 
-        let containerExists: boolean = parent.classList.contains('zoom__container');
+        let containerExists: boolean = hasClass(parent, 'zoom__container');
         let targetWrapper: HTMLElement = containerExists ? grandParent : parent;
 
-        if (targetWrapper.classList.contains('zoom--active')) {
+        if (hasClass(targetWrapper, 'zoom--active')) {
             return;
         }
 
@@ -187,13 +190,13 @@ function addClone(src: string): void {
 }
 
 function showClone(): void {
-    image.classList.add('zoom__element--hidden');
-    clone.classList.add('zoom__clone--visible');
+    addClass(image, 'zoom__element--hidden');
+    addClass(clone, 'zoom__clone--visible');
 }
 
 function hideClone(): void {
-    image.classList.remove('zoom__element--hidden');
-    clone.classList.remove('zoom__clone--visible');
+    removeClass(image, 'zoom__element--hidden');
+    removeClass(clone, 'zoom__clone--visible');
 }
 
 function repaintContainer(): void {
@@ -260,11 +263,11 @@ function removeOverlay(): void {
 
 function showOverlay(): void {
     repaint(overlay);
-    overlay.classList.add('zoom__overlay--visible');
+    addClass(overlay, 'zoom__overlay--visible');
 }
 
 function hideOverlay(): void {
-    overlay.classList.remove('zoom__overlay--visible');
+    removeClass(overlay, 'zoom__overlay--visible');
     removeTransitionEndListener(container, finishedExpandingContainer);
 }
 
@@ -285,13 +288,13 @@ function collapseContainer(): void {
 }
 
 function activateZoom(): void {
-    wrapper.classList.add('zoom--active');
-    image.classList.add('zoom__element--active');
+    addClass(wrapper, 'zoom--active');
+    addClass(image, 'zoom__element--active');
 }
 
 function deactivateZoom(): void {
-    wrapper.classList.remove('zoom--active');
-    image.classList.remove('zoom__element--active');
+    removeClass(wrapper, 'zoom--active');
+    removeClass(image, 'zoom__element--active');
 }
 
 export function start(): void {

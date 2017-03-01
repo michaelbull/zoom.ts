@@ -5,7 +5,7 @@ function wrap(standard: string, fallback: string): any {
         } else if (element[fallback] !== undefined) { // attempt to use fallback listeners
             element[fallback](`on${type}`, listener, useCapture);
         } else { // no listeners available, fire event immediately
-            listener(new Event(type));
+            listener(createEvent(type));
         }
     };
 }
@@ -19,3 +19,13 @@ export let listeners: EventListeners = {
     add: wrap('addEventListener', 'attachEvent'),
     remove: wrap('removeEventListener', 'detachEvent')
 };
+
+export function createEvent(type: string): Event {
+    if (typeof(Event) === 'function') {
+        return new Event(type);
+    } else {
+        let event: Event = document.createEvent('Event');
+        event.initEvent(type, false, false);
+        return event;
+    }
+}

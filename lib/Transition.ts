@@ -1,4 +1,7 @@
-import { listeners } from './EventListeners';
+import {
+    createEvent,
+    listeners
+} from './EventListeners';
 import {
     vendorPrefixes,
     vendorProperties
@@ -40,7 +43,7 @@ export function addTransitionEndListener(element: HTMLElement, listener: EventLi
             listeners.add(element, event, listener);
         }
     } else {
-        listener(new Event(transitionEndEvents[0]));
+        listener(createEvent(transitionEndEvents[0]));
     }
 }
 

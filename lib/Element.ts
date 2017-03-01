@@ -12,3 +12,17 @@ export function srcAttribute(wrapper: HTMLElement, image: HTMLImageElement): str
 
     return image.src as string;
 }
+
+export function hasClass(element: HTMLElement, name: string): boolean {
+    return element.className.indexOf(name) !== -1;
+}
+
+export function addClass(element: HTMLElement, name: string): void {
+    element.className += ` ${name}`;
+}
+
+export function removeClass(element: HTMLElement, name: string): void {
+    let classes: string[] = element.className.split(' ');
+    classes.splice(classes.indexOf(name), 1);
+    element.className = classes.join(' ');
+}

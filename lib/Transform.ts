@@ -16,5 +16,6 @@ function getTransformProperty(): string | null {
 export const transformProperty: string | null = getTransformProperty();
 
 export function transform(element: HTMLElement, value: string): void {
-    element.style.setProperty(transformProperty as string, value);
+    let style: any = element.style;
+    style[transformProperty as string] = value;
 }

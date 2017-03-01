@@ -1,13 +1,15 @@
+import { listeners } from './EventListeners';
+
 /**
  * Executes a function when the DOM is fully loaded.
  * @param callback The function to execute.
  * @see http://youmightnotneedjquery.com/#ready
  */
 export function ready(callback: Function): any {
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => callback());
-    } else {
+    if (document.readyState === 'complete') {
         return callback();
+    } else {
+        listeners.add(document, 'DOMContentLoaded', () => callback());
     }
 }
 
