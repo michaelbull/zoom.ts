@@ -1,5 +1,5 @@
 export function supportsTranslate3d(transformProperty: string): boolean {
-    if (transformProperty === null || window.getComputedStyle === undefined) {
+    if (window.getComputedStyle === undefined) {
         return false;
     }
 
@@ -17,7 +17,7 @@ export function supportsTranslate3d(transformProperty: string): boolean {
     style[transformProperty as string] = 'translate3d(1px,1px,1px)';
     document.body.insertBefore(element, null);
 
-    let computedStyle: CSSStyleDeclaration = getComputedStyle(element);
+    let computedStyle: CSSStyleDeclaration = window.getComputedStyle(element);
     let value: string = computedStyle.getPropertyValue(map[transformProperty as string]);
     document.body.removeChild(element);
 

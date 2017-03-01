@@ -92,8 +92,8 @@ let zoomInListener: EventListener = (event: MouseEvent): void => {
             return;
         }
 
-        if (translate3d === undefined) {
-            translate3d = supportsTranslate3d(transform as string);
+        if (translate3d === undefined && transform !== null) {
+            translate3d = supportsTranslate3d(transform);
         }
 
         wrapper = targetWrapper;
