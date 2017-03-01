@@ -35,6 +35,10 @@ let container: HTMLElement;
 let image: HTMLImageElement;
 let clone: HTMLImageElement;
 
+let rect: ClientRect;
+let targetWidth: number;
+let targetHeight: number;
+
 let transform: string | null;
 let hasTranslate3d: boolean;
 
@@ -44,6 +48,7 @@ let initialScrollY: number;
 
 let resizeListener: EventListener = (): void => {
     initialScrollY = pageScrollY();
+    rect = wrapper.getBoundingClientRect();
     scaleContainer();
 };
 
@@ -155,6 +160,7 @@ function useExistingContainer(parent: HTMLElement, target: HTMLImageElement): vo
 }
 
 function show(): void {
+    setTargetSize();
     freezeWrapperHeight();
     addOverlay();
     showOverlay();
@@ -170,6 +176,11 @@ function hide(): void {
     hideOverlay();
     hideClone();
     unfreezeWrapperHeight();
+}
+
+function setTargetSize(): void {
+    targetWidth = Number(wrapper.getAttribute('data-width') || Infinity);
+    targetHeight = Number(wrapper.getAttribute('data-height') || Infinity);
 }
 
 function freezeWrapperHeight(): void {
@@ -219,11 +230,6 @@ function repaintContainer(): void {
 }
 
 function scaleContainer(): void {
-    let rect: ClientRect = wrapper.getBoundingClientRect();
-
-    let targetWidth: number = Number(wrapper.getAttribute('data-width') || Infinity);
-    let targetHeight: number = Number(wrapper.getAttribute('data-height') || Infinity);
-
     let scaleX: number = Math.min(viewportWidth(), targetWidth) / rect.width;
     let scaleY: number = Math.min(viewportHeight(), targetHeight) / rect.height;
     let scale: number = Math.min(scaleX, scaleY);
@@ -251,7 +257,6 @@ function scaleContainer(): void {
             translation = translate(translateX, translateY);
         }
 
-        console.log(`${transform}`);
         style[transform as string] = `scale(${scale}) ${translation}`;
     } else {
         style[transform as string] = '';
@@ -294,6 +299,7 @@ function hideOverlay(): void {
 function expandContainer(): void {
     state = 'expanding';
 
+    rect = wrapper.getBoundingClientRect();
     activateZoom();
     addTransitionEndListener(container, finishedExpandingContainer);
     scaleContainer();
