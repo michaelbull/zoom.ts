@@ -19,7 +19,8 @@ import {
 } from './Transition';
 import {
     translate,
-    supportsTranslate3d
+    supportsTranslate3d,
+    translate3d
 } from './Translate';
 import { vendorProperty } from './Vendor';
 
@@ -35,7 +36,7 @@ let image: HTMLImageElement;
 let clone: HTMLImageElement;
 
 let transform: string | null;
-let translate3d: boolean;
+let hasTranslate3d: boolean;
 
 let state: State = 'collapsed';
 let loaded: boolean = false;
@@ -84,7 +85,7 @@ let zoomInListener: EventListener = (event: MouseEvent): void => {
         let src: string = srcAttribute(targetWrapper, target);
 
         if (transform === undefined) {
-            transform = vendorProperty(document.body, 'transition');
+            transform = vendorProperty(document.body, 'transform');
         }
 
         if (transform === null || event.metaKey || event.ctrlKey) {
@@ -92,8 +93,8 @@ let zoomInListener: EventListener = (event: MouseEvent): void => {
             return;
         }
 
-        if (translate3d === undefined && transform !== null) {
-            translate3d = supportsTranslate3d(transform);
+        if (hasTranslate3d === undefined && transform !== null) {
+            hasTranslate3d = supportsTranslate3d(transform);
         }
 
         wrapper = targetWrapper;
@@ -242,7 +243,16 @@ function scaleContainer(): void {
         let translateX: number = (centreX - offsetX) / scale;
         let translateY: number = (centreY - offsetY) / scale;
 
-        style[transform as string] = `scale(${scale}) ${translate(translateX, translateY, translate3d)}`;
+        let translation: string;
+
+        if (hasTranslate3d) {
+            translation = translate3d(translateX, translateY);
+        } else {
+            translation = translate(translateX, translateY);
+        }
+
+        console.log(`${transform}`);
+        style[transform as string] = `scale(${scale}) ${translation}`;
     } else {
         style[transform as string] = '';
         style.left = `${centreX - rect.left}px`;

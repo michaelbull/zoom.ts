@@ -24,6 +24,10 @@ export function supportsTranslate3d(transformProperty: string): boolean {
     return value.length > 0 && value !== 'none';
 }
 
-export function translate(x: number, y: number, translate3d: boolean): string {
-    return translate3d ? `translate3d(${x}px, ${y}px, 0)` : `translate(${x}px, ${y}px)`;
+export function translate3d(x: number, y: number): string {
+    return `translate3d(${x}px, ${y}px, 0)`;
+}
+
+export function translate(x: number, y: number): string {
+    return `translate(${x}px, ${y}px)`;
 }
