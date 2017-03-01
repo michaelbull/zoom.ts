@@ -1,13 +1,13 @@
 import {
     addTransitionEndListener,
-    createClone,
-    createDiv,
     removeTransitionEndListener,
     srcAttribute,
     repaint,
     translate
 } from './Element';
 import {
+    createClone,
+    createDiv,
     scrollY,
     viewportWidth,
     viewportHeight

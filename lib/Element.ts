@@ -35,19 +35,6 @@ export function removeTransitionEndListener(element: HTMLElement, listener: Even
     }
 }
 
-export function createDiv(className: string): HTMLDivElement {
-    let overlay: HTMLDivElement = document.createElement('div');
-    overlay.className = className;
-    return overlay;
-}
-
-export function createClone(src: string): HTMLImageElement {
-    let clone: HTMLImageElement = document.createElement('img');
-    clone.className = 'zoom__clone';
-    clone.src = src;
-    return clone;
-}
-
 export function srcAttribute(wrapper: HTMLElement, image: HTMLImageElement): string {
     let attribute: string | null = wrapper.getAttribute('data-src');
 
