@@ -22,7 +22,13 @@ export function addClass(element: HTMLElement, name: string): void {
 }
 
 export function removeClass(element: HTMLElement, name: string): void {
-    let classes: string[] = element.className.split(' ');
-    classes.splice(classes.indexOf(name), 1);
-    element.className = classes.join(' ');
+    let existing: string = element.className;
+
+    if (existing.indexOf(' ') !== -1) {
+        let classes: string[] = existing.split(' ');
+        classes.splice(classes.indexOf(name), 1);
+        element.className = classes.join(' ');
+    } else if (existing === name) {
+        element.className = '';
+    }
 }
