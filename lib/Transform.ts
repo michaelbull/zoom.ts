@@ -1,14 +1,20 @@
 import { vendorProperties } from './Vendor';
 
-function getTransformProperty(): string {
+function getTransformProperty(): string | null {
     let properties: string[] = vendorProperties('transform');
     let element: HTMLParagraphElement = document.createElement('p');
-    let style: any = element.style;
-    return properties.find((property: string) => style[property] !== undefined);
+
+    for (let property of properties) {
+        if (element.style.getPropertyValue(property) !== undefined) {
+            return property;
+        }
+    }
+
+    return null;
 }
 
-export const transformProperty: string = getTransformProperty();
+export const transformProperty: string | null = getTransformProperty();
 
 export function transform(element: HTMLElement, value: string): void {
-    element.style.setProperty(transformProperty, value);
+    element.style.setProperty(transformProperty as string, value);
 }

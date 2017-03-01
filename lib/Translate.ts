@@ -2,7 +2,7 @@ import { transformProperty } from './Transform';
 import { ready } from './Document';
 
 const hasTranslate3d: boolean = ready(() => {
-    if (transformProperty === undefined || window.getComputedStyle === undefined) {
+    if (transformProperty === null || window.getComputedStyle === undefined) {
         return false;
     }
 
@@ -15,9 +15,10 @@ const hasTranslate3d: boolean = ready(() => {
     };
 
     let element: HTMLDivElement = document.createElement('div');
-    element.style.setProperty(transformProperty, 'translate3d(1px,1px,1px)');
+    element.style.setProperty(transformProperty as string, 'translate3d(1px,1px,1px)');
     document.body.insertBefore(element, null);
-    let value: string = getComputedStyle(element).getPropertyValue(map[transformProperty]);
+    let style: CSSStyleDeclaration = getComputedStyle(element);
+    let value: string = style.getPropertyValue(map[transformProperty as string]);
     document.body.removeChild(element);
     return value.length > 0 && value !== 'none';
 });

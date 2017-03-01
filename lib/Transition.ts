@@ -4,20 +4,34 @@ import {
     vendorProperties
 } from './Vendor';
 
-const transitionEndEvents: string[] = ['transitionend'].concat(
-    vendorPrefixes.map((prefix: string) => `${prefix}TransitionEnd`)
-);
+const transitionEndEvents: string[] = ['transitionend'];
 
-function hasTransitions(element?: HTMLElement): boolean {
-    let property: string = vendorProperties('transitionDuration').find((type: string) => type in document.body.style);
+for (let prefix of vendorPrefixes) {
+    transitionEndEvents.push(`${prefix}TransitionEnd`);
+}
 
-    if (element === undefined) {
-        return property !== undefined;
+function transitionDurationProperty(): string | null {
+    for (let property of vendorProperties('transitionDuration')) {
+        if (property in document.body.style) {
+            return property;
+        }
     }
 
-    let style: any = getComputedStyle(element);
-    let duration: any = style[property];
-    return duration.length > 0 && parseFloat(duration) !== 0;
+    return null;
+}
+
+function hasTransitions(element?: HTMLElement): boolean {
+    let property: string | null = transitionDurationProperty();
+
+    if (property === null) {
+        return false;
+    } else if (element === undefined) {
+        return true;
+    } else {
+        let style: any = getComputedStyle(element);
+        let duration: any = style[property];
+        return duration.length > 0 && parseFloat(duration) !== 0;
+    }
 }
 
 export function addTransitionEndListener(element: HTMLElement, listener: EventListener): void {
