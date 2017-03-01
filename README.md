@@ -12,7 +12,7 @@ A running demonstration can be found [here][demo].
 
 `zoom.ts` easily plugs into your application and starts listening to zoom events
 as soon as the DOM is ready. The library accounts for just 4kB of bandwidth once
-gzipped and requires no external bootstrapping.
+gzipped and requires no third-party libraries.
 
 Holding either the <kbd>⌘</kbd> or <kbd>Ctrl</kbd> key will open the image in a
 new tab when clicked. Zoomed images can be dismissed either by clicking the

@@ -1,20 +1,24 @@
 import {
-    addTransitionEndListener,
-    removeTransitionEndListener,
-    srcAttribute,
     repaint,
-    translate
+    srcAttribute
 } from './Element';
 import {
     createClone,
     createDiv,
     scrollY,
-    viewportWidth,
-    viewportHeight
+    viewportHeight,
+    viewportWidth
 } from './Document';
 import { listeners } from './EventListeners';
-
-const transform: any = require('transform-property');
+import {
+    addTransitionEndListener,
+    removeTransitionEndListener
+} from './Transition';
+import {
+    transform,
+    transformProperty
+} from './Transform';
+import { translate } from './Translate';
 
 const ESCAPE_KEY_CODE: number = 27;
 const SCROLL_Y_DELTA: number = 50;
@@ -72,7 +76,7 @@ let zoomInListener: EventListener = (event: MouseEvent): void => {
 
         let src: string = srcAttribute(targetWrapper, target);
 
-        if (transform === undefined || event.metaKey || event.ctrlKey) {
+        if (transformProperty === undefined || event.metaKey || event.ctrlKey) {
             window.open(src, '_blank');
             return;
         }
@@ -223,9 +227,9 @@ function scaleContainer(): void {
         let translateX: number = (centreX - offsetX) / scale;
         let translateY: number = (centreY - offsetY) / scale;
 
-        style[transform] = `scale(${scale}) ${translate(translateX, translateY)}`;
+        transform(container, `scale(${scale}) ${translate(translateX, translateY)}`);
     } else {
-        style[transform] = '';
+        transform(container, '');
         style.left = `${centreX - rect.left}px`;
         style.top = `${centreY - rect.top}px`;
         style.width = `${scaledWidth}px`;
@@ -236,7 +240,7 @@ function scaleContainer(): void {
 
 function resetScale(): void {
     let style: CSSStyleDeclaration = container.style;
-    style[transform] = '';
+    transform(container, '');
     style.left = '';
     style.top = '';
     style.width = '';

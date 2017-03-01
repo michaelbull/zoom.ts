@@ -3,11 +3,11 @@
  * @param callback The function to execute.
  * @see http://youmightnotneedjquery.com/#ready
  */
-export function ready(callback: Function): void {
+export function ready(callback: Function): any {
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => callback());
     } else {
-        callback();
+        return callback();
     }
 }
 
