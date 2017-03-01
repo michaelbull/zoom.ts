@@ -36,6 +36,7 @@ let loaded: boolean = false;
 let initialScrollY: number;
 
 let resizeListener: EventListener = (): void => {
+    initialScrollY = scrollY();
     scaleContainer();
 };
 
