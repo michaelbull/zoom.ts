@@ -13,9 +13,9 @@ for (let prefix of vendorPrefixes) {
     transitionEndEvents.push(`${prefix}TransitionEnd`);
 }
 
-function transitionDurationProperty(): string | null {
+function transitionDurationProperty(element: HTMLElement): string | null {
     for (let property of vendorProperties('transitionDuration')) {
-        if (property in document.body.style) {
+        if (property in element.style) {
             return property;
         }
     }
@@ -23,18 +23,20 @@ function transitionDurationProperty(): string | null {
     return null;
 }
 
-function hasTransitions(element?: HTMLElement): boolean {
-    let property: string | null = transitionDurationProperty();
+function hasTransitions(element: HTMLElement): boolean {
+    if (window.getComputedStyle === undefined) {
+        return false;
+    }
+
+    let property: string | null = transitionDurationProperty(element);
 
     if (property === null) {
         return false;
-    } else if (element === undefined) {
-        return true;
-    } else {
-        let style: any = getComputedStyle(element);
-        let duration: any = style[property];
-        return duration.length > 0 && parseFloat(duration) !== 0;
     }
+
+    let style: any = window.getComputedStyle(element);
+    let duration: string = style[property];
+    return duration.length > 0 && parseFloat(duration) !== 0;
 }
 
 export function addTransitionEndListener(element: HTMLElement, listener: EventListener): void {
