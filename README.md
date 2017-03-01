@@ -7,7 +7,7 @@ A running demonstration can be found [here][demo].
 [![license][license-badge]][license]
 [![npm version][npm-badge]][npm]
 [![npm downloads][downloads-badge]][downloads]
-[![dependencies status][dependencies-badge]][dependencies]
+[![build status][build-status-badge]][build-status]
 [![devDependencies status][devDependencies-badge]][devDependencies]
 
 `zoom.ts` easily plugs into your application and starts listening to zoom events
@@ -105,14 +105,14 @@ This project is available under the terms of the ISC license. See the
 
 [logo]: /img/logo.png
 [medium]: https://medium.design/image-zoom-on-medium-24d146fc0c20
+[build-status-badge]: https://img.shields.io/travis/michaelbull/zoom.ts.svg?style=flat-square
+[build-status]: https://travis-ci.org/michaelbull/zoom.ts
 [license-badge]: https://img.shields.io/github/license/michaelbull/zoom.ts.svg?style=flat-square
 [license]: https://github.com/michaelbull/zoom.ts/blob/master/LICENSE
 [npm-badge]: https://img.shields.io/npm/v/zoom.ts.svg?style=flat-square
 [npm]: https://www.npmjs.com/package/zoom.ts
 [downloads-badge]: https://img.shields.io/npm/dt/zoom.ts.svg?style=flat-square
 [downloads]: https://www.npmjs.com/package/zoom.ts
-[dependencies-badge]: https://david-dm.org/michaelbull/zoom.ts.svg?style=flat-square
-[dependencies]: https://david-dm.org/michaelbull/zoom.ts
 [devDependencies-badge]: https://david-dm.org/michaelbull/zoom.ts/dev-status.svg?style=flat-square
 [devDependencies]: https://david-dm.org/michaelbull/zoom.ts?type=dev
 [demo]: https://michaelbull.github.io/zoom.ts
