@@ -1,3 +1,4 @@
+import { listeners } from './EventListeners';
 const transform: any = require('transform-property');
 
 const TRANSITION_END_EVENTS: string[] = [
@@ -17,12 +18,33 @@ export function translate(x: number, y: number): string {
     return has3d ? `translate3d(${x}px, ${y}px, 0)` : `translate(${x}px, ${y}px)`;
 }
 
-export function addTransitionEndListener(element: HTMLElement, listener: EventListener): void {
-    const hasTransitions: boolean = require('has-transitions');
+function hasTransitions(element?: HTMLElement): boolean {
+    const PROPERTIES: string[] = [
+        'transitionDuration',
+        'MozTransitionDuration',
+        'WebkitTransitionDuration'
+    ];
 
-    if (hasTransitions) {
+    let supportedProperties: string[] = PROPERTIES.filter((type: string) => type in document.body.style);
+
+    if (supportedProperties.length < 1) {
+        return false;
+    }
+
+    if (element === undefined) {
+        return true;
+    }
+
+    let property: string = supportedProperties[0];
+    let style: any = getComputedStyle(element);
+    let duration: any = style[property];
+    return duration.length > 0 && parseFloat(duration) !== 0;
+}
+
+export function addTransitionEndListener(element: HTMLElement, listener: EventListener): void {
+    if (hasTransitions(element)) {
         for (let eventName of TRANSITION_END_EVENTS) {
-            element.addEventListener(eventName, listener);
+            listeners.add(element, eventName, listener);
         }
     } else {
         listener(new Event(TRANSITION_END_EVENTS[0]));
@@ -30,8 +52,8 @@ export function addTransitionEndListener(element: HTMLElement, listener: EventLi
 }
 
 export function removeTransitionEndListener(element: HTMLElement, listener: EventListener): void {
-    for (let event of TRANSITION_END_EVENTS) {
-        element.removeEventListener(event, listener);
+    for (let eventName of TRANSITION_END_EVENTS) {
+        listeners.remove(element, eventName, listener);
     }
 }
 
