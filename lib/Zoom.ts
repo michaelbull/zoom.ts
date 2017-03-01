@@ -84,7 +84,7 @@ let zoomInListener: EventListener = (event: MouseEvent): void => {
         let src: string = srcAttribute(targetWrapper, target);
 
         if (transform === undefined) {
-            transform = transformProperty();
+            transform = transformProperty(document.body);
         }
 
         if (transform === null || event.metaKey || event.ctrlKey) {
