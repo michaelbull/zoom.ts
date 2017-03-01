@@ -4,7 +4,7 @@ import {
 } from './EventListeners';
 import {
     vendorPrefixes,
-    vendorProperties
+    vendorProperty
 } from './Vendor';
 
 const transitionEndEvents: string[] = ['transitionend'];
@@ -13,22 +13,12 @@ for (let prefix of vendorPrefixes) {
     transitionEndEvents.push(`${prefix}TransitionEnd`);
 }
 
-function transitionDurationProperty(element: HTMLElement): string | null {
-    for (let property of vendorProperties('transitionDuration')) {
-        if (property in element.style) {
-            return property;
-        }
-    }
-
-    return null;
-}
-
 function hasTransitions(element: HTMLElement): boolean {
     if (window.getComputedStyle === undefined) {
         return false;
     }
 
-    let property: string | null = transitionDurationProperty(element);
+    let property: string | null = vendorProperty(element, 'transitionDuration');
 
     if (property === null) {
         return false;

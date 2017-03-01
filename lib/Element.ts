@@ -1,3 +1,4 @@
+import { vendorProperties } from './Vendor';
 export function repaint(element: HTMLElement): void {
     // tslint:disable-next-line
     element.offsetHeight;

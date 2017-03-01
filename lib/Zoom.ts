@@ -17,11 +17,11 @@ import {
     addTransitionEndListener,
     removeTransitionEndListener
 } from './Transition';
-import { transformProperty } from './Transform';
 import {
     translate,
     supportsTranslate3d
 } from './Translate';
+import { vendorProperty } from './Vendor';
 
 const ESCAPE_KEY_CODE: number = 27;
 const SCROLL_Y_DELTA: number = 50;
@@ -84,7 +84,7 @@ let zoomInListener: EventListener = (event: MouseEvent): void => {
         let src: string = srcAttribute(targetWrapper, target);
 
         if (transform === undefined) {
-            transform = transformProperty(document.body);
+            transform = vendorProperty(document.body, 'transition');
         }
 
         if (transform === null || event.metaKey || event.ctrlKey) {

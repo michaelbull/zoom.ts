@@ -15,3 +15,13 @@ export function vendorProperties(property: string): string[] {
 
     return properties;
 }
+
+export function vendorProperty(element: HTMLElement, property: string): string | null {
+    for (let vendorProperty of vendorProperties(property)) {
+        if (vendorProperty in element.style) {
+            return vendorProperty;
+        }
+    }
+
+    return null;
+}
