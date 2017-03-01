@@ -8,7 +8,7 @@ import {
 import {
     createClone,
     createDiv,
-    scrollY,
+    pageScrollY,
     viewportHeight,
     viewportWidth
 } from './Document';
@@ -41,12 +41,12 @@ let loaded: boolean = false;
 let initialScrollY: number;
 
 let resizeListener: EventListener = (): void => {
-    initialScrollY = scrollY();
+    initialScrollY = pageScrollY();
     scaleContainer();
 };
 
 let scrollListener: EventListener = (): void => {
-    if (Math.abs(initialScrollY - scrollY()) > SCROLL_Y_DELTA) {
+    if (Math.abs(initialScrollY - pageScrollY()) > SCROLL_Y_DELTA) {
         hide();
     }
 };
@@ -175,7 +175,7 @@ function unfreezeWrapperHeight(): void {
 }
 
 function addEventListeners(): void {
-    initialScrollY = scrollY();
+    initialScrollY = pageScrollY();
     listeners.add(window, 'resize', resizeListener);
     listeners.add(window, 'scroll', scrollListener);
     listeners.add(document, 'keyup', keyboardListener);

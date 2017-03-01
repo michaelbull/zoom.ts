@@ -36,7 +36,7 @@ export function viewportHeight(): number {
  * @returns {number} The number of pixels in the document have been scrolled past vertically.
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Window/scrollY#Notes
  */
-export function scrollY(): number {
+export function pageScrollY(): number {
     if (window.pageYOffset === undefined) { // <IE9
         return (document.documentElement || document.body).scrollTop;
     } else {
