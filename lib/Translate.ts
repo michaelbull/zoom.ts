@@ -1,7 +1,4 @@
-import { transformProperty } from './Transform';
-import { ready } from './Document';
-
-const hasTranslate3d: boolean = ready(() => {
+export function supportsTranslate3d(transformProperty: string): boolean {
     if (transformProperty === null || window.getComputedStyle === undefined) {
         return false;
     }
@@ -25,8 +22,8 @@ const hasTranslate3d: boolean = ready(() => {
     document.body.removeChild(element);
 
     return value.length > 0 && value !== 'none';
-});
+}
 
-export function translate(x: number, y: number): string {
-    return hasTranslate3d ? `translate3d(${x}px, ${y}px, 0)` : `translate(${x}px, ${y}px)`;
+export function translate(x: number, y: number, translate3d: boolean): string {
+    return translate3d ? `translate3d(${x}px, ${y}px, 0)` : `translate(${x}px, ${y}px)`;
 }

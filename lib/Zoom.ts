@@ -17,14 +17,16 @@ import {
     addTransitionEndListener,
     removeTransitionEndListener
 } from './Transition';
+import { transformProperty } from './Transform';
 import {
-    transform,
-    transformProperty
-} from './Transform';
-import { translate } from './Translate';
+    translate,
+    supportsTranslate3d
+} from './Translate';
 
 const ESCAPE_KEY_CODE: number = 27;
 const SCROLL_Y_DELTA: number = 50;
+const transform: string | null = transformProperty();
+let translate3d: boolean;
 
 type State = 'collapsed' | 'expanding' | 'expanded' | 'collapsing';
 
@@ -80,7 +82,7 @@ let zoomInListener: EventListener = (event: MouseEvent): void => {
 
         let src: string = srcAttribute(targetWrapper, target);
 
-        if (transformProperty === undefined || event.metaKey || event.ctrlKey) {
+        if (transform === null || event.metaKey || event.ctrlKey) {
             window.open(src, '_blank');
             return;
         }
@@ -143,6 +145,10 @@ function useExistingContainer(parent: HTMLElement, target: HTMLImageElement): vo
 }
 
 function show(): void {
+    if (translate3d === undefined) {
+        translate3d = supportsTranslate3d(transform as string);
+    }
+
     freezeWrapperHeight();
     addOverlay();
     showOverlay();
@@ -222,6 +228,8 @@ function scaleContainer(): void {
     let centreX: number = (viewportWidth() - scaledWidth) / 2;
     let centreY: number = (viewportHeight() - scaledHeight) / 2;
 
+    let style: any = container.style;
+
     if (state === 'expanding' || state === 'collapsing') {
         let offsetX: number = rect.left + (rect.width - scaledWidth) / 2;
         let offsetY: number = rect.top + (rect.height - scaledHeight) / 2;
@@ -229,11 +237,9 @@ function scaleContainer(): void {
         let translateX: number = (centreX - offsetX) / scale;
         let translateY: number = (centreY - offsetY) / scale;
 
-        transform(container, `scale(${scale}) ${translate(translateX, translateY)}`);
+        style[transform as string] = `scale(${scale}) ${translate(translateX, translateY, translate3d)}`;
     } else {
-        transform(container, '');
-
-        let style: CSSStyleDeclaration = container.style;
+        style[transform as string] = '';
         style.left = `${centreX - rect.left}px`;
         style.top = `${centreY - rect.top}px`;
         style.width = `${scaledWidth}px`;
@@ -243,9 +249,8 @@ function scaleContainer(): void {
 }
 
 function resetScale(): void {
-    transform(container, '');
-
-    let style: CSSStyleDeclaration = container.style;
+    let style: any = container.style;
+    style[transform as string] = '';
     style.left = '';
     style.top = '';
     style.width = '';

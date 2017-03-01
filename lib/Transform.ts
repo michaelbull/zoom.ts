@@ -1,6 +1,6 @@
 import { vendorProperties } from './Vendor';
 
-function getTransformProperty(): string | null {
+export function transformProperty(): string | null {
     let properties: string[] = vendorProperties('transform');
     let element: HTMLParagraphElement = document.createElement('p');
 
@@ -11,11 +11,4 @@ function getTransformProperty(): string | null {
     }
 
     return null;
-}
-
-export const transformProperty: string | null = getTransformProperty();
-
-export function transform(element: HTMLElement, value: string): void {
-    let style: any = element.style;
-    style[transformProperty as string] = value;
 }
