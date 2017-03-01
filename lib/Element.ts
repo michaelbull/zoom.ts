@@ -1,8 +1,4 @@
-import { Dimension } from './Dimension';
-import {
-    viewportWidth,
-    viewportHeight
-} from './Document';
+const transform: any = require('transform-property');
 
 const TRANSITION_END_EVENTS: string[] = [
     'transitionend',
@@ -19,11 +15,6 @@ export function repaint(element: HTMLElement): void {
 export function translate(x: number, y: number): string {
     const has3d: boolean = require('has-translate3d');
     return has3d ? `translate3d(${x}px, ${y}px, 0)` : `translate(${x}px, ${y}px)`;
-}
-
-export function dimensions(element: HTMLElement): Dimension {
-    let rect: ClientRect = element.getBoundingClientRect();
-    return new Dimension(rect.left, rect.top, element.clientWidth, element.clientHeight);
 }
 
 export function addTransitionEndListener(element: HTMLElement, listener: EventListener): void {
@@ -65,12 +56,4 @@ export function srcAttribute(wrapper: HTMLElement, image: HTMLImageElement): str
     }
 
     return image.src as string;
-}
-
-export function fillViewportScale(wrapper: HTMLElement, original: Dimension): number {
-    let targetWidth: number = Number(wrapper.getAttribute('data-width') || Infinity);
-    let targetHeight: number = Number(wrapper.getAttribute('data-height') || Infinity);
-    let scaleX: number = Math.min(viewportWidth(), targetWidth) / original.width;
-    let scaleY: number = Math.min(viewportHeight(), targetHeight) / original.height;
-    return Math.min(scaleX, scaleY);
 }

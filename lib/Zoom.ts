@@ -2,19 +2,16 @@ import {
     addTransitionEndListener,
     createClone,
     createDiv,
-    dimensions,
-    fillViewportScale,
     removeTransitionEndListener,
     srcAttribute,
-    translate,
-    repaint
+    repaint,
+    translate
 } from './Element';
 import {
     scrollY,
-    viewportHeight,
-    viewportWidth
+    viewportWidth,
+    viewportHeight
 } from './Document';
-import { Dimension } from './Dimension';
 
 const transform: any = require('transform-property');
 const eventListener: any = require('eventlistener');
@@ -33,7 +30,6 @@ let clone: HTMLImageElement;
 let state: State = 'collapsed';
 let loaded: boolean = false;
 let initialScrollY: number;
-let original: Dimension;
 
 let resizeListener: EventListener = (): void => {
     scaleContainer();
@@ -203,10 +199,17 @@ function repaintContainer(): void {
 }
 
 function scaleContainer(): void {
-    let scale: number = fillViewportScale(wrapper, original);
+    let rect: ClientRect = wrapper.getBoundingClientRect();
 
-    let scaledWidth: number = original.width * scale;
-    let scaledHeight: number = original.height * scale;
+    let targetWidth: number = Number(wrapper.getAttribute('data-width') || Infinity);
+    let targetHeight: number = Number(wrapper.getAttribute('data-height') || Infinity);
+
+    let scaleX: number = Math.min(viewportWidth(), targetWidth) / rect.width;
+    let scaleY: number = Math.min(viewportHeight(), targetHeight) / rect.height;
+    let scale: number = Math.min(scaleX, scaleY);
+
+    let scaledWidth: number = rect.width * scale;
+    let scaledHeight: number = rect.height * scale;
 
     let centreX: number = (viewportWidth() - scaledWidth) / 2;
     let centreY: number = (viewportHeight() - scaledHeight) / 2;
@@ -214,8 +217,8 @@ function scaleContainer(): void {
     let style: CSSStyleDeclaration = container.style;
 
     if (state === 'expanding' || state === 'collapsing') {
-        let offsetX: number = original.left + (original.width - scaledWidth) / 2;
-        let offsetY: number = original.top + (original.height - scaledHeight) / 2;
+        let offsetX: number = rect.left + (rect.width - scaledWidth) / 2;
+        let offsetY: number = rect.top + (rect.height - scaledHeight) / 2;
 
         let translateX: number = (centreX - offsetX) / scale;
         let translateY: number = (centreY - offsetY) / scale;
@@ -223,12 +226,22 @@ function scaleContainer(): void {
         style[transform] = `scale(${scale}) ${translate(translateX, translateY)}`;
     } else {
         style[transform] = '';
-        style.left = `${centreX - original.left}px`;
-        style.top = `${centreY - original.top}px`;
+        style.left = `${centreX - rect.left}px`;
+        style.top = `${centreY - rect.top}px`;
         style.width = `${scaledWidth}px`;
         style.maxWidth = `${scaledWidth}px`;
         style.height = `${scaledHeight}px`;
     }
+}
+
+function resetScale(): void {
+    let style: CSSStyleDeclaration = container.style;
+    style[transform] = '';
+    style.left = '';
+    style.top = '';
+    style.width = '';
+    style.maxWidth = '';
+    style.height = '';
 }
 
 function addOverlay(): void {
@@ -252,9 +265,7 @@ function hideOverlay(): void {
 function expandContainer(): void {
     state = 'expanding';
 
-    original = dimensions(image);
     activateZoom();
-
     addTransitionEndListener(container, finishedExpandingContainer);
     scaleContainer();
 }
@@ -264,14 +275,7 @@ function collapseContainer(): void {
 
     addTransitionEndListener(container, finishedCollapsingContainer);
     repaintContainer();
-
-    let style: CSSStyleDeclaration = container.style;
-    style[transform] = '';
-    style.left = '';
-    style.top = '';
-    style.width = '';
-    style.maxWidth = '';
-    style.height = '';
+    resetScale();
 }
 
 function activateZoom(): void {
