@@ -1,6 +1,7 @@
 import {
     hasTransitions,
-    addTransitionEndListener
+    addTransitionEndListener,
+    removeTransitionEndListener
 } from '../../lib/Transition';
 
 describe('hasTransitions', () => {
@@ -129,23 +130,23 @@ describe('addTransitionEndListener', () => {
             addTransitionEndListener(element, listener);
         });
 
-        it('should listen for the transitionend event', () => {
+        it('should add an event listener for the transitionend event', () => {
             expect(element.addEventListener).toHaveBeenCalledWith('transitionend', listener);
         });
 
-        it('should listen for the WebkitTransitionEnd event', () => {
+        it('should add an event listener for the WebkitTransitionEnd event', () => {
             expect(element.addEventListener).toHaveBeenCalledWith('WebkitTransitionEnd', listener);
         });
 
-        it('should listen for the MozTransitionEnd event', () => {
+        it('should add an event listener for the MozTransitionEnd event', () => {
             expect(element.addEventListener).toHaveBeenCalledWith('MozTransitionEnd', listener);
         });
 
-        it('should listen for the msTransitionEnd event', () => {
+        it('should add an event listener for the msTransitionEnd event', () => {
             expect(element.addEventListener).toHaveBeenCalledWith('msTransitionEnd', listener);
         });
 
-        it('should listen for the OTransitionEnd event', () => {
+        it('should add an event listener for the OTransitionEnd event', () => {
             expect(element.addEventListener).toHaveBeenCalledWith('OTransitionEnd', listener);
         });
     });
@@ -164,5 +165,39 @@ describe('addTransitionEndListener', () => {
             let event: Event = listener.calls.mostRecent().args[0];
             expect(event.type).toBe('transitionend');
         });
+    });
+});
+
+describe('removeEventListener', () => {
+    let element: any;
+    let listener: EventListener;
+
+    beforeAll(() => {
+        element = {
+            removeEventListener: jasmine.createSpy('addEventListener')
+        };
+
+        listener = jasmine.createSpy('EventListener');
+        removeTransitionEndListener(element, listener);
+    });
+
+    it('should remove the event listener for the transitionend event', () => {
+        expect(element.removeEventListener).toHaveBeenCalledWith('transitionend', listener);
+    });
+
+    it('should remove the event listener for the WebkitTransitionEnd event', () => {
+        expect(element.removeEventListener).toHaveBeenCalledWith('WebkitTransitionEnd', listener);
+    });
+
+    it('should remove the event listener for the MozTransitionEnd event', () => {
+        expect(element.removeEventListener).toHaveBeenCalledWith('MozTransitionEnd', listener);
+    });
+
+    it('should remove the event listener for the msTransitionEnd event', () => {
+        expect(element.removeEventListener).toHaveBeenCalledWith('msTransitionEnd', listener);
+    });
+
+    it('should remove the event listener for the OTransitionEnd event', () => {
+        expect(element.removeEventListener).toHaveBeenCalledWith('OTransitionEnd', listener);
     });
 });
