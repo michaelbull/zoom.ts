@@ -49,7 +49,11 @@ describe('hasTranslate3d', () => {
             }
         });
 
-        window.getComputedStyle = jasmine.createSpy('getComputedStyle').and.callFake(() => computedStyle);
+        window.getComputedStyle = jasmine.createSpy('getComputedStyle').and.callFake((elt: any) => {
+            if (elt === child) {
+                return computedStyle;
+            }
+        });
     });
 
     it('should create a child element with a tagName of "div"', () => {

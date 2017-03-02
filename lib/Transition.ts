@@ -25,8 +25,14 @@ export function hasTransitions(element: HTMLElement): boolean {
     }
 
     let style: any = window.getComputedStyle(element);
-    let duration: string = style[property];
-    return duration.length > 0 && parseFloat(duration) !== 0;
+    let value: string = style[property];
+
+    if (value.length < 1) {
+        return false;
+    }
+
+    let duration: number = parseFloat(value);
+    return !isNaN(duration) && duration !== 0;
 }
 
 export function addTransitionEndListener(element: HTMLElement, listener: EventListener): void {
