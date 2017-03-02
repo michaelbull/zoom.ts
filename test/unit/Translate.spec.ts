@@ -21,7 +21,7 @@ describe('hasTranslate3d', () => {
     let child: any;
     let computedStyle: any;
 
-    beforeAll(() => {
+    beforeEach(() => {
         element = {
             insertBefore: jasmine.createSpy('insertBefore'),
             removeChild: jasmine.createSpy('removeChild')
@@ -68,12 +68,12 @@ describe('hasTranslate3d', () => {
     });
 
     it('should compute the style of the child', () => {
-        hasTranslate3d(element, '-o-transform');
+        hasTranslate3d(element, 'OTransform');
         expect(window.getComputedStyle).toHaveBeenCalledWith(child);
     });
 
     it('should remove the child from the element', () => {
-        hasTranslate3d(element, '-ms-transform');
+        hasTranslate3d(element, 'msTransform');
         expect(element.removeChild).toHaveBeenCalledWith(child);
     });
 

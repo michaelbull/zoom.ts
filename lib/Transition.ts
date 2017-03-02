@@ -13,7 +13,7 @@ for (let prefix of vendorPrefixes) {
     transitionEndEvents.push(`${prefix}TransitionEnd`);
 }
 
-function hasTransitions(element: HTMLElement): boolean {
+export function hasTransitions(element: HTMLElement): boolean {
     if (window.getComputedStyle === undefined) {
         return false;
     }
