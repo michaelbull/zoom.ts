@@ -8,7 +8,9 @@ import { addEventListener } from './Events';
  * @see http://youmightnotneedjquery.com/#ready
  */
 export function ready(document: Document, callback: Function): any {
-    if (document.readyState === 'complete') {
+    let state: string = document.readyState;
+
+    if (state === 'interactive' || state === 'complete') {
         return callback();
     } else {
         addEventListener(document, 'DOMContentLoaded', () => callback());
