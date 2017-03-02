@@ -34,6 +34,5 @@ export function removeEventListener(target: any, type: string, listener: EventLi
 }
 
 export function fireEventListener(type: string, listener: EventListener): void {
-    let event: Event = createEvent(type);
-    listener(event);
+    listener(createEvent(type));
 }
