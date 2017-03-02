@@ -50,13 +50,13 @@ let loaded: boolean = false;
 let initialScrollY: number;
 
 let resizeListener: EventListener = (): void => {
-    initialScrollY = pageScrollY();
+    initialScrollY = pageScrollY(window, document);
     rect = wrapper.getBoundingClientRect();
     scaleContainer();
 };
 
 let scrollListener: EventListener = (): void => {
-    if (Math.abs(initialScrollY - pageScrollY()) > SCROLL_Y_DELTA) {
+    if (Math.abs(initialScrollY - pageScrollY(window, document)) > SCROLL_Y_DELTA) {
         hide();
     }
 };
@@ -197,7 +197,7 @@ function unfreezeWrapperHeight(): void {
 }
 
 function addEventListeners(): void {
-    initialScrollY = pageScrollY();
+    initialScrollY = pageScrollY(window, document);
     addEventListener(window, 'resize', resizeListener);
     addEventListener(window, 'scroll', scrollListener);
     addEventListener(document, 'keyup', keyboardListener);
@@ -235,15 +235,18 @@ function repaintContainer(): void {
 }
 
 function scaleContainer(): void {
-    let scaleX: number = Math.min(viewportWidth(), targetWidth) / rect.width;
-    let scaleY: number = Math.min(viewportHeight(), targetHeight) / rect.height;
+    let vWidth: number = viewportWidth(document);
+    let vHeight: number = viewportHeight(document);
+
+    let scaleX: number = Math.min(vWidth, targetWidth) / rect.width;
+    let scaleY: number = Math.min(vHeight, targetHeight) / rect.height;
     let scale: number = Math.min(scaleX, scaleY);
 
     let scaledWidth: number = rect.width * scale;
     let scaledHeight: number = rect.height * scale;
 
-    let centreX: number = (viewportWidth() - scaledWidth) / 2;
-    let centreY: number = (viewportHeight() - scaledHeight) / 2;
+    let centreX: number = (vWidth - scaledWidth) / 2;
+    let centreY: number = (vHeight - scaledHeight) / 2;
 
     let style: any = container.style;
 

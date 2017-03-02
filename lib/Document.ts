@@ -20,7 +20,7 @@ export function ready(document: Document, callback: Function): any {
  * @returns {number} The width (in pixels) of the browser window viewport.
  * @see https://stackoverflow.com/questions/9410088/how-do-i-get-innerwidth-in-internet-explorer-8/9410162#9410162
  */
-export function viewportWidth(): number {
+export function viewportWidth(document: Document): number {
     return (document.documentElement || document.body).clientWidth;
 }
 
@@ -29,7 +29,7 @@ export function viewportWidth(): number {
  * @returns {number} The height (in pixels) of the browser window viewport.
  * @see https://stackoverflow.com/questions/9410088/how-do-i-get-innerwidth-in-internet-explorer-8/9410162#9410162
  */
-export function viewportHeight(): number {
+export function viewportHeight(document: Document): number {
     return (document.documentElement || document.body).clientHeight;
 }
 
@@ -38,7 +38,7 @@ export function viewportHeight(): number {
  * @returns {number} The number of pixels in the document have been scrolled past vertically.
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Window/scrollY#Notes
  */
-export function pageScrollY(): number {
+export function pageScrollY(window: Window, document: Document): number {
     if (window.pageYOffset === undefined) { // <IE9
         return (document.documentElement || document.body).scrollTop;
     } else {
