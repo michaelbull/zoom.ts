@@ -1,7 +1,8 @@
 import {
-    createEvent,
-    listeners
-} from './EventListeners';
+    addEventListener,
+    removeEventListener,
+    createEvent
+} from './Events';
 import {
     vendorPrefixes,
     vendorProperty
@@ -38,7 +39,7 @@ export function hasTransitions(element: HTMLElement): boolean {
 export function addTransitionEndListener(element: HTMLElement, listener: EventListener): void {
     if (hasTransitions(element)) {
         for (let event of transitionEndEvents) {
-            listeners.add(element, event, listener);
+            addEventListener(element, event, listener);
         }
     } else {
         listener(createEvent(transitionEndEvents[0]));
@@ -47,6 +48,6 @@ export function addTransitionEndListener(element: HTMLElement, listener: EventLi
 
 export function removeTransitionEndListener(element: HTMLElement, listener: EventListener): void {
     for (let event of transitionEndEvents) {
-        listeners.remove(element, event, listener);
+        removeEventListener(element, event, listener);
     }
 }

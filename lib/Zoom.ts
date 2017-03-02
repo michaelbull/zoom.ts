@@ -1,4 +1,11 @@
 import {
+    createClone,
+    createDiv,
+    pageScrollY,
+    viewportHeight,
+    viewportWidth
+} from './Document';
+import {
     addClass,
     hasClass,
     removeClass,
@@ -6,13 +13,9 @@ import {
     srcAttribute
 } from './Element';
 import {
-    createClone,
-    createDiv,
-    pageScrollY,
-    viewportHeight,
-    viewportWidth
-} from './Document';
-import { listeners } from './EventListeners';
+    addEventListener,
+    removeEventListener
+} from './Events';
 import {
     addTransitionEndListener,
     removeTransitionEndListener
@@ -120,7 +123,7 @@ let zoomOutListener: EventListener = (): void => {
 };
 
 let finishedLoadingClone: EventListener = (): void => {
-    listeners.remove(clone, 'load', finishedLoadingClone);
+    removeEventListener(clone, 'load', finishedLoadingClone);
     loaded = true;
 
     if (state === 'expanded') {
@@ -193,22 +196,22 @@ function unfreezeWrapperHeight(): void {
 
 function addEventListeners(): void {
     initialScrollY = pageScrollY();
-    listeners.add(window, 'resize', resizeListener);
-    listeners.add(window, 'scroll', scrollListener);
-    listeners.add(document, 'keyup', keyboardListener);
-    listeners.add(container, 'click', zoomOutListener);
+    addEventListener(window, 'resize', resizeListener);
+    addEventListener(window, 'scroll', scrollListener);
+    addEventListener(document, 'keyup', keyboardListener);
+    addEventListener(container, 'click', zoomOutListener);
 }
 
 function removeEventListeners(): void {
-    listeners.remove(window, 'resize', resizeListener);
-    listeners.remove(window, 'scroll', scrollListener);
-    listeners.remove(document, 'keyup', keyboardListener);
-    listeners.remove(container, 'click', zoomOutListener);
+    removeEventListener(window, 'resize', resizeListener);
+    removeEventListener(window, 'scroll', scrollListener);
+    removeEventListener(document, 'keyup', keyboardListener);
+    removeEventListener(container, 'click', zoomOutListener);
 }
 
 function addClone(src: string): void {
     clone = createClone(src);
-    listeners.add(clone, 'load', finishedLoadingClone);
+    addEventListener(clone, 'load', finishedLoadingClone);
     container.appendChild(clone);
 }
 
@@ -324,9 +327,9 @@ function deactivateZoom(): void {
 }
 
 export function start(): void {
-    listeners.add(document.body, 'click', zoomInListener);
+    addEventListener(document.body, 'click', zoomInListener);
 }
 
 export function stop(): void {
-    listeners.remove(document.body, 'click', zoomInListener);
+    addEventListener(document.body, 'click', zoomInListener);
 }

@@ -130,23 +130,23 @@ describe('addTransitionEndListener', () => {
         });
 
         it('should listen for the transitionend event', () => {
-            expect(element.addEventListener).toHaveBeenCalledWith('transitionend', listener, undefined);
+            expect(element.addEventListener).toHaveBeenCalledWith('transitionend', listener);
         });
 
         it('should listen for the WebkitTransitionEnd event', () => {
-            expect(element.addEventListener).toHaveBeenCalledWith('WebkitTransitionEnd', listener, undefined);
+            expect(element.addEventListener).toHaveBeenCalledWith('WebkitTransitionEnd', listener);
         });
 
         it('should listen for the MozTransitionEnd event', () => {
-            expect(element.addEventListener).toHaveBeenCalledWith('MozTransitionEnd', listener, undefined);
+            expect(element.addEventListener).toHaveBeenCalledWith('MozTransitionEnd', listener);
         });
 
         it('should listen for the msTransitionEnd event', () => {
-            expect(element.addEventListener).toHaveBeenCalledWith('msTransitionEnd', listener, undefined);
+            expect(element.addEventListener).toHaveBeenCalledWith('msTransitionEnd', listener);
         });
 
         it('should listen for the OTransitionEnd event', () => {
-            expect(element.addEventListener).toHaveBeenCalledWith('OTransitionEnd', listener, undefined);
+            expect(element.addEventListener).toHaveBeenCalledWith('OTransitionEnd', listener);
         });
     });
 

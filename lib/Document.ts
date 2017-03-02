@@ -1,4 +1,4 @@
-import { listeners } from './EventListeners';
+import { addEventListener } from './Events';
 
 /**
  * Executes a function when the DOM is fully loaded.
@@ -9,7 +9,7 @@ export function ready(callback: Function): any {
     if (document.readyState === 'complete') {
         return callback();
     } else {
-        listeners.add(document, 'DOMContentLoaded', () => callback());
+        addEventListener(document, 'DOMContentLoaded', () => callback());
     }
 }
 
