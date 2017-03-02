@@ -7,21 +7,24 @@ import {
 
 describe('srcAttribute', () => {
     let element: HTMLElement;
-    let image: HTMLImageElement;
 
     beforeEach(() => {
         element = document.createElement('div');
-        image = document.createElement('img');
     });
 
     it('should return the value of the data-src attribute if present', () => {
+        let image: any = {};
+
         element.setAttribute('data-src', 'test-value');
         expect(srcAttribute(element, image)).toBe('test-value');
     });
 
     it('should return the src of the image if the data-src attribute is absent', () => {
-        image.src = 'example-src';
-        expect(srcAttribute(element, image)).toContain('example-src');
+        let image: any = {
+            src: 'example-src'
+        };
+
+        expect(srcAttribute(element, image)).toBe('example-src');
     });
 });
 
