@@ -19,8 +19,8 @@ import {
 } from './Transition';
 import {
     translate,
-    supportsTranslate3d,
-    translate3d
+    translate3d,
+    hasTranslate3d
 } from './Translate';
 import { vendorProperty } from './Vendor';
 
@@ -40,7 +40,7 @@ let targetWidth: number;
 let targetHeight: number;
 
 let transform: string | null;
-let hasTranslate3d: boolean;
+let useTranslate3d: boolean;
 
 let state: State = 'collapsed';
 let loaded: boolean = false;
@@ -98,8 +98,8 @@ let zoomInListener: EventListener = (event: MouseEvent): void => {
             return;
         }
 
-        if (hasTranslate3d === undefined && transform !== null) {
-            hasTranslate3d = supportsTranslate3d(document.body, transform);
+        if (useTranslate3d === undefined && transform !== null) {
+            useTranslate3d = hasTranslate3d(document.body, transform);
         }
 
         wrapper = targetWrapper;
@@ -251,7 +251,7 @@ function scaleContainer(): void {
 
         let translation: string;
 
-        if (hasTranslate3d) {
+        if (useTranslate3d) {
             translation = translate3d(translateX, translateY);
         } else {
             translation = translate(translateX, translateY);

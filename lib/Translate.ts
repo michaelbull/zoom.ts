@@ -6,7 +6,7 @@ export function translate3d(x: number, y: number): string {
     return `translate3d(${x}px, ${y}px, 0)`;
 }
 
-export function supportsTranslate3d(element: HTMLElement, transformProperty: string): boolean {
+export function hasTranslate3d(element: HTMLElement, transformProperty: string): boolean {
     if (window.getComputedStyle === undefined) {
         return false;
     }
