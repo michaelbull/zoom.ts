@@ -49,7 +49,7 @@ that responds to click events on images marked as zoomable.
 import { ready } from 'zoom.ts/lib/Document';
 import { start } from 'zoom.ts/lib/Zoom';
 
-ready(() => {
+ready(document, () => {
     start();
     console.log('zoom.ts started');
 });

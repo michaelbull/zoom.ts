@@ -1,11 +1,13 @@
 import { addEventListener } from './Events';
 
 /**
- * Executes a function when the DOM is fully loaded.
+ * Executes a callback function when a document has finished loading, or immediately if the document has already
+ * finished loading.
+ * @param document The document.
  * @param callback The function to execute.
  * @see http://youmightnotneedjquery.com/#ready
  */
-export function ready(callback: Function): any {
+export function ready(document: Document, callback: Function): any {
     if (document.readyState === 'complete') {
         return callback();
     } else {
