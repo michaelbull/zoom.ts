@@ -1,18 +1,15 @@
 import {
     translate,
-    translate3d,
     hasTranslate3d
 } from '../../lib/Translate';
 
 describe('translate', () => {
-    it('should return the correct value', () => {
-        expect(translate(90, 35)).toBe('translate(90px, 35px)');
+    it('should use translate3d if translate3d is available', () => {
+        expect(translate(50, 120, true)).toBe('translate3d(50px, 120px, 0)');
     });
-});
 
-describe('translate3d', () => {
-    it('should return the correct value', () => {
-        expect(translate3d(50, 120)).toBe('translate3d(50px, 120px, 0)');
+    it('should use translate if translate3d is unavailable', () => {
+        expect(translate(90, 35, false)).toBe('translate(90px, 35px)');
     });
 });
 

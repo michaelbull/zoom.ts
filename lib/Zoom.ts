@@ -22,7 +22,6 @@ import {
 } from './Transition';
 import {
     translate,
-    translate3d,
     hasTranslate3d
 } from './Translate';
 import { vendorProperty } from './Vendor';
@@ -257,15 +256,7 @@ function scaleContainer(): void {
         let translateX: number = (centreX - offsetX) / scale;
         let translateY: number = (centreY - offsetY) / scale;
 
-        let translation: string;
-
-        if (useTranslate3d) {
-            translation = translate3d(translateX, translateY);
-        } else {
-            translation = translate(translateX, translateY);
-        }
-
-        style[transform as string] = `scale(${scale}) ${translation}`;
+        style[transform as string] = `scale(${scale}) ${translate(translateX, translateY, useTranslate3d)}`;
     } else {
         style[transform as string] = '';
         style.left = `${centreX - rect.left}px`;

@@ -1,9 +1,5 @@
-export function translate(x: number, y: number): string {
-    return `translate(${x}px, ${y}px)`;
-}
-
-export function translate3d(x: number, y: number): string {
-    return `translate3d(${x}px, ${y}px, 0)`;
+export function translate(x: number, y: number, use3d: boolean): string {
+    return use3d ? `translate3d(${x}px, ${y}px, 0)` : `translate(${x}px, ${y}px)`;
 }
 
 export function hasTranslate3d(element: HTMLElement, transformProperty: string): boolean {
