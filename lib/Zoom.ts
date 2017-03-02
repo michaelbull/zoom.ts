@@ -68,6 +68,10 @@ let keyboardListener: EventListener = (event: KeyboardEvent): void => {
 };
 
 let zoomInListener: EventListener = (event: MouseEvent): void => {
+    if (state !== 'collapsed') {
+        return;
+    }
+
     let target: EventTarget = event.target;
 
     if (target instanceof HTMLImageElement && hasClass(target, 'zoom__element')) {
@@ -85,10 +89,6 @@ let zoomInListener: EventListener = (event: MouseEvent): void => {
 
         let containerExists: boolean = hasClass(parent, 'zoom__container');
         let targetWrapper: HTMLElement = containerExists ? grandParent : parent;
-
-        if (hasClass(targetWrapper, 'zoom--active')) {
-            return;
-        }
 
         let src: string = srcAttribute(targetWrapper, target);
 
@@ -143,6 +143,8 @@ let finishedExpandingContainer: EventListener = (): void => {
 };
 
 let finishedCollapsingContainer: EventListener = (): void => {
+    state = 'collapsed';
+
     removeTransitionEndListener(container, finishedCollapsingContainer);
     removeOverlay();
     deactivateZoom();
