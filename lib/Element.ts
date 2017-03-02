@@ -18,7 +18,11 @@ export function hasClass(element: HTMLElement, name: string): boolean {
 }
 
 export function addClass(element: HTMLElement, name: string): void {
-    element.className += ` ${name}`;
+    if (element.className.length === 0) {
+        element.className = name;
+    } else {
+        element.className += ` ${name}`;
+    }
 }
 
 export function removeClass(element: HTMLElement, name: string): void {
