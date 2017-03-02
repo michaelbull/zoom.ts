@@ -47,10 +47,10 @@ that responds to click events on images marked as zoomable.
 
 ```typescript
 import { ready } from 'zoom.ts/lib/Document';
-import { start } from 'zoom.ts/lib/Zoom';
+import { startListening } from 'zoom.ts/lib/Zoom';
 
 ready(document, () => {
-    start();
+    startListening();
     console.log('zoom.ts started');
 });
 ```

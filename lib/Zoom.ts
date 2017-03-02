@@ -67,10 +67,6 @@ let keyboardListener: EventListener = (event: KeyboardEvent): void => {
 };
 
 let zoomInListener: EventListener = (event: MouseEvent): void => {
-    if (state !== 'collapsed') {
-        return;
-    }
-
     let target: EventTarget = event.target;
 
     if (target instanceof HTMLImageElement && hasClass(target, 'zoom__element')) {
@@ -97,23 +93,24 @@ let zoomInListener: EventListener = (event: MouseEvent): void => {
 
         if (transform === null || event.metaKey || event.ctrlKey) {
             window.open(src, '_blank');
-            return;
-        }
-
-        if (useTranslate3d === undefined && transform !== null) {
-            useTranslate3d = hasTranslate3d(document.body, transform);
-        }
-
-        wrapper = targetWrapper;
-
-        if (containerExists) {
-            useExistingContainer(parent, target);
         } else {
-            addContainer(target);
-            addClone(src);
-        }
+            stopListening();
 
-        show();
+            if (useTranslate3d === undefined && transform !== null) {
+                useTranslate3d = hasTranslate3d(document.body, transform);
+            }
+
+            wrapper = targetWrapper;
+
+            if (containerExists) {
+                useExistingContainer(parent, target);
+            } else {
+                addContainer(target);
+                addClone(src);
+            }
+
+            show();
+        }
     }
 };
 
@@ -147,6 +144,7 @@ let finishedCollapsingContainer: EventListener = (): void => {
     removeTransitionEndListener(container, finishedCollapsingContainer);
     removeOverlay();
     deactivateZoom();
+    startListening();
 };
 
 function addContainer(target: HTMLImageElement): void {
@@ -322,10 +320,10 @@ function deactivateZoom(): void {
     removeClass(image, 'zoom__element--active');
 }
 
-export function start(): void {
+export function startListening(): void {
     addEventListener(document.body, 'click', zoomInListener);
 }
 
-export function stop(): void {
-    addEventListener(document.body, 'click', zoomInListener);
+export function stopListening(): void {
+    removeEventListener(document.body, 'click', zoomInListener);
 }
