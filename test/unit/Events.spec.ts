@@ -1,6 +1,7 @@
 import {
     addEventListener,
-    removeEventListener
+    removeEventListener,
+    fireEventListener
 } from '../../lib/Events';
 
 describe('addEventListener', () => {
@@ -61,5 +62,16 @@ describe('removeEventListener', () => {
 
         removeEventListener(element, 'click', listener);
         expect(element.detachEvent).toHaveBeenCalled();
+    });
+});
+
+describe('fireEventListener', () => {
+    it('should call the listener with a new event', () => {
+        let listener: any = jasmine.createSpy('EventLister');
+
+        fireEventListener('example', listener);
+
+        let event: Event = listener.calls.mostRecent().args[0];
+        expect(listener).toHaveBeenCalledWith(event);
     });
 });

@@ -13,17 +13,7 @@ function call(target: any, type: string, listener: EventListener, standard: stri
     }
 }
 
-export function addEventListener(target: any, type: string, listener: EventListener): void {
-    if (!call(target, type, listener, 'addEventListener', 'attachEvent')) {
-        listener(createEvent(type)); // fire immediately
-    }
-}
-
-export function removeEventListener(target: any, type: string, listener: EventListener): void {
-    call(target, type, listener, 'removeEventListener', 'detachEvent');
-}
-
-export function createEvent(type: string): Event {
+function createEvent(type: string): Event {
     if (typeof(Event) === 'function') {
         return new Event(type);
     } else {
@@ -31,4 +21,19 @@ export function createEvent(type: string): Event {
         event.initEvent(type, false, false);
         return event;
     }
+}
+
+export function addEventListener(target: any, type: string, listener: EventListener): void {
+    if (!call(target, type, listener, 'addEventListener', 'attachEvent')) {
+        fireEventListener(type, listener);
+    }
+}
+
+export function removeEventListener(target: any, type: string, listener: EventListener): void {
+    call(target, type, listener, 'removeEventListener', 'detachEvent');
+}
+
+export function fireEventListener(type: string, listener: EventListener): void {
+    let event: Event = createEvent(type);
+    listener(event);
 }
