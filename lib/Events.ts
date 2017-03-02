@@ -1,12 +1,12 @@
 function call(target: any, type: string, listener: EventListener, standard: string, fallback: string): boolean {
-    let standardFunction: any = target[standard];
-    let fallbackFunction: any = target[fallback];
+    let standardFn: any = target[standard];
+    let fallbackFn: any = target[fallback];
 
-    if (standardFunction !== undefined) {
-        standardFunction(type, listener);
+    if (standardFn !== undefined) {
+        standardFn(type, listener);
         return true;
-    } else if (fallbackFunction !== undefined) {
-        fallbackFunction(`on${type}`, listener);
+    } else if (fallbackFn !== undefined) {
+        fallbackFn(`on${type}`, listener);
         return true;
     } else {
         return false;
