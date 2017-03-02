@@ -1,4 +1,12 @@
-export function supportsTranslate3d(transformProperty: string): boolean {
+export function translate(x: number, y: number): string {
+    return `translate(${x}px, ${y}px)`;
+}
+
+export function translate3d(x: number, y: number): string {
+    return `translate3d(${x}px, ${y}px, 0)`;
+}
+
+export function supportsTranslate3d(element: HTMLElement, transformProperty: string): boolean {
     if (window.getComputedStyle === undefined) {
         return false;
     }
@@ -11,23 +19,19 @@ export function supportsTranslate3d(transformProperty: string): boolean {
         transform: 'transform'
     };
 
-    let element: HTMLDivElement = document.createElement('div');
-    let style: any = element.style;
+    if (!(transformProperty in map)) {
+        return false;
+    }
 
-    style[transformProperty as string] = 'translate3d(1px,1px,1px)';
-    document.body.insertBefore(element, null);
+    let child: HTMLDivElement = document.createElement('div');
+    let style: any = child.style;
 
-    let computedStyle: CSSStyleDeclaration = window.getComputedStyle(element);
+    style[transformProperty] = 'translate3d(1px,1px,1px)';
+    element.insertBefore(child, null);
+
+    let computedStyle: CSSStyleDeclaration = window.getComputedStyle(child);
     let value: string = computedStyle.getPropertyValue(map[transformProperty as string]);
-    document.body.removeChild(element);
+    element.removeChild(child);
 
     return value.length > 0 && value !== 'none';
-}
-
-export function translate3d(x: number, y: number): string {
-    return `translate3d(${x}px, ${y}px, 0)`;
-}
-
-export function translate(x: number, y: number): string {
-    return `translate(${x}px, ${y}px)`;
 }

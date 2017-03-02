@@ -1,7 +1,7 @@
 var path = require('path'),
     webpackConfig = require('../webpack.config');
 
-webpackConfig.devtool = '#inline-source-map';
+webpackConfig.devtool = '#eval';
 
 module.exports = function (config) {
     config.set({
