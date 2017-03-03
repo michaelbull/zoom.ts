@@ -128,9 +128,9 @@ let finishedLoadingClone: EventListener = (): void => {
 };
 
 let finishedExpandingContainer: EventListener = (): void => {
-    state = 'expanded';
-
     removeTransitionEndListener(container, finishedExpandingContainer);
+
+    state = 'expanded';
     repaintContainer();
 
     if (loaded) {
@@ -139,9 +139,9 @@ let finishedExpandingContainer: EventListener = (): void => {
 };
 
 let finishedCollapsingContainer: EventListener = (): void => {
-    state = 'collapsed';
-
     removeTransitionEndListener(container, finishedCollapsingContainer);
+
+    state = 'collapsed';
     removeOverlay();
     deactivateZoom();
     startListening();
@@ -290,7 +290,6 @@ function showOverlay(): void {
 
 function hideOverlay(): void {
     removeClass(overlay, 'zoom__overlay--visible');
-    removeTransitionEndListener(container, finishedExpandingContainer);
 }
 
 function expandContainer(): void {
@@ -303,8 +302,11 @@ function expandContainer(): void {
 }
 
 function collapseContainer(): void {
-    state = 'collapsing';
+    if (state === 'expanding') {
+        removeTransitionEndListener(container, finishedExpandingContainer);
+    }
 
+    state = 'collapsing';
     addTransitionEndListener(container, finishedCollapsingContainer);
     repaintContainer();
     resetScale();
