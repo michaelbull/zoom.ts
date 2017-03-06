@@ -306,6 +306,10 @@ function collapseContainer(): void {
         removeTransitionEndListener(container, finishedExpandingContainer);
     }
 
+    if (!loaded) {
+        removeEventListener(clone, 'load', finishedLoadingClone);
+    }
+
     state = 'collapsing';
     addTransitionEndListener(container, finishedCollapsingContainer);
     repaintContainer();
