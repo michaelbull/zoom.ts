@@ -164,6 +164,6 @@ describe('createClone', () => {
     });
 
     it('should set the src', () => {
-        expect(createClone('clone-src').src).toContain('clone-src');
+        expect(createClone('/img/forest.jpg').src).toContain('/img/forest.jpg');
     });
 });
