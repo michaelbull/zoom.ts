@@ -58,21 +58,21 @@ ready(document, () => {
 ## Usage
 
 1. Add the class `zoom__element` to your `<img>`.
-2. Wrap your `<img>` in a `div` with a class of `zoom` (i.e.
-`<div class="zoom">`)
+2. Wrap your `<img>` in a block-level element with a class of `zoom` (e.g.
+`<figure class="zoom">`)
 3. A width and height can be configured to specify the dimensions that the
 expanded image should size to by add the `data-width` and `data-height`
-attributes to the wrapper `div`.
+attributes to the wrapper element.
 4. The loading of a big image can be deferred by adding the `data-src` attribute
-to the wrapper `div`.
+to the wrapper element (e.g. `<figure class="zoom" data-src="img/big-image.jpg">`).
 
 ```html
 <!DOCTYPE html>
 <html>
   <body>
-    <div class="zoom" data-width="3500" data-height="2333" data-src="img/forest-full.jpg">
+    <figure class="zoom" data-width="3500" data-height="2333" data-src="img/forest-full.jpg">
       <img class="zoom__element" src="img/forest.jpg">
-    </div>
+    </figure>
 
     <script type="text/javascript" src="dist/zoom.js"></script>
   </body>
