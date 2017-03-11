@@ -29,7 +29,12 @@ import { vendorProperty } from './Vendor';
 const ESCAPE_KEY_CODE: number = 27;
 const SCROLL_Y_DELTA: number = 50;
 
-type State = 'collapsed' | 'expanding' | 'expanded' | 'collapsing';
+const enum State {
+    Collapsed,
+    Expanding,
+    Expanded,
+    Collapsing
+}
 
 let overlay: HTMLDivElement = createDiv('zoom__overlay');
 let wrapper: HTMLElement;
@@ -44,7 +49,7 @@ let targetHeight: number;
 let transform: string | null;
 let useTranslate3d: boolean;
 
-let state: State = 'collapsed';
+let state: State = State.Collapsed;
 let loaded: boolean = false;
 let initialScrollY: number;
 
@@ -122,7 +127,7 @@ let finishedLoadingClone: EventListener = (): void => {
     removeEventListener(clone, 'load', finishedLoadingClone);
     loaded = true;
 
-    if (state === 'expanded') {
+    if (state === State.Expanded) {
         showClone();
     }
 };
@@ -130,7 +135,7 @@ let finishedLoadingClone: EventListener = (): void => {
 let finishedExpandingContainer: EventListener = (): void => {
     removeTransitionEndListener(container, finishedExpandingContainer);
 
-    state = 'expanded';
+    state = State.Expanded;
     repaintContainer();
 
     if (loaded) {
@@ -141,7 +146,7 @@ let finishedExpandingContainer: EventListener = (): void => {
 let finishedCollapsingContainer: EventListener = (): void => {
     removeTransitionEndListener(container, finishedCollapsingContainer);
 
-    state = 'collapsed';
+    state = State.Collapsed;
     removeOverlay();
     deactivateZoom();
     startListening();
@@ -247,7 +252,7 @@ function scaleContainer(): void {
 
     let style: any = container.style;
 
-    if (state === 'expanding' || state === 'collapsing') {
+    if (state === State.Expanding || state === State.Collapsing) {
         let offsetX: number = rect.left + (rect.width - scaledWidth) / 2;
         let offsetY: number = rect.top + (rect.height - scaledHeight) / 2;
 
@@ -293,7 +298,7 @@ function hideOverlay(): void {
 }
 
 function expandContainer(): void {
-    state = 'expanding';
+    state = State.Expanding;
 
     rect = wrapper.getBoundingClientRect();
     activateZoom();
@@ -302,7 +307,7 @@ function expandContainer(): void {
 }
 
 function collapseContainer(): void {
-    if (state === 'expanding') {
+    if (state === State.Expanding) {
         removeTransitionEndListener(container, finishedExpandingContainer);
     }
 
@@ -310,7 +315,7 @@ function collapseContainer(): void {
         removeEventListener(clone, 'load', finishedLoadingClone);
     }
 
-    state = 'collapsing';
+    state = State.Collapsing;
     addTransitionEndListener(container, finishedCollapsingContainer);
     repaintContainer();
     resetScale();
