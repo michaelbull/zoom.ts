@@ -1,5 +1,16 @@
 import { addEventListener } from './Events';
 
+export const QUIRKS_MODE: string = 'BackCompat';
+export const STANDARDS_MODE: string = 'CSS1Compat';
+
+export function isStandardsMode(document: Document): boolean {
+    return document.compatMode === STANDARDS_MODE;
+}
+
+export function rootElement(document: Document): HTMLElement {
+    return isStandardsMode(document) ? document.documentElement : document.body;
+}
+
 /**
  * Executes a callback function when a document has finished loading, or immediately if the document has already
  * finished loading.
@@ -18,43 +29,25 @@ export function ready(document: Document, callback: Function): any {
 }
 
 /**
- * Calculates the width (in pixels) of the browser window viewport.
- * @returns {number} The width (in pixels) of the browser window viewport.
- * @see https://stackoverflow.com/questions/9410088/how-do-i-get-innerwidth-in-internet-explorer-8/9410162#9410162
- */
-export function viewportWidth(document: Document): number {
-    return (document.documentElement || document.body).clientWidth;
-}
-
-/**
- * Calculates the height (in pixels) of the browser window viewport.
- * @returns {number} The height (in pixels) of the browser window viewport.
- * @see https://stackoverflow.com/questions/9410088/how-do-i-get-innerwidth-in-internet-explorer-8/9410162#9410162
- */
-export function viewportHeight(document: Document): number {
-    return (document.documentElement || document.body).clientHeight;
-}
-
-/**
  * Calculates the number of pixels in the document have been scrolled past vertically.
  * @returns {number} The number of pixels in the document have been scrolled past vertically.
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Window/scrollY#Notes
  */
 export function pageScrollY(window: Window, document: Document): number {
     if (window.pageYOffset === undefined) { // <IE9
-        return (document.documentElement || document.body).scrollTop;
+        return rootElement(document).scrollTop;
     } else {
         return window.pageYOffset;
     }
 }
 
-export function createDiv(className: string): HTMLDivElement {
+export function createDiv(document: Document, className: string): HTMLDivElement {
     let overlay: HTMLDivElement = document.createElement('div');
     overlay.className = className;
     return overlay;
 }
 
-export function createClone(src: string): HTMLImageElement {
+export function createClone(document: Document, src: string): HTMLImageElement {
     let clone: HTMLImageElement = document.createElement('img');
     clone.className = 'zoom__clone';
     clone.src = src;

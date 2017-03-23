@@ -16,8 +16,7 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            { pattern: 'spec-bundle.ts', watched: false },
-            { pattern: path.resolve(__dirname, '..', 'img', '*'), watched: false, included: false }
+            { pattern: 'spec-bundle.ts', watched: false }
         ],
 
         // mime types
@@ -29,10 +28,6 @@ module.exports = function (config) {
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
             'spec-bundle.ts': ['webpack']
-        },
-
-        proxies: {
-            '/img/': '/base/img/'
         },
 
         // test results reporter to use

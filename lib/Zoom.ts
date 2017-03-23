@@ -2,8 +2,7 @@ import {
     createClone,
     createDiv,
     pageScrollY,
-    viewportHeight,
-    viewportWidth
+    rootElement
 } from './Document';
 import {
     addClass,
@@ -36,7 +35,7 @@ const enum State {
     Collapsing
 }
 
-let overlay: HTMLDivElement = createDiv('zoom__overlay');
+let overlay: HTMLDivElement = createDiv(document, 'zoom__overlay');
 let wrapper: HTMLElement;
 let container: HTMLElement;
 let image: HTMLImageElement;
@@ -154,7 +153,7 @@ let finishedCollapsingContainer: EventListener = (): void => {
 
 function addContainer(target: HTMLImageElement): void {
     image = target.cloneNode(true) as HTMLImageElement;
-    container = createDiv('zoom__container');
+    container = createDiv(document, 'zoom__container');
     container.appendChild(image);
     wrapper.replaceChild(container, target);
 }
@@ -214,7 +213,7 @@ function removeEventListeners(): void {
 }
 
 function addClone(src: string): void {
-    clone = createClone(src);
+    clone = createClone(document, src);
     addEventListener(clone, 'load', finishedLoadingClone);
     container.appendChild(clone);
 }
@@ -237,18 +236,19 @@ function repaintContainer(): void {
 }
 
 function scaleContainer(): void {
-    let vWidth: number = viewportWidth(document);
-    let vHeight: number = viewportHeight(document);
+    let root: HTMLElement = rootElement(document);
+    let viewportWidth: number = root.clientWidth;
+    let viewportHeight: number = root.clientHeight;
 
-    let scaleX: number = Math.min(vWidth, targetWidth) / rect.width;
-    let scaleY: number = Math.min(vHeight, targetHeight) / rect.height;
+    let scaleX: number = Math.min(viewportWidth, targetWidth) / rect.width;
+    let scaleY: number = Math.min(viewportHeight, targetHeight) / rect.height;
     let scale: number = Math.min(scaleX, scaleY);
 
     let scaledWidth: number = rect.width * scale;
     let scaledHeight: number = rect.height * scale;
 
-    let centreX: number = (vWidth - scaledWidth) / 2;
-    let centreY: number = (vHeight - scaledHeight) / 2;
+    let centreX: number = (viewportWidth - scaledWidth) / 2;
+    let centreY: number = (viewportHeight - scaledHeight) / 2;
 
     let style: any = container.style;
 
