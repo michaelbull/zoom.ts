@@ -300,7 +300,7 @@ function hideOverlay(): void {
 function expandContainer(): void {
     state = State.Expanding;
 
-    rect = wrapper.getBoundingClientRect();
+    rect = image.getBoundingClientRect();
     activateZoom();
     addTransitionEndListener(container, finishedExpandingContainer);
     scaleContainer();
