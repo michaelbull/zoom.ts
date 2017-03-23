@@ -1,7 +1,7 @@
 import {
     addEventListener,
-    removeEventListener,
-    fireEventListener
+    fireEventListener,
+    removeEventListener
 } from '../../lib/Events';
 
 describe('addEventListener', () => {

@@ -1,10 +1,10 @@
 import {
-    ready,
-    viewportWidth,
-    viewportHeight,
-    pageScrollY,
+    createClone,
     createDiv,
-    createClone
+    pageScrollY,
+    ready,
+    viewportHeight,
+    viewportWidth
 } from '../../lib/Document';
 
 describe('ready', () => {

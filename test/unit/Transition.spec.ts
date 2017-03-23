@@ -1,6 +1,6 @@
 import {
-    hasTransitions,
     addTransitionEndListener,
+    hasTransitions,
     removeTransitionEndListener
 } from '../../lib/Transition';
 

@@ -1,8 +1,8 @@
 import {
-    srcAttribute,
-    hasClass,
     addClass,
-    removeClass
+    hasClass,
+    removeClass,
+    srcAttribute
 } from '../../lib/Element';
 
 describe('srcAttribute', () => {

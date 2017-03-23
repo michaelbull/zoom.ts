@@ -1,6 +1,6 @@
 import {
-    vendorProperties,
     vendorPrefixes,
+    vendorProperties,
     vendorProperty
 } from '../../lib/Vendor';
 

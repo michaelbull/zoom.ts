@@ -21,8 +21,8 @@ import {
     removeTransitionEndListener
 } from './Transition';
 import {
-    translate,
-    hasTranslate3d
+    hasTranslate3d,
+    translate
 } from './Translate';
 import { vendorProperty } from './Vendor';
 

@@ -1,6 +1,6 @@
 import {
-    translate,
-    hasTranslate3d
+    hasTranslate3d,
+    translate
 } from '../../lib/Translate';
 
 describe('translate', () => {
