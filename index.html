@@ -7,50 +7,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="shortcut icon" href="img/favicon.ico">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|PT+Serif" rel="stylesheet">
 
     <style>
       body {
-        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        font-size: 1rem;
+        margin: 0;
+        padding-bottom: 8rem;
+        font-family: 'PT Serif', serif;
+        font-size: 1.25rem;
         line-height: 1.6;
-        margin: 0;
+        letter-spacing: 0.01em;
+        color: rgba(0, 0, 0, 0.8);
       }
 
-      main {
-        display: block;
-        margin-left: 16px;
-        margin-right: 16px;
-      }
-
-      @media (min-width: 632px) {
-        main {
-          margin-right: auto;
-          margin-left: auto;
-          max-width: 600px;
-        }
-      }
-
-      p {
-        margin-top: 1em;
-        margin-bottom: 1em;
-      }
-
-      figure {
-        margin: 0;
-      }
-
-      figcaption {
+      h1 {
         text-align: center;
-      }
-
-      figcaption a {
-        font-size: 12px;
-        font-weight: 300;
-        color: rgba(0, 0, 0, 0.6);
+        margin: 0 auto 6rem;
       }
 
       .logo {
         max-width: 100%;
+      }
+
+      .column {
+        max-width: 740px;
+        margin: 0 auto;
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      p {
+        margin-top: 0;
+        margin-bottom: 2rem;
+        max-width: 700px;
+      }
+
+      h2, h3 {
+        margin-top: 1.75em;
+        margin-bottom: 0.35em;
+
+        max-width: 700px;
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 700;
+        line-height: 1.04;
+      }
+
+      h2 {
+        margin-left: -2.5px;
+        font-size: 2.25rem;
+        letter-spacing: -0.05em;
+      }
+
+      h3 {
+        margin-left: -1.5px;
+        font-size: 1.3125rem;
+        letter-spacing: -0.018em;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 50%, rgba(0, 0, 0, 0) 50%);
+        background-repeat: repeat-x;
+        background-size: 2px 0.1em;
+        background-position: 0 1.25em;
+      }
+
+      figure {
+        text-align: center;
+        margin: 3.25rem auto;
+        max-width: 1000px;
+      }
+
+      figcaption a {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 0.75rem;
+        color: rgba(0, 0, 0, 0.6);
+      }
+
+      hr {
+        display: block;
+        box-sizing: content-box;
+        margin-top: 56px;
+        margin-bottom: 38px;
+        border: 0;
+        height: 0;
+        text-align: center;
+      }
+
+      hr::before {
+        display: inline-block;
+        position: relative;
+        top: -30px;
+        margin-left: 0.6em;
+
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 400;
+        font-size: 1.25rem;
+        letter-spacing: 0.875em;
+        color: rgba(0, 0, 0, 0.6);
+        content: '...';
       }
 
       .pull-left, .pull-right {
@@ -59,18 +115,43 @@
 
       .pull-left {
         float: left;
-        margin: 20px 20px 20px -80px;
+        margin: 10px 30px 10px -150px;
       }
 
       .pull-right {
         float: right;
-        margin: 20px -80px 20px 20px;
+        margin: 10px -150px 10px 30px;
       }
 
-      @media (max-width: 860px) {
+      @media (max-width: 767px) {
+        body {
+          font-size: 1.125rem;
+          line-height: 1.5;
+          letter-spacing: 0;
+        }
+
+        figure {
+          margin-left: 0;
+          margin-right: 0;
+          max-width: none;
+        }
+
+        h2 {
+          font-size: 1.75rem;
+          margin-left: -2px;
+          letter-spacing: -0.028em;
+        }
+
+        h3 {
+          margin-left: -1.38px;
+          font-size: 1.25rem;
+        }
+      }
+
+      @media (max-width: 900px) {
         .pull-left, .pull-right {
           float: none;
-          margin: 0;
+          margin: 3.25rem 0;
           max-width: none;
           text-align: center;
         }
@@ -82,61 +163,91 @@
 
   <body>
     <main>
-      <header>
-        <img class="logo" src="img/logo.png">
-      </header>
+      <h1><img class="logo" src="img/logo.png" alt="zoom.ts"></h1>
 
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque euismod elit eu lacus luctus, eget maximus augue viverra. Ut sed lectus eros. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Ut nec feugiat nunc. Etiam et elit vel odio consectetur lacinia nec ut felis. Nulla facilisi. Duis sodales mattis sem, ac consectetur eros tempor vitae. Phasellus eget lorem justo. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque quis placerat sem. Pellentesque at consectetur metus. Nullam a elit at libero rhoncus laoreet. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <div class="column">
+        <h2>Introduction</h2>
+        <p><strong>zoom.ts</strong> is a a lightweight TypeScript library for image zooming, as seen on <a href="https://medium.design/image-zoom-on-medium-24d146fc0c20" target="_blank">Medium</a>. It easily plugs into your application and starts listening to zoom events as soon as the DOM is ready. The library accounts for just 4kB of bandwidth once gzipped and requires no third-party libraries.</p>
+
+        <h3>Click to zoom</h3>
+        <p>A click will start a seamless animation into an immersive, full-screen view. Holding either the <kbd>⌘</kbd> or <kbd>Ctrl</kbd> key will open the image in a new tab when clicked.</p>
+      </div>
 
       <figure>
-        <div class="zoom" data-width="2896" data-height="1931" data-src="https://cdn-images-1.medium.com/1*gi__K5OpNKtUmKEs2LtqUw.jpeg">
-          <img class="zoom__element" src="https://cdn-images-1.medium.com/max/600/1*gi__K5OpNKtUmKEs2LtqUw.jpeg">
+        <div class="zoom" data-width="2896" data-height="1931" data-src="img/beach-full.jpeg">
+          <img class="zoom__element" src="img/beach.jpeg">
         </div>
         <figcaption>
           <a href="http://medium.com/@nick" target="_blank">@nick</a>
         </figcaption>
       </figure>
 
-      <p>Aliquam tincidunt convallis vestibulum. Aliquam placerat massa laoreet placerat sagittis. Nulla non mauris eu sem finibus bibendum at iaculis nibh. Aenean pretium augue id tellus ullamcorper, eget egestas nunc sagittis. Quisque tempor arcu dui, vel venenatis tellus molestie in. Proin ut enim nunc. Nam placerat quis eros ut aliquet. Nam nec lectus sapien. Sed aliquam lectus eget vehicula vehicula. Phasellus diam est, dignissim et semper eget, aliquet a nunc. Integer eget ante at ante rutrum fermentum. Proin elit nibh, fermentum vel maximus ut, bibendum in ante. Nam vehicula laoreet sagittis.</p>
-      <p>Nam dignissim mollis ipsum quis iaculis. Nullam quam quam, pharetra sed ipsum ac, varius ullamcorper nibh. Sed varius mi vel arcu aliquam iaculis. Mauris mattis tellus quis congue condimentum. Vestibulum ac massa a leo sodales condimentum. Phasellus dictum eros eget eleifend varius. Fusce ut pulvinar nisl. Nulla nunc augue, suscipit iaculis rhoncus in, lobortis id odio. Integer ut felis mollis, eleifend neque at, eleifend tellus.</p>
+      <div class="column">
+        <h3>Don’t lose your place</h3>
+        <p>Your progress through a story is important. When you interact with images we maintain your scroll position and make it apparent that your state has not changed. We simultaneously fade out the content and zoom the image for a smooth visual experience.</p>
+
+        <h3>Take me home</h3>
+        <p>You can press <kbd>Esc</kbd> or click anywhere on the image to exit the zoomed state, or, more interestingly, just scroll away as if you were continuing past the image. Give it a try:</p>
+      </div>
 
       <figure>
-        <div class="zoom" data-width="2048" data-height="1366" data-src="https://cdn-images-1.medium.com/1*yU6ohp6hzf0NN5mGh8dvEQ.jpeg">
-          <img class="zoom__element" src="https://cdn-images-1.medium.com/max/600/1*yU6ohp6hzf0NN5mGh8dvEQ.jpeg">
+        <div class="zoom" data-width="2048" data-height="1366" data-src="img/tower-full.jpeg">
+          <img class="zoom__element" src="img/tower.jpeg">
         </div>
-        <figcaption >
+        <figcaption>
           <a href="https://medium.com/@dpup" target="_blank">@dpup</a>
         </figcaption>
       </figure>
 
-      <p>Accusamus debitis delectus doloribus in labore magni necessitatibus nisi officiis sit voluptas. Aspernatur dolore dolorem fugit magni minima nam qui temporibus voluptatibus?</p>
-      <p>A adipisci aliquam blanditiis consequuntur debitis, dolore doloremque doloribus, eligendi eveniet expedita, explicabo fugiat minima neque odit perferendis recusandae sit ullam voluptate.</p>
-      <p>Atque consectetur dolore dolorum eius error ex fugiat ipsam labore maiores maxime natus neque nulla perspiciatis provident quo ratione rem ullam, voluptas.</p>
-      <p>Alias aliquam, aliquid dolor ea expedita facere fugit illum maxime nihil quod reprehenderit sunt, vel, vero voluptatem voluptatum! Consequuntur exercitationem laudantium vero? Consequuntur corporis, culpa dolore eligendi eos facere fugiat illum impedit inventore laborum molestiae mollitia nihil perferendis quam quasi quos rem repudiandae sequi!</p>
+      <div class="column">
+        <h3>Ready when you are</h3>
+        <p>Another significant detail is the lack of loading indicators — we’re always ready to zoom. We prepare all images to zoom right after the content has loaded. If the full-size image isn’t loaded, we transition the original image and replace it when the detailed image is ready. We don’t allow your connection speed to affect the animation, creating an ultra-snappy interaction. More often than not, the images are swapped before the transition comes to an end.</p>
 
-      <div class="pull-left">
-        <figure class="zoom" data-width="3500" data-height="2333" data-src="img/forest-full.jpg">
-          <img class="zoom__element" src="img/forest.jpg">
-        </figure>
+        <hr />
+
+        <div class="pull-right">
+          <figure class="zoom" data-width="3500" data-height="2333" data-src="img/forest-full.jpg">
+            <img class="zoom__element" src="img/forest.jpg">
+          </figure>
+        </div>
+
+        <p>Image’s come a variety of sizes, as such <strong>zoom.ts</strong> adapts to wherever you place your image on the page and repositions the image if the browser is resized whilst an image is expanded.</p>
+        <p>You may wish to justify your image to align it with the flow of text, avoiding the thematic break that typical block spaced images produce. The zooming experience doesn’t change for these cases.</p>
+
+        <hr />
+
+        <div class="pull-left">
+          <figure class="zoom" data-width="960" data-height="1931">
+            <img class="zoom__element" src="img/city.jpg">
+          </figure>
+        </div>
+
+        <p>Even small images can be zoomed. If the image doesn’t expand to fill the entire browser viewport, it will float above your content in the centre of the page.</p>
+        <p>The image to the left doesn’t have a separate image specified as the full-source, thus won’t create a separate network request upon expansion.</p>
       </div>
 
-      <p>Praesent interdum ex sit amet laoreet varius. Nam gravida massa odio, vitae facilisis nisi pretium eget. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam condimentum lacinia lacus vitae pulvinar. Suspendisse vestibulum nulla et diam mattis auctor. Duis pretium non neque rhoncus dictum. Sed ac arcu tempus, ultrices enim at, sagittis sapien. Donec dapibus fermentum arcu in rutrum. Curabitur feugiat tempus dolor et ullamcorper. Ut viverra, lectus non porttitor pellentesque, arcu mi consectetur nibh, vel faucibus neque massa eget mauris. In vulputate felis ac viverra feugiat. Morbi ut faucibus dui. Integer lobortis eros orci, rutrum feugiat leo dictum at. Curabitur ultricies leo nulla, eget ultrices augue dapibus non. Nullam eu felis ac nisl semper fringilla et ut magna.</p>
+      <br />
+      <br />
 
-      <div class="pull-right">
-        <figure class="zoom" data-width="960" data-height="1931">
-          <img class="zoom__element" src="img/city.jpg">
-        </figure>
-      </div>
-
-      <p>Pellentesque consectetur risus eu ligula laoreet, at semper nulla cursus. Duis semper, arcu non sagittis eleifend, arcu turpis sodales lacus, eu fermentum justo mauris congue purus. Quisque quis pellentesque lacus, vel venenatis leo. Donec sollicitudin nisi ut felis maximus commodo. Maecenas scelerisque magna nisi, vel mollis quam molestie eget. Etiam vehicula scelerisque elit, fringilla convallis ipsum dignissim at. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Morbi convallis hendrerit eros.</p>
-      <p>Proin ut aliquet massa. Duis sit amet auctor nibh, vel interdum dui. Morbi ac magna nisi. Sed at fringilla leo, et ornare ipsum. Praesent scelerisque convallis justo nec blandit. Nunc in leo at massa tempus ullamcorper eu et massa. Nulla sagittis neque vitae neque facilisis luctus. Sed nec augue id tellus convallis vehicula faucibus at lorem. Nullam auctor turpis ac orci elementum, et volutpat magna tempor. Cras pellentesque nunc eget velit porta congue in a enim. Nunc egestas malesuada massa, et vulputate dui elementum sed. Etiam vitae sodales libero. Aliquam erat volutpat.</p>
-
-      <figure class="zoom" data-width="960" data-height="640">
-        <img class="zoom__element" src="img/wave.jpg">
+      <figure>
+        <div class="zoom" data-width="1800" data-height="794" data-src="img/illustration-full.jpeg">
+          <img class="zoom__element" src="img/illustration.jpeg">
+        </div>
+        <figcaption>
+          <a href="http://miko-studio.tumblr.com/" target="_blank">Miko Maciaszek</a>
+        </figcaption>
       </figure>
 
-      <p>Et eum id non. Ex excepturi inventore laborum libero, omnis quo quos tempora! Adipisci aut facere molestias pariatur! Cum eum explicabo inventore.</p>
-      <p>Nullam egestas volutpat placerat. Proin dignissim tellus id quam hendrerit pharetra. Vestibulum non rutrum urna. Sed at convallis diam, vitae dictum lectus. Morbi in euismod odio, vel luctus libero. Aliquam euismod, justo ac dignissim elementum, quam metus feugiat turpis, id tincidunt turpis nunc in erat. Nam nec mi arcu. Vivamus lacinia rutrum augue, ac commodo leo. Integer congue tortor ut ultrices tincidunt. Vestibulum tempus, leo quis pretium aliquet, erat risus aliquam mi, nec dignissim mauris est feugiat ante. Maecenas diam ligula, efficitur a justo at, dapibus rhoncus dolor. Nullam ac porttitor turpis. Pellentesque ante orci, blandit eget nibh quis, pretium congue velit. Etiam lacus lacus, ullamcorper in vehicula aliquet, pretium eget eros. Proin sit amet finibus lorem. Quisque id tristique erat.</p>
+      <br />
+
+      <div class="column">
+        <h3>License</h3>
+        <p><strong>zoom.ts</strong> is available under the terms of the ISC license. See the <a href="https://github.com/michaelbull/zoom.ts/blob/master/LICENSE" target="_blank">license file</a> for copyright information and licensing terms.</p>
+
+        <hr />
+
+        <p><em>Contribute to <strong>zoom.ts</strong> on <a href="https://github.com/michaelbull/zoom.ts" target="_blank">GitHub</a>. Full credits to <a href="https://medium.design/@b" target="_blank">Brad Birdsall</a> for the <a href="https://medium.design/image-zoom-on-medium-24d146fc0c20" target="_blank">original version</a> of this article.</em></p>
+      </div>
     </main>
   </body>
 </html>
