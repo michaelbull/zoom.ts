@@ -21,7 +21,7 @@ export function rootElement(document: Document): HTMLElement {
 export function ready(document: Document, callback: Function): any {
     let state: string = document.readyState;
 
-    if (state === 'interactive' || state === 'complete') {
+    if (state === 'complete') {
         return callback();
     } else {
         addEventListener(document, 'DOMContentLoaded', () => callback());

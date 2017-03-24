@@ -65,19 +65,6 @@ describe('ready', () => {
         expect(document.addEventListener).toHaveBeenCalledTimes(0);
     });
 
-    it('should execute the callback immediately if document.readyState is interactive', () => {
-        let document: any = {
-            readyState: 'complete',
-            addEventListener: jasmine.createSpy('EventListener')
-        };
-
-        let callback: jasmine.Spy = jasmine.createSpy('Function');
-        ready(document, callback);
-
-        expect(callback).toHaveBeenCalled();
-        expect(document.addEventListener).toHaveBeenCalledTimes(0);
-    });
-
     it('should add an event listener for the DOMContentLoaded event if the document is not ready', () => {
         let document: any = {
             readyState: 'loading',
