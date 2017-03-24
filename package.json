@@ -33,7 +33,6 @@
     "dist": "cross-env NODE_ENV=production webpack --hide-modules"
   },
   "devDependencies": {
-    "@types/core-js": "0.9.35",
     "@types/jasmine": "2.5.41",
     "@types/webpack": "2.2.7",
     "@types/webpack-env": "1.13.0",
