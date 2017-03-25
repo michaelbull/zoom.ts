@@ -1,5 +1,7 @@
 import {
     addClass,
+    createClone,
+    createDiv,
     hasClass,
     removeClass,
     srcAttribute
@@ -75,5 +77,61 @@ describe('removeClass', () => {
         element.className = 'keep-me remove-me keep-me-too';
         removeClass(element, 'remove-me');
         expect(element.className).toBe('keep-me keep-me-too');
+    });
+});
+
+describe('createDiv', () => {
+    it('should set the element’s className', () => {
+        let element: any = {};
+        let document: any = {
+            createElement: function (tagName: string): any {
+                if (tagName === 'div') {
+                    return element;
+                } else {
+                    throw new Error();
+                }
+            }
+        };
+
+        createDiv(document, 'example-class');
+        expect(element.className).toBe('example-class');
+    });
+});
+
+describe('createClone', () => {
+    let element: any;
+    let document: any;
+    let loaded: any;
+
+    beforeEach(() => {
+        element = {
+            addEventListener: jasmine.createSpy('addEventListener')
+        };
+
+        document = {
+            createElement: function (tagName: string): any {
+                if (tagName === 'img') {
+                    return element;
+                } else {
+                    throw new Error();
+                }
+            }
+        };
+
+        loaded = jasmine.createSpy('loaded');
+
+        createClone(document, 'example-src', loaded);
+    });
+
+    it('should add a load event listener', () => {
+        expect(element.addEventListener).toHaveBeenCalledWith('load', loaded);
+    });
+
+    it('should set the element’s className', () => {
+        expect(element.className).toBe('zoom__clone');
+    });
+
+    it('should set the element’s src', () => {
+        expect(element.src).toBe('example-src');
     });
 });

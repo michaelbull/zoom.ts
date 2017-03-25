@@ -33,23 +33,10 @@ export function ready(document: Document, callback: Function): any {
  * @returns {number} The number of pixels in the document have been scrolled past vertically.
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Window/scrollY#Notes
  */
-export function pageScrollY(window: Window, document: Document): number {
+export function pageScrollY(window: Window): number {
     if (window.pageYOffset === undefined) { // <IE9
-        return rootElement(document).scrollTop;
+        return rootElement(window.document).scrollTop;
     } else {
         return window.pageYOffset;
     }
-}
-
-export function createDiv(document: Document, className: string): HTMLDivElement {
-    let overlay: HTMLDivElement = document.createElement('div');
-    overlay.className = className;
-    return overlay;
-}
-
-export function createClone(document: Document, src: string): HTMLImageElement {
-    let clone: HTMLImageElement = document.createElement('img');
-    clone.className = 'zoom__clone';
-    clone.src = src;
-    return clone;
 }

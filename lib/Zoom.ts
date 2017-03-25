@@ -1,20 +1,38 @@
 import {
-    createClone,
-    createDiv,
     pageScrollY,
     rootElement
 } from './Document';
 import {
-    addClass,
+    activateZoom,
+    createClone,
+    createDiv,
+    deactivateZoom,
     hasClass,
-    removeClass,
+    hideClone,
     repaint,
+    showClone,
     srcAttribute
 } from './Element';
+import {
+    escapeKeyListener,
+    scrollListener
+} from './EventListeners';
 import {
     addEventListener,
     removeEventListener
 } from './Events';
+import {
+    hideOverlay,
+    showOverlay
+} from './Overlay';
+import {
+    freezeWrapperHeight,
+    resetBounds,
+    resetTransformation,
+    setBoundsPx,
+    transform,
+    unfreezeWrapperHeight
+} from './Style';
 import {
     addTransitionEndListener,
     removeTransitionEndListener
@@ -25,7 +43,6 @@ import {
 } from './Translate';
 import { vendorProperty } from './Vendor';
 
-const ESCAPE_KEY_CODE: number = 27;
 const SCROLL_Y_DELTA: number = 50;
 
 const enum State {
@@ -35,7 +52,7 @@ const enum State {
     Collapsing
 }
 
-let overlay: HTMLDivElement = createDiv(document, 'zoom__overlay');
+let overlay: HTMLDivElement;
 let wrapper: HTMLElement;
 let container: HTMLElement;
 let image: HTMLImageElement;
@@ -45,143 +62,153 @@ let rect: ClientRect;
 let targetWidth: number;
 let targetHeight: number;
 
-let transform: string | null;
 let useTranslate3d: boolean;
 
 let state: State = State.Collapsed;
 let loaded: boolean = false;
 let initialScrollY: number;
 
-let resizeListener: EventListener = (): void => {
-    initialScrollY = pageScrollY(window, document);
-    rect = wrapper.getBoundingClientRect();
-    scaleContainer();
-};
-
-let scrollListener: EventListener = (): void => {
-    if (Math.abs(initialScrollY - pageScrollY(window, document)) > SCROLL_Y_DELTA) {
-        hide();
-    }
-};
-
-let keyboardListener: EventListener = (event: KeyboardEvent): void => {
-    if (event.keyCode === ESCAPE_KEY_CODE) {
-        hide();
-    }
-};
-
-let zoomInListener: EventListener = (event: MouseEvent): void => {
-    let target: EventTarget = event.target;
-
-    if (target instanceof HTMLImageElement && hasClass(target, 'zoom__element')) {
-        let parent: HTMLElement | null = target.parentElement;
-        if (parent === null) {
-            return;
-        }
-
-        let grandParent: HTMLElement | null = parent.parentElement;
-        if (grandParent === null) {
-            return;
-        }
-
-        event.preventDefault();
-
-        let containerExists: boolean = hasClass(parent, 'zoom__container');
-        let targetWrapper: HTMLElement = containerExists ? grandParent : parent;
-
-        let src: string = srcAttribute(targetWrapper, target);
-
-        if (transform === undefined) {
-            transform = vendorProperty(document.body, 'transform');
-        }
-
-        if (transform === null || event.metaKey || event.ctrlKey) {
-            window.open(src, '_blank');
-        } else {
-            stopListening();
-
-            if (useTranslate3d === undefined && transform !== null) {
-                useTranslate3d = hasTranslate3d(document.body, transform);
-            }
-
-            wrapper = targetWrapper;
-
-            if (containerExists) {
-                useExistingContainer(parent, target);
-            } else {
-                addContainer(target);
-                addClone(src);
-            }
-
-            show();
-        }
-    }
-};
-
-let zoomOutListener: EventListener = (): void => {
-    hide();
-};
+let resizeListener: EventListener;
+let scrolledListener: EventListener;
+let keyboardListener: EventListener;
+let zoomOutListener: EventListener;
+let zoomInListener: EventListener;
+let finishedExpandingContainer: EventListener;
 
 let finishedLoadingClone: EventListener = (): void => {
     removeEventListener(clone, 'load', finishedLoadingClone);
     loaded = true;
 
     if (state === State.Expanded) {
-        showClone();
+        showClone(image, clone);
     }
 };
 
-let finishedExpandingContainer: EventListener = (): void => {
-    removeTransitionEndListener(container, finishedExpandingContainer);
+function createResizeEventListener(window: Window): EventListener {
+    return (): void => {
+        initialScrollY = pageScrollY(window);
+        rect = wrapper.getBoundingClientRect();
+        scaleContainer(window.document);
+    };
+}
 
-    state = State.Expanded;
-    repaintContainer();
+function createZoomInListener(window: Window): EventListener {
+    return (event: MouseEvent): void => {
+        let target: EventTarget = event.target;
+        let document: Document = window.document;
+        let body: HTMLElement = document.body;
 
-    if (loaded) {
-        showClone();
-    }
-};
+        if (target instanceof HTMLImageElement && hasClass(target, 'zoom__element')) {
+            let parent: HTMLElement | null = target.parentElement;
+            if (parent === null) {
+                return;
+            }
 
-let finishedCollapsingContainer: EventListener = (): void => {
-    removeTransitionEndListener(container, finishedCollapsingContainer);
+            let grandParent: HTMLElement | null = parent.parentElement;
+            if (grandParent === null) {
+                return;
+            }
 
-    state = State.Collapsed;
-    removeOverlay();
-    deactivateZoom();
-    startListening();
-};
+            event.preventDefault();
 
-function addContainer(target: HTMLImageElement): void {
+            let containerExists: boolean = hasClass(parent, 'zoom__container');
+            let targetWrapper: HTMLElement = containerExists ? grandParent : parent;
+
+            let src: string = srcAttribute(targetWrapper, target);
+            let transformProperty: string | null = vendorProperty(body.style, 'transform');
+
+            if (transformProperty === null || event.metaKey || event.ctrlKey) {
+                window.open(src, '_blank');
+            } else {
+                removeZoomListener(window);
+                wrapper = targetWrapper;
+
+                if (containerExists) {
+                    useExistingContainer(parent, target);
+                } else {
+                    createContainer(document, target, src);
+                }
+
+                if (useTranslate3d === undefined && transformProperty !== null) {
+                    useTranslate3d = hasTranslate3d(body, transformProperty);
+                }
+
+                show(window);
+            }
+        }
+    };
+}
+
+function createZoomOutListener(window: Window): EventListener {
+    return (): void => {
+        hide(window);
+    };
+}
+
+function createFinishedExpandingContainerListener(document: Document): EventListener {
+    return (): void => {
+        removeTransitionEndListener(container, finishedExpandingContainer);
+
+        state = State.Expanded;
+        refreshContainer(document);
+
+        if (loaded) {
+            showClone(image, clone);
+        }
+    };
+}
+
+function finishedCollapsingContainer(window: Window): EventListener {
+    let listener: EventListener = (): void => {
+        removeTransitionEndListener(container, listener);
+
+        state = State.Collapsed;
+        window.document.body.removeChild(overlay);
+        deactivateZoom(wrapper, image);
+        addZoomListener(window);
+    };
+
+    return listener;
+}
+
+function createContainer(document: Document, target: HTMLImageElement, src: string): void {
     image = target.cloneNode(true) as HTMLImageElement;
     container = createDiv(document, 'zoom__container');
+    clone = createClone(document, src, finishedLoadingClone);
+
     container.appendChild(image);
+    container.appendChild(clone);
     wrapper.replaceChild(container, target);
 }
 
 function useExistingContainer(parent: HTMLElement, target: HTMLImageElement): void {
-    loaded = true;
     image = target;
     container = parent;
     clone = container.children.item(1) as HTMLImageElement;
+
+    loaded = true;
 }
 
-function show(): void {
+function show(window: Window): void {
+    if (overlay === undefined) {
+        overlay = createDiv(document, 'zoom__overlay');
+    }
+
     setTargetSize();
-    freezeWrapperHeight();
-    addOverlay();
-    showOverlay();
-    expandContainer();
-    addEventListeners();
+    freezeWrapperHeight(wrapper, image);
+    showOverlay(window.document.body, overlay);
+    expandContainer(window);
+    addEventListeners(window);
 }
 
-function hide(): void {
+function hide(window: Window): void {
     loaded = false;
 
-    removeEventListeners();
-    collapseContainer();
-    hideOverlay();
-    hideClone();
-    unfreezeWrapperHeight();
+    removeEventListeners(window);
+    collapseContainer(window);
+    hideOverlay(overlay);
+    hideClone(image, clone);
+    unfreezeWrapperHeight(wrapper);
 }
 
 function setTargetSize(): void {
@@ -189,124 +216,83 @@ function setTargetSize(): void {
     targetHeight = Number(wrapper.getAttribute('data-height') || Infinity);
 }
 
-function freezeWrapperHeight(): void {
-    wrapper.style.height = `${image.height}px`;
-}
+function addEventListeners(window: Window): void {
+    initialScrollY = pageScrollY(window);
 
-function unfreezeWrapperHeight(): void {
-    wrapper.style.height = '';
-}
+    resizeListener = createResizeEventListener(window);
+    keyboardListener = escapeKeyListener(() => hide(window));
+    scrolledListener = scrollListener(initialScrollY, SCROLL_Y_DELTA, () => pageScrollY(window), () => hide(window));
+    zoomOutListener = createZoomOutListener(window);
 
-function addEventListeners(): void {
-    initialScrollY = pageScrollY(window, document);
     addEventListener(window, 'resize', resizeListener);
-    addEventListener(window, 'scroll', scrollListener);
-    addEventListener(document, 'keyup', keyboardListener);
+    addEventListener(window, 'scroll', scrolledListener);
+    addEventListener(window.document, 'keyup', keyboardListener);
     addEventListener(container, 'click', zoomOutListener);
 }
 
-function removeEventListeners(): void {
+function removeEventListeners(window: Window): void {
     removeEventListener(window, 'resize', resizeListener);
-    removeEventListener(window, 'scroll', scrollListener);
-    removeEventListener(document, 'keyup', keyboardListener);
+    removeEventListener(window, 'scroll', scrolledListener);
+    removeEventListener(window.document, 'keyup', keyboardListener);
     removeEventListener(container, 'click', zoomOutListener);
 }
 
-function addClone(src: string): void {
-    clone = createClone(document, src);
-    addEventListener(clone, 'load', finishedLoadingClone);
-    container.appendChild(clone);
-}
-
-function showClone(): void {
-    addClass(image, 'zoom__element--hidden');
-    addClass(clone, 'zoom__clone--visible');
-}
-
-function hideClone(): void {
-    removeClass(image, 'zoom__element--hidden');
-    removeClass(clone, 'zoom__clone--visible');
-}
-
-function repaintContainer(): void {
-    container.style.transition = 'initial';
-    scaleContainer();
-    repaint(container);
-    container.style.transition = '';
-}
-
-function scaleContainer(): void {
+export function scaleContainer(document: Document): void {
     let root: HTMLElement = rootElement(document);
     let viewportWidth: number = root.clientWidth;
     let viewportHeight: number = root.clientHeight;
 
-    let scaleX: number = Math.min(viewportWidth, targetWidth) / rect.width;
-    let scaleY: number = Math.min(viewportHeight, targetHeight) / rect.height;
+    let x: number = rect.left;
+    let y: number = rect.top;
+    let width: number = rect.width;
+    let height: number = rect.height;
+
+    let scaleX: number = Math.min(viewportWidth, targetWidth) / width;
+    let scaleY: number = Math.min(viewportHeight, targetHeight) / height;
     let scale: number = Math.min(scaleX, scaleY);
 
-    let scaledWidth: number = rect.width * scale;
-    let scaledHeight: number = rect.height * scale;
+    let scaledWidth: number = width * scale;
+    let scaledHeight: number = height * scale;
 
     let centreX: number = (viewportWidth - scaledWidth) / 2;
     let centreY: number = (viewportHeight - scaledHeight) / 2;
 
-    let style: any = container.style;
+    let style: CSSStyleDeclaration = container.style;
 
     if (state === State.Expanding || state === State.Collapsing) {
-        let offsetX: number = rect.left + (rect.width - scaledWidth) / 2;
-        let offsetY: number = rect.top + (rect.height - scaledHeight) / 2;
+        let offsetX: number = x + (width - scaledWidth) / 2;
+        let offsetY: number = y + (height - scaledHeight) / 2;
 
         let translateX: number = (centreX - offsetX) / scale;
         let translateY: number = (centreY - offsetY) / scale;
 
-        style[transform as string] = `scale(${scale}) ${translate(translateX, translateY, useTranslate3d)}`;
+        transform(style, `scale(${scale}) ${translate(translateX, translateY, useTranslate3d)}`);
     } else {
-        style[transform as string] = '';
-        style.left = `${centreX - rect.left}px`;
-        style.top = `${centreY - rect.top}px`;
-        style.width = `${scaledWidth}px`;
-        style.maxWidth = `${scaledWidth}px`;
-        style.height = `${scaledHeight}px`;
+        resetTransformation(style);
+        setBoundsPx(style, centreX - x, centreY - y, scaledWidth, scaledHeight);
     }
 }
 
-function resetScale(): void {
-    let style: any = container.style;
-    style[transform as string] = '';
-    style.left = '';
-    style.top = '';
-    style.width = '';
-    style.maxWidth = '';
-    style.height = '';
-}
-
-function addOverlay(): void {
-    document.body.appendChild(overlay);
-}
-
-function removeOverlay(): void {
-    document.body.removeChild(overlay);
-}
-
-function showOverlay(): void {
-    repaint(overlay);
-    addClass(overlay, 'zoom__overlay--visible');
-}
-
-function hideOverlay(): void {
-    removeClass(overlay, 'zoom__overlay--visible');
-}
-
-function expandContainer(): void {
+function expandContainer(window: Window): void {
     state = State.Expanding;
 
     rect = image.getBoundingClientRect();
-    activateZoom();
-    addTransitionEndListener(container, finishedExpandingContainer);
-    scaleContainer();
+    finishedExpandingContainer = createFinishedExpandingContainerListener(window.document);
+    activateZoom(wrapper, image);
+    addTransitionEndListener(window, container, finishedExpandingContainer);
+    scaleContainer(window.document);
 }
 
-function collapseContainer(): void {
+function refreshContainer(document: Document): void {
+    let style: CSSStyleDeclaration = container.style;
+
+    style.transition = 'initial';
+    scaleContainer(document);
+    repaint(container);
+    style.transition = '';
+}
+
+function collapseContainer(window: Window): void {
     if (state === State.Expanding) {
         removeTransitionEndListener(container, finishedExpandingContainer);
     }
@@ -316,25 +302,18 @@ function collapseContainer(): void {
     }
 
     state = State.Collapsing;
-    addTransitionEndListener(container, finishedCollapsingContainer);
-    repaintContainer();
-    resetScale();
+    addTransitionEndListener(window, container, finishedCollapsingContainer(window));
+    refreshContainer(window.document);
+
+    resetTransformation(container.style);
+    resetBounds(container.style);
 }
 
-function activateZoom(): void {
-    addClass(wrapper, 'zoom--active');
-    addClass(image, 'zoom__element--active');
+export function addZoomListener(window: Window): void {
+    zoomInListener = createZoomInListener(window);
+    addEventListener(window.document.body, 'click', zoomInListener);
 }
 
-function deactivateZoom(): void {
-    removeClass(wrapper, 'zoom--active');
-    removeClass(image, 'zoom__element--active');
-}
-
-export function startListening(): void {
-    addEventListener(document.body, 'click', zoomInListener);
-}
-
-export function stopListening(): void {
-    removeEventListener(document.body, 'click', zoomInListener);
+export function removeZoomListener(window: Window): void {
+    removeEventListener(window.document.body, 'click', zoomInListener);
 }

@@ -16,9 +16,9 @@ export function vendorProperties(property: string): string[] {
     return properties;
 }
 
-export function vendorProperty(element: HTMLElement, property: string): string | null {
+export function vendorProperty(style: CSSStyleDeclaration, property: string): string | null {
     for (let vendorProperty of vendorProperties(property)) {
-        if (vendorProperty in element.style) {
+        if (vendorProperty in style) {
             return vendorProperty;
         }
     }

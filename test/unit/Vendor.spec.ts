@@ -38,37 +38,37 @@ describe('vendorProperties', () => {
 
 describe('vendorProperty', () => {
     it('should return the default property if present', () => {
-        let element: any = { style: { example: '' } };
-        expect(vendorProperty(element, 'example')).toBe('example');
+        let style: any = { example: '' };
+        expect(vendorProperty(style, 'example')).toBe('example');
     });
 
     it('should return the Webkit property if present', () => {
-        let element: any = { style: { WebkitExample: '' } };
-        expect(vendorProperty(element, 'example')).toBe('WebkitExample');
+        let style: any = { WebkitExample: '' };
+        expect(vendorProperty(style, 'example')).toBe('WebkitExample');
     });
 
     it('should return the Mozilla property if present', () => {
-        let element: any = { style: { MozExample: '' } };
-        expect(vendorProperty(element, 'example')).toBe('MozExample');
+        let style: any = { MozExample: '' };
+        expect(vendorProperty(style, 'example')).toBe('MozExample');
     });
 
     it('should return the Microsoft property if present', () => {
-        let element: any = { style: { msExample: '' } };
-        expect(vendorProperty(element, 'example')).toBe('msExample');
+        let style: any = { msExample: '' };
+        expect(vendorProperty(style, 'example')).toBe('msExample');
     });
 
     it('should return the Opera property if present', () => {
-        let element: any = { style: { OExample: '' } };
-        expect(vendorProperty(element, 'example')).toBe('OExample');
+        let style: any = { OExample: '' };
+        expect(vendorProperty(style, 'example')).toBe('OExample');
     });
 
     it('should ignore an invalid property and return null', () => {
-        let element: any = { style: { invalid: '' } };
-        expect(vendorProperty(element, 'valid')).toBeNull();
+        let style: any = { invalid: '' };
+        expect(vendorProperty(style, 'valid')).toBeNull();
     });
 
     it('should return null if property absent', () => {
-        let element: any = { style: {} };
-        expect(vendorProperty(element, 'example')).toBeNull();
+        let style: any = {};
+        expect(vendorProperty(style, 'example')).toBeNull();
     });
 });

@@ -14,12 +14,12 @@ for (let prefix of vendorPrefixes) {
     transitionEndEvents.push(`${prefix}TransitionEnd`);
 }
 
-export function hasTransitions(element: HTMLElement): boolean {
+export function hasTransitions(window: Window, element: HTMLElement): boolean {
     if (window.getComputedStyle === undefined) {
         return false;
     }
 
-    let property: string | null = vendorProperty(element, 'transitionDuration');
+    let property: string | null = vendorProperty(element.style, 'transitionDuration');
 
     if (property === null) {
         return false;
@@ -28,7 +28,7 @@ export function hasTransitions(element: HTMLElement): boolean {
     let style: any = window.getComputedStyle(element);
     let value: string = style[property];
 
-    if (value.length < 1) {
+    if (value === '') {
         return false;
     }
 
@@ -36,8 +36,8 @@ export function hasTransitions(element: HTMLElement): boolean {
     return !isNaN(duration) && duration !== 0;
 }
 
-export function addTransitionEndListener(element: HTMLElement, listener: EventListener): void {
-    if (hasTransitions(element)) {
+export function addTransitionEndListener(window: Window, element: HTMLElement, listener: EventListener): void {
+    if (hasTransitions(window, element)) {
         for (let event of transitionEndEvents) {
             addEventListener(element, event, listener);
         }

@@ -1,6 +1,4 @@
 import {
-    createClone,
-    createDiv,
     isStandardsMode,
     pageScrollY,
     QUIRKS_MODE,
@@ -27,27 +25,23 @@ describe('isStandardsMode', () => {
     });
 });
 
-describe('root', () => {
+describe('rootElement', () => {
     it('should return documentElement if in standards mode', () => {
-        let spy: jasmine.Spy = jasmine.createSpy('documentElement');
-
         let document: any = {
             compatMode: STANDARDS_MODE,
-            documentElement: spy
+            documentElement: jasmine.createSpy('documentElement')
         };
 
-        expect(rootElement(document)).toBe(spy);
+        expect(rootElement(document)).toBe(document.documentElement);
     });
 
     it('should return body if not in standards mode', () => {
-        let spy: jasmine.Spy = jasmine.createSpy('documentElement');
-
         let document: any = {
             compatMode: QUIRKS_MODE,
-            body: spy
+            body: jasmine.createSpy('body')
         };
 
-        expect(rootElement(document)).toBe(spy);
+        expect(rootElement(document)).toBe(document.body);
     });
 });
 
@@ -82,103 +76,50 @@ describe('ready', () => {
 describe('pageScrollY', () => {
     it('should use window.pageYOffset if present', () => {
         let window: any = {
-            pageYOffset: 50
-        };
-
-        let document: any = {
-            compatMode: STANDARDS_MODE,
-            documentElement: {
-                scrollTop: 150
-            },
-            body: {
-                scrollTop: 200
+            pageYOffset: 50,
+            document: {
+                compatMode: STANDARDS_MODE,
+                documentElement: {
+                    scrollTop: 150
+                },
+                body: {
+                    scrollTop: 200
+                }
             }
         };
 
-        expect(pageScrollY(window, document)).toBe(50);
+        expect(pageScrollY(window)).toBe(50);
     });
 
     it('should fall back to document.documentElement if window.pageYOffset is absent and in standards mode', () => {
-        let window: any = {};
-
-        let document: any = {
-            compatMode: STANDARDS_MODE,
-            documentElement: {
-                scrollTop: 250
-            },
-            body: {
-                scrollTop: 300
+        let window: any = {
+            document: {
+                compatMode: STANDARDS_MODE,
+                documentElement: {
+                    scrollTop: 250
+                },
+                body: {
+                    scrollTop: 300
+                }
             }
         };
 
-        expect(pageScrollY(window, document)).toBe(250);
+        expect(pageScrollY(window)).toBe(250);
     });
 
     it('should fall back to document.body if window.pageYOffset is absent and not in standards mode', () => {
-        let window: any = {};
-
-        let document: any = {
-            compatMode: QUIRKS_MODE,
-            documentElement: {
-                scrollTop: 100
-            },
-            body: {
-                scrollTop: 400
-            }
-        };
-
-        expect(pageScrollY(window, document)).toBe(400);
-    });
-});
-
-describe('createDiv', () => {
-    it('should set the element’s className', () => {
-        let element: any = {};
-        let document: any = {
-            createElement: function (tagName: string): any {
-                if (tagName === 'div') {
-                    return element;
-                } else {
-                    throw new Error();
+        let window: any = {
+            document: {
+                compatMode: QUIRKS_MODE,
+                documentElement: {
+                    scrollTop: 100
+                },
+                body: {
+                    scrollTop: 400
                 }
             }
         };
 
-        createDiv(document, 'example-class');
-        expect(element.className).toBe('example-class');
-    });
-});
-
-describe('createClone', () => {
-    it('should set the element’s className', () => {
-        let element: any = {};
-        let document: any = {
-            createElement: function (tagName: string): any {
-                if (tagName === 'img') {
-                    return element;
-                } else {
-                    throw new Error();
-                }
-            }
-        };
-
-        createClone(document, '');
-        expect(element.className).toBe('zoom__clone');
-    });
-
-    it('should set the element’s src', () => {
-        let element: any = {};
-        let document: any = {
-            createElement: function (tagName: string): any {
-                if (tagName === 'img') {
-                    return element;
-                } else {
-                    throw new Error();
-                }
-            }
-        };
-
-        createClone(document, 'example-src');
-        expect(element.src).toBe('example-src');
+        expect(pageScrollY(window)).toBe(400);
     });
 });

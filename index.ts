@@ -1,5 +1,5 @@
 import './style.scss';
 import { ready } from './lib/Document';
-import { startListening } from './lib/Zoom';
+import { addZoomListener } from './lib/Zoom';
 
-ready(document, () => startListening());
+ready(document, () => addZoomListener(window));

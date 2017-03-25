@@ -1,3 +1,5 @@
+import { addEventListener } from './Events';
+
 export function repaint(element: HTMLElement): void {
     // tslint:disable-next-line
     element.offsetHeight;
@@ -35,4 +37,38 @@ export function removeClass(element: HTMLElement, name: string): void {
     } else if (existing === name) {
         element.className = '';
     }
+}
+
+export function createDiv(document: Document, className: string): HTMLDivElement {
+    let overlay: HTMLDivElement = document.createElement('div');
+    overlay.className = className;
+    return overlay;
+}
+
+export function createClone(document: Document, src: string, loaded: EventListener): HTMLImageElement {
+    let clone: HTMLImageElement = document.createElement('img');
+    clone.className = 'zoom__clone';
+    clone.src = src;
+    addEventListener(clone, 'load', loaded);
+    return clone;
+}
+
+export function activateZoom(wrapper: HTMLElement, element: HTMLElement): void {
+    addClass(wrapper, 'zoom--active');
+    addClass(element, 'zoom__element--active');
+}
+
+export function deactivateZoom(wrapper: HTMLElement, element: HTMLElement): void {
+    removeClass(wrapper, 'zoom--active');
+    removeClass(element, 'zoom__element--active');
+}
+
+export function showClone(image: HTMLImageElement, clone: HTMLImageElement): void {
+    addClass(image, 'zoom__element--hidden');
+    addClass(clone, 'zoom__clone--visible');
+}
+
+export function hideClone(image: HTMLImageElement, clone: HTMLImageElement): void {
+    removeClass(image, 'zoom__element--hidden');
+    removeClass(clone, 'zoom__clone--visible');
 }

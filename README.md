@@ -11,7 +11,7 @@ A running demonstration can be found [here][demo].
 [![devDependencies status][devDependencies-badge]][devDependencies]
 
 `zoom.ts` easily plugs into your application and starts listening to zoom events
-as soon as the DOM is ready. The library accounts for just 4kB of bandwidth once
+as soon as the DOM is ready. The library accounts for just 5kB of bandwidth once
 gzipped and requires no third-party libraries.
 
 Holding either the <kbd>⌘</kbd> or <kbd>Ctrl</kbd> key will open the image in a
@@ -47,10 +47,10 @@ that responds to click events on images marked as zoomable.
 
 ```typescript
 import { ready } from 'zoom.ts/lib/Document';
-import { startListening } from 'zoom.ts/lib/Zoom';
+import { addZoomListener } from 'zoom.ts/lib/Zoom';
 
 ready(document, () => {
-    startListening();
+    addZoomListener(window);
     console.log('zoom.ts started');
 });
 ```

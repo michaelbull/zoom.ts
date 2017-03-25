@@ -5,6 +5,21 @@ import {
 } from '../../lib/Transition';
 
 describe('hasTransitions', () => {
+    it('should return false if window.getComputedStyle is undefined', () => {
+        let window: any = {};
+        let element: any = {};
+        expect(hasTransitions(window, element)).toBe(false);
+    });
+
+    it('should return false if no transitionDuration property is present', () => {
+        let element: any = {
+            style: []
+        };
+        let window: any = {};
+
+        expect(hasTransitions(window, element)).toBe(false);
+    });
+
     it('should compute the style of the element', () => {
         let computedStyle: any = {
             MozTransitionDuration: '55'
@@ -20,16 +35,8 @@ describe('hasTransitions', () => {
             }
         });
 
-        hasTransitions(element);
+        hasTransitions(window, element);
         expect(window.getComputedStyle).toHaveBeenCalledWith(element);
-    });
-
-    it('should return false if no transitionDuration property is present', () => {
-        let element: any = {
-            style: []
-        };
-
-        expect(hasTransitions(element)).toBe(false);
     });
 
     it('should return false if the duration is an empty string', () => {
@@ -41,13 +48,15 @@ describe('hasTransitions', () => {
             style: computedStyle
         };
 
-        window.getComputedStyle = jasmine.createSpy('getComputedStyle').and.callFake((elt: any) => {
-            if (elt === element) {
-                return computedStyle;
-            }
-        });
+        let window: any = {
+            getComputedStyle: jasmine.createSpy('getComputedStyle').and.callFake((elt: any) => {
+                if (elt === element) {
+                    return computedStyle;
+                }
+            })
+        };
 
-        expect(hasTransitions(element)).toBe(false);
+        expect(hasTransitions(window, element)).toBe(false);
     });
 
     it('should return false if the duration is not a number', () => {
@@ -59,13 +68,15 @@ describe('hasTransitions', () => {
             style: computedStyle
         };
 
-        window.getComputedStyle = jasmine.createSpy('getComputedStyle').and.callFake((elt: any) => {
-            if (elt === element) {
-                return computedStyle;
-            }
-        });
+        let window: any = {
+            getComputedStyle: jasmine.createSpy('getComputedStyle').and.callFake((elt: any) => {
+                if (elt === element) {
+                    return computedStyle;
+                }
+            })
+        };
 
-        expect(hasTransitions(element)).toBe(false);
+        expect(hasTransitions(window, element)).toBe(false);
     });
 
     it('should return false if the duration is zero', () => {
@@ -77,13 +88,15 @@ describe('hasTransitions', () => {
             style: computedStyle
         };
 
-        window.getComputedStyle = jasmine.createSpy('getComputedStyle').and.callFake((elt: any) => {
-            if (elt === element) {
-                return computedStyle;
-            }
-        });
+        let window: any = {
+            getComputedStyle: jasmine.createSpy('getComputedStyle').and.callFake((elt: any) => {
+                if (elt === element) {
+                    return computedStyle;
+                }
+            })
+        };
 
-        expect(hasTransitions(element)).toBe(false);
+        expect(hasTransitions(window, element)).toBe(false);
     });
 
     it('should return true if the duration is a non-zero number', () => {
@@ -95,19 +108,22 @@ describe('hasTransitions', () => {
             style: computedStyle
         };
 
-        window.getComputedStyle = jasmine.createSpy('getComputedStyle').and.callFake((elt: any) => {
-            if (elt === element) {
-                return computedStyle;
-            }
-        });
+        let window: any = {
+            getComputedStyle: jasmine.createSpy('getComputedStyle').and.callFake((elt: any) => {
+                if (elt === element) {
+                    return computedStyle;
+                }
+            })
+        };
 
-        expect(hasTransitions(element)).toBe(true);
+        expect(hasTransitions(window, element)).toBe(true);
     });
 });
 
 describe('addTransitionEndListener', () => {
     describe('if the element has transitions', () => {
         let element: any;
+        let window: any;
         let listener: EventListener;
 
         beforeAll(() => {
@@ -120,14 +136,16 @@ describe('addTransitionEndListener', () => {
                 addEventListener: jasmine.createSpy('addEventListener')
             };
 
-            window.getComputedStyle = jasmine.createSpy('getComputedStyle').and.callFake((elt: any) => {
-                if (elt === element) {
-                    return computedStyle;
-                }
-            });
+            window = {
+                getComputedStyle: jasmine.createSpy('getComputedStyle').and.callFake((elt: any) => {
+                    if (elt === element) {
+                        return computedStyle;
+                    }
+                })
+            };
 
             listener = jasmine.createSpy('EventListener');
-            addTransitionEndListener(element, listener);
+            addTransitionEndListener(window, element, listener);
         });
 
         it('should add an event listener for the transitionend event', () => {
@@ -153,14 +171,11 @@ describe('addTransitionEndListener', () => {
 
     describe('if the element does not have transitions', () => {
         it('should fire the event immediately', () => {
-            let element: any = {
-                style: {
-                    MozTransitionEnd: '0'
-                }
-            };
+            let element: any = {};
+            let window: any = {};
             let listener: any = jasmine.createSpy('EventListener');
 
-            addTransitionEndListener(element, listener);
+            addTransitionEndListener(window, element, listener);
 
             let event: Event = listener.calls.mostRecent().args[0];
             expect(event.type).toBe('transitionend');
@@ -168,7 +183,7 @@ describe('addTransitionEndListener', () => {
     });
 });
 
-describe('removeEventListener', () => {
+describe('removeTransitionEndListener', () => {
     let element: any;
     let listener: EventListener;
 
