@@ -1,7 +1,12 @@
+import { createDiv } from '../Document';
 import {
     hasClass,
     repaint
 } from './Element';
+
+export function createContainer(document: Document): HTMLDivElement {
+    return createDiv(document, 'zoom__container');
+}
 
 export function isContainer(element: HTMLElement): boolean {
     return hasClass(element, 'zoom__container');

@@ -1,7 +1,4 @@
-import {
-    createDiv,
-    viewportDimensions
-} from '../Document';
+import { viewportDimensions } from '../Document';
 import {
     createClone,
     isCloneLoaded,
@@ -10,6 +7,7 @@ import {
     unsetCloneVisible
 } from '../element/Clone';
 import {
+    createContainer,
     isContainer,
     refreshContainer
 } from '../element/Container';
@@ -152,7 +150,7 @@ export function createZoomInListener(window: Window, scrollToDismiss: number): E
             container = parent;
             clone = container.children.item(1) as HTMLImageElement;
         } else {
-            container = createDiv(document, 'zoom__container');
+            container = createContainer(document);
             clone = createClone(document, src);
 
             showClone = cloneLoaded(wrapper, image, clone);

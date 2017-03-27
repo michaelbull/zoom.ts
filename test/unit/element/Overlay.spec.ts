@@ -11,10 +11,7 @@ describe('createOverlay', () => {
     beforeEach(() => {
         overlay = { className: 'overlay' };
         document = {
-            createElement: jasmine.createSpy('createElement').and.callFake((tagName: string) => {
-                expect(tagName).toBe('div');
-                return overlay;
-            }),
+            createElement: jasmine.createSpy('createElement').and.callFake(() => overlay),
             body: {
                 appendChild: jasmine.createSpy('appendChild')
             }
@@ -26,6 +23,10 @@ describe('createOverlay', () => {
         expect(document.createElement).toHaveBeenCalledWith('div');
     });
 
+    it('should assign the className', () => {
+        expect(createOverlay(document).className).toBe('zoom__overlay zoom__overlay--visible');
+    });
+
     it('should add the overlay to the document.body', () => {
         createOverlay(document);
         expect(document.body.appendChild).toHaveBeenCalledWith(overlay);
@@ -34,10 +35,6 @@ describe('createOverlay', () => {
     it('should make the overlay visible', () => {
         createOverlay(document);
         expect(isOverlayVisible(overlay)).toBe(true);
-    });
-
-    it('should return the overlay', () => {
-        expect(createOverlay(document)).toBe(overlay);
     });
 });
 

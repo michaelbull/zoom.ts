@@ -10,35 +10,35 @@ import {
 describe('createClone', () => {
     let element: any;
     let document: any;
-    let clone: any;
     let listener: EventListener;
+    let clone: any;
 
     beforeEach(() => {
         element = {
             addEventListener: //
                 jasmine.createSpy('addEventListener').and.callFake((event: string, evtListener: EventListener) => {
-                    expect(event).toBe('load');
                     listener = evtListener;
                 }),
             removeEventListener: jasmine.createSpy('removeEventListener')
         };
 
         document = {
-            createElement: function (tagName: string): any {
-                expect(tagName).toBe('img');
-                return element;
-            }
+            createElement: jasmine.createSpy('createElement').and.callFake(() => element)
         };
 
-        clone = createClone(document, 'example-src');
+        clone = createClone(document, 'dummy-src');
     });
 
-    it('should set the element’s className', () => {
-        expect(element.className).toBe('zoom__clone');
+    it('should create an img element', () => {
+        expect(document.createElement).toHaveBeenCalledWith('img');
     });
 
-    it('should set the element’s src', () => {
-        expect(element.src).toBe('example-src');
+    it('should assign the className', () => {
+        expect(clone.className).toBe('zoom__clone');
+    });
+
+    it('should set the src', () => {
+        expect(clone.src).toBe('dummy-src');
     });
 
     it('should add a load event listener', () => {

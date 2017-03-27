@@ -114,16 +114,22 @@ describe('viewportDimensions', () => {
 });
 
 describe('createDiv', () => {
-    it('should set the element’s className', () => {
-        let element: any = {};
-        let document: any = {
-            createElement: function (tagName: string): any {
-                expect(tagName).toBe('div');
-                return element;
-            }
-        };
+    let element: any;
+    let document: any;
 
-        createDiv(document, 'example-class');
-        expect(element.className).toBe('example-class');
+    beforeEach(() => {
+        element = {};
+        document = {
+            createElement: jasmine.createSpy('createElement').and.callFake(() => element)
+        };
+    });
+
+    it('should create a div element', () => {
+        createDiv(document, '');
+        expect(document.createElement).toHaveBeenCalledWith('div');
+    });
+
+    it('should assign the className', () => {
+        expect(createDiv(document, 'example').className).toBe('example');
     });
 });

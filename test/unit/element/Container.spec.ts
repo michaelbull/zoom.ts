@@ -1,7 +1,32 @@
 import {
+    createContainer,
     isContainer,
     refreshContainer
 } from '../../../lib/element/Container';
+
+describe('createContainer', () => {
+    let container: any;
+    let document: any;
+
+    beforeEach(() => {
+        container = {};
+        document = {
+            createElement: jasmine.createSpy('createElement').and.callFake((tagName: string): any => {
+                expect(tagName).toBe('div');
+                return container;
+            })
+        };
+    });
+
+    it('should create a div element', () => {
+        createContainer(document);
+        expect(document.createElement).toHaveBeenCalledWith('div');
+    });
+
+    it('should assign the className', () => {
+        expect(createContainer(document).className).toBe('zoom__container');
+    });
+});
 
 describe('isContainer', () => {
     it('should return true if the class is present', () => {
