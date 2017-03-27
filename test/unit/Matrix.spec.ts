@@ -102,29 +102,29 @@ describe('calculateScale', () => {
     it('should scale to the viewport width if shorter than the target width', () => {
         let viewport: Matrix = [900, 5000];
         let target: Matrix = [1000, 4000];
-        let actual: Matrix = [300, 1000];
-        expect(calculateScale(viewport, target, actual)).toBe(3);
+        let current: Matrix = [300, 1000];
+        expect(calculateScale(viewport, target, current)).toBe(3);
     });
 
     it('should scale to the viewport height if shorter than the target height', () => {
         let viewport: Matrix = [1000, 800];
         let target: Matrix = [900, 1000];
-        let actual: Matrix = [100, 200];
-        expect(calculateScale(viewport, target, actual)).toBe(4);
+        let current: Matrix = [100, 200];
+        expect(calculateScale(viewport, target, current)).toBe(4);
     });
 
     it('should scale to the target width if shorter than the viewport width', () => {
         let viewport: Matrix = [500, 800];
         let target: Matrix = [300, 800];
-        let actual: Matrix = [100, 200];
-        expect(calculateScale(viewport, target, actual)).toBe(3);
+        let current: Matrix = [100, 200];
+        expect(calculateScale(viewport, target, current)).toBe(3);
     });
 
     it('should scale to the target height if shorter than the viewport height', () => {
         let viewport: Matrix = [1200, 1900];
         let target: Matrix = [1200, 1300];
-        let actual: Matrix = [1, 130];
-        expect(calculateScale(viewport, target, actual)).toBe(10);
+        let current: Matrix = [1, 130];
+        expect(calculateScale(viewport, target, current)).toBe(10);
     });
 });
 

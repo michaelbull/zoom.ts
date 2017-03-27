@@ -60,9 +60,9 @@ function scale(viewport: number, target: number, actual: number): number {
     return Math.min(viewport, target) / actual;
 }
 
-export function calculateScale(viewport: Matrix, target: Matrix, actual: Matrix): number {
-    let scaleX: number = scale(viewport[0], target[0], actual[0]);
-    let scaleY: number = scale(viewport[1], target[1], actual[1]);
+export function calculateScale(viewport: Matrix, target: Matrix, current: Matrix): number {
+    let scaleX: number = scale(viewport[0], target[0], current[0]);
+    let scaleY: number = scale(viewport[1], target[1], current[1]);
     return Math.min(scaleX, scaleY);
 }
 
