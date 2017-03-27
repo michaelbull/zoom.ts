@@ -122,15 +122,10 @@ describe('cloneLoaded', () => {
 
     describe('if the wrapper is expanded', () => {
         let wrapper: any;
-        let clone: any;
         let listener: EventListener;
 
         beforeEach(() => {
             wrapper = { className: 'zoom--expanded' };
-            clone = {
-                className: '',
-                removeEventListener: jasmine.createSpy('removeEventListener')
-            };
         });
 
         describe('and the clone is visible', () => {

@@ -141,7 +141,7 @@ describe('hasTranslate3d', () => {
 
     it('should return false if the transformProperty is invalid', () => {
         let window: any = {
-            getComputedStyle: () => {
+            getComputedStyle: (): void => {
             }
         };
 

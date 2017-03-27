@@ -21,7 +21,7 @@ describe('clientDimensions', () => {
 describe('targetDimensions', () => {
     it('should return the specified width if the data-width attribute is present', () => {
         let element: any = {
-            getAttribute: (attribute: string) => {
+            getAttribute: (attribute: string): string | null => {
                 if (attribute === 'data-width') {
                     return '550';
                 } else {
@@ -35,7 +35,7 @@ describe('targetDimensions', () => {
 
     it('should return the specified height if the data-height attribute is present', () => {
         let element: any = {
-            getAttribute: (attribute: string) => {
+            getAttribute: (attribute: string): string | null => {
                 if (attribute === 'data-height') {
                     return '660';
                 } else {
@@ -49,7 +49,7 @@ describe('targetDimensions', () => {
 
     it('should return Infinity as the width if the data-width attribute is absent', () => {
         let element: any = {
-            getAttribute: (attribute: string) => {
+            getAttribute: (attribute: string): string | null => {
                 if (attribute === 'data-width') {
                     return null;
                 } else {
@@ -63,7 +63,7 @@ describe('targetDimensions', () => {
 
     it('should return Infinity as the height if the data-height attribute is absent', () => {
         let element: any = {
-            getAttribute: (attribute: string) => {
+            getAttribute: (attribute: string): string | null => {
                 if (attribute === 'data-height') {
                     return null;
                 } else {

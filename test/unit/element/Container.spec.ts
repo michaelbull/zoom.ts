@@ -27,7 +27,7 @@ describe('refreshContainer', () => {
     });
 
     it('should set the transition to initial before executing the callback', () => {
-        let callback: Function = () => {
+        let callback: Function = (): void => {
             expect(container.style.transition).toBe('initial');
         };
 
