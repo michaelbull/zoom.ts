@@ -1,12 +1,12 @@
 import {
     addMatrices,
-    calculateScale,
     centrePadding,
     centrePosition,
     divideMatrices,
     divideMatrix,
     Matrix,
     minimizeMatrices,
+    minimumScale,
     multiplyMatrix,
     positionOf,
     sizeOf,
@@ -98,33 +98,13 @@ describe('minimizeMatrices', () => {
     });
 });
 
-describe('calculateScale', () => {
-    it('should scale to the viewport width if shorter than the target width', () => {
-        let viewport: Matrix = [900, 5000];
-        let target: Matrix = [1000, 4000];
-        let current: Matrix = [300, 1000];
-        expect(calculateScale(viewport, target, current)).toBe(3);
+describe('minimumScale', () => {
+    it('should calculate the minimum vertical scale', () => {
+        expect(minimumScale([900, 500], [300, 50])).toBe(3);
     });
 
-    it('should scale to the viewport height if shorter than the target height', () => {
-        let viewport: Matrix = [1000, 800];
-        let target: Matrix = [900, 1000];
-        let current: Matrix = [100, 200];
-        expect(calculateScale(viewport, target, current)).toBe(4);
-    });
-
-    it('should scale to the target width if shorter than the viewport width', () => {
-        let viewport: Matrix = [500, 800];
-        let target: Matrix = [300, 800];
-        let current: Matrix = [100, 200];
-        expect(calculateScale(viewport, target, current)).toBe(3);
-    });
-
-    it('should scale to the target height if shorter than the viewport height', () => {
-        let viewport: Matrix = [1200, 1900];
-        let target: Matrix = [1200, 1300];
-        let current: Matrix = [1, 130];
-        expect(calculateScale(viewport, target, current)).toBe(10);
+    it('should calculate the minimum horizontal scale', () => {
+        expect(minimumScale([1000, 600], [10, 50])).toBe(12);
     });
 });
 

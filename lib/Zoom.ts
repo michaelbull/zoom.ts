@@ -1,12 +1,17 @@
+import { viewportDimensions } from './Document';
 import {
-    cloneLoaded,
-    escKeyPressed,
-    scrolled
-} from './event/EventListeners';
+    createClone,
+    isCloneLoaded,
+    isCloneVisible,
+    setCloneVisible,
+    unsetCloneVisible
+} from './element/Clone';
 import {
-    addEventListener,
-    removeEventListener
-} from './event/Events';
+    createContainer,
+    isContainer,
+    refreshContainer
+} from './element/Container';
+import { targetDimensions } from './element/Element';
 import {
     isZoomable,
     setImageActive,
@@ -15,10 +20,18 @@ import {
     unsetImageHidden
 } from './element/Image';
 import {
-    createContainer,
-    isContainer,
-    refreshContainer
-} from './element/Container';
+    createOverlay,
+    hideOverlay
+} from './element/Overlay';
+import {
+    resetBounds,
+    resetTransformation,
+    scaleAndTranslate,
+    setBoundsPx,
+    setHeightPx,
+    transform,
+    unsetHeight
+} from './element/Style';
 import {
     isWrapperExpanding,
     isWrapperTransitioning,
@@ -30,48 +43,34 @@ import {
     unsetWrapperExpanded,
     unsetWrapperExpanding
 } from './element/Wrapper';
-import { vendorProperty } from './Vendor';
 import {
-    createClone,
-    isCloneLoaded,
-    isCloneVisible,
-    setCloneVisible,
-    unsetCloneVisible
-} from './element/Clone';
+    cloneLoaded,
+    escKeyPressed,
+    scrolled
+} from './event/EventListeners';
 import {
-    hasTranslate3d,
-    pageScrollY
-} from './Window';
+    addEventListener,
+    removeEventListener
+} from './event/Events';
 import {
-    createOverlay,
-    hideOverlay
-} from './element/Overlay';
+    addTransitionEndListener,
+    removeTransitionEndListener
+} from './event/TransitionEvents';
 import {
-    calculateScale,
     centrePosition,
-    divideMatrices,
     Matrix,
     minimizeMatrices,
+    minimumScale,
     multiplyMatrix,
     positionOf,
     sizeOf,
     translateToCentre
 } from './Matrix';
-import { targetDimensions } from './element/Element';
+import { vendorProperty } from './Vendor';
 import {
-    resetBounds,
-    resetTransformation,
-    scaleAndTranslate,
-    setBoundsPx,
-    setHeightPx,
-    transform,
-    unsetHeight
-} from './element/Style';
-import { viewportDimensions } from './Document';
-import {
-    addTransitionEndListener,
-    removeTransitionEndListener
-} from './event/TransitionEvents';
+    hasTranslate3d,
+    pageScrollY
+} from './Window';
 
 const SCROLL_Y_DELTA: number = 50;
 
@@ -144,21 +143,22 @@ export function addZoomListener(window: Window): void {
 
         let freezeContainer: Function = (): void => {
             let viewport: Matrix = viewportDimensions(document);
-            let actualTarget: Matrix = minimizeMatrices(viewport, target);
-            let scales: Matrix = divideMatrices(actualTarget, imageSize);
-            let factor: number = Math.min(scales[0], scales[1]);
-            let scaled: Matrix = multiplyMatrix(imageSize, factor);
-            let newPosition: Matrix = centrePosition(viewport, scaled, imagePosition);
+            let cappedTarget: Matrix = minimizeMatrices(viewport, target);
+            let factor: number = minimumScale(cappedTarget, imageSize);
+
+            let newSize: Matrix = multiplyMatrix(imageSize, factor);
+            let newPosition: Matrix = centrePosition(viewport, newSize, imagePosition);
             resetTransformation(container.style);
-            setBoundsPx(container.style, newPosition, scaled);
+            setBoundsPx(container.style, newPosition, newSize);
         };
 
         let scaleAndTranslateContainer: Function = (): void => {
             let viewport: Matrix = viewportDimensions(document);
-            let factor: number = calculateScale(viewport, target, imageSize);
+            let cappedTarget: Matrix = minimizeMatrices(viewport, target);
+            let factor: number = minimumScale(cappedTarget, imageSize);
+
             let translation: Matrix = translateToCentre(viewport, imageSize, imagePosition, factor);
-            let transformation: string = scaleAndTranslate(factor, translation, use3d);
-            transform(container.style, transformation);
+            transform(container.style, scaleAndTranslate(factor, translation, use3d));
         };
 
         let recalculateScale: Function = (): void => {

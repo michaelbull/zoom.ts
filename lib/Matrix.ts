@@ -56,14 +56,9 @@ export function minimizeMatrices(x: Matrix, y: Matrix): Matrix {
     ];
 }
 
-function scale(viewport: number, target: number, actual: number): number {
-    return Math.min(viewport, target) / actual;
-}
-
-export function calculateScale(viewport: Matrix, target: Matrix, current: Matrix): number {
-    let scaleX: number = scale(viewport[0], target[0], current[0]);
-    let scaleY: number = scale(viewport[1], target[1], current[1]);
-    return Math.min(scaleX, scaleY);
+export function minimumScale(x: Matrix, y: Matrix): number {
+    let scaled: Matrix = divideMatrices(x, y);
+    return Math.min(scaled[0], scaled[1]);
 }
 
 /**
