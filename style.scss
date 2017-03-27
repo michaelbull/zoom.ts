@@ -28,7 +28,9 @@ $zoom-overlay-visible-opacity: 100 !default;
   text-align: center;
 }
 
-.zoom--active {
+.zoom--expanding,
+.zoom--expanded,
+.zoom--collapsing {
   z-index: $zoom-z-index;
 }
 

@@ -2,7 +2,7 @@ import {
     addEventListener,
     fireEventListener,
     removeEventListener
-} from '../../lib/Events';
+} from '../../../lib/event/Events';
 
 describe('addEventListener', () => {
     let listener: jasmine.Spy;

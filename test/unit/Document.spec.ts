@@ -1,11 +1,13 @@
 import {
+    createDiv,
     isStandardsMode,
-    pageScrollY,
     QUIRKS_MODE,
     ready,
     rootElement,
-    STANDARDS_MODE
+    STANDARDS_MODE,
+    viewportDimensions
 } from '../../lib/Document';
+import { Matrix } from '../../lib/Matrix';
 
 describe('isStandardsMode', () => {
     it('should return true if compatMode is CSS1Compat', () => {
@@ -73,53 +75,55 @@ describe('ready', () => {
     });
 });
 
-describe('pageScrollY', () => {
-    it('should use window.pageYOffset if present', () => {
-        let window: any = {
-            pageYOffset: 50,
-            document: {
-                compatMode: STANDARDS_MODE,
-                documentElement: {
-                    scrollTop: 150
-                },
-                body: {
-                    scrollTop: 200
-                }
+describe('viewportDimensions', () => {
+    it('should return the dimensions of document.documentElement if in standards mode', () => {
+        let document: any = {
+            compatMode: STANDARDS_MODE,
+            documentElement: {
+                clientWidth: 300,
+                clientHeight: 400
+            },
+            body: {
+                clientWidth: 500,
+                clientHeight: 600
             }
         };
 
-        expect(pageScrollY(window)).toBe(50);
+        let actual: Matrix = viewportDimensions(document);
+        expect(actual[0]).toBe(300);
+        expect(actual[1]).toBe(400);
     });
 
-    it('should fall back to document.documentElement if window.pageYOffset is absent and in standards mode', () => {
-        let window: any = {
-            document: {
-                compatMode: STANDARDS_MODE,
-                documentElement: {
-                    scrollTop: 250
-                },
-                body: {
-                    scrollTop: 300
-                }
+    it('should return the dimensions of document.body if not in standards mode', () => {
+        let document: any = {
+            compatMode: QUIRKS_MODE,
+            documentElement: {
+                clientWidth: 650,
+                clientHeight: 750
+            },
+            body: {
+                clientWidth: 850,
+                clientHeight: 950
             }
         };
 
-        expect(pageScrollY(window)).toBe(250);
+        let actual: Matrix = viewportDimensions(document);
+        expect(actual[0]).toBe(850);
+        expect(actual[1]).toBe(950);
     });
+});
 
-    it('should fall back to document.body if window.pageYOffset is absent and not in standards mode', () => {
-        let window: any = {
-            document: {
-                compatMode: QUIRKS_MODE,
-                documentElement: {
-                    scrollTop: 100
-                },
-                body: {
-                    scrollTop: 400
-                }
+describe('createDiv', () => {
+    it('should set the element’s className', () => {
+        let element: any = {};
+        let document: any = {
+            createElement: function (tagName: string): any {
+                expect(tagName).toBe('div');
+                return element;
             }
         };
 
-        expect(pageScrollY(window)).toBe(400);
+        createDiv(document, 'example-class');
+        expect(element.className).toBe('example-class');
     });
 });

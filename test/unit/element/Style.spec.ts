@@ -1,11 +1,13 @@
 import {
-    freezeWrapperHeight,
     resetBounds,
     resetTransformation,
+    scaleAndTranslate,
     setBoundsPx,
+    setHeightPx,
     transform,
-    unfreezeWrapperHeight
-} from '../../lib/Style';
+    translate,
+    unsetHeight
+} from '../../../lib/element/Style';
 
 describe('transform', () => {
     it('should set the vendor property if non-null', () => {
@@ -16,7 +18,7 @@ describe('transform', () => {
 });
 
 describe('resetTransformation', () => {
-    it('should clear the vendor property', () => {
+    it('should clear the value assigned to the vendor property', () => {
         let style: any = { MozTransform: '' };
         transform(style, 'after-transform');
         resetTransformation(style);
@@ -72,7 +74,7 @@ describe('setBoundsPx', () => {
             height: '50px'
         };
 
-        setBoundsPx(style, 20, 170, 95, 240);
+        setBoundsPx(style, [20, 170], [95, 240]);
     });
 
     it('should set the left property', () => {
@@ -96,32 +98,44 @@ describe('setBoundsPx', () => {
     });
 });
 
-describe('freezeWrapperHeight', () => {
-    it('should set the wrapper’s height to the image’s height', () => {
-        let wrapper: any = {
-            style: {
-                height: '100px'
-            }
+describe('setHeightPx', () => {
+    it('should set the height', () => {
+        let style: any = {
+            height: '100px'
         };
 
-        let image: any = {
-            height: 244
-        };
-
-        freezeWrapperHeight(wrapper, image);
-        expect(wrapper.style.height).toBe('244px');
+        setHeightPx(style, 244);
+        expect(style.height).toBe('244px');
     });
 });
 
-describe('unfreezeWrapperHeight', () => {
-    it('should reset the wrapper’s height', () => {
-        let wrapper: any = {
-            style: {
-                height: '300px'
-            }
+describe('unsetHeight', () => {
+    it('should unset the height', () => {
+        let style: any = {
+            height: '300px'
         };
 
-        unfreezeWrapperHeight(wrapper);
-        expect(wrapper.style.height).toBe('');
+        unsetHeight(style);
+        expect(style.height).toBe('');
+    });
+});
+
+describe('translate', () => {
+    it('should use translate3d if translate3d is available', () => {
+        expect(translate([50, 120], true)).toBe('translate3d(50px, 120px, 0)');
+    });
+
+    it('should use translate if translate3d is unavailable', () => {
+        expect(translate([90, 35], false)).toBe('translate(90px, 35px)');
+    });
+});
+
+describe('scaleAndTranslate', () => {
+    it('should use translate3d if translate3d is available', () => {
+        expect(scaleAndTranslate(5, [10, 20], true)).toBe('scale(5) translate3d(10px, 20px, 0)');
+    });
+
+    it('should use translate if translate3d is unavailable', () => {
+        expect(scaleAndTranslate(30, [40, 50], false)).toBe('scale(30) translate(40px, 50px)');
     });
 });
