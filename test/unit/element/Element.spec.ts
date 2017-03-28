@@ -1,6 +1,6 @@
 import {
     clientDimensions,
-    targetDimensions,
+    targetDimensions
 } from '../../../lib/element/Element';
 
 describe('clientDimensions', () => {

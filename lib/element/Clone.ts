@@ -8,9 +8,13 @@ import {
     removeClass
 } from './ClassList';
 
+const CLASS: string = 'zoom__clone';
+const VISIBLE_CLASS: string = `${CLASS}--visible`;
+const LOADED_CLASS: string = `${CLASS}--loaded`;
+
 export function createClone(document: Document, src: string): HTMLImageElement {
     let clone: HTMLImageElement = document.createElement('img');
-    clone.className = 'zoom__clone';
+    clone.className = CLASS;
     clone.src = src;
 
     let loaded: EventListener = (): void => {
@@ -23,21 +27,21 @@ export function createClone(document: Document, src: string): HTMLImageElement {
 }
 
 export function setCloneVisible(clone: HTMLImageElement): void {
-    addClass(clone, 'zoom__clone--visible');
+    addClass(clone, VISIBLE_CLASS);
 }
 
 export function unsetCloneVisible(clone: HTMLImageElement): void {
-    removeClass(clone, 'zoom__clone--visible');
+    removeClass(clone, VISIBLE_CLASS);
 }
 
 export function isCloneVisible(clone: HTMLImageElement): boolean {
-    return hasClass(clone, 'zoom__clone--visible');
+    return hasClass(clone, VISIBLE_CLASS);
 }
 
 export function setCloneLoaded(clone: HTMLImageElement): void {
-    addClass(clone, 'zoom__clone--loaded');
+    addClass(clone, LOADED_CLASS);
 }
 
 export function isCloneLoaded(clone: HTMLImageElement): boolean {
-    return hasClass(clone, 'zoom__clone--loaded');
+    return hasClass(clone, LOADED_CLASS);
 }
