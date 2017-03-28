@@ -100,10 +100,7 @@ describe('setBoundsPx', () => {
 
 describe('setHeightPx', () => {
     it('should set the height', () => {
-        let style: any = {
-            height: '100px'
-        };
-
+        let style: any = { height: '100px' };
         setHeightPx(style, 244);
         expect(style.height).toBe('244px');
     });
@@ -111,10 +108,7 @@ describe('setHeightPx', () => {
 
 describe('unsetHeight', () => {
     it('should unset the height', () => {
-        let style: any = {
-            height: '300px'
-        };
-
+        let style: any = { height: '300px' };
         unsetHeight(style);
         expect(style.height).toBe('');
     });

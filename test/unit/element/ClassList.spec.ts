@@ -1,9 +1,9 @@
 import {
     addClass,
+    excludeClass,
     hasClass,
     joinClasses,
-    removeClass,
-    excludeClass
+    removeClass
 } from '../../../lib/element/ClassList';
 
 describe('joinClasses', () => {
