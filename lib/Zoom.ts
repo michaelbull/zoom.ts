@@ -155,7 +155,7 @@ export function addZoomListener(window: Window): void {
             setBoundsPx(container.style, newPosition, newSize);
         };
 
-        let scaleAndTranslateContainer: Function = (): void => {
+        let transformContainer: Function = (): void => {
             let viewport: Matrix = viewportDimensions(document);
             let cappedTarget: Matrix = minimizeMatrices(viewport, target);
             let factor: number = minimumScale(cappedTarget, imageSize);
@@ -166,7 +166,7 @@ export function addZoomListener(window: Window): void {
 
         let recalculateScale: Function = (): void => {
             if (isWrapperTransitioning(wrapper)) {
-                scaleAndTranslateContainer();
+                transformContainer();
             } else {
                 freezeContainer();
             }
@@ -253,7 +253,7 @@ export function addZoomListener(window: Window): void {
 
         addTransitionEndListener(window, container, expanded);
         if (!isWrapperExpanded(wrapper)) {
-            scaleAndTranslateContainer();
+            transformContainer();
         }
 
         addEventListener(document, 'keyup', pressedEsc);
