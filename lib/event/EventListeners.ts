@@ -101,182 +101,171 @@ export function cloneLoaded(wrapper: HTMLElement, image: HTMLImageElement, clone
     return listener;
 }
 
-export function createZoomListener(window: Window, scrollY: number): EventListener {
-    let document: Document = window.document;
-    let body: HTMLElement = document.body;
+function setUp(document: Document, src: string, wrapper: HTMLElement, image: HTMLImageElement): EventListener {
+    let container: HTMLElement = createContainer(document);
+    let clone: HTMLImageElement = createClone(document, src);
 
-    let listener: EventListener = (event: MouseEvent): void => {
-        if (!isZoomable(event.target)) {
-            return;
-        }
+    let loaded: EventListener = cloneLoaded(wrapper, image, clone);
+    addEventListener(clone, 'load', loaded);
 
-        event.preventDefault();
+    wrapper.replaceChild(container, image);
+    container.appendChild(image);
+    container.appendChild(clone);
+    return loaded;
+}
 
-        let image: HTMLImageElement = event.target as HTMLImageElement;
-        let parent: HTMLElement = image.parentElement as HTMLElement;
-        let wrapper: HTMLElement = parent;
+function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, transformProperty: string | null,
+    loadCloneListener: EventListener | null, zoomListener: EventListener, scrollY: number): void {
+    let container: HTMLElement = image.parentElement as HTMLElement;
+    let clone: HTMLImageElement = container.children.item(1) as HTMLImageElement;
 
-        let alreadySetUp: boolean = isContainer(parent);
-        if (alreadySetUp) {
-            let grandParent: HTMLElement | null = parent.parentElement;
-            if (grandParent === null) {
-                return;
-            }
+    let target: Matrix = targetDimensions(wrapper);
+    let imageRect: ClientRect = image.getBoundingClientRect();
+    let imagePosition: Matrix = positionOf(imageRect);
+    let imageSize: Matrix = sizeOf(imageRect);
 
-            wrapper = grandParent;
-        }
+    let use3d: boolean = transformProperty !== null && hasTranslate3d(window, transformProperty);
 
-        let src: string = resolveSrc(wrapper, image);
-        let transformProperty: string | null = vendorProperty(body.style, 'transform');
+    let transformContainer: Function = (): void => {
+        let viewport: Matrix = viewportDimensions(window.document);
+        let cappedTarget: Matrix = minimizeMatrices(viewport, target);
+        let factor: number = minimumScale(cappedTarget, imageSize);
 
-        if (transformProperty === null || event.metaKey || event.ctrlKey) {
-            window.open(src, '_blank');
-            return;
-        }
+        let translation: Matrix = translateToCentre(viewport, imageSize, imagePosition, factor);
+        transform(container.style, scaleAndTranslate(factor, translation, use3d));
+    };
 
-        let container: HTMLElement;
-        let clone: HTMLImageElement;
-        let showClone: EventListener | null = null;
+    let freezeContainer: Function = (): void => {
+        let viewport: Matrix = viewportDimensions(window.document);
+        let cappedTarget: Matrix = minimizeMatrices(viewport, target);
+        let factor: number = minimumScale(cappedTarget, imageSize);
 
-        if (alreadySetUp) {
-            container = parent;
-            clone = container.children.item(1) as HTMLImageElement;
+        let newSize: Matrix = multiplyMatrix(imageSize, factor);
+        let newPosition: Matrix = centrePosition(viewport, newSize, imagePosition);
+        resetTransformation(container.style);
+        setBoundsPx(container.style, newPosition, newSize);
+    };
+
+    let recalculateScale: Function = (): void => {
+        if (isWrapperTransitioning(wrapper)) {
+            transformContainer();
         } else {
-            container = createContainer(document);
-            clone = createClone(document, src);
-
-            showClone = cloneLoaded(wrapper, image, clone);
-            addEventListener(clone, 'load', showClone);
-
-            wrapper.replaceChild(container, image);
-            container.appendChild(image);
-            container.appendChild(clone);
+            freezeContainer();
         }
+    };
 
-        let wrapperStyle: CSSStyleDeclaration = wrapper.style;
-        let containerStyle: CSSStyleDeclaration = container.style;
-        let target: Matrix = targetDimensions(wrapper);
-        let imageRect: ClientRect = image.getBoundingClientRect();
-        let imagePosition: Matrix = positionOf(imageRect);
-        let imageSize: Matrix = sizeOf(imageRect);
+    let expanded: EventListener = (): void => {
+        removeTransitionEndListener(container, expanded);
+        unsetWrapperExpanding(wrapper);
+        setWrapperExpanded(wrapper);
+        refreshContainer(container, freezeContainer);
 
-        let use3d: boolean = transformProperty !== null && hasTranslate3d(window, transformProperty);
-        let transformContainer: Function = (): void => {
-            let viewport: Matrix = viewportDimensions(document);
-            let cappedTarget: Matrix = minimizeMatrices(viewport, target);
-            let factor: number = minimumScale(cappedTarget, imageSize);
-
-            let translation: Matrix = translateToCentre(viewport, imageSize, imagePosition, factor);
-            transform(containerStyle, scaleAndTranslate(factor, translation, use3d));
-        };
-
-        let freezeContainer: Function = (): void => {
-            let viewport: Matrix = viewportDimensions(document);
-            let cappedTarget: Matrix = minimizeMatrices(viewport, target);
-            let factor: number = minimumScale(cappedTarget, imageSize);
-
-            let newSize: Matrix = multiplyMatrix(imageSize, factor);
-            let newPosition: Matrix = centrePosition(viewport, newSize, imagePosition);
-            resetTransformation(containerStyle);
-            setBoundsPx(containerStyle, newPosition, newSize);
-        };
-
-        let recalculateScale: Function = (): void => {
-            if (isWrapperTransitioning(wrapper)) {
-                transformContainer();
-            } else {
-                freezeContainer();
+        if (isCloneLoaded(clone) && !isCloneVisible(clone)) {
+            if (loadCloneListener !== null) {
+                removeTransitionEndListener(container, loadCloneListener);
             }
-        };
 
-        let expanded: EventListener = (): void => {
+            setImageHidden(image);
+            setCloneVisible(clone);
+        }
+    };
+
+    let removeListeners: Function;
+    let overlay: HTMLDivElement = createOverlay(window.document);
+
+    let collapse: Function = (): void => {
+        removeListeners();
+
+        if (isWrapperExpanding(wrapper)) {
             removeTransitionEndListener(container, expanded);
             unsetWrapperExpanding(wrapper);
-            setWrapperExpanded(wrapper);
-            refreshContainer(container, freezeContainer);
-
-            if (isCloneLoaded(clone) && !isCloneVisible(clone)) {
-                if (showClone !== null) {
-                    removeTransitionEndListener(container, showClone);
-                }
-
-                setImageHidden(image);
-                setCloneVisible(clone);
-            }
-        };
-
-        let removeListeners: Function;
-        let overlay: HTMLDivElement = createOverlay(document);
-
-        let collapse: Function = (): void => {
-            removeListeners();
-
-            if (isWrapperExpanding(wrapper)) {
-                removeTransitionEndListener(container, expanded);
-                unsetWrapperExpanding(wrapper);
-            }
-
-            if (!isCloneLoaded(clone) && showClone !== null) {
-                removeEventListener(clone, 'load', showClone);
-            }
-
-            unsetWrapperExpanded(wrapper);
-            setWrapperCollapsing(wrapper);
-
-            let collapsed: EventListener = (): void => {
-                removeTransitionEndListener(container, collapsed);
-
-                body.removeChild(overlay);
-                unsetWrapperCollapsing(wrapper);
-                unsetHeight(wrapperStyle);
-                unsetImageHidden(image);
-                unsetImageActive(image);
-
-                if (isCloneVisible(clone)) {
-                    unsetCloneVisible(clone);
-                }
-
-                addEventListener(body, 'click', listener);
-            };
-
-            addTransitionEndListener(window, container, collapsed);
-            refreshContainer(container, recalculateScale);
-
-            resetTransformation(containerStyle);
-            resetBounds(containerStyle);
-            hideOverlay(overlay);
-        };
-
-        let pressedEsc: EventListener = escKeyPressed(collapse);
-        let dismissed: EventListener = (): void => collapse();
-        let resized: EventListener = (): void => recalculateScale();
-        let initialScrollY: number = pageScrollY(window);
-        let scolledPast: EventListener = scrolled(initialScrollY, scrollY, collapse, () => pageScrollY(window));
-
-        removeListeners = (): void => {
-            removeEventListener(document, 'keyup', pressedEsc);
-            removeEventListener(container, 'click', dismissed);
-            removeEventListener(window, 'scroll', scolledPast);
-            removeEventListener(window, 'resize', resized);
-        };
-
-        removeEventListener(body, 'click', listener);
-
-        body.appendChild(overlay);
-        showOverlay(overlay);
-        setWrapperExpanding(wrapper);
-        setImageActive(image);
-        setHeightPx(wrapperStyle, image.height);
-
-        addTransitionEndListener(window, container, expanded);
-        if (!isWrapperExpanded(wrapper)) {
-            transformContainer();
         }
 
-        addEventListener(document, 'keyup', pressedEsc);
-        addEventListener(container, 'click', dismissed);
-        addEventListener(window, 'scroll', scolledPast);
-        addEventListener(window, 'resize', resized);
+        if (!isCloneLoaded(clone) && loadCloneListener !== null) {
+            removeEventListener(clone, 'load', loadCloneListener);
+        }
+
+        unsetWrapperExpanded(wrapper);
+        setWrapperCollapsing(wrapper);
+
+        let collapsed: EventListener = (): void => {
+            removeTransitionEndListener(container, collapsed);
+
+            window.document.body.removeChild(overlay);
+            unsetWrapperCollapsing(wrapper);
+            unsetHeight(wrapper.style);
+            unsetImageHidden(image);
+            unsetImageActive(image);
+
+            if (isCloneVisible(clone)) {
+                unsetCloneVisible(clone);
+            }
+
+            addEventListener(window.document.body, 'click', zoomListener);
+        };
+
+        addTransitionEndListener(window, container, collapsed);
+        refreshContainer(container, recalculateScale);
+
+        resetTransformation(container.style);
+        resetBounds(container.style);
+        hideOverlay(overlay);
+    };
+
+    let pressedEsc: EventListener = escKeyPressed(collapse);
+    let dismissed: EventListener = (): void => collapse();
+    let resized: EventListener = (): void => recalculateScale();
+    let initialScrollY: number = pageScrollY(window);
+    let scolledPast: EventListener = scrolled(initialScrollY, scrollY, collapse, () => pageScrollY(window));
+
+    removeListeners = (): void => {
+        removeEventListener(window.document, 'keyup', pressedEsc);
+        removeEventListener(container, 'click', dismissed);
+        removeEventListener(window, 'scroll', scolledPast);
+        removeEventListener(window, 'resize', resized);
+    };
+
+    removeEventListener(window.document.body, 'click', zoomListener);
+
+    window.document.body.appendChild(overlay);
+    showOverlay(overlay);
+    setWrapperExpanding(wrapper);
+    setImageActive(image);
+    setHeightPx(wrapper.style, image.height);
+
+    addTransitionEndListener(window, container, expanded);
+    if (!isWrapperExpanded(wrapper)) {
+        transformContainer();
+    }
+
+    addEventListener(window.document, 'keyup', pressedEsc);
+    addEventListener(container, 'click', dismissed);
+    addEventListener(window, 'scroll', scolledPast);
+    addEventListener(window, 'resize', resized);
+}
+
+export function createZoomListener(window: Window, scrollY: number): EventListener {
+    let listener: EventListener = (event: MouseEvent): void => {
+        if (isZoomable(event.target)) {
+            event.preventDefault();
+
+            let image: HTMLImageElement = event.target as HTMLImageElement;
+            let parent: HTMLElement = image.parentElement as HTMLElement;
+            let grandParent: HTMLElement = parent.parentElement as HTMLElement;
+
+            let alreadySetUp: boolean = isContainer(parent);
+            let wrapper: HTMLElement = alreadySetUp ? grandParent : parent;
+
+            let src: string = resolveSrc(wrapper, image);
+            let transformProperty: string | null = vendorProperty(window.document.body.style, 'transform');
+
+            if (transformProperty === null || event.metaKey || event.ctrlKey) {
+                window.open(src, '_blank');
+            } else {
+                let loadClone: EventListener | null = alreadySetUp ? null : setUp(window.document, src, wrapper, image);
+                zoom(window, wrapper, image, transformProperty, loadClone, listener, scrollY);
+            }
+        }
     };
 
     return listener;
