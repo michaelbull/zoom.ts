@@ -128,7 +128,6 @@ export function addZoomListener(window: Window): void {
             container.appendChild(clone);
         }
 
-
         let target: Matrix = targetDimensions(wrapper);
         let imageRect: ClientRect = image.getBoundingClientRect();
         let imagePosition: Matrix = positionOf(imageRect);
