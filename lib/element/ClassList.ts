@@ -1,10 +1,10 @@
 const CLASS_SEPARATOR: string = ' ';
 
-export function classesFrom(classList: string): string[] {
+function classesFrom(classList: string): string[] {
     return classList.split(CLASS_SEPARATOR);
 }
 
-export function classNotEmpty(className: string): boolean {
+function classNotEmpty(className: string): boolean {
     return className.length > 0;
 }
 
