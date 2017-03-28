@@ -4,30 +4,34 @@ import {
     removeClass
 } from './ClassList';
 
+const CLASS: string = 'zoom__element';
+const HIDDEN_CLASS: string = `${CLASS}--hidden`;
+const ACTIVE_CLASS: string = `${CLASS}--active`;
+
 export function setImageHidden(image: HTMLImageElement): void {
-    addClass(image, 'zoom__element--hidden');
+    addClass(image, HIDDEN_CLASS);
 }
 
 export function unsetImageHidden(image: HTMLImageElement): void {
-    removeClass(image, 'zoom__element--hidden');
+    removeClass(image, HIDDEN_CLASS);
 }
 
 export function isImageHidden(image: HTMLImageElement): boolean {
-    return hasClass(image, 'zoom__element--hidden');
+    return hasClass(image, HIDDEN_CLASS);
 }
 
 export function setImageActive(image: HTMLImageElement): void {
-    addClass(image, 'zoom__element--active');
+    addClass(image, ACTIVE_CLASS);
 }
 
 export function unsetImageActive(image: HTMLImageElement): void {
-    removeClass(image, 'zoom__element--active');
+    removeClass(image, ACTIVE_CLASS);
 }
 
 export function isImageActive(image: HTMLImageElement): boolean {
-    return hasClass(image, 'zoom__element--active');
+    return hasClass(image, ACTIVE_CLASS);
 }
 
 export function isZoomable(target: EventTarget): boolean {
-    return target instanceof HTMLImageElement && hasClass(target, 'zoom__element');
+    return target instanceof HTMLImageElement && hasClass(target, CLASS);
 }
