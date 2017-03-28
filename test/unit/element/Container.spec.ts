@@ -1,4 +1,5 @@
 import {
+    CLASS,
     createContainer,
     isContainer,
     refreshContainer
@@ -24,18 +25,18 @@ describe('createContainer', () => {
     });
 
     it('should assign the className', () => {
-        expect(createContainer(document).className).toBe('zoom__container');
+        expect(createContainer(document).className).toBe(CLASS);
     });
 });
 
 describe('isContainer', () => {
     it('should return true if the class is present', () => {
-        let element: any = { className: 'zoom__container' };
+        let element: any = { className: CLASS };
         expect(isContainer(element)).toBe(true);
     });
 
     it('should return false if the class is absent', () => {
-        let element: any = { className: 'example' };
+        let element: any = { className: '' };
         expect(isContainer(element)).toBe(false);
     });
 });

@@ -2,7 +2,7 @@ import { createDiv } from '../Document';
 import { hasClass } from './ClassList';
 import { repaint } from './Element';
 
-const CLASS: string = 'zoom__container';
+export const CLASS: string = 'zoom__container';
 
 export function createContainer(document: Document): HTMLDivElement {
     return createDiv(document, CLASS);
