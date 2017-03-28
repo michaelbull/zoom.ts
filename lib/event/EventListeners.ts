@@ -88,7 +88,7 @@ export function scrolled(start: number, minAmount: number, callback: Function, c
     };
 }
 
-export function cloneLoaded(wrapper: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement): EventListener {
+export function showLoadedClone(wrapper: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement): EventListener {
     let listener: EventListener = (): void => {
         removeEventListener(clone, 'load', listener);
 
@@ -105,17 +105,17 @@ function setUp(document: Document, src: string, wrapper: HTMLElement, image: HTM
     let container: HTMLElement = createContainer(document);
     let clone: HTMLImageElement = createClone(document, src);
 
-    let loaded: EventListener = cloneLoaded(wrapper, image, clone);
-    addEventListener(clone, 'load', loaded);
+    let showClone: EventListener = showLoadedClone(wrapper, image, clone);
+    addEventListener(clone, 'load', showClone);
 
     wrapper.replaceChild(container, image);
     container.appendChild(image);
     container.appendChild(clone);
-    return loaded;
+    return showClone;
 }
 
 function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, transformProperty: string | null,
-    loadCloneListener: EventListener | null, zoomListener: EventListener, scrollY: number): void {
+    showCloneListener: EventListener | null, zoomListener: EventListener, scrollY: number): void {
     let container: HTMLElement = image.parentElement as HTMLElement;
     let clone: HTMLImageElement = container.children.item(1) as HTMLImageElement;
 
@@ -126,16 +126,16 @@ function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, tra
 
     let use3d: boolean = transformProperty !== null && hasTranslate3d(window, transformProperty);
 
-    let transformContainer: Function = (): void => {
+    function transformContainer(): void {
         let viewport: Matrix = viewportDimensions(window.document);
         let cappedTarget: Matrix = minimizeMatrices(viewport, target);
         let factor: number = minimumScale(cappedTarget, imageSize);
 
         let translation: Matrix = translateToCentre(viewport, imageSize, imagePosition, factor);
         transform(container.style, scaleAndTranslate(factor, translation, use3d));
-    };
+    }
 
-    let freezeContainer: Function = (): void => {
+    function freezeContainer(): void {
         let viewport: Matrix = viewportDimensions(window.document);
         let cappedTarget: Matrix = minimizeMatrices(viewport, target);
         let factor: number = minimumScale(cappedTarget, imageSize);
@@ -144,15 +144,15 @@ function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, tra
         let newPosition: Matrix = centrePosition(viewport, newSize, imagePosition);
         resetTransformation(container.style);
         setBoundsPx(container.style, newPosition, newSize);
-    };
+    }
 
-    let recalculateScale: Function = (): void => {
+    function recalculateScale(): void {
         if (isWrapperTransitioning(wrapper)) {
             transformContainer();
         } else {
             freezeContainer();
         }
-    };
+    }
 
     let expanded: EventListener = (): void => {
         removeTransitionEndListener(container, expanded);
@@ -161,8 +161,8 @@ function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, tra
         refreshContainer(container, freezeContainer);
 
         if (isCloneLoaded(clone) && !isCloneVisible(clone)) {
-            if (loadCloneListener !== null) {
-                removeTransitionEndListener(container, loadCloneListener);
+            if (showCloneListener !== null) {
+                removeTransitionEndListener(container, showCloneListener);
             }
 
             setImageHidden(image);
@@ -173,7 +173,7 @@ function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, tra
     let removeListeners: Function;
     let overlay: HTMLDivElement = createOverlay(window.document);
 
-    let collapse: Function = (): void => {
+    function collapse(): void {
         removeListeners();
 
         if (isWrapperExpanding(wrapper)) {
@@ -181,8 +181,8 @@ function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, tra
             unsetWrapperExpanding(wrapper);
         }
 
-        if (!isCloneLoaded(clone) && loadCloneListener !== null) {
-            removeEventListener(clone, 'load', loadCloneListener);
+        if (!isCloneLoaded(clone) && showCloneListener !== null) {
+            removeEventListener(clone, 'load', showCloneListener);
         }
 
         unsetWrapperExpanded(wrapper);
@@ -210,7 +210,7 @@ function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, tra
         resetTransformation(container.style);
         resetBounds(container.style);
         hideOverlay(overlay);
-    };
+    }
 
     let pressedEsc: EventListener = escKeyPressed(collapse);
     let dismissed: EventListener = (): void => collapse();

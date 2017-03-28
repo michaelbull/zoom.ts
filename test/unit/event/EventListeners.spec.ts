@@ -1,7 +1,7 @@
 import { isCloneVisible } from '../../../lib/element/Clone';
 import { isImageHidden } from '../../../lib/element/Image';
 import {
-    cloneLoaded,
+    showLoadedClone,
     ESCAPE_KEY_CODE,
     escKeyPressed,
     scrolled
@@ -87,7 +87,7 @@ describe('scrolled', () => {
     });
 });
 
-describe('cloneLoaded', () => {
+describe('showLoadedClone', () => {
     describe('if the wrapper is not expanded', () => {
         let clone: any;
         let image: any;
@@ -103,7 +103,7 @@ describe('cloneLoaded', () => {
 
             let event: any = {};
 
-            listener = cloneLoaded(wrapper, image, clone);
+            listener = showLoadedClone(wrapper, image, clone);
             listener(event);
         });
 
@@ -141,7 +141,7 @@ describe('cloneLoaded', () => {
 
                 let event: any = {};
 
-                listener = cloneLoaded(wrapper, image, clone);
+                listener = showLoadedClone(wrapper, image, clone);
                 listener(event);
             });
 
@@ -171,7 +171,7 @@ describe('cloneLoaded', () => {
 
                 let event: any = {};
 
-                listener = cloneLoaded(wrapper, image, clone);
+                listener = showLoadedClone(wrapper, image, clone);
                 listener(event);
             });
 
