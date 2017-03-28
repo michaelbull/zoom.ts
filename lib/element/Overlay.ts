@@ -6,18 +6,22 @@ import {
 } from './ClassList';
 import { repaint } from './Element';
 
+export const CLASS: string = 'zoom__overlay';
+export const VISIBLE_CLASS: string = `${CLASS}--visible`;
+
 export function createOverlay(document: Document): HTMLDivElement {
-    let overlay: HTMLDivElement = createDiv(document, 'zoom__overlay');
-    document.body.appendChild(overlay);
+    return createDiv(document, CLASS);
+}
+
+export function showOverlay(overlay: HTMLDivElement): void {
     repaint(overlay);
-    addClass(overlay, 'zoom__overlay--visible');
-    return overlay;
+    addClass(overlay, VISIBLE_CLASS);
 }
 
 export function hideOverlay(overlay: HTMLDivElement): void {
-    removeClass(overlay, 'zoom__overlay--visible');
+    removeClass(overlay, VISIBLE_CLASS);
 }
 
 export function isOverlayVisible(overlay: HTMLDivElement): boolean {
-    return hasClass(overlay, 'zoom__overlay--visible');
+    return hasClass(overlay, VISIBLE_CLASS);
 }

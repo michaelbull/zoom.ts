@@ -21,7 +21,8 @@ import {
 } from './element/Image';
 import {
     createOverlay,
-    hideOverlay
+    hideOverlay,
+    showOverlay
 } from './element/Overlay';
 import {
     resetBounds,
@@ -76,6 +77,9 @@ import {
 const SCROLL_Y_DELTA: number = 50;
 
 export function addZoomListener(window: Window): void {
+    let document: Document = window.document;
+    let body: HTMLElement = document.body;
+
     let zoomListener: EventListener = (event: MouseEvent): void => {
         if (!isZoomable(event.target)) {
             return;
@@ -103,8 +107,6 @@ export function addZoomListener(window: Window): void {
         }
 
         let src: string = resolveSrc(wrapper, image);
-        let document: Document = window.document;
-        let body: HTMLElement = document.body;
         let transformProperty: string | null = vendorProperty(body.style, 'transform');
 
         if (transformProperty === null || event.metaKey || event.ctrlKey) {
@@ -136,7 +138,7 @@ export function addZoomListener(window: Window): void {
             use3d = hasTranslate3d(window, transformProperty);
         }
 
-        let overlay: HTMLDivElement = createOverlay(window.document);
+        let overlay: HTMLDivElement = createOverlay(document);
         let target: Matrix = targetDimensions(wrapper);
         let imageRect: ClientRect = image.getBoundingClientRect();
         let imagePosition: Matrix = positionOf(imageRect);
@@ -206,7 +208,7 @@ export function addZoomListener(window: Window): void {
             let collapsed: EventListener = (): void => {
                 removeTransitionEndListener(container, collapsed);
 
-                window.document.body.removeChild(overlay);
+                body.removeChild(overlay);
                 unsetWrapperCollapsing(wrapper);
                 unsetHeight(wrapper.style);
                 unsetImageHidden(image);
@@ -216,7 +218,7 @@ export function addZoomListener(window: Window): void {
                     unsetCloneVisible(clone);
                 }
 
-                addEventListener(window.document.body, 'click', zoomListener);
+                addEventListener(body, 'click', zoomListener);
             };
 
             addTransitionEndListener(window, container, collapsed);
@@ -235,14 +237,16 @@ export function addZoomListener(window: Window): void {
         });
 
         removeListeners = (): void => {
-            removeEventListener(window.document, 'keyup', pressedEsc);
+            removeEventListener(document, 'keyup', pressedEsc);
             removeEventListener(container, 'click', dismissed);
             removeEventListener(window, 'scroll', scolledPast);
             removeEventListener(window, 'resize', resized);
         };
 
-        removeEventListener(window.document.body, 'click', zoomListener);
+        removeEventListener(body, 'click', zoomListener);
 
+        body.appendChild(overlay);
+        showOverlay(overlay);
         setWrapperExpanding(wrapper);
         setImageActive(image);
         setHeightPx(wrapper.style, image.height);
@@ -252,11 +256,11 @@ export function addZoomListener(window: Window): void {
             scaleAndTranslateContainer();
         }
 
-        addEventListener(window.document, 'keyup', pressedEsc);
+        addEventListener(document, 'keyup', pressedEsc);
         addEventListener(container, 'click', dismissed);
         addEventListener(window, 'scroll', scolledPast);
         addEventListener(window, 'resize', resized);
     };
 
-    addEventListener(window.document.body, 'click', zoomListener);
+    addEventListener(body, 'click', zoomListener);
 }

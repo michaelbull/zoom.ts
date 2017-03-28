@@ -1,20 +1,20 @@
 import {
+    CLASS,
     createOverlay,
     hideOverlay,
-    isOverlayVisible
+    isOverlayVisible,
+    showOverlay,
+    VISIBLE_CLASS
 } from '../../../lib/element/Overlay';
 
 describe('createOverlay', () => {
-    let overlay: any;
     let document: any;
+    let element: any;
 
     beforeEach(() => {
-        overlay = { className: 'overlay' };
+        element = {};
         document = {
-            createElement: jasmine.createSpy('createElement').and.callFake(() => overlay),
-            body: {
-                appendChild: jasmine.createSpy('appendChild')
-            }
+            createElement: jasmine.createSpy('createElement').and.callFake(() => element)
         };
     });
 
@@ -24,31 +24,29 @@ describe('createOverlay', () => {
     });
 
     it('should assign the className', () => {
-        expect(createOverlay(document).className).toBe('zoom__overlay zoom__overlay--visible');
+        expect(createOverlay(document).className).toBe(CLASS);
     });
+});
 
-    it('should add the overlay to the document.body', () => {
-        createOverlay(document);
-        expect(document.body.appendChild).toHaveBeenCalledWith(overlay);
-    });
-
+describe('showOverlay', () => {
     it('should make the overlay visible', () => {
-        createOverlay(document);
+        let overlay: any = { className: 'my-hidden-overlay' };
+        showOverlay(overlay);
         expect(isOverlayVisible(overlay)).toBe(true);
     });
 });
 
 describe('hideOverlay', () => {
-    it('should remove the visible class', () => {
-        let overlay: any = { className: 'example-overlay zoom__overlay--visible' };
+    it('should make the overlay not visible', () => {
+        let overlay: any = { className: `my-visible-overlay ${VISIBLE_CLASS}` };
         hideOverlay(overlay);
-        expect(overlay.className).toBe('example-overlay');
+        expect(isOverlayVisible(overlay)).toBe(false);
     });
 });
 
 describe('isOverlayVisible', () => {
     it('should return true if the visible class is present', () => {
-        let overlay: any = { className: 'overlay zoom__overlay--visible' };
+        let overlay: any = { className: `overlay ${VISIBLE_CLASS}` };
         expect(isOverlayVisible(overlay)).toBe(true);
     });
 
