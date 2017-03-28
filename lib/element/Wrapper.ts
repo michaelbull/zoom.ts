@@ -2,7 +2,7 @@ import {
     addClass,
     hasClass,
     removeClass
-} from './Element';
+} from './ClassList';
 
 export function resolveSrc(wrapper: HTMLElement, image: HTMLImageElement): string {
     let attribute: string | null = wrapper.getAttribute('data-src');

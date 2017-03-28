@@ -2,7 +2,7 @@ import {
     addClass,
     hasClass,
     removeClass
-} from './Element';
+} from './ClassList';
 
 export function setImageHidden(image: HTMLImageElement): void {
     addClass(image, 'zoom__element--hidden');

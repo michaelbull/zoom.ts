@@ -6,7 +6,7 @@ import {
     addClass,
     hasClass,
     removeClass
-} from './Element';
+} from './ClassList';
 
 export function createClone(document: Document, src: string): HTMLImageElement {
     let clone: HTMLImageElement = document.createElement('img');

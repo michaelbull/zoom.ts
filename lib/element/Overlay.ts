@@ -2,9 +2,9 @@ import { createDiv } from '../Document';
 import {
     addClass,
     hasClass,
-    removeClass,
-    repaint
-} from './Element';
+    removeClass
+} from './ClassList';
+import { repaint } from './Element';
 
 export function createOverlay(document: Document): HTMLDivElement {
     let overlay: HTMLDivElement = createDiv(document, 'zoom__overlay');

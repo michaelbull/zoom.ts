@@ -1,8 +1,6 @@
 import { createDiv } from '../Document';
-import {
-    hasClass,
-    repaint
-} from './Element';
+import { hasClass } from './ClassList';
+import { repaint } from './Element';
 
 export function createContainer(document: Document): HTMLDivElement {
     return createDiv(document, 'zoom__container');
