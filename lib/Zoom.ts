@@ -128,12 +128,7 @@ export function addZoomListener(window: Window): void {
             container.appendChild(clone);
         }
 
-        let use3d: boolean = false;
-        if (transformProperty !== null) {
-            use3d = hasTranslate3d(window, transformProperty);
-        }
 
-        let overlay: HTMLDivElement = createOverlay(document);
         let target: Matrix = targetDimensions(wrapper);
         let imageRect: ClientRect = image.getBoundingClientRect();
         let imagePosition: Matrix = positionOf(imageRect);
@@ -150,6 +145,7 @@ export function addZoomListener(window: Window): void {
             setBoundsPx(container.style, newPosition, newSize);
         };
 
+        let use3d: boolean = transformProperty !== null && hasTranslate3d(window, transformProperty);
         let transformContainer: Function = (): void => {
             let viewport: Matrix = viewportDimensions(document);
             let cappedTarget: Matrix = minimizeMatrices(viewport, target);
@@ -184,6 +180,7 @@ export function addZoomListener(window: Window): void {
         };
 
         let removeListeners: Function;
+        let overlay: HTMLDivElement = createOverlay(document);
 
         let collapse: Function = (): void => {
             removeListeners();
