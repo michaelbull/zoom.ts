@@ -28,27 +28,35 @@ export function hasClass(element: HTMLElement, name: string): boolean {
     return element.className.indexOf(name) !== -1;
 }
 
-export function addClass(element: HTMLElement, name: string): void {
-    if (element.className.length === 0) {
-        element.className = name;
-    } else {
-        element.className += ` ${name}`;
-    }
+export function classesFrom(className: string): string[] {
+    return className.split(' ');
 }
 
-export function removeClass(element: HTMLElement, name: string): void {
-    let existing: string = element.className;
-    let multipleClasses: boolean = existing.indexOf(' ') !== -1;
+function excludeClass(exclude: string): (className: string) => boolean {
+    return (className: string): boolean => {
+        return className !== exclude;
+    };
+}
 
-    if (multipleClasses) {
-        let classes: string[] = existing.split(' ');
-        let index: number = classes.indexOf(name);
+let excludeEmptyClass: (className: string) => boolean = excludeClass('');
 
-        if (index !== -1) {
-            classes.splice(index, 1);
-            element.className = classes.join(' ');
-        }
-    } else if (existing === name) {
-        element.className = '';
-    }
+export function joinClasses(classes: string[]): string {
+    return classes
+        .filter(excludeEmptyClass)
+        .join(' ');
+}
+
+export function truncateClass(classes: string[], toExclude: string): string {
+    return classes
+        .filter(excludeClass(toExclude))
+        .filter(excludeEmptyClass)
+        .join(' ');
+}
+
+export function addClass(element: HTMLElement, add: string): void {
+    element.className = joinClasses([element.className, add]);
+}
+
+export function removeClass(element: HTMLElement, remove: string): void {
+    element.className = truncateClass(classesFrom(element.className), remove);
 }

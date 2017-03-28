@@ -2,6 +2,7 @@ import {
     addClass,
     clientDimensions,
     hasClass,
+    joinClasses,
     removeClass,
     targetDimensions
 } from '../../../lib/element/Element';
@@ -184,3 +185,45 @@ describe('removeClass', () => {
         });
     });
 });
+
+describe('joinClasses', () => {
+    it('should return an empty string when merging empty classes', () => {
+        expect(joinClasses(['', '', ''])).toBe('');
+    });
+
+    it('should return a single class when merging with an existing empty class', () => {
+        expect(joinClasses(['', 'new'])).toBe('new');
+    });
+
+    it('should return a single class when merging with a new empty class', () => {
+        expect(joinClasses(['existing', ''])).toBe('existing');
+    });
+});
+
+// describe('truncateClass', () => {
+//     describe('if there are no classes', () => {
+//         it('should return an empty string', () => {
+//             expect(truncateClass('', 'remove-me')).toBe('');
+//         });
+//     });
+//
+//     describe('if there is a single class', () => {
+//         it('should return an empty string when removing the remaining class', () => {
+//             expect(truncateClass('example-class', 'example-class')).toBe('');
+//         });
+//
+//         it('should return the unmodified className when removing a different class', () => {
+//             expect(truncateClass('keep-me', 'remove-me')).toBe('keep-me');
+//         });
+//     });
+//
+//     describe('if there are multiple classes', () => {
+//         it('should return a className without the class when removing a class that is present', () => {
+//             expect(truncateClass('example button container wrapper', 'container')).toBe('example button wrapper');
+//         });
+//
+//         it('should return the unmodified className when removing a different class', () => {
+//             expect(truncateClass('list map set tree', 'vector')).toBe('list map set tree');
+//         });
+//     });
+// });
