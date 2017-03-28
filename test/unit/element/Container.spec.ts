@@ -2,7 +2,8 @@ import {
     CLASS,
     createContainer,
     isContainer,
-    refreshContainer
+    refreshContainer,
+    restoreContainer
 } from '../../../lib/element/Container';
 
 describe('createContainer', () => {
@@ -69,5 +70,35 @@ describe('refreshContainer', () => {
     it('should clear the transition after executing the callback', () => {
         refreshContainer(container, jasmine.createSpy('callback'));
         expect(container.style.transition).toBe('');
+    });
+});
+
+describe('restoreContainer', () => {
+    it('should reset the transformation', () => {
+        let container: any = {
+            style: {
+                msTransform: 'scale(5)'
+            }
+        };
+        restoreContainer(container);
+        expect(container.style.msTransform).toBe('');
+    });
+
+    it('should reset the bounds', () => {
+        let container: any = {
+            style: {
+                left: '50px',
+                top: '10px',
+                width: '100px',
+                maxWidth: '100px',
+                height: '200px'
+            }
+        };
+        restoreContainer(container);
+        expect(container.style.left).toBe('');
+        expect(container.style.top).toBe('');
+        expect(container.style.width).toBe('');
+        expect(container.style.maxWidth).toBe('');
+        expect(container.style.height).toBe('');
     });
 });

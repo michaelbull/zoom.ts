@@ -9,7 +9,8 @@ import {
 import {
     createContainer,
     isContainer,
-    refreshContainer
+    refreshContainer,
+    restoreContainer
 } from '../element/Container';
 import { targetDimensions } from '../element/Element';
 import {
@@ -25,25 +26,21 @@ import {
     showOverlay
 } from '../element/Overlay';
 import {
-    resetBounds,
     resetTransformation,
     scaleAndTranslate,
     setBoundsPx,
-    setHeightPx,
-    transform,
-    unsetHeight
+    transform
 } from '../element/Style';
 import {
+    collapseWrapper,
+    expandWrapper,
+    finishCollapsingWrapper,
+    finishExpandingWrapper,
     isWrapperExpanded,
     isWrapperExpanding,
     isWrapperTransitioning,
     resolveSrc,
-    setWrapperCollapsing,
-    setWrapperExpanded,
-    setWrapperExpanding,
-    unsetWrapperCollapsing,
-    unsetWrapperExpanded,
-    unsetWrapperExpanding
+    stopExpandingWrapper
 } from '../element/Wrapper';
 import {
     centrePosition,
@@ -156,8 +153,8 @@ function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, tra
 
     let expanded: EventListener = (): void => {
         removeTransitionEndListener(container, expanded);
-        unsetWrapperExpanding(wrapper);
-        setWrapperExpanded(wrapper);
+
+        finishExpandingWrapper(wrapper);
         refreshContainer(container, freezeContainer);
 
         if (isCloneLoaded(clone) && !isCloneVisible(clone)) {
@@ -178,22 +175,20 @@ function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, tra
 
         if (isWrapperExpanding(wrapper)) {
             removeTransitionEndListener(container, expanded);
-            unsetWrapperExpanding(wrapper);
+            stopExpandingWrapper(wrapper);
         }
 
         if (!isCloneLoaded(clone) && showCloneListener !== null) {
             removeEventListener(clone, 'load', showCloneListener);
         }
 
-        unsetWrapperExpanded(wrapper);
-        setWrapperCollapsing(wrapper);
+        collapseWrapper(wrapper);
 
         let collapsed: EventListener = (): void => {
             removeTransitionEndListener(container, collapsed);
 
             window.document.body.removeChild(overlay);
-            unsetWrapperCollapsing(wrapper);
-            unsetHeight(wrapper.style);
+            finishCollapsingWrapper(wrapper);
             unsetImageHidden(image);
             unsetImageActive(image);
 
@@ -207,8 +202,7 @@ function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, tra
         addTransitionEndListener(window, container, collapsed);
         refreshContainer(container, recalculateScale);
 
-        resetTransformation(container.style);
-        resetBounds(container.style);
+        restoreContainer(container);
         hideOverlay(overlay);
     }
 
@@ -229,9 +223,8 @@ function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, tra
 
     window.document.body.appendChild(overlay);
     showOverlay(overlay);
-    setWrapperExpanding(wrapper);
     setImageActive(image);
-    setHeightPx(wrapper.style, image.height);
+    expandWrapper(wrapper, image.height);
 
     addTransitionEndListener(window, container, expanded);
     if (!isWrapperExpanded(wrapper)) {

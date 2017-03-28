@@ -1,6 +1,10 @@
 import { createDiv } from '../Document';
 import { hasClass } from './ClassList';
 import { repaint } from './Element';
+import {
+    resetBounds,
+    resetTransformation
+} from './Style';
 
 export const CLASS: string = 'zoom__container';
 
@@ -17,4 +21,9 @@ export function refreshContainer(container: HTMLElement, callback: Function): vo
     callback();
     repaint(container);
     container.style.transition = '';
+}
+
+export function restoreContainer(container: HTMLElement): void {
+    resetTransformation(container.style);
+    resetBounds(container.style);
 }
