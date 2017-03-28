@@ -33,6 +33,7 @@ import {
     unsetHeight
 } from './element/Style';
 import {
+    isWrapperExpanded,
     isWrapperExpanding,
     isWrapperTransitioning,
     resolveSrc,
@@ -247,7 +248,9 @@ export function addZoomListener(window: Window): void {
         setHeightPx(wrapper.style, image.height);
 
         addTransitionEndListener(window, container, expanded);
-        scaleAndTranslateContainer();
+        if (!isWrapperExpanded(wrapper)) {
+            scaleAndTranslateContainer();
+        }
 
         addEventListener(window.document, 'keyup', pressedEsc);
         addEventListener(container, 'click', dismissed);
