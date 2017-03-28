@@ -128,21 +128,12 @@ export function addZoomListener(window: Window): void {
             container.appendChild(clone);
         }
 
+        let wrapperStyle: CSSStyleDeclaration = wrapper.style;
+        let containerStyle: CSSStyleDeclaration = container.style;
         let target: Matrix = targetDimensions(wrapper);
         let imageRect: ClientRect = image.getBoundingClientRect();
         let imagePosition: Matrix = positionOf(imageRect);
         let imageSize: Matrix = sizeOf(imageRect);
-
-        let freezeContainer: Function = (): void => {
-            let viewport: Matrix = viewportDimensions(document);
-            let cappedTarget: Matrix = minimizeMatrices(viewport, target);
-            let factor: number = minimumScale(cappedTarget, imageSize);
-
-            let newSize: Matrix = multiplyMatrix(imageSize, factor);
-            let newPosition: Matrix = centrePosition(viewport, newSize, imagePosition);
-            resetTransformation(container.style);
-            setBoundsPx(container.style, newPosition, newSize);
-        };
 
         let use3d: boolean = transformProperty !== null && hasTranslate3d(window, transformProperty);
         let transformContainer: Function = (): void => {
@@ -151,7 +142,18 @@ export function addZoomListener(window: Window): void {
             let factor: number = minimumScale(cappedTarget, imageSize);
 
             let translation: Matrix = translateToCentre(viewport, imageSize, imagePosition, factor);
-            transform(container.style, scaleAndTranslate(factor, translation, use3d));
+            transform(containerStyle, scaleAndTranslate(factor, translation, use3d));
+        };
+
+        let freezeContainer: Function = (): void => {
+            let viewport: Matrix = viewportDimensions(document);
+            let cappedTarget: Matrix = minimizeMatrices(viewport, target);
+            let factor: number = minimumScale(cappedTarget, imageSize);
+
+            let newSize: Matrix = multiplyMatrix(imageSize, factor);
+            let newPosition: Matrix = centrePosition(viewport, newSize, imagePosition);
+            resetTransformation(containerStyle);
+            setBoundsPx(containerStyle, newPosition, newSize);
         };
 
         let recalculateScale: Function = (): void => {
@@ -166,7 +168,7 @@ export function addZoomListener(window: Window): void {
             removeTransitionEndListener(container, expanded);
             unsetWrapperExpanding(wrapper);
             setWrapperExpanded(wrapper);
-            refreshContainer(container, () => freezeContainer());
+            refreshContainer(container, freezeContainer);
 
             if (isCloneLoaded(clone) && !isCloneVisible(clone)) {
                 if (showClone !== null) {
@@ -201,7 +203,7 @@ export function addZoomListener(window: Window): void {
 
                 body.removeChild(overlay);
                 unsetWrapperCollapsing(wrapper);
-                unsetHeight(wrapper.style);
+                unsetHeight(wrapperStyle);
                 unsetImageHidden(image);
                 unsetImageActive(image);
 
@@ -213,19 +215,18 @@ export function addZoomListener(window: Window): void {
             };
 
             addTransitionEndListener(window, container, collapsed);
-            refreshContainer(container, () => recalculateScale());
+            refreshContainer(container, recalculateScale);
 
-            resetTransformation(container.style);
-            resetBounds(container.style);
+            resetTransformation(containerStyle);
+            resetBounds(containerStyle);
             hideOverlay(overlay);
         };
 
         let pressedEsc: EventListener = escKeyPressed(collapse);
         let dismissed: EventListener = (): void => collapse();
         let resized: EventListener = (): void => recalculateScale();
-        let scolledPast: EventListener = scrolled(pageScrollY(window), SCROLL_Y_DELTA, collapse, () => {
-            return pageScrollY(window);
-        });
+        let initialScrollY: number = pageScrollY(window);
+        let scolledPast: EventListener = scrolled(initialScrollY, SCROLL_Y_DELTA, collapse, () => pageScrollY(window));
 
         removeListeners = (): void => {
             removeEventListener(document, 'keyup', pressedEsc);
@@ -240,7 +241,7 @@ export function addZoomListener(window: Window): void {
         showOverlay(overlay);
         setWrapperExpanding(wrapper);
         setImageActive(image);
-        setHeightPx(wrapper.style, image.height);
+        setHeightPx(wrapperStyle, image.height);
 
         addTransitionEndListener(window, container, expanded);
         if (!isWrapperExpanded(wrapper)) {
