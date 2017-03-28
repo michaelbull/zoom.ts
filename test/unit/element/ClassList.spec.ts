@@ -3,7 +3,7 @@ import {
     hasClass,
     joinClasses,
     removeClass,
-    truncateClass
+    excludeClass
 } from '../../../lib/element/ClassList';
 
 describe('joinClasses', () => {
@@ -20,28 +20,28 @@ describe('joinClasses', () => {
     });
 });
 
-describe('truncateClass', () => {
+describe('excludeClass', () => {
     it('should return an empty string if there are no classes present', () => {
-        expect(truncateClass('remove-me', [''])).toBe('');
+        expect(excludeClass('remove-me', [''])).toBe('');
     });
 
     it('should return an empty string when removing the only class', () => {
-        expect(truncateClass('example-class', ['example-class'])).toBe('');
+        expect(excludeClass('example-class', ['example-class'])).toBe('');
     });
 
     it('should return the unmodified className when removing an absent class', () => {
         let classes: string[] = ['list', 'map', 'set', 'tree'];
-        expect(truncateClass('vector', classes)).toBe('list map set tree');
+        expect(excludeClass('vector', classes)).toBe('list map set tree');
     });
 
     it('should return a className without the class when removing a class that is present', () => {
         let classes: string[] = ['example', 'button', 'container', 'wrapper'];
-        expect(truncateClass('container', classes)).toBe('example button wrapper');
+        expect(excludeClass('container', classes)).toBe('example button wrapper');
     });
 
     it('should exclude empty classes', () => {
         let classes: string[] = ['', 'example', '', 'image', '', '', 'wrapper'];
-        expect(truncateClass('wrapper', classes)).toBe('example image');
+        expect(excludeClass('wrapper', classes)).toBe('example image');
     });
 });
 

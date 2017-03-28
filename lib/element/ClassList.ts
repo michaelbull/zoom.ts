@@ -14,14 +14,14 @@ export function joinClasses(classes: string[]): string {
         .join(CLASS_SEPARATOR);
 }
 
-export function truncateClass(exclude: string, classes: string[]): string {
+export function excludeClass(exclude: string, classes: string[]): string {
     return classes
         .filter((className: string) => classNotEmpty(className) && className !== exclude)
         .join(CLASS_SEPARATOR);
 }
 
-export function hasClass(element: HTMLElement, name: string): boolean {
-    return element.className.indexOf(name) !== -1;
+export function hasClass(element: HTMLElement, className: string): boolean {
+    return element.className.indexOf(className) !== -1;
 }
 
 export function addClass(element: HTMLElement, className: string): void {
@@ -29,5 +29,5 @@ export function addClass(element: HTMLElement, className: string): void {
 }
 
 export function removeClass(element: HTMLElement, className: string): void {
-    element.className = truncateClass(className, classesFrom(element.className));
+    element.className = excludeClass(className, classesFrom(element.className));
 }
