@@ -4,9 +4,9 @@ import {
     removeClass
 } from './ClassList';
 
-const CLASS: string = 'zoom__element';
-const HIDDEN_CLASS: string = `${CLASS}--hidden`;
-const ACTIVE_CLASS: string = `${CLASS}--active`;
+export const CLASS: string = 'zoom__element';
+export const HIDDEN_CLASS: string = `${CLASS}--hidden`;
+export const ACTIVE_CLASS: string = `${CLASS}--active`;
 
 export function setImageHidden(image: HTMLImageElement): void {
     addClass(image, HIDDEN_CLASS);

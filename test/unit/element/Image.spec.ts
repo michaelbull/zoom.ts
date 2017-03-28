@@ -1,4 +1,7 @@
 import {
+    ACTIVE_CLASS,
+    CLASS,
+    HIDDEN_CLASS,
     isImageActive,
     isImageHidden,
     isZoomable,
@@ -10,56 +13,56 @@ import {
 
 describe('setImageHidden', () => {
     it('should add the hidden class', () => {
-        let image: any = { className: 'my-image' };
+        let image: any = { className: '' };
         setImageHidden(image);
-        expect(image.className).toBe('my-image zoom__element--hidden');
+        expect(isImageHidden(image)).toBe(true);
     });
 });
 
 describe('unsetImageHidden', () => {
     it('should remove the hidden class', () => {
-        let image: any = { className: 'another-image zoom__element--hidden' };
+        let image: any = { className: HIDDEN_CLASS };
         unsetImageHidden(image);
-        expect(image.className).toBe('another-image');
+        expect(isImageHidden(image)).toBe(false);
     });
 });
 
 describe('isImageHidden', () => {
     it('should return true if the hidden class is present', () => {
-        let image: any = { className: 'example zoom__element--hidden' };
+        let image: any = { className: HIDDEN_CLASS };
         expect(isImageHidden(image)).toBe(true);
     });
 
     it('should return false if the hidden class is absent', () => {
-        let image: any = { className: 'example' };
+        let image: any = { className: '' };
         expect(isImageHidden(image)).toBe(false);
     });
 });
 
 describe('setImageActive', () => {
     it('should add the active class', () => {
-        let image: any = { className: 'this-image' };
+        let image: any = { className: '' };
         setImageActive(image);
-        expect(image.className).toBe('this-image zoom__element--active');
+        expect(isImageActive(image)).toBe(true);
     });
 });
 
 describe('unsetImageActive', () => {
     it('should remove the active class', () => {
-        let image: any = { className: 'that-image zoom__element--active' };
+        let image: any = { className: ACTIVE_CLASS };
         unsetImageActive(image);
-        expect(image.className).toBe('that-image');
+        expect(isImageActive(image)).toBe(false);
     });
 });
 
 describe('isImageActive', () => {
     it('should return true if the active class is present', () => {
-        let image: any = { className: 'element zoom__element--active' };
+        let image: any = { className: ACTIVE_CLASS };
         expect(isImageActive(image)).toBe(true);
     });
 
     it('should return false if the active class is absent', () => {
-        let image: any = { className: 'element' };
+        let image: any = { className: '' };
         expect(isImageActive(image)).toBe(false);
     });
 });
@@ -78,7 +81,7 @@ describe('isZoomable', () => {
 
     it('should return true if the target does have the zoomable class', () => {
         let element: HTMLImageElement = new Image();
-        element.className = 'zoom__element';
+        element.className = CLASS;
         expect(isZoomable(element)).toBe(true);
     });
 });
