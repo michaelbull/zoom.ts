@@ -1,10 +1,13 @@
 import {
+    CLASS,
     createClone,
     isCloneLoaded,
     isCloneVisible,
+    LOADED_CLASS,
     setCloneLoaded,
     setCloneVisible,
-    unsetCloneVisible
+    unsetCloneVisible,
+    VISIBLE_CLASS
 } from '../../../lib/element/Clone';
 
 describe('createClone', () => {
@@ -34,7 +37,7 @@ describe('createClone', () => {
     });
 
     it('should assign the className', () => {
-        expect(clone.className).toBe('zoom__clone');
+        expect(clone.className).toBe(CLASS);
     });
 
     it('should set the src', () => {
@@ -65,48 +68,48 @@ describe('createClone', () => {
 
 describe('setCloneVisible', () => {
     it('should add the visible class', () => {
-        let clone: any = { className: 'this-clone' };
+        let clone: any = { className: '' };
         setCloneVisible(clone);
-        expect(clone.className).toBe('this-clone zoom__clone--visible');
+        expect(isCloneVisible(clone)).toBe(true);
     });
 });
 
 describe('unsetCloneVisible', () => {
-    it('should add the visible class', () => {
-        let clone: any = { className: 'that-clone zoom__clone--visible' };
+    it('should remove the visible class', () => {
+        let clone: any = { className: VISIBLE_CLASS };
         unsetCloneVisible(clone);
-        expect(clone.className).toBe('that-clone');
+        expect(isCloneVisible(clone)).toBe(false);
     });
 });
 
 describe('isCloneVisible', () => {
     it('should return true if the visible class is present', () => {
-        let clone: any = { className: 'clone zoom__clone--visible' };
+        let clone: any = { className: VISIBLE_CLASS };
         expect(isCloneVisible(clone)).toBe(true);
     });
 
     it('should return false if the visible class is present', () => {
-        let clone: any = { className: 'clone' };
+        let clone: any = { className: '' };
         expect(isCloneVisible(clone)).toBe(false);
     });
 });
 
 describe('setCloneLoaded', () => {
     it('should add the loaded class', () => {
-        let clone: any = { className: 'clone' };
+        let clone: any = { className: '' };
         setCloneLoaded(clone);
-        expect(clone.className).toBe('clone zoom__clone--loaded');
+        expect(isCloneLoaded(clone)).toBe(true);
     });
 });
 
 describe('isCloneLoaded', () => {
     it('should return true if the loaded class is present', () => {
-        let clone: any = { className: 'clone zoom__clone--loaded' };
+        let clone: any = { className: LOADED_CLASS };
         expect(isCloneLoaded(clone)).toBe(true);
     });
 
     it('should return false if the loaded class is present', () => {
-        let clone: any = { className: 'clone' };
+        let clone: any = { className: '' };
         expect(isCloneLoaded(clone)).toBe(false);
     });
 });

@@ -8,9 +8,9 @@ import {
     removeClass
 } from './ClassList';
 
-const CLASS: string = 'zoom__clone';
-const VISIBLE_CLASS: string = `${CLASS}--visible`;
-const LOADED_CLASS: string = `${CLASS}--loaded`;
+export const CLASS: string = 'zoom__clone';
+export const VISIBLE_CLASS: string = `${CLASS}--visible`;
+export const LOADED_CLASS: string = `${CLASS}--loaded`;
 
 export function createClone(document: Document, src: string): HTMLImageElement {
     let clone: HTMLImageElement = document.createElement('img');

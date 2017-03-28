@@ -29,8 +29,8 @@ describe('createOverlay', () => {
 });
 
 describe('showOverlay', () => {
-    it('should make the overlay visible', () => {
-        let overlay: any = { className: 'my-hidden-overlay' };
+    it('should add the visible class', () => {
+        let overlay: any = { className: '' };
         showOverlay(overlay);
         expect(isOverlayVisible(overlay)).toBe(true);
     });
@@ -38,7 +38,7 @@ describe('showOverlay', () => {
 
 describe('hideOverlay', () => {
     it('should make the overlay not visible', () => {
-        let overlay: any = { className: `my-visible-overlay ${VISIBLE_CLASS}` };
+        let overlay: any = { className: VISIBLE_CLASS };
         hideOverlay(overlay);
         expect(isOverlayVisible(overlay)).toBe(false);
     });
@@ -46,12 +46,12 @@ describe('hideOverlay', () => {
 
 describe('isOverlayVisible', () => {
     it('should return true if the visible class is present', () => {
-        let overlay: any = { className: `overlay ${VISIBLE_CLASS}` };
+        let overlay: any = { className: VISIBLE_CLASS };
         expect(isOverlayVisible(overlay)).toBe(true);
     });
 
     it('should return false if the visible class is absent', () => {
-        let overlay: any = { className: 'example' };
+        let overlay: any = { className: '' };
         expect(isOverlayVisible(overlay)).toBe(false);
     });
 });
