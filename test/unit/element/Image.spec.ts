@@ -73,15 +73,26 @@ describe('isZoomable', () => {
         expect(isZoomable(target)).toBe(false);
     });
 
+    it('should return false if the target has no parentElement', () => {
+        let target: HTMLImageElement = document.createElement('img');
+        target.className = CLASS;
+        expect(isZoomable(target)).toBe(false);
+    });
+
     it('should return false if the target does not have the zoomable class', () => {
-        let element: HTMLImageElement = new Image();
-        element.className = 'example';
-        expect(isZoomable(element)).toBe(false);
+        let target: HTMLImageElement = document.createElement('img');
+        let parent: HTMLElement = document.createElement('div');
+        parent.appendChild(target);
+
+        expect(isZoomable(target)).toBe(false);
     });
 
     it('should return true if the target does have the zoomable class', () => {
-        let element: HTMLImageElement = new Image();
-        element.className = CLASS;
-        expect(isZoomable(element)).toBe(true);
+        let target: HTMLImageElement = document.createElement('img');
+        target.className = CLASS;
+        let parent: HTMLElement = document.createElement('div');
+        parent.appendChild(target);
+
+        expect(isZoomable(target)).toBe(true);
     });
 });

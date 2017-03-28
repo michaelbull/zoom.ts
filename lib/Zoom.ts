@@ -88,16 +88,11 @@ export function addZoomListener(window: Window): void {
         event.preventDefault();
 
         let image: HTMLImageElement = event.target as HTMLImageElement;
-
-        let parent: HTMLElement | null = image.parentElement;
-        if (parent === null) {
-            return;
-        }
-
-        let containerExists: boolean = isContainer(parent);
+        let parent: HTMLElement = image.parentElement as HTMLElement;
         let wrapper: HTMLElement = parent;
 
-        if (containerExists) {
+        let alreadySetUp: boolean = isContainer(parent);
+        if (alreadySetUp) {
             let grandParent: HTMLElement | null = parent.parentElement;
             if (grandParent === null) {
                 return;
@@ -118,7 +113,7 @@ export function addZoomListener(window: Window): void {
         let clone: HTMLImageElement;
         let showClone: EventListener | null = null;
 
-        if (containerExists) {
+        if (alreadySetUp) {
             container = parent;
             clone = container.children.item(1) as HTMLImageElement;
         } else {

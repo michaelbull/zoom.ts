@@ -33,5 +33,5 @@ export function isImageActive(image: HTMLImageElement): boolean {
 }
 
 export function isZoomable(target: EventTarget): boolean {
-    return target instanceof HTMLImageElement && hasClass(target, CLASS);
+    return target instanceof HTMLImageElement && target.parentElement !== null && hasClass(target, CLASS);
 }
