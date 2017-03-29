@@ -22,13 +22,13 @@
         color: rgba(0, 0, 0, 0.8);
       }
 
-      h1 {
-        text-align: center;
-        margin: 0 auto 6rem;
-      }
-
       .logo {
+        display: block;
+        margin: 5rem auto 8rem;
+        padding: 0 2rem;
         max-width: 100%;
+        text-align: center;
+        box-sizing: border-box;
       }
 
       .column {
@@ -46,7 +46,7 @@
         max-width: 700px;
       }
 
-      h2, h3 {
+      h1, h2 {
         margin-top: 1.75em;
         margin-bottom: 0.35em;
 
@@ -56,13 +56,13 @@
         line-height: 1.04;
       }
 
-      h2 {
+      h1 {
         margin-left: -2.5px;
         font-size: 2.25rem;
         letter-spacing: -0.05em;
       }
 
-      h3 {
+      h2 {
         margin-left: -1.5px;
         font-size: 1.3125rem;
         letter-spacing: -0.022em;
@@ -140,13 +140,13 @@
           max-width: none;
         }
 
-        h2 {
+        h1 {
           font-size: 1.75rem;
           margin-left: -2px;
           letter-spacing: -0.028em;
         }
 
-        h3 {
+        h2 {
           margin-left: -1.38px;
           font-size: 1.25rem;
         }
@@ -165,13 +165,13 @@
 
   <body>
     <main>
-      <h1><img class="logo" src="img/logo.png" alt="zoom.ts"></h1>
+      <img class="logo" src="img/logo.png" alt="zoom.ts">
 
       <div class="column">
-        <h2>Introduction</h2>
+        <h1>Image zoom</h1>
         <p><strong>zoom.ts</strong> is a a lightweight TypeScript library for image zooming, as seen on <a href="https://medium.design/image-zoom-on-medium-24d146fc0c20" target="_blank">Medium</a>. It easily plugs into your application and starts listening to zoom events as soon as the DOM is ready. The library accounts for just 5kB of bandwidth once gzipped and requires no third-party libraries.</p>
 
-        <h3>Click to zoom</h3>
+        <h2>Click to zoom</h2>
         <p>A click will start a seamless animation into an immersive, full-screen view. Holding either the <kbd>⌘</kbd> or <kbd>Ctrl</kbd> key will open the image in a new tab when clicked.</p>
       </div>
 
@@ -185,10 +185,10 @@
       </figure>
 
       <div class="column">
-        <h3>Don’t lose your place</h3>
+        <h2>Don’t lose your place</h2>
         <p>Your progress through a story is important. When you interact with images we maintain your scroll position and make it apparent that your state has not changed. We simultaneously fade out the content and zoom the image for a smooth visual experience.</p>
 
-        <h3>Take me home</h3>
+        <h2>Take me home</h2>
         <p>You can press <kbd>Esc</kbd> or click anywhere on the image to exit the zoomed state, or, more interestingly, just scroll away as if you were continuing past the image. Give it a try:</p>
       </div>
 
@@ -202,7 +202,7 @@
       </figure>
 
       <div class="column">
-        <h3>Ready when you are</h3>
+        <h2>Ready when you are</h2>
         <p>Another significant detail is the lack of loading indicators — we’re always ready to zoom. We prepare all images to zoom right after the content has loaded. If the full-size image isn’t loaded, we transition the original image and replace it when the detailed image is ready. We don’t allow your connection speed to affect the animation, creating an ultra-snappy interaction. More often than not, the images are swapped before the transition comes to an end.</p>
 
         <hr />
@@ -243,7 +243,7 @@
       <br />
 
       <div class="column">
-        <h3>License</h3>
+        <h2>License</h2>
         <p><strong>zoom.ts</strong> is available under the terms of the ISC license. See the <a href="https://github.com/michaelbull/zoom.ts/blob/master/LICENSE" target="_blank">license file</a> for copyright information and licensing terms.</p>
 
         <hr />
