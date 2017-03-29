@@ -1,6 +1,6 @@
 <p align="center">
   <a href="#">
-    <img src="https://github.com/michaelbull/zoom.ts/raw/master/img/logo.png" alt="zoom.ts" />
+    <img src="./img/logo.png" alt="zoom.ts" />
   </a>
 </p>
 <p align="center">
@@ -28,6 +28,9 @@
   </a>
 </p>
 <br />
+<p align="center">
+    <img src="./img/example.gif" alt="example" />
+</p>
 <br />
 
 ## Introduction
