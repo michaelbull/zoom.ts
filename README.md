@@ -1,5 +1,6 @@
+<br />
 <p align="center">
-  <a href="#readme"><img src="./img/logo.png" alt="zoom.ts" width="640" height="280" /></a>
+  <a href="#readme"><img src="./img/logo.png" alt="zoom.ts" width="478" height="178" /></a>
 </p>
 <p align="center">
   A lightweight TypeScript library for image zooming, as seen on <a href="https://medium.design/image-zoom-on-medium-24d146fc0c20">Medium</a>.
