@@ -1,36 +1,23 @@
 <p align="center">
-  <a href="#">
-    <img src="./img/logo.png" alt="zoom.ts" />
-  </a>
+  <a href="#readme"><img src="./img/logo.png" alt="zoom.ts" /></a>
 </p>
 <p align="center">
  A lightweight TypeScript library for image zooming, as seen on <a href="https://medium.design/image-zoom-on-medium-24d146fc0c20">Medium</a>.
 </p>
 <p align="center">
-  <a href="https://www.npmjs.com/package/zoom.ts">
-    <img src="https://img.shields.io/npm/v/zoom.ts.svg?style=flat-square" alt="npm version" />
-  </a>
-  <a href="https://www.npmjs.com/package/zoom.ts">
-    <img src="https://img.shields.io/npm/dt/zoom.ts.svg?style=flat-square" alt="npm downloads" />
-  </a>
-  <a href="https://travis-ci.org/michaelbull/zoom.ts">
-    <img src="https://img.shields.io/travis/michaelbull/zoom.ts.svg?style=flat-square" alt="build status" />
-  </a>
-  <a href="https://github.com/michaelbull/zoom.ts/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/michaelbull/zoom.ts.svg?style=flat-square" alt="License" />
-  </a>
+  <a href="https://www.npmjs.com/package/zoom.ts"><img src="https://img.shields.io/npm/v/zoom.ts.svg?style=flat-square" alt="npm version" /></a>
+  <a href="https://www.npmjs.com/package/zoom.ts"><img src="https://img.shields.io/npm/dt/zoom.ts.svg?style=flat-square" alt="npm downloads" /></a>
+  <a href="https://travis-ci.org/michaelbull/zoom.ts"><img src="https://img.shields.io/travis/michaelbull/zoom.ts.svg?style=flat-square" alt="build status" /></a>
+  <a href="https://github.com/michaelbull/zoom.ts/blob/master/LICENSE"><img src="https://img.shields.io/github/license/michaelbull/zoom.ts.svg?style=flat-square" alt="License" /></a>
   <br />
-  <a href="https://david-dm.org/michaelbull/zoom.ts">
-    <img src="https://david-dm.org/michaelbull/zoom.ts/status.svg?style=flat-square" "dependencies status" />
-  </a>
-  <a href="https://david-dm.org/michaelbull/zoom.ts?type=dev">
-    <img src="https://david-dm.org/michaelbull/zoom.ts/dev-status.svg?style=flat-square" "devDependencies status" />
-  </a>
+  <a href="https://david-dm.org/michaelbull/zoom.ts"><img src="https://david-dm.org/michaelbull/zoom.ts/status.svg?style=flat-square" "dependencies status" /></a>
+  <a href="https://david-dm.org/michaelbull/zoom.ts?type=dev"><img src="https://david-dm.org/michaelbull/zoom.ts/dev-status.svg?style=flat-square" "devDependencies status" /></a>
 </p>
 <br />
 <p align="center">
   <img src="./img/example.gif" alt="example" />
 </p>
+<br />
 <br />
 
 ## Introduction
