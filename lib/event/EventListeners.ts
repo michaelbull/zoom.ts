@@ -212,12 +212,12 @@ function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, tra
     let dismissed: EventListener = (): void => collapse();
     let resized: EventListener = (): void => recalculateScale();
     let initialScrollY: number = pageScrollY(window);
-    let scolledPast: EventListener = scrolled(initialScrollY, scrollY, collapse, () => pageScrollY(window));
+    let scrolledAway: EventListener = scrolled(initialScrollY, scrollY, collapse, () => pageScrollY(window));
 
     removeListeners = (): void => {
         removeEventListener(window.document, 'keyup', pressedEsc);
         removeEventListener(container, 'click', dismissed);
-        removeEventListener(window, 'scroll', scolledPast);
+        removeEventListener(window, 'scroll', scrolledAway);
         removeEventListener(window, 'resize', resized);
     };
 
@@ -235,7 +235,7 @@ function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, tra
 
     addEventListener(window.document, 'keyup', pressedEsc);
     addEventListener(container, 'click', dismissed);
-    addEventListener(window, 'scroll', scolledPast);
+    addEventListener(window, 'scroll', scrolledAway);
     addEventListener(window, 'resize', resized);
 }
 
