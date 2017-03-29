@@ -1,9 +1,6 @@
-var path = require('path'),
-    webpackConfig = require('../webpack.config');
+const typescript = require('rollup-plugin-typescript2');
 
-webpackConfig.devtool = '#eval';
-
-module.exports = function (config) {
+module.exports = (config) => {
     config.set({
         // base path that will be used to resolve all patterns (eg. files, exclude)
         basePath: __dirname,
@@ -16,7 +13,8 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            { pattern: 'spec-bundle.ts', watched: false }
+            { pattern: '../lib/**/*.ts', included: false, served: false },
+            'unit/**/*.spec.ts'
         ],
 
         // mime types
@@ -27,7 +25,8 @@ module.exports = function (config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'spec-bundle.ts': ['webpack']
+            '../lib/**/*.ts': ['rollup'],
+            'unit/**/*.spec.ts': ['rollup']
         },
 
         // test results reporter to use
@@ -61,7 +60,17 @@ module.exports = function (config) {
             'PhantomJS'
         ],
 
-        // webpack
-        webpack: webpackConfig
+        rollupPreprocessor: {
+            plugins: [
+                typescript({
+                    types: [
+                        'jasmine'
+                    ]
+                })
+            ],
+            format: 'iife',
+            moduleName: 'zoom',
+            sourceMap: 'inline'
+        }
     });
 };
