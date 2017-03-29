@@ -203,7 +203,10 @@ function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, tra
 
     let pressedEsc: EventListener = escKeyPressed(collapse);
     let dismissed: EventListener = (): void => collapse();
-    let resized: EventListener = (): void => recalculateScale();
+    let resized: EventListener = (): void => {
+        imagePosition = positionOf(wrapper.getBoundingClientRect());
+        recalculateScale();
+    };
     let initialScrollY: number = pageScrollY(window);
     let scrolledAway: EventListener = scrolled(initialScrollY, scrollY, collapse, () => pageScrollY(window));
 
