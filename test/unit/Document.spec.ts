@@ -132,4 +132,8 @@ describe('createDiv', () => {
     it('should assign the className', () => {
         expect(createDiv(document, 'example').className).toBe('example');
     });
+
+    it('should return the created element', () => {
+        expect(createDiv(document, '')).toBe(element);
+    });
 });

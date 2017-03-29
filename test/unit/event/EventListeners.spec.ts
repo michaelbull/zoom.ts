@@ -1,10 +1,10 @@
 import { isCloneVisible } from '../../../lib/element/Clone';
 import { isImageHidden } from '../../../lib/element/Image';
 import {
-    showLoadedClone,
     ESCAPE_KEY_CODE,
     escKeyPressed,
-    scrolled
+    scrolled,
+    showLoadedClone
 } from '../../../lib/event/EventListeners';
 
 describe('escKeyPressed', () => {
@@ -19,7 +19,7 @@ describe('escKeyPressed', () => {
     describe('if a key other than escape was pressed', () => {
         let event: any;
 
-        beforeAll(() => {
+        beforeEach(() => {
             event = {
                 keyCode: 55,
                 preventDefault: jasmine.createSpy('preventDefault')
@@ -40,7 +40,7 @@ describe('escKeyPressed', () => {
     describe('if the escape key was pressed', () => {
         let event: any;
 
-        beforeAll(() => {
+        beforeEach(() => {
             event = {
                 keyCode: ESCAPE_KEY_CODE,
                 preventDefault: jasmine.createSpy('preventDefault')

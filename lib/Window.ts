@@ -2,55 +2,46 @@ import { rootElement } from './Document';
 import { vendorProperty } from './Vendor';
 
 export function hasTransitions(window: Window, element: HTMLElement): boolean {
-    if (window.getComputedStyle === undefined) {
-        return false;
-    }
-
+    let computeStyle: any = window.getComputedStyle;
     let property: string | null = vendorProperty(element.style, 'transitionDuration');
 
-    if (property === null) {
+    if (typeof computeStyle === 'function' && property !== null) {
+        let value: string = computeStyle(element)[property];
+        let duration: number = parseFloat(value);
+        return !isNaN(duration) && duration !== 0;
+    } else {
         return false;
     }
-
-    let style: any = window.getComputedStyle(element);
-    let value: string = style[property];
-
-    if (value === '') {
-        return false;
-    }
-
-    let duration: number = parseFloat(value);
-    return !isNaN(duration) && duration !== 0;
 }
 
+const TRANSFORM_PROPERTIES: { [key: string]: string } = {
+    WebkitTransform: '-webkit-transform',
+    MozTransform: '-moz-transform',
+    msTransform: '-ms-transform',
+    OTransform: '-o-transform',
+    transform: 'transform'
+};
+
 export function hasTranslate3d(window: Window, transformProperty: string): boolean {
-    if (typeof window.getComputedStyle !== 'function') {
+    let computeStyle: any = window.getComputedStyle;
+    let property: string = TRANSFORM_PROPERTIES[transformProperty];
+
+    if (typeof computeStyle === 'function' && property !== undefined) {
+        let document: Document = window.document;
+
+        let child: HTMLParagraphElement = document.createElement('p');
+        (child.style as any)[transformProperty] = 'translate3d(1px,1px,1px)';
+
+        let body: HTMLElement = document.body;
+        body.appendChild(child);
+
+        let value: string = computeStyle(child).getPropertyValue(property);
+        body.removeChild(child);
+
+        return value.length > 0 && value !== 'none';
+    } else {
         return false;
     }
-
-    let map: { [key: string]: string } = {
-        WebkitTransform: '-webkit-transform',
-        MozTransform: '-moz-transform',
-        msTransform: '-ms-transform',
-        OTransform: '-o-transform',
-        transform: 'transform'
-    };
-
-    if (!(transformProperty in map)) {
-        return false;
-    }
-
-    let child: HTMLDivElement = window.document.createElement('div');
-    let style: any = child.style;
-
-    style[transformProperty] = 'translate3d(1px,1px,1px)';
-    window.document.body.appendChild(child);
-
-    let computedStyle: CSSStyleDeclaration = window.getComputedStyle(child);
-    let value: string = computedStyle.getPropertyValue(map[transformProperty as string]);
-    window.document.body.removeChild(child);
-
-    return value.length > 0 && value !== 'none';
 }
 
 /**

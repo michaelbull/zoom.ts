@@ -8,26 +8,19 @@ function classNotEmpty(className: string): boolean {
     return className.length > 0;
 }
 
-export function joinClasses(classes: string[]): string {
-    return classes
-        .filter(classNotEmpty)
-        .join(CLASS_SEPARATOR);
-}
-
-export function excludeClass(exclude: string, classes: string[]): string {
-    return classes
-        .filter((className: string) => classNotEmpty(className) && className !== exclude)
-        .join(CLASS_SEPARATOR);
-}
-
 export function hasClass(element: HTMLElement, className: string): boolean {
     return element.className.indexOf(className) !== -1;
 }
 
-export function addClass(element: HTMLElement, className: string): void {
-    element.className = joinClasses([element.className, className]);
+export function addClass(element: HTMLElement, add: string): void {
+    element.className = classesFrom(element.className)
+        .concat(add)
+        .filter(classNotEmpty)
+        .join(CLASS_SEPARATOR);
 }
 
-export function removeClass(element: HTMLElement, className: string): void {
-    element.className = excludeClass(className, classesFrom(element.className));
+export function removeClass(element: HTMLElement, remove: string): void {
+    element.className = classesFrom(element.className)
+        .filter((className: string) => classNotEmpty(className) && className !== remove)
+        .join(CLASS_SEPARATOR);
 }

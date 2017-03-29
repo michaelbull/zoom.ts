@@ -1,4 +1,4 @@
-export const vendorPrefixes: string[] = [
+export const VENDOR_PREFIXES: string[] = [
     'Webkit',
     'Moz',
     'ms',
@@ -9,7 +9,7 @@ export function vendorProperties(property: string): string[] {
     let properties: string[] = [property];
     let formattedProperty: string = `${property.charAt(0).toUpperCase()}${property.substr(1)}`;
 
-    for (let prefix of vendorPrefixes) {
+    for (let prefix of VENDOR_PREFIXES) {
         properties.push(`${prefix}${formattedProperty}`);
     }
 

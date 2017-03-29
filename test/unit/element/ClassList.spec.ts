@@ -1,49 +1,8 @@
 import {
     addClass,
-    excludeClass,
     hasClass,
-    joinClasses,
     removeClass
 } from '../../../lib/element/ClassList';
-
-describe('joinClasses', () => {
-    it('should return an empty string when merging empty classes', () => {
-        expect(joinClasses(['', '', ''])).toBe('');
-    });
-
-    it('should return a single class when merging with an existing empty class', () => {
-        expect(joinClasses(['', 'new'])).toBe('new');
-    });
-
-    it('should return a single class when merging with a new empty class', () => {
-        expect(joinClasses(['existing', ''])).toBe('existing');
-    });
-});
-
-describe('excludeClass', () => {
-    it('should return an empty string if there are no classes present', () => {
-        expect(excludeClass('remove-me', [''])).toBe('');
-    });
-
-    it('should return an empty string when removing the only class', () => {
-        expect(excludeClass('example-class', ['example-class'])).toBe('');
-    });
-
-    it('should return the unmodified className when removing an absent class', () => {
-        let classes: string[] = ['list', 'map', 'set', 'tree'];
-        expect(excludeClass('vector', classes)).toBe('list map set tree');
-    });
-
-    it('should return a className without the class when removing a class that is present', () => {
-        let classes: string[] = ['example', 'button', 'container', 'wrapper'];
-        expect(excludeClass('container', classes)).toBe('example button wrapper');
-    });
-
-    it('should exclude empty classes', () => {
-        let classes: string[] = ['', 'example', '', 'image', '', '', 'wrapper'];
-        expect(excludeClass('wrapper', classes)).toBe('example image');
-    });
-});
 
 describe('hasClass', () => {
     it('should return true if the class is in the className', () => {
@@ -63,93 +22,65 @@ describe('hasClass', () => {
 });
 
 describe('addClass', () => {
-    describe('if the element has multiple classes', () => {
-        let element: any;
-
-        beforeAll(() => {
-            element = { className: 'class-one class-two' };
-        });
-
-        it('should append the class to the className', () => {
-            addClass(element, 'class-three');
-            expect(element.className).toBe('class-one class-two class-three');
-        });
+    it('should set the className to an empty string when adding an empty class to an empty class list', () => {
+        let element: any = { className: '    ' };
+        addClass(element, '');
+        expect(element.className).toBe('');
     });
 
-    describe('if the element has a single class', () => {
-        let element: any;
-
-        beforeAll(() => {
-            element = { className: 'single-class' };
-        });
-
-        it('should append the class to the className', () => {
-            addClass(element, 'new-class');
-            expect(element.className).toBe('single-class new-class');
-        });
+    it('should replace the className when adding a class to an empty class list', () => {
+        let element: any = { className: '' };
+        addClass(element, 'new');
+        expect(element.className).toBe('new');
     });
 
-    describe('if the element has no classes', () => {
-        let element: any;
+    it('should append to the className when adding a class to a populated class list', () => {
+        let element: any = { className: 'class-one class-two' };
+        addClass(element, 'class-three');
+        expect(element.className).toBe('class-one class-two class-three');
+    });
 
-        beforeAll(() => {
-            element = { className: '' };
-        });
+    it('should exclude empty classes from the className when adding a class to a populated class list', () => {
+        let element: any = { className: '  this     that   those        these' };
+        addClass(element, 'them');
+        expect(element.className).toBe('this that those these them');
+    });
 
-        it('should replace the className', () => {
-            addClass(element, 'another-class');
-            expect(element.className).toBe('another-class');
-        });
+    it('should not modify the className when adding an empty class to a populated class list', () => {
+        let element: any = { className: 'existing' };
+        addClass(element, '');
+        expect(element.className).toBe('existing');
     });
 });
 
 describe('removeClass', () => {
-    describe('if the element has multiple classes', () => {
-        let element: any;
-
-        beforeEach(() => {
-            element = { className: 'button container wrapper image' };
-        });
-
-        it('should remove the class from the className if the class is present', () => {
-            removeClass(element, 'container');
-            expect(element.className).toBe('button wrapper image');
-        });
-
-        it('should not change the className if the class is absent', () => {
-            removeClass(element, 'example');
-            expect(element.className).toBe('button container wrapper image');
-        });
+    it('should set the className to an empty string when removing an empty class from an empty class list', () => {
+        let element: any = { className: '    ' };
+        removeClass(element, '');
+        expect(element.className).toBe('');
     });
 
-    describe('if the element has a single class', () => {
-        let element: any;
-
-        beforeEach(() => {
-            element = { className: 'button' };
-        });
-
-        it('should empty the className if it is the same class', () => {
-            removeClass(element, 'button');
-            expect(element.className).toBe('');
-        });
-
-        it('should not change the className if it is a different class', () => {
-            removeClass(element, 'different');
-            expect(element.className).toBe('button');
-        });
+    it('should replace the className with an empty string when removing the only present class in a class list', () => {
+        let element: any = { className: 'remove-me' };
+        removeClass(element, 'remove-me');
+        expect(element.className).toBe('');
     });
 
-    describe('if the element has no classes', () => {
-        let element: any;
+    it('should remove from the className when removing a present class from a populated class list', () => {
+        let element: any = { className: 'list map set tree' };
+        removeClass(element, 'set');
+        expect(element.className).toBe('list map tree');
+    });
 
-        beforeEach(() => {
-            element = { className: '' };
-        });
+    it('should exclude empty classes from the className when removing a class from a populated class list', () => {
+        let element: any = { className: ' video  image   wrapper' };
+        removeClass(element, 'image');
+        expect(element.className).toBe('video wrapper');
+    });
 
-        it('should not change the className', () => {
-            removeClass(element, 'another');
-            expect(element.className).toBe('');
-        });
+    it('should not modify the className when removing an absent class from a populated class list', () => {
+        let element: any = { className: 'button container wrapper image' };
+        removeClass(element, 'video');
+        expect(element.className).toBe('button container wrapper image');
     });
 });

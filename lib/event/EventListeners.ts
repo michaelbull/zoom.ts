@@ -111,6 +111,7 @@ function setUp(document: Document, src: string, wrapper: HTMLElement, image: HTM
     return showClone;
 }
 
+// TODO: clean this up somehow
 function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, transformProperty: string | null,
     showCloneListener: EventListener | null, zoomListener: EventListener, scrollY: number): void {
     let container: HTMLElement = image.parentElement as HTMLElement;

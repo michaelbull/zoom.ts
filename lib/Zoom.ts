@@ -1,5 +1,5 @@
-import { addEventListener } from './event/Events';
 import { createZoomListener } from './event/EventListeners';
+import { addEventListener } from './event/Events';
 
 const DEFAULT_SCROLL_DELTA: number = 50;
 

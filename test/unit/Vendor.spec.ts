@@ -1,38 +1,32 @@
 import {
-    vendorPrefixes,
+    VENDOR_PREFIXES,
     vendorProperties,
     vendorProperty
 } from '../../lib/Vendor';
 
 describe('vendorProperties', () => {
-    let properties: string[];
-
-    beforeAll(() => {
-        properties = vendorProperties('example');
-    });
-
     it('should contain the property itself', () => {
-        expect(properties).toContain('example');
+        expect(vendorProperties('example')).toContain('example');
     });
 
     it('should contain the Webkit-prefixed property', () => {
-        expect(properties).toContain('WebkitExample');
+        expect(vendorProperties('another')).toContain('WebkitAnother');
     });
 
     it('should contain the Mozilla-prefixed property', () => {
-        expect(properties).toContain('MozExample');
+        expect(vendorProperties('dummy')).toContain('MozDummy');
     });
 
     it('should contain the Microsoft-prefixed property', () => {
-        expect(properties).toContain('msExample');
+        expect(vendorProperties('foo')).toContain('msFoo');
     });
 
     it('should contain the Opera-prefixed property', () => {
-        expect(properties).toContain('OExample');
+        expect(vendorProperties('bar')).toContain('OBar');
     });
 
     it('should not contain extra properties', () => {
-        expect(properties.length).toBe(vendorPrefixes.length + 1);
+        expect(vendorProperties('extra').length).toBe(VENDOR_PREFIXES.length + 1);
     });
 });
 

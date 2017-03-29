@@ -29,7 +29,7 @@ describe('resetTransformation', () => {
 describe('resetBounds', () => {
     let style: any;
 
-    beforeAll(() => {
+    beforeEach(() => {
         style = {
             left: 'left',
             top: 'top',
@@ -37,27 +37,30 @@ describe('resetBounds', () => {
             maxWidth: 'max-width',
             height: 'height'
         };
-
-        resetBounds(style);
     });
 
     it('should reset the left property', () => {
+        resetBounds(style);
         expect(style.left).toBe('');
     });
 
     it('should reset the top property', () => {
+        resetBounds(style);
         expect(style.top).toBe('');
     });
 
     it('should reset the width property', () => {
+        resetBounds(style);
         expect(style.width).toBe('');
     });
 
     it('should reset the max-width property', () => {
+        resetBounds(style);
         expect(style.maxWidth).toBe('');
     });
 
     it('should reset the height property', () => {
+        resetBounds(style);
         expect(style.height).toBe('');
     });
 });
@@ -65,7 +68,7 @@ describe('resetBounds', () => {
 describe('setBoundsPx', () => {
     let style: any;
 
-    beforeAll(() => {
+    beforeEach(() => {
         style = {
             left: '5em',
             top: '2em',
@@ -73,28 +76,31 @@ describe('setBoundsPx', () => {
             maxWidth: '200px',
             height: '50px'
         };
-
-        setBoundsPx(style, [20, 170], [95, 240]);
     });
 
     it('should set the left property', () => {
+        setBoundsPx(style, [20, 170], [95, 240]);
         expect(style.left).toBe('20px');
     });
 
     it('should set the top property', () => {
-        expect(style.top).toBe('170px');
+        setBoundsPx(style, [50, 130], [155, 0]);
+        expect(style.top).toBe('130px');
     });
 
     it('should set the width property', () => {
-        expect(style.width).toBe('95px');
+        setBoundsPx(style, [500, 22], [103, 999]);
+        expect(style.width).toBe('103px');
     });
 
     it('should set the max-width property', () => {
-        expect(style.maxWidth).toBe('95px');
+        setBoundsPx(style, [5, -105], [1011, 1221]);
+        expect(style.maxWidth).toBe('1011px');
     });
 
     it('should set the height property', () => {
-        expect(style.height).toBe('240px');
+        setBoundsPx(style, [344, 55], [-5, -300]);
+        expect(style.height).toBe('-300px');
     });
 });
 

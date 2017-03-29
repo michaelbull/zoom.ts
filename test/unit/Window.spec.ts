@@ -11,7 +11,13 @@ import {
 describe('hasTransitions', () => {
     it('should return false if window.getComputedStyle is undefined', () => {
         let window: any = {};
-        let element: any = {};
+        let element: any = { style: {} };
+        expect(hasTransitions(window, element)).toBe(false);
+    });
+
+    it('should return false if window.getComputedStyle is not a function', () => {
+        let window: any = { getComputedStyle: '' };
+        let element: any = { style: {} };
         expect(hasTransitions(window, element)).toBe(false);
     });
 
@@ -127,15 +133,11 @@ describe('hasTransitions', () => {
 describe('hasTranslate3d', () => {
     it('should return false if window.getComputedStyle is undefined', () => {
         let window: any = {};
-
         expect(hasTranslate3d(window, 'MozTransform')).toBe(false);
     });
 
     it('should return false if window.getComputedStyle is not a function', () => {
-        let window: any = {
-            getComputedStyle: ''
-        };
-
+        let window: any = { getComputedStyle: '' };
         expect(hasTranslate3d(window, 'WebkitTransform')).toBe(false);
     });
 
@@ -170,17 +172,9 @@ describe('hasTranslate3d', () => {
             };
 
             window = {
-                getComputedStyle: jasmine.createSpy('getComputedStyle').and.callFake((elt: any) => {
-                    if (elt === child) {
-                        return computedStyle;
-                    }
-                }),
+                getComputedStyle: jasmine.createSpy('getComputedStyle').and.callFake((elt: any) => computedStyle),
                 document: {
-                    createElement: jasmine.createSpy('createElement').and.callFake((tagName: string) => {
-                        if (tagName === 'div') {
-                            return child;
-                        }
-                    }),
+                    createElement: jasmine.createSpy('createElement').and.callFake((tagName: string) => child),
                     body: {
                         appendChild: jasmine.createSpy('appendChild'),
                         removeChild: jasmine.createSpy('removeChild')
@@ -191,7 +185,7 @@ describe('hasTranslate3d', () => {
 
         it('should create a div element', () => {
             hasTranslate3d(window, 'WebkitTransform');
-            expect(window.document.createElement).toHaveBeenCalledWith('div');
+            expect(window.document.createElement).toHaveBeenCalledWith('p');
         });
 
         it('should assign the translate3d property to the child element', () => {
