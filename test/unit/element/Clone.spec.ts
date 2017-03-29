@@ -1,12 +1,11 @@
 import {
     CLASS,
     createClone,
+    hideClone,
     isCloneLoaded,
     isCloneVisible,
     LOADED_CLASS,
-    setCloneLoaded,
-    setCloneVisible,
-    unsetCloneVisible,
+    showClone,
     VISIBLE_CLASS
 } from '../../../lib/element/Clone';
 
@@ -60,24 +59,24 @@ describe('createClone', () => {
             expect(clone.removeEventListener).toHaveBeenCalledWith('load', listener);
         });
 
-        it('should should set the clone to loaded', () => {
+        it('should add the loaded class', () => {
             expect(isCloneLoaded(clone)).toBe(true);
         });
     });
 });
 
-describe('setCloneVisible', () => {
+describe('showClone', () => {
     it('should add the visible class', () => {
         let clone: any = { className: '' };
-        setCloneVisible(clone);
+        showClone(clone);
         expect(isCloneVisible(clone)).toBe(true);
     });
 });
 
-describe('unsetCloneVisible', () => {
+describe('hideClone', () => {
     it('should remove the visible class', () => {
         let clone: any = { className: VISIBLE_CLASS };
-        unsetCloneVisible(clone);
+        hideClone(clone);
         expect(isCloneVisible(clone)).toBe(false);
     });
 });
@@ -91,14 +90,6 @@ describe('isCloneVisible', () => {
     it('should return false if the visible class is present', () => {
         let clone: any = { className: '' };
         expect(isCloneVisible(clone)).toBe(false);
-    });
-});
-
-describe('setCloneLoaded', () => {
-    it('should add the loaded class', () => {
-        let clone: any = { className: '' };
-        setCloneLoaded(clone);
-        expect(isCloneLoaded(clone)).toBe(true);
     });
 });
 

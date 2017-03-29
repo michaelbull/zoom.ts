@@ -5,25 +5,30 @@ import {
     isImageActive,
     isImageHidden,
     isZoomable,
-    setImageActive,
-    setImageHidden,
-    unsetImageActive,
-    unsetImageHidden
+    activateImage,
+    hideImage,
+    showImage
 } from '../../../lib/element/Image';
 
-describe('setImageHidden', () => {
+describe('hideImage', () => {
     it('should add the hidden class', () => {
         let image: any = { className: '' };
-        setImageHidden(image);
+        hideImage(image);
         expect(isImageHidden(image)).toBe(true);
     });
 });
 
-describe('unsetImageHidden', () => {
+describe('showImage', () => {
     it('should remove the hidden class', () => {
-        let image: any = { className: HIDDEN_CLASS };
-        unsetImageHidden(image);
+        let image: any = {className: HIDDEN_CLASS};
+        showImage(image);
         expect(isImageHidden(image)).toBe(false);
+    });
+
+    it('should remove the active class', () => {
+        let image: any = {className: ACTIVE_CLASS};
+        showImage(image);
+        expect(isImageActive(image)).toBe(false);
     });
 });
 
@@ -39,19 +44,11 @@ describe('isImageHidden', () => {
     });
 });
 
-describe('setImageActive', () => {
+describe('activateImage', () => {
     it('should add the active class', () => {
         let image: any = { className: '' };
-        setImageActive(image);
+        activateImage(image);
         expect(isImageActive(image)).toBe(true);
-    });
-});
-
-describe('unsetImageActive', () => {
-    it('should remove the active class', () => {
-        let image: any = { className: ACTIVE_CLASS };
-        unsetImageActive(image);
-        expect(isImageActive(image)).toBe(false);
     });
 });
 

@@ -19,27 +19,23 @@ export function createClone(document: Document, src: string): HTMLImageElement {
 
     let loaded: EventListener = (): void => {
         removeEventListener(clone, 'load', loaded);
-        setCloneLoaded(clone);
+        addClass(clone, LOADED_CLASS);
     };
 
     addEventListener(clone, 'load', loaded);
     return clone;
 }
 
-export function setCloneVisible(clone: HTMLImageElement): void {
+export function showClone(clone: HTMLImageElement): void {
     addClass(clone, VISIBLE_CLASS);
 }
 
-export function unsetCloneVisible(clone: HTMLImageElement): void {
+export function hideClone(clone: HTMLImageElement): void {
     removeClass(clone, VISIBLE_CLASS);
 }
 
 export function isCloneVisible(clone: HTMLImageElement): boolean {
     return hasClass(clone, VISIBLE_CLASS);
-}
-
-export function setCloneLoaded(clone: HTMLImageElement): void {
-    addClass(clone, LOADED_CLASS);
 }
 
 export function isCloneLoaded(clone: HTMLImageElement): boolean {

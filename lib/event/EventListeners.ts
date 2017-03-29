@@ -3,8 +3,8 @@ import {
     createClone,
     isCloneLoaded,
     isCloneVisible,
-    setCloneVisible,
-    unsetCloneVisible
+    showClone,
+    hideClone
 } from '../element/Clone';
 import {
     createContainer,
@@ -15,10 +15,9 @@ import {
 import { targetDimensions } from '../element/Element';
 import {
     isZoomable,
-    setImageActive,
-    setImageHidden,
-    unsetImageActive,
-    unsetImageHidden
+    activateImage,
+    hideImage,
+    showImage
 } from '../element/Image';
 import {
     createOverlay,
@@ -90,8 +89,8 @@ export function showLoadedClone(wrapper: HTMLElement, image: HTMLImageElement, c
         removeEventListener(clone, 'load', listener);
 
         if (isWrapperExpanded(wrapper) && !isCloneVisible(clone)) {
-            setImageHidden(image);
-            setCloneVisible(clone);
+            hideImage(image);
+            showClone(clone);
         }
     };
 
@@ -164,8 +163,8 @@ function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, tra
                 removeTransitionEndListener(container, showCloneListener);
             }
 
-            setImageHidden(image);
-            setCloneVisible(clone);
+            hideImage(image);
+            showClone(clone);
         }
     };
 
@@ -184,28 +183,22 @@ function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, tra
             removeEventListener(clone, 'load', showCloneListener);
         }
 
-        collapseWrapper(wrapper);
-
         let collapsed: EventListener = (): void => {
             removeTransitionEndListener(container, collapsed);
 
             window.document.body.removeChild(overlay);
             finishCollapsingWrapper(wrapper);
-            unsetImageHidden(image);
-            unsetImageActive(image);
-
-            if (isCloneVisible(clone)) {
-                unsetCloneVisible(clone);
-            }
-
+            showImage(image);
+            hideClone(clone);
             addEventListener(window.document.body, 'click', zoomListener);
         };
 
+        hideOverlay(overlay);
+        collapseWrapper(wrapper);
+
         addTransitionEndListener(window, container, collapsed);
         refreshContainer(container, recalculateScale);
-
         restoreContainer(container);
-        hideOverlay(overlay);
     }
 
     let pressedEsc: EventListener = escKeyPressed(collapse);
@@ -225,7 +218,7 @@ function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, tra
 
     window.document.body.appendChild(overlay);
     showOverlay(overlay);
-    setImageActive(image);
+    activateImage(image);
     expandWrapper(wrapper, image.height);
 
     addTransitionEndListener(window, container, expanded);
