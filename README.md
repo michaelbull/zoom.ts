@@ -29,7 +29,7 @@
 </p>
 <br />
 <p align="center">
-    <img src="./img/example.gif" alt="example" />
+  <img src="./img/example.gif" alt="example" />
 </p>
 <br />
 
