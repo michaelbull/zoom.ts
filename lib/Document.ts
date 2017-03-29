@@ -21,9 +21,7 @@ export function rootElement(document: Document): HTMLElement {
  * @see http://youmightnotneedjquery.com/#ready
  */
 export function ready(document: Document, callback: Function): any {
-    let state: string = document.readyState;
-
-    if (state === 'complete') {
+    if (document.readyState === 'complete') {
         return callback();
     } else {
         addEventListener(document, 'DOMContentLoaded', () => callback());
