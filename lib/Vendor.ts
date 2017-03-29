@@ -6,14 +6,10 @@ export const VENDOR_PREFIXES: string[] = [
 ];
 
 export function vendorProperties(property: string): string[] {
-    let properties: string[] = [property];
-    let formattedProperty: string = `${property.charAt(0).toUpperCase()}${property.substr(1)}`;
-
-    for (let prefix of VENDOR_PREFIXES) {
-        properties.push(`${prefix}${formattedProperty}`);
-    }
-
-    return properties;
+    let suffix: string = `${property.charAt(0).toUpperCase()}${property.substr(1)}`;
+    return VENDOR_PREFIXES
+        .map((prefix: string) => `${prefix}${suffix}`)
+        .concat(property);
 }
 
 export function vendorProperty(style: CSSStyleDeclaration, property: string): string | null {
