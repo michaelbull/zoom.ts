@@ -89,8 +89,8 @@ export function showLoadedClone(wrapper: HTMLElement, image: HTMLImageElement, c
         removeEventListener(clone, 'load', listener);
 
         if (isWrapperExpanded(wrapper) && !isCloneVisible(clone)) {
-            hideImage(image);
             showClone(clone);
+            hideImage(image);
         }
     };
 
@@ -163,8 +163,8 @@ function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, tra
                 removeTransitionEndListener(container, showCloneListener);
             }
 
-            hideImage(image);
             showClone(clone);
+            hideImage(image);
         }
     };
 
@@ -188,13 +188,14 @@ function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, tra
 
             window.document.body.removeChild(overlay);
             finishCollapsingWrapper(wrapper);
-            showImage(image);
-            hideClone(clone);
             addEventListener(window.document.body, 'click', zoomListener);
         };
 
-        hideOverlay(overlay);
         collapseWrapper(wrapper);
+        hideOverlay(overlay);
+
+        showImage(image);
+        hideClone(clone);
 
         addTransitionEndListener(window, container, collapsed);
         refreshContainer(container, recalculateScale);
@@ -220,9 +221,10 @@ function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, tra
     removeEventListener(window.document.body, 'click', zoomListener);
 
     window.document.body.appendChild(overlay);
+
     showOverlay(overlay);
-    activateImage(image);
     expandWrapper(wrapper, image.height);
+    activateImage(image);
 
     addTransitionEndListener(window, container, expanded);
     if (!isWrapperExpanded(wrapper)) {
