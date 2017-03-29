@@ -1,14 +1,38 @@
-# ![zoom.ts][logo]
+<p align="center">
+  <a href="#">
+    <img src="https://github.com/michaelbull/zoom.ts/raw/master/img/logo.png" alt="zoom.ts" />
+  </a>
+</p>
+<p align="center">
+ A lightweight TypeScript library for image zooming, as seen on <a href="https://medium.design/image-zoom-on-medium-24d146fc0c20">Medium</a>.
+</p>
+<p align="center">
+  <a href="https://www.npmjs.com/package/zoom.ts">
+    <img src="https://img.shields.io/npm/v/zoom.ts.svg?style=flat-square" alt="npm version" />
+  </a>
+  <a href="https://www.npmjs.com/package/zoom.ts">
+    <img src="https://img.shields.io/npm/dt/zoom.ts.svg?style=flat-square" alt="npm downloads" />
+  </a>
+  <a href="https://travis-ci.org/michaelbull/zoom.ts">
+    <img src="https://img.shields.io/travis/michaelbull/zoom.ts.svg?style=flat-square" alt="build status" />
+  </a>
+  <a href="https://github.com/michaelbull/zoom.ts/blob/master/LICENSE">
+    <img src="https://img.shields.io/github/license/michaelbull/zoom.ts.svg?style=flat-square" alt="License" />
+  </a>
+  <br />
+  <a href="https://david-dm.org/michaelbull/zoom.ts">
+    <img src="https://david-dm.org/michaelbull/zoom.ts/status.svg?style=flat-square" "dependencies status" />
+  </a>
+  <a href="https://david-dm.org/michaelbull/zoom.ts?type=dev">
+    <img src="https://david-dm.org/michaelbull/zoom.ts/dev-status.svg?style=flat-square" "devDependencies status" />
+  </a>
+</p>
+<br />
+<br />
 
-A lightweight TypeScript library for image zooming, as seen on [Medium][medium].
+## Introduction
 
 A running demonstration can be found [here][demo].
-
-[![license][license-badge]][license]
-[![npm version][npm-badge]][npm]
-[![npm downloads][downloads-badge]][downloads]
-[![build status][build-status-badge]][build-status]
-[![devDependencies status][devDependencies-badge]][devDependencies]
 
 `zoom.ts` easily plugs into your application and starts listening to zoom events
 as soon as the DOM is ready. The library accounts for just 5kB of bandwidth once
