@@ -1,38 +1,39 @@
 import {
+    addOverlay,
     CLASS,
-    createOverlay,
     hideOverlay,
     isOverlayVisible,
-    showOverlay,
     VISIBLE_CLASS
 } from '../../../lib/element/Overlay';
 
-describe('createOverlay', () => {
-    let document: any;
+describe('addOverlay', () => {
     let element: any;
+    let document: any;
 
     beforeEach(() => {
-        element = {};
+        element = { className: '' };
         document = {
-            createElement: jasmine.createSpy('createElement').and.callFake(() => element)
+            createElement: jasmine.createSpy('createElement').and.returnValue(element),
+            body: {
+                appendChild: jasmine.createSpy('appendChild').and.callFake((element: any) => {
+                    expect(isOverlayVisible(element)).toBe(false);
+                })
+            }
         };
     });
 
     it('should create a div element', () => {
-        createOverlay(document);
+        addOverlay(document);
         expect(document.createElement).toHaveBeenCalledWith('div');
     });
 
-    it('should assign the className', () => {
-        expect(createOverlay(document).className).toBe(CLASS);
+    it('should append the invisible overlay to the document.body', () => {
+        addOverlay(document);
+        expect(document.body.appendChild).toHaveBeenCalledWith(element);
     });
-});
 
-describe('showOverlay', () => {
     it('should add the visible class', () => {
-        let overlay: any = { className: '' };
-        showOverlay(overlay);
-        expect(isOverlayVisible(overlay)).toBe(true);
+        expect(addOverlay(document).className).toBe(`${CLASS} ${VISIBLE_CLASS}`);
     });
 });
 

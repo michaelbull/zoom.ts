@@ -20,9 +20,8 @@ import {
     showImage
 } from '../element/Image';
 import {
-    createOverlay,
     hideOverlay,
-    showOverlay
+    addOverlay
 } from '../element/Overlay';
 import {
     resetTransformation,
@@ -112,7 +111,7 @@ function setUp(document: Document, src: string, wrapper: HTMLElement, image: HTM
 
 // TODO: clean this up somehow
 function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, transformProperty: string | null,
-    showCloneListener: EventListener | null, zoomListener: EventListener, scrollY: number): void {
+    showCloneListener: EventListener | null, zoomListener: EventListener, scrollY: number, overlay: HTMLDivElement): void {
 
     let container: HTMLElement = image.parentElement as HTMLElement;
     let clone: HTMLImageElement = container.children.item(1) as HTMLImageElement;
@@ -169,7 +168,6 @@ function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, tra
     };
 
     let removeListeners: Function;
-    let overlay: HTMLDivElement = createOverlay(window.document);
 
     function collapse(): void {
         removeListeners();
@@ -220,9 +218,6 @@ function zoom(window: Window, wrapper: HTMLElement, image: HTMLImageElement, tra
 
     removeEventListener(window.document.body, 'click', zoomListener);
 
-    window.document.body.appendChild(overlay);
-
-    showOverlay(overlay);
     expandWrapper(wrapper, image.height);
     activateImage(image);
 
@@ -256,7 +251,8 @@ export function createZoomListener(window: Window, scrollY: number): EventListen
                 window.open(src, '_blank');
             } else {
                 let loadClone: EventListener | null = alreadySetUp ? null : setUp(window.document, src, wrapper, image);
-                zoom(window, wrapper, image, transformProperty, loadClone, listener, scrollY);
+                let overlay: HTMLDivElement = addOverlay(window.document);
+                zoom(window, wrapper, image, transformProperty, loadClone, listener, scrollY, overlay);
             }
         }
     };
