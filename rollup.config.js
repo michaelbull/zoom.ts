@@ -33,7 +33,11 @@ let configuration = {
     sourceMap: !prodEnv,
     banner: '/*!' + '\n' + ' * ' + copyright.join('\n * ') + '\n' + ' */' + '\n',
     plugins: [
-        typescript({ check: prodEnv }),
+        typescript({
+            check: prodEnv,
+            clean: true,
+            abortOnError: false
+        }),
         sass({
             output: 'dist/zoom.css',
             processor: css => postcss(postcssPlugins)

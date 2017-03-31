@@ -149,10 +149,7 @@
       true,
       1000
     ],
-    "max-line-length": [
-      true,
-      120
-    ],
+    "max-line-length": false,
     "no-default-export": true,
     "no-mergeable-namespace": true,
     "no-require-imports": false,

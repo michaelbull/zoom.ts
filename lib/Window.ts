@@ -14,12 +14,20 @@ export function hasTransitions(window: Window, element: HTMLElement): boolean {
     }
 }
 
-const TRANSFORM_PROPERTIES: { [key: string]: string } = {
+export const TRANSFORM_PROPERTIES: { [key: string]: string } = {
     WebkitTransform: '-webkit-transform',
     MozTransform: '-moz-transform',
     msTransform: '-ms-transform',
     OTransform: '-o-transform',
     transform: 'transform'
+};
+
+export const TRANSITION_END_EVENTS: { [key: string]: string } = {
+    'WebkitTransition': 'webkitTransitionEnd',
+    'MozTransition': 'transitionend',
+    'OTransition': 'oTransitionEnd',
+    'msTransition': 'MSTransitionEnd',
+    'transition': 'transitionend'
 };
 
 export function hasTranslate3d(window: Window, transformProperty: string): boolean {

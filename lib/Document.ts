@@ -1,5 +1,5 @@
 import { clientDimensions } from './element/Element';
-import { addEventListener } from './event/Events';
+import { addEventListener } from './event/EventListener';
 import { Matrix } from './Matrix';
 
 export const QUIRKS_MODE: string = 'BackCompat';

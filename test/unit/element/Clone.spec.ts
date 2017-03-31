@@ -11,24 +11,20 @@ import {
 
 describe('createClone', () => {
     let element: any;
-    let document: any;
     let listener: EventListener;
     let clone: any;
 
     beforeEach(() => {
         element = {
-            addEventListener: //
-                jasmine.createSpy('addEventListener').and.callFake((event: string, evtListener: EventListener) => {
-                    listener = evtListener;
-                }),
+            addEventListener: jasmine.createSpy('addEventListener').and.callFake((event: string, evtListener: EventListener) => {
+                listener = evtListener;
+            }),
             removeEventListener: jasmine.createSpy('removeEventListener')
         };
 
-        document = {
-            createElement: jasmine.createSpy('createElement').and.callFake(() => element)
-        };
+        spyOn(document, 'createElement').and.returnValue(element);
 
-        clone = createClone(document, 'dummy-src');
+        clone = createClone('dummy-src');
     });
 
     it('should create an img element', () => {
@@ -40,11 +36,11 @@ describe('createClone', () => {
     });
 
     it('should set the src', () => {
-        expect(clone.src).toBe('dummy-src');
+        expect(clone.src.indexOf('dummy-src') === -1).toBe(false);
     });
 
     it('should add a load event listener', () => {
-        expect(element.addEventListener).toHaveBeenCalledWith('load', listener);
+        expect(element.addEventListener).toHaveBeenCalledWith('load', listener, false);
     });
 
     describe('when the loaded event is fired', () => {

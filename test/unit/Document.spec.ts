@@ -71,7 +71,7 @@ describe('ready', () => {
         ready(document, callback);
 
         expect(callback).toHaveBeenCalledTimes(0);
-        expect(document.addEventListener).toHaveBeenCalledWith('DOMContentLoaded', jasmine.any(Function));
+        expect(document.addEventListener).toHaveBeenCalledWith('DOMContentLoaded', jasmine.any(Function), false);
     });
 });
 

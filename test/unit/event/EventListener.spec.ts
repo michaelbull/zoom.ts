@@ -2,7 +2,26 @@ import {
     addEventListener,
     fireEventListener,
     removeEventListener
-} from '../../../lib/event/Events';
+} from '../../../lib/event/EventListener';
+
+describe('fireEventListener', () => {
+    it('should call the listener if the listener is an EventListener', () => {
+        let listener: any = jasmine.createSpy('EventListener');
+        let event: any = jasmine.createSpy('Event');
+        fireEventListener(listener, event);
+        expect(listener).toHaveBeenCalledWith(event);
+    });
+
+    it('should call handleEvent if the listener is EventListenerObject', () => {
+        let listener: any = {
+            handleEvent: jasmine.createSpy('handleEvent')
+        };
+        let event: any = jasmine.createSpy('Event');
+        fireEventListener(listener, event);
+        expect(listener.handleEvent).toHaveBeenCalledWith(event);
+    });
+
+});
 
 describe('addEventListener', () => {
     let listener: jasmine.Spy;
@@ -29,13 +48,9 @@ describe('addEventListener', () => {
         expect(element.attachEvent).toHaveBeenCalled();
     });
 
-    it('should execute immediately otherwise', () => {
+    it('should return undefined otherwise', () => {
         let element: any = {};
-
-        addEventListener(element, 'click', listener);
-
-        let event: Event = listener.calls.mostRecent().args[0];
-        expect(event.type).toBe('click');
+        expect(addEventListener(element, 'click', listener)).toBeUndefined();
     });
 });
 
@@ -51,7 +66,7 @@ describe('removeEventListener', () => {
             removeEventListener: jasmine.createSpy('removeEventListener')
         };
 
-        removeEventListener(element, 'click', listener);
+        expect(removeEventListener(element, 'click', listener)).toBe(true);
         expect(element.removeEventListener).toHaveBeenCalled();
     });
 
@@ -60,18 +75,12 @@ describe('removeEventListener', () => {
             detachEvent: jasmine.createSpy('detachEvent')
         };
 
-        removeEventListener(element, 'click', listener);
+        expect(removeEventListener(element, 'click', listener)).toBe(true);
         expect(element.detachEvent).toHaveBeenCalled();
     });
-});
 
-describe('fireEventListener', () => {
-    it('should call the listener with a new event', () => {
-        let listener: any = jasmine.createSpy('EventLister');
-
-        fireEventListener('example', listener);
-
-        let event: Event = listener.calls.mostRecent().args[0];
-        expect(listener).toHaveBeenCalledWith(event);
+    it('should return false otherwise', () => {
+        let element: any = {};
+        expect(removeEventListener(element, 'click', listener)).toBe(false);
     });
 });

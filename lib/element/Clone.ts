@@ -1,7 +1,8 @@
 import {
     addEventListener,
+    PotentialEventListener,
     removeEventListener
-} from '../event/Events';
+} from '../event/EventListener';
 import {
     addClass,
     hasClass,
@@ -12,17 +13,19 @@ export const CLASS: string = 'zoom__clone';
 export const VISIBLE_CLASS: string = `${CLASS}--visible`;
 export const LOADED_CLASS: string = `${CLASS}--loaded`;
 
-export function createClone(document: Document, src: string): HTMLImageElement {
+export function createClone(src: string): HTMLImageElement {
     let clone: HTMLImageElement = document.createElement('img');
     clone.className = CLASS;
     clone.src = src;
 
-    let loaded: EventListener = (): void => {
-        removeEventListener(clone, 'load', loaded);
-        addClass(clone, LOADED_CLASS);
-    };
+    let listener: PotentialEventListener = addEventListener(clone, 'load', () => {
+        if (listener !== undefined) {
+            removeEventListener(clone, 'load', listener);
+        }
 
-    addEventListener(clone, 'load', loaded);
+        addClass(clone, LOADED_CLASS);
+    });
+
     return clone;
 }
 
