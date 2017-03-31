@@ -25,7 +25,7 @@
     "url": "https://github.com/michaelbull/zoom.ts"
   },
   "scripts": {
-    "clean": "rm -rf dist/*",
+    "clean": "rm -rf dist/* && rm -rf reports/*",
     "start": "npm run clean && rollup --config --watch",
     "build": "npm run clean && rollup --config",
     "test": "karma start test/karma.conf.js --singleRun",
@@ -41,8 +41,8 @@
     "karma": "1.4.1",
     "karma-jasmine": "1.1.0",
     "karma-phantomjs-launcher": "1.0.2",
-    "karma-rollup-preprocessor": "3.0.3",
     "karma-spec-reporter": "0.0.26",
+    "karma-typescript": "github:monounity/karma-typescript",
     "node-sass": "4.5.0",
     "rollup": "0.41.6",
     "rollup-plugin-livereload": "0.4.0",
