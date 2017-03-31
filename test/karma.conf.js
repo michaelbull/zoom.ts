@@ -61,11 +61,11 @@ module.exports = (config) => {
 
         karmaTypescriptConfig: {
             include: [
-                "../lib/**/*.ts",
-                "unit/**/*.spec.ts"
+                '../lib/**/*.ts',
+                'unit/**/*.spec.ts'
             ],
             reports: {
-                html: "reports/coverage"
+                html: 'reports/coverage'
             }
         }
     });
