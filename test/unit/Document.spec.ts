@@ -7,6 +7,7 @@ import {
     STANDARDS_MODE,
     viewportDimensions
 } from '../../lib/Document';
+import { fireEventListener } from '../../lib/event/EventListener';
 import { Matrix } from '../../lib/Matrix';
 
 describe('isStandardsMode', () => {
@@ -48,30 +49,68 @@ describe('rootElement', () => {
 });
 
 describe('ready', () => {
-    it('should execute the callback immediately if document.readyState is complete', () => {
-        let document: any = {
-            readyState: 'complete',
-            addEventListener: jasmine.createSpy('EventListener')
-        };
+    describe('if document.readyState is complete', () => {
+        let document: any;
 
-        let callback: jasmine.Spy = jasmine.createSpy('Function');
-        ready(document, callback);
+        beforeEach(() => {
+            document = {
+                readyState: 'complete'
+            };
+        });
 
-        expect(callback).toHaveBeenCalled();
-        expect(document.addEventListener).toHaveBeenCalledTimes(0);
+        it('should execute the callback immediately if document.readyState is complete', () => {
+            document.addEventListener = jasmine.createSpy('addEventListener');
+            let callback: jasmine.Spy = jasmine.createSpy('callback');
+
+            ready(document, callback);
+
+            expect(callback).toHaveBeenCalled();
+            expect(document.addEventListener).toHaveBeenCalledTimes(0);
+        });
     });
 
-    it('should add an event listener for the DOMContentLoaded event if the document is not ready', () => {
-        let document: any = {
-            readyState: 'loading',
-            addEventListener: jasmine.createSpy('EventListener')
-        };
+    describe('if document.readyState is not complete', () => {
+        let document: any;
 
-        let callback: jasmine.Spy = jasmine.createSpy('Function');
-        ready(document, callback);
+        beforeEach(() => {
+            document = {
+                readyState: 'loading'
+            };
+        });
 
-        expect(callback).toHaveBeenCalledTimes(0);
-        expect(document.addEventListener).toHaveBeenCalledWith('DOMContentLoaded', jasmine.any(Function), false);
+        it('should not call the callback if the document is not ready', () => {
+            document.addEventListener = jasmine.createSpy('addEventListener');
+            let callback: jasmine.Spy = jasmine.createSpy('callback');
+
+            ready(document, callback);
+
+            expect(callback).toHaveBeenCalledTimes(0);
+        });
+
+        it('should listen for the DOMContentLoaded event', () => {
+            let registeredListener: any = undefined;
+            document.addEventListener = jasmine.createSpy('addEventListener').and.callFake((type: string, listener: EventListenerOrEventListenerObject) => {
+                registeredListener = listener;
+            });
+
+            ready(document, jasmine.createSpy('callback'));
+
+            expect(document.addEventListener).toHaveBeenCalledWith('DOMContentLoaded', registeredListener, false);
+        });
+
+        it('should execute the callback when the DOMContentLoaded event is fired', () => {
+            let registeredListener: any = undefined;
+            document.addEventListener = jasmine.createSpy('addEventListener').and.callFake((type: string, listener: EventListenerOrEventListenerObject) => {
+                registeredListener = listener;
+            });
+            let callback: jasmine.Spy = jasmine.createSpy('callback');
+            let event: any = jasmine.createSpy('event');
+
+            ready(document, callback);
+            fireEventListener(registeredListener, event);
+
+            expect(callback).toHaveBeenCalled();
+        });
     });
 });
 
@@ -90,6 +129,7 @@ describe('viewportDimensions', () => {
         };
 
         let actual: Matrix = viewportDimensions(document);
+
         expect(actual[0]).toBe(300);
         expect(actual[1]).toBe(400);
     });
@@ -108,6 +148,7 @@ describe('viewportDimensions', () => {
         };
 
         let actual: Matrix = viewportDimensions(document);
+
         expect(actual[0]).toBe(850);
         expect(actual[1]).toBe(950);
     });
