@@ -105,7 +105,7 @@ function transformContainer(target: Matrix, imageSize: Matrix, imagePosition: Ma
     transform(container.style, scaleAndTranslate(factor, translation, use3d));
 }
 
-function freezeContainer(target: Matrix, imageSize: Matrix, imagePosition: Matrix, container: HTMLElement) {
+function freezeContainer(target: Matrix, imageSize: Matrix, imagePosition: Matrix, container: HTMLElement): void {
     let viewport: Matrix = viewportDimensions(document);
     let cappedTarget: Matrix = minimizeMatrices(viewport, target);
     let factor: number = minimumScale(cappedTarget, imageSize);
@@ -116,7 +116,7 @@ function freezeContainer(target: Matrix, imageSize: Matrix, imagePosition: Matri
     setBoundsPx(container.style, newPosition, newSize);
 }
 
-function expanded(wrapper: HTMLElement, container: HTMLElement, target: Matrix, imageSize: Matrix, imagePosition: Matrix, clone: HTMLImageElement, showCloneListener: PotentialEventListener, transitionEndEvent: string | any, image: HTMLImageElement) {
+function expanded(wrapper: HTMLElement, container: HTMLElement, target: Matrix, imageSize: Matrix, imagePosition: Matrix, clone: HTMLImageElement, showCloneListener: PotentialEventListener, transitionEndEvent: string | any, image: HTMLImageElement): void {
     finishExpandingWrapper(wrapper);
     refreshContainer(container, () => freezeContainer(target, imageSize, imagePosition, container));
 
@@ -234,7 +234,7 @@ function zoom(wrapper: HTMLElement, image: HTMLImageElement, transformProperty: 
     }
 }
 
-function clickedZoomable(event: MouseEvent, zoomListener: PotentialEventListener, scrollDelta: number) {
+function clickedZoomable(event: MouseEvent, zoomListener: PotentialEventListener, scrollDelta: number): void {
     let image: HTMLImageElement = event.target as HTMLImageElement;
     let parent: HTMLElement = image.parentElement as HTMLElement;
     let grandParent: HTMLElement = parent.parentElement as HTMLElement;

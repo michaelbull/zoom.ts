@@ -15,8 +15,8 @@ describe('addOverlay', () => {
         document = {
             createElement: jasmine.createSpy('createElement').and.returnValue(element),
             body: {
-                appendChild: jasmine.createSpy('appendChild').and.callFake((element: any) => {
-                    expect(isOverlayVisible(element)).toBe(false);
+                appendChild: jasmine.createSpy('appendChild').and.callFake((newChild: any) => {
+                    expect(isOverlayVisible(newChild)).toBe(false);
                 })
             }
         };

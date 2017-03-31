@@ -31,7 +31,7 @@
     "test": "karma start test/karma.conf.js --singleRun",
     "test:watch": "karma start test/karma.conf.js",
     "dist": "npm run clean && cross-env NODE_ENV=production rollup --config",
-    "lint": "tslint --fix **/*.ts"
+    "lint": "tslint lib/**/*.ts test/**/*.ts"
   },
   "devDependencies": {
     "@types/jasmine": "2.5.41",

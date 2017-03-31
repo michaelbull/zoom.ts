@@ -16,7 +16,7 @@ export function polyfillEvent(event: Event): Event {
     }
 
     if (typeof event.stopPropagation !== 'function') {
-        event.stopPropagation = () => {
+        event.stopPropagation = (): void => {
             event.cancelBubble = true;
         };
     }
