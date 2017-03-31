@@ -1,6 +1,7 @@
 import {
     addEventListener,
     fireEventListener,
+    PotentialEventListener,
     removeEventListener
 } from '../../../lib/event/EventListener';
 
@@ -8,7 +9,9 @@ describe('fireEventListener', () => {
     it('should call the listener if the listener is an EventListener', () => {
         let listener: any = jasmine.createSpy('EventListener');
         let event: any = jasmine.createSpy('Event');
+
         fireEventListener(listener, event);
+
         expect(listener).toHaveBeenCalledWith(event);
     });
 
@@ -17,7 +20,9 @@ describe('fireEventListener', () => {
             handleEvent: jasmine.createSpy('handleEvent')
         };
         let event: any = jasmine.createSpy('Event');
+
         fireEventListener(listener, event);
+
         expect(listener.handleEvent).toHaveBeenCalledWith(event);
     });
 
@@ -34,18 +39,18 @@ describe('addEventListener', () => {
         let element: any = {
             addEventListener: jasmine.createSpy('addEventListener')
         };
+        let added: PotentialEventListener = addEventListener(element, 'click', listener);
 
-        addEventListener(element, 'click', listener);
-        expect(element.addEventListener).toHaveBeenCalled();
+        expect(element.addEventListener).toHaveBeenCalledWith('click', added, false);
     });
 
     it('should use attachEvent if present', () => {
         let element: any = {
-            attachEvent: jasmine.createSpy('attachEvent')
+            attachEvent: jasmine.createSpy('attachEvent').and.returnValue(true)
         };
+        let added: PotentialEventListener = addEventListener(element, 'click', listener);
 
-        addEventListener(element, 'click', listener);
-        expect(element.attachEvent).toHaveBeenCalled();
+        expect(element.attachEvent).toHaveBeenCalledWith('onclick', added);
     });
 
     it('should return undefined otherwise', () => {
@@ -66,8 +71,19 @@ describe('removeEventListener', () => {
             removeEventListener: jasmine.createSpy('removeEventListener')
         };
 
-        expect(removeEventListener(element, 'click', listener)).toBe(true);
-        expect(element.removeEventListener).toHaveBeenCalled();
+        removeEventListener(element, 'click', listener);
+
+        expect(element.removeEventListener).toHaveBeenCalledWith('click', listener);
+    });
+
+    it('should return true if removeEventListener was called', () => {
+        let element: any = {
+            removeEventListener: jasmine.createSpy('removeEventListener')
+        };
+
+        let removed: boolean = removeEventListener(element, 'click', listener);
+
+        expect(removed).toBe(true);
     });
 
     it('should use detachEvent if present', () => {
@@ -75,8 +91,19 @@ describe('removeEventListener', () => {
             detachEvent: jasmine.createSpy('detachEvent')
         };
 
-        expect(removeEventListener(element, 'click', listener)).toBe(true);
-        expect(element.detachEvent).toHaveBeenCalled();
+        removeEventListener(element, 'click', listener);
+
+        expect(element.detachEvent).toHaveBeenCalledWith('click', listener);
+    });
+
+    it('should return true if detachEvent was called', () => {
+        let element: any = {
+            detachEvent: jasmine.createSpy('detachEvent')
+        };
+
+        let removed: boolean = removeEventListener(element, 'click', listener);
+
+        expect(removed).toBe(true);
     });
 
     it('should return false otherwise', () => {
