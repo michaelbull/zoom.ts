@@ -1,10 +1,10 @@
-export function currentEvent(event: Event | undefined): Event {
+export function currentEvent(event: Event | undefined, context: Window = window): Event {
     if (event !== undefined) {
         return event;
-    } else if (window.event !== undefined) {
-        return window.event;
+    } else if (context.event !== undefined) {
+        return context.event;
     } else {
-        throw new Error('no current event to handle');
+        throw new Error('No current event to handle.');
     }
 }
 
@@ -23,16 +23,14 @@ export function polyfillEvent(event: Event): Event {
 
     if (event.type === 'mouseover') {
         let mouseEvent: MouseEvent = event as MouseEvent;
-        let missingRelatedTarget: boolean = mouseEvent.relatedTarget === undefined;
 
-        if (missingRelatedTarget && mouseEvent.fromElement !== undefined) {
+        if (mouseEvent.relatedTarget === undefined && mouseEvent.fromElement !== undefined) {
             (mouseEvent as any).relatedTarget = mouseEvent.fromElement;
         }
     } else if (event.type === 'mouseout') {
         let mouseEvent: MouseEvent = event as MouseEvent;
-        let missingRelatedTarget: boolean = mouseEvent.relatedTarget === undefined;
 
-        if (missingRelatedTarget && mouseEvent.toElement !== undefined) {
+        if (mouseEvent.relatedTarget === undefined && mouseEvent.toElement !== undefined) {
             (mouseEvent as any).relatedTarget = mouseEvent.toElement;
         }
     }
