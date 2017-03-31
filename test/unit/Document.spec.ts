@@ -78,7 +78,7 @@ describe('ready', () => {
             };
         });
 
-        it('should not call the callback if the document is not ready', () => {
+        it('should not call the callback', () => {
             document.addEventListener = jasmine.createSpy('addEventListener');
             let callback: jasmine.Spy = jasmine.createSpy('callback');
 
