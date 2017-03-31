@@ -1,11 +1,10 @@
-
 export function currentEvent(event: Event | undefined): Event {
     if (event !== undefined) {
         return event;
     } else if (window.event !== undefined) {
         return window.event;
     } else {
-        throw new TypeError('no current event to handle');
+        throw new Error('no current event to handle');
     }
 }
 
