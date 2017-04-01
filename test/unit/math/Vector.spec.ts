@@ -12,7 +12,7 @@ import {
     sizeOf,
     subtractVectors,
     translateToCentre
-} from '../../lib/math/Vector';
+} from '../../../lib/math/Vector';
 
 describe('positionOf', () => {
     it('should return left as the x value', () => {
@@ -26,7 +26,7 @@ describe('positionOf', () => {
     });
 });
 
-describe('dimensionsFrom', () => {
+describe('sizeOf', () => {
     it('should return the width as the x value', () => {
         let rect: any = { width: 200 };
         expect(sizeOf(rect)[0]).toBe(200);
