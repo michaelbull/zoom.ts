@@ -106,7 +106,7 @@ function expanded(wrapper: HTMLElement, container: HTMLElement, target: Vector, 
     }
 }
 
-function zoom(wrapper: HTMLElement, image: HTMLImageElement, transformProperty: string | any, transitionProperty: string | any, showCloneListener: PotentialEventListener, scrollY: number, overlay: HTMLDivElement): void {
+function zoom(wrapper: HTMLElement, image: HTMLImageElement, transformProperty: string, transitionProperty: string | any, showCloneListener: PotentialEventListener, scrollY: number, overlay: HTMLDivElement): void {
     let container: HTMLElement = image.parentElement as HTMLElement;
     let clone: HTMLImageElement = container.children.item(1) as HTMLImageElement;
 
@@ -115,7 +115,7 @@ function zoom(wrapper: HTMLElement, image: HTMLImageElement, transformProperty: 
     let imagePosition: Vector = positionFrom(imageRect);
     let imageSize: Vector = sizeFrom(imageRect);
 
-    let use3d: boolean = transformProperty !== null && hasTranslate3d(window, transformProperty);
+    let use3d: boolean = hasTranslate3d(window, transformProperty);
     let transitionEndEvent: string | null = transitionProperty === null ? null : TRANSITION_END_EVENTS[transitionProperty];
 
     function recalculateScale(): void {
@@ -158,26 +158,24 @@ function zoom(wrapper: HTMLElement, image: HTMLImageElement, transformProperty: 
         collapseWrapper(wrapper);
         hideOverlay(overlay);
 
-        if (transitionEndEvent === null) {
-            collapsed(overlay, wrapper, image, clone);
-        } else {
-            let collapsedListener: PotentialEventListener = addEventListener(container, transitionEndEvent, () => {
+        let collapsedListener: PotentialEventListener;
+
+        if (transitionEndEvent !== null) {
+            collapsedListener = addEventListener(container, transitionEndEvent, () => {
                 if (collapsedListener !== undefined) {
                     removeEventListener(container, transitionEndEvent as string, collapsedListener);
                 }
 
                 collapsed(overlay, wrapper, image, clone);
             });
-
-            if (collapsedListener === undefined) {
-                collapsed(overlay, wrapper, image, clone);
-            } else {
-                transitionToCentre(container, document, target, imageSize, imagePosition, use3d);
-            }
         }
 
         refreshContainer(container, recalculateScale);
         restoreContainer(container);
+
+        if (collapsedListener === undefined) {
+            collapsed(overlay, wrapper, image, clone);
+        }
     }
 
     let initialScrollY: number = pageScrollY(window);
