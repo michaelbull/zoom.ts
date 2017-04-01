@@ -10,6 +10,7 @@ import {
     setBoundsPx,
     transform
 } from './Style';
+import { isWrapperTransitioning } from './Wrapper';
 
 export const CLASS: string = 'zoom__container';
 
@@ -35,6 +36,14 @@ export function refreshContainer(container: HTMLElement, callback: Function): vo
     callback();
     repaint(container);
     container.style.transition = '';
+}
+
+export function centreContainer(wrapper: HTMLElement, container: HTMLElement, target: Vector, size: Vector, position: Vector, use3d: boolean): void {
+    if (isWrapperTransitioning(wrapper)) {
+        transitionToCentre(container, document, target, size, position, use3d);
+    } else {
+        fixToCentre(container, document, target, size, position);
+    }
 }
 
 export function restoreContainer(container: HTMLElement): void {

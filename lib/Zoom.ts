@@ -6,6 +6,7 @@ import {
     showClone
 } from './element/Clone';
 import {
+    centreContainer,
     createContainer,
     fixToCentre,
     isContainer,
@@ -32,7 +33,6 @@ import {
 } from './element/Style';
 import {
     isWrapperExpanding,
-    isWrapperTransitioning,
     setWrapperExpanded,
     startCollapsingWrapper,
     startExpandingWrapper,
@@ -102,22 +102,14 @@ function finishedExpanding(wrapper: HTMLElement, container: HTMLElement, target:
     }
 }
 
-function recentreContainer(wrapper: HTMLElement, container: HTMLElement, target: Vector, imageSize: Vector, imagePosition: Vector, use3d: boolean) {
-    if (isWrapperTransitioning(wrapper)) {
-        transitionToCentre(container, document, target, imageSize, imagePosition, use3d);
-    } else {
-        fixToCentre(container, document, target, imageSize, imagePosition);
-    }
-}
-
 function zoomInstant(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement | any, showCloneListener: PotentialEventListener, scrollY: number, overlay: HTMLDivElement, target: Vector, use3d: boolean): void {
     let initialScrollY: number = pageScrollY(window);
     let imageRect: ClientRect = image.getBoundingClientRect();
     let imagePosition: Vector = positionFrom(imageRect);
     let imageSize: Vector = sizeFrom(imageRect);
 
-    function recalculateScale(): void {
-        recentreContainer(wrapper, container, target, imageSize, imagePosition, use3d);
+    function recentre(): void {
+        centreContainer(wrapper, container, target, imageSize, imagePosition, use3d);
     }
 
     let removeListeners: Function;
@@ -139,7 +131,7 @@ function zoomInstant(wrapper: HTMLElement, container: HTMLElement, image: HTMLIm
     let scrolledAway: PotentialEventListener = addEventListener(window, 'scroll', scrolled(initialScrollY, scrollY, () => pageScrollY(window), () => collapse()));
     let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
         imagePosition = positionFrom(wrapper.getBoundingClientRect());
-        recalculateScale();
+        recentre();
     });
 
     removeListeners = (): void => {
@@ -162,8 +154,8 @@ function zoomTransition(wrapper: HTMLElement, container: HTMLElement, image: HTM
     let imagePosition: Vector = positionFrom(imageRect);
     let imageSize: Vector = sizeFrom(imageRect);
 
-    function recalculateScale(): void {
-        recentreContainer(wrapper, container, target, imageSize, imagePosition, use3d);
+    function recentre(): void {
+        centreContainer(wrapper, container, target, imageSize, imagePosition, use3d);
     }
 
     let expandedListener: PotentialEventListener = undefined;
@@ -197,7 +189,7 @@ function zoomTransition(wrapper: HTMLElement, container: HTMLElement, image: HTM
             collapsed(overlay, wrapper, image, clone);
         });
 
-        refreshContainer(container, recalculateScale);
+        refreshContainer(container, recentre);
         restoreContainer(container);
 
         if (collapsedListener === undefined) {
@@ -210,7 +202,7 @@ function zoomTransition(wrapper: HTMLElement, container: HTMLElement, image: HTM
     let scrolledAway: PotentialEventListener = addEventListener(window, 'scroll', scrolled(initialScrollY, scrollY, () => pageScrollY(window), () => collapse()));
     let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
         imagePosition = positionFrom(wrapper.getBoundingClientRect());
-        recalculateScale();
+        recentre();
     });
 
     removeListeners = (): void => {
