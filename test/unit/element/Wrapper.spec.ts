@@ -1,10 +1,10 @@
 import {
-    collapseWrapper,
+    startCollapsingWrapper,
     COLLAPSING_CLASS,
     EXPANDED_CLASS,
     EXPANDING_CLASS,
-    expandWrapper,
-    finishCollapsingWrapper,
+    startExpandingWrapper,
+    stopCollapsingWrapper,
     finishExpandingWrapper,
     isWrapperCollapsing,
     isWrapperExpanded,
@@ -86,14 +86,14 @@ describe('isWrapperTransitioning', () => {
     });
 });
 
-describe('expandWrapper', () => {
+describe('startExpandingWrapper', () => {
     it('should add the expanding class', () => {
         let wrapper: any = {
             className: '',
             style: {}
         };
 
-        expandWrapper(wrapper, 0);
+        startExpandingWrapper(wrapper);
         expect(isWrapperExpanding(wrapper)).toBe(true);
     });
 
@@ -103,7 +103,7 @@ describe('expandWrapper', () => {
             style: {}
         };
 
-        expandWrapper(wrapper, 50);
+        startExpandingWrapper(wrapper);
         expect(wrapper.style.height).toBe('50px');
     });
 });
@@ -130,28 +130,28 @@ describe('finishExpandingWrapper', () => {
     });
 });
 
-describe('collapseWrapper', () => {
+describe('startCollapsingWrapper', () => {
     it('should remove the expanded class', () => {
         let wrapper: any = { className: EXPANDED_CLASS };
-        collapseWrapper(wrapper);
+        startCollapsingWrapper(wrapper);
         expect(isWrapperExpanded(wrapper)).toBe(false);
     });
 
     it('should add the collapsing class', () => {
         let wrapper: any = { className: EXPANDED_CLASS };
-        collapseWrapper(wrapper);
+        startCollapsingWrapper(wrapper);
         expect(isWrapperCollapsing(wrapper)).toBe(true);
     });
 });
 
-describe('finishCollapsingWrapper', () => {
+describe('stopCollapsingWrapper', () => {
     it('should remove the collapsing class', () => {
         let wrapper: any = {
             className: COLLAPSING_CLASS,
             style: {}
         };
 
-        finishCollapsingWrapper(wrapper);
+        stopCollapsingWrapper(wrapper);
         expect(isWrapperCollapsing(wrapper)).toBe(false);
     });
 
@@ -163,7 +163,7 @@ describe('finishCollapsingWrapper', () => {
             }
         };
 
-        finishCollapsingWrapper(wrapper);
+        stopCollapsingWrapper(wrapper);
         expect(wrapper.style.height).toBe('');
     });
 });

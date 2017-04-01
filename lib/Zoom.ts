@@ -25,15 +25,20 @@ import {
     addOverlay,
     hideOverlay
 } from './element/Overlay';
-import { transform } from './element/Style';
 import {
-    collapseWrapper,
-    expandWrapper,
-    finishCollapsingWrapper,
-    finishExpandingWrapper,
+    setHeightPx,
+    transform,
+    unsetHeight
+} from './element/Style';
+import {
+    startCollapsingWrapper,
+    startExpandingWrapper,
+    stopCollapsingWrapper,
     isWrapperExpanding,
     isWrapperTransitioning,
-    stopExpandingWrapper
+    stopExpandingWrapper,
+    setWrapperExpanded,
+    unsetWrapperExpanded
 } from './element/Wrapper';
 import {
     addEventListener,
@@ -69,12 +74,14 @@ function collapsed(overlay: HTMLDivElement, wrapper: HTMLElement, image: HTMLIma
     }
 
     document.body.removeChild(overlay);
-    finishCollapsingWrapper(wrapper);
+    stopCollapsingWrapper(wrapper);
+    unsetHeight(wrapper.style);
     addZoomListener();
 }
 
 function expanded(wrapper: HTMLElement, container: HTMLElement, target: Vector, imageSize: Vector, imagePosition: Vector, clone: HTMLImageElement | null, showCloneListener: PotentialEventListener, transitionEndEvent: string | any, image: HTMLImageElement): void {
-    finishExpandingWrapper(wrapper);
+    stopExpandingWrapper(wrapper);
+    setWrapperExpanded(wrapper);
 
     refreshContainer(container, () => {
         fixToCentre(container, document, target, imageSize, imagePosition);
@@ -124,19 +131,21 @@ function zoom(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElem
     function collapse(): void {
         removeListeners();
 
+        if (clone !== null && !isCloneLoaded(clone) && showCloneListener !== undefined) {
+            removeEventListener(clone, 'load', showCloneListener);
+        }
+
         if (isWrapperExpanding(wrapper)) {
             if (expandedListener !== undefined) {
                 removeEventListener(container, transitionEndEvent as string, expandedListener);
             }
 
             stopExpandingWrapper(wrapper);
+        } else {
+            unsetWrapperExpanded(wrapper);
         }
 
-        if (clone !== null && !isCloneLoaded(clone) && showCloneListener !== undefined) {
-            removeEventListener(clone, 'load', showCloneListener);
-        }
-
-        collapseWrapper(wrapper);
+        startCollapsingWrapper(wrapper);
         hideOverlay(overlay);
 
         let collapsedListener: PotentialEventListener;
@@ -176,7 +185,8 @@ function zoom(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElem
         removeEventListener(window, 'resize', resized as EventListenerOrEventListenerObject);
     };
 
-    expandWrapper(wrapper, image.height);
+    startExpandingWrapper(wrapper);
+    setHeightPx(wrapper.style, image.height);
     activateImage(image);
 
     if (transitionEndEvent === null || expandedListener === undefined) {

@@ -17,38 +17,38 @@ export function isWrapperExpanding(wrapper: HTMLElement): boolean {
     return hasClass(wrapper, EXPANDING_CLASS);
 }
 
-export function isWrapperExpanded(wrapper: HTMLElement): boolean {
-    return hasClass(wrapper, EXPANDED_CLASS);
-}
-
-export function isWrapperCollapsing(wrapper: HTMLElement): boolean {
-    return hasClass(wrapper, COLLAPSING_CLASS);
-}
-
-export function isWrapperTransitioning(wrapper: HTMLElement): boolean {
-    return isWrapperExpanding(wrapper) || isWrapperCollapsing(wrapper);
-}
-
-export function expandWrapper(wrapper: HTMLElement, toHeight: number): void {
+export function startExpandingWrapper(wrapper: HTMLElement): void {
     addClass(wrapper, EXPANDING_CLASS);
-    setHeightPx(wrapper.style, toHeight);
 }
 
 export function stopExpandingWrapper(wrapper: HTMLElement): void {
     removeClass(wrapper, EXPANDING_CLASS);
 }
 
-export function finishExpandingWrapper(wrapper: HTMLElement): void {
-    stopExpandingWrapper(wrapper);
+export function isWrapperExpanded(wrapper: HTMLElement): boolean {
+    return hasClass(wrapper, EXPANDED_CLASS);
+}
+
+export function setWrapperExpanded(wrapper: HTMLElement): void {
     addClass(wrapper, EXPANDED_CLASS);
 }
 
-export function collapseWrapper(wrapper: HTMLElement): void {
+export function unsetWrapperExpanded(wrapper: HTMLElement): void {
     removeClass(wrapper, EXPANDED_CLASS);
+}
+
+export function isWrapperCollapsing(wrapper: HTMLElement): boolean {
+    return hasClass(wrapper, COLLAPSING_CLASS);
+}
+
+export function startCollapsingWrapper(wrapper: HTMLElement): void {
     addClass(wrapper, COLLAPSING_CLASS);
 }
 
-export function finishCollapsingWrapper(wrapper: HTMLElement): void {
+export function stopCollapsingWrapper(wrapper: HTMLElement): void {
     removeClass(wrapper, COLLAPSING_CLASS);
-    unsetHeight(wrapper.style);
+}
+
+export function isWrapperTransitioning(wrapper: HTMLElement): boolean {
+    return isWrapperExpanding(wrapper) || isWrapperCollapsing(wrapper);
 }
