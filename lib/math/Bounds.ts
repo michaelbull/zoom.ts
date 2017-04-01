@@ -1,17 +1,19 @@
 import {
     centrePosition,
-    Vector,
     minimizeVectors,
     minimumScale,
-    scaleVector
+    positionFrom,
+    scaleVector,
+    sizeFrom,
+    Vector
 } from './Vector';
 
-export type Bounds = [number, number, number, number];
+export type Bounds = [Vector, Vector];
 
 export function boundsFrom(rect: ClientRect): Bounds {
     return [
-        rect.left, rect.top,
-        rect.width, rect.height
+        positionFrom(rect),
+        sizeFrom(rect)
     ];
 }
 
@@ -23,7 +25,7 @@ export function centreBounds(viewport: Vector, target: Vector, size: Vector, pos
     let centre: Vector = centrePosition(viewport, scaled, position);
 
     return [
-        centre[0], centre[1],
-        scaled[0], scaled[1]
+        centre,
+        scaled
     ];
 }

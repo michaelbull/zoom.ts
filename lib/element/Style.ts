@@ -1,8 +1,8 @@
 import { Bounds } from '../math/Bounds';
 import {
-    Vector,
     ScaleAndTranslate,
-    scaleTranslateToCentre
+    scaleTranslateToCentre,
+    Vector
 } from '../math/Vector';
 import { vendorProperty } from '../Vendor';
 
@@ -31,7 +31,9 @@ export function resetBounds(style: CSSStyleDeclaration): void {
 }
 
 export function setBoundsPx(style: CSSStyleDeclaration, bounds: Bounds): void {
-    setBounds(style, `${bounds[0]}px`, `${bounds[1]}px`, `${bounds[2]}px`, `${bounds[3]}px`);
+    let position: Vector = bounds[0];
+    let size: Vector = bounds[1];
+    setBounds(style, `${position[0]}px`, `${position[1]}px`, `${size[0]}px`, `${size[1]}px`);
 }
 
 export function setHeightPx(style: CSSStyleDeclaration, height: number): void {
