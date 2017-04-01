@@ -8,33 +8,33 @@ import {
     minimizeVectors,
     minimumScale,
     scaleVector,
-    positionOf,
-    sizeOf,
+    positionFrom,
+    sizeFrom,
     subtractVectors,
     translateToCentre
 } from '../../../lib/math/Vector';
 
-describe('positionOf', () => {
+describe('positionFrom', () => {
     it('should return left as the x value', () => {
         let rect: any = { left: 100 };
-        expect(positionOf(rect)[0]).toBe(100);
+        expect(positionFrom(rect)[0]).toBe(100);
     });
 
     it('should return top as the y value', () => {
         let rect: any = { top: 50 };
-        expect(positionOf(rect)[1]).toBe(50);
+        expect(positionFrom(rect)[1]).toBe(50);
     });
 });
 
-describe('sizeOf', () => {
+describe('sizeFrom', () => {
     it('should return the width as the x value', () => {
         let rect: any = { width: 200 };
-        expect(sizeOf(rect)[0]).toBe(200);
+        expect(sizeFrom(rect)[0]).toBe(200);
     });
 
     it('should return the height as the y value', () => {
         let rect: any = { height: 300 };
-        expect(sizeOf(rect)[1]).toBe(300);
+        expect(sizeFrom(rect)[1]).toBe(300);
     });
 });
 

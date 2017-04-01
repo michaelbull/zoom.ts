@@ -52,8 +52,8 @@ import {
 import { centreBounds } from './math/Bounds';
 import {
     Vector,
-    positionOf,
-    sizeOf
+    positionFrom,
+    sizeFrom
 } from './math/Vector';
 import { vendorProperty } from './Vendor';
 import {
@@ -118,8 +118,8 @@ function zoom(wrapper: HTMLElement, image: HTMLImageElement, transformProperty: 
 
     let target: Vector = targetDimensions(wrapper);
     let imageRect: ClientRect = image.getBoundingClientRect();
-    let imagePosition: Vector = positionOf(imageRect);
-    let imageSize: Vector = sizeOf(imageRect);
+    let imagePosition: Vector = positionFrom(imageRect);
+    let imageSize: Vector = sizeFrom(imageRect);
 
     let use3d: boolean = transformProperty !== null && hasTranslate3d(window, transformProperty);
     let transitionEndEvent: string | null = transitionProperty === null ? null : TRANSITION_END_EVENTS[transitionProperty];
@@ -199,7 +199,7 @@ function zoom(wrapper: HTMLElement, image: HTMLImageElement, transformProperty: 
     let dismissed: PotentialEventListener = addEventListener(container, 'click', () => collapse());
     let scrolledAway: PotentialEventListener = addEventListener(window, 'scroll', scrolled(initialScrollY, scrollY, () => collapse(), () => pageScrollY(window)));
     let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
-        imagePosition = positionOf(wrapper.getBoundingClientRect());
+        imagePosition = positionFrom(wrapper.getBoundingClientRect());
         recalculateScale();
     });
 

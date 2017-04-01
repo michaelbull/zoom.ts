@@ -1,13 +1,13 @@
 export type Vector = [number, number];
 
-export function positionOf(rect: ClientRect): Vector {
+export function positionFrom(rect: ClientRect): Vector {
     return [
         rect.left,
         rect.top
     ];
 }
 
-export function sizeOf(rect: ClientRect): Vector {
+export function sizeFrom(rect: ClientRect): Vector {
     return [
         rect.width,
         rect.height
