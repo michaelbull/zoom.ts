@@ -186,7 +186,7 @@ function zoom(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElem
     }
 }
 
-function clickedZoomable(event: MouseEvent, zoomListener: PotentialEventListener, scrollDelta: number): void {
+function clickedZoomable(event: MouseEvent, zoomListener: EventListener, scrollDelta: number): void {
     let image: HTMLImageElement = event.target as HTMLImageElement;
     let parent: HTMLElement = image.parentElement as HTMLElement;
     let grandParent: HTMLElement = parent.parentElement as HTMLElement;
@@ -247,8 +247,7 @@ export function addZoomListener(scrollDelta: number = DEFAULT_SCROLL_DELTA): voi
     let listener: PotentialEventListener = addEventListener(document.body, 'click', (event: MouseEvent) => {
         if (isZoomable(event.target)) {
             event.preventDefault();
-            removeEventListener(document.body, 'click', listener as EventListener);
-            clickedZoomable(event, listener, scrollDelta);
+            clickedZoomable(event, listener as EventListener, scrollDelta);
         }
     });
 }
