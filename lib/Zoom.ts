@@ -16,6 +16,7 @@ import {
 import { targetDimensions } from './element/Element';
 import {
     activateImage,
+    deactivateImage,
     hideImage,
     isZoomable,
     showImage
@@ -30,10 +31,8 @@ import {
     expandWrapper,
     finishCollapsingWrapper,
     finishExpandingWrapper,
-    isWrapperExpanded,
     isWrapperExpanding,
     isWrapperTransitioning,
-    resolveSrc,
     stopExpandingWrapper
 } from './element/Wrapper';
 import {
@@ -43,7 +42,8 @@ import {
 } from './event/EventListener';
 import {
     escKeyPressed,
-    scrolled
+    scrolled,
+    showCloneOnceLoaded
 } from './event/EventListeners';
 import {
     positionFrom,
@@ -59,44 +59,28 @@ import {
 
 const DEFAULT_SCROLL_DELTA: number = 50;
 
-function setUp(src: string, wrapper: HTMLElement, image: HTMLImageElement): PotentialEventListener {
-    let container: HTMLElement = createContainer(document);
-    let clone: HTMLImageElement = createClone(src);
-
-    let listener: PotentialEventListener = addEventListener(clone, 'load', () => {
-        if (listener !== undefined) {
-            removeEventListener(clone, 'load', listener);
-        }
-
-        if (isWrapperExpanded(wrapper) && !isCloneVisible(clone)) {
-            showClone(clone);
-            hideImage(image);
-        }
-    });
-
-    wrapper.replaceChild(container, image);
-    container.appendChild(image);
-    container.appendChild(clone);
-    return undefined;
-}
-
 // TODO: clean this up somehow
-function collapsed(overlay: HTMLDivElement, wrapper: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement): void {
-    showImage(image);
-    hideClone(clone);
+function collapsed(overlay: HTMLDivElement, wrapper: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement | null): void {
+    deactivateImage(image);
+
+    if (clone !== null) {
+        showImage(image);
+        hideClone(clone);
+    }
+
     document.body.removeChild(overlay);
     finishCollapsingWrapper(wrapper);
     addZoomListener();
 }
 
-function expanded(wrapper: HTMLElement, container: HTMLElement, target: Vector, imageSize: Vector, imagePosition: Vector, clone: HTMLImageElement, showCloneListener: PotentialEventListener, transitionEndEvent: string | any, image: HTMLImageElement): void {
+function expanded(wrapper: HTMLElement, container: HTMLElement, target: Vector, imageSize: Vector, imagePosition: Vector, clone: HTMLImageElement | null, showCloneListener: PotentialEventListener, transitionEndEvent: string | any, image: HTMLImageElement): void {
     finishExpandingWrapper(wrapper);
 
     refreshContainer(container, () => {
         fixToCentre(container, document, target, imageSize, imagePosition);
     });
 
-    if (isCloneLoaded(clone) && !isCloneVisible(clone)) {
+    if (clone !== null && isCloneLoaded(clone) && !isCloneVisible(clone)) {
         if (showCloneListener !== undefined) {
             removeEventListener(clone, transitionEndEvent as string, showCloneListener);
         }
@@ -106,16 +90,13 @@ function expanded(wrapper: HTMLElement, container: HTMLElement, target: Vector, 
     }
 }
 
-function zoom(wrapper: HTMLElement, image: HTMLImageElement, transformProperty: string, transitionProperty: string | any, showCloneListener: PotentialEventListener, scrollY: number, overlay: HTMLDivElement): void {
-    let container: HTMLElement = image.parentElement as HTMLElement;
-    let clone: HTMLImageElement = container.children.item(1) as HTMLImageElement;
-
+function zoom(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement | null, transformProperty: string, transitionProperty: string | any, showCloneListener: PotentialEventListener, scrollY: number, overlay: HTMLDivElement): void {
     let target: Vector = targetDimensions(wrapper);
     let imageRect: ClientRect = image.getBoundingClientRect();
     let imagePosition: Vector = positionFrom(imageRect);
     let imageSize: Vector = sizeFrom(imageRect);
 
-    let use3d: boolean = hasTranslate3d(window, transformProperty);
+    let use3d: boolean = transformProperty !== null && hasTranslate3d(window, transformProperty);
     let transitionEndEvent: string | null = transitionProperty === null ? null : TRANSITION_END_EVENTS[transitionProperty];
 
     function recalculateScale(): void {
@@ -151,7 +132,7 @@ function zoom(wrapper: HTMLElement, image: HTMLImageElement, transformProperty: 
             stopExpandingWrapper(wrapper);
         }
 
-        if (!isCloneLoaded(clone) && showCloneListener !== undefined) {
+        if (clone !== null && !isCloneLoaded(clone) && showCloneListener !== undefined) {
             removeEventListener(clone, 'load', showCloneListener);
         }
 
@@ -213,21 +194,52 @@ function clickedZoomable(event: MouseEvent, zoomListener: PotentialEventListener
     let alreadySetUp: boolean = isContainer(parent);
     let wrapper: HTMLElement = alreadySetUp ? grandParent : parent;
 
-    let src: string = resolveSrc(wrapper, image);
+    let originalSrc: string = image.src;
+    let fullSrc: string | null = wrapper.getAttribute('data-src');
+    let actualSrc: string = fullSrc === null ? originalSrc : fullSrc;
+
     let transformProperty: string | null = vendorProperty(document.body.style, 'transform');
 
     if (transformProperty === null || event.metaKey || event.ctrlKey) {
-        window.open(src, '_blank');
+        window.open(actualSrc, '_blank');
     } else {
         if (zoomListener !== undefined) {
             removeEventListener(document.body, 'click', zoomListener);
         }
 
         let transitionProperty: string | null = vendorProperty(document.body.style, 'transition');
-        let showClone: PotentialEventListener = alreadySetUp ? undefined : setUp(src, wrapper, image);
+
+        let container: HTMLElement;
+        let clone: HTMLImageElement | null = null;
+
+        let cloneRequired: boolean = fullSrc !== null && fullSrc !== originalSrc;
+        let showCloneListener: PotentialEventListener;
+
+        if (alreadySetUp) {
+            container = image.parentElement as HTMLElement;
+
+            if (cloneRequired) {
+                clone = container.children.item(1) as HTMLImageElement;
+
+                if (!isCloneLoaded(clone)) {
+                    showCloneListener = showCloneOnceLoaded(wrapper, image, clone);
+                }
+            }
+        } else {
+            container = createContainer(document);
+            wrapper.replaceChild(container, image);
+            container.appendChild(image);
+
+            if (cloneRequired) {
+                clone = createClone(actualSrc);
+                showCloneListener = showCloneOnceLoaded(wrapper, image, clone);
+                container.appendChild(clone);
+            }
+        }
+
         let overlay: HTMLDivElement = addOverlay(document);
 
-        zoom(wrapper, image, transformProperty, transitionProperty, showClone, scrollDelta, overlay);
+        zoom(wrapper, container, image, clone, transformProperty, transitionProperty, showCloneListener, scrollDelta, overlay);
     }
 }
 

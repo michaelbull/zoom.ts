@@ -13,16 +13,6 @@ export const EXPANDING_CLASS: string = `${CLASS}--expanding`;
 export const EXPANDED_CLASS: string = `${CLASS}--expanded`;
 export const COLLAPSING_CLASS: string = `${CLASS}--collapsing`;
 
-export function resolveSrc(wrapper: HTMLElement, image: HTMLImageElement): string {
-    let attribute: string | null = wrapper.getAttribute('data-src');
-
-    if (attribute !== null) {
-        return attribute;
-    }
-
-    return image.src as string;
-}
-
 export function isWrapperExpanding(wrapper: HTMLElement): boolean {
     return hasClass(wrapper, EXPANDING_CLASS);
 }

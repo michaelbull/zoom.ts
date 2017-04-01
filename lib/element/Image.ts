@@ -14,7 +14,6 @@ export function hideImage(image: HTMLImageElement): void {
 
 export function showImage(image: HTMLImageElement): void {
     removeClass(image, HIDDEN_CLASS);
-    removeClass(image, ACTIVE_CLASS);
 }
 
 export function isImageHidden(image: HTMLImageElement): boolean {
@@ -23,6 +22,10 @@ export function isImageHidden(image: HTMLImageElement): boolean {
 
 export function activateImage(image: HTMLImageElement): void {
     addClass(image, ACTIVE_CLASS);
+}
+
+export function deactivateImage(image: HTMLImageElement): void {
+    removeClass(image, ACTIVE_CLASS);
 }
 
 export function isImageActive(image: HTMLImageElement): boolean {
