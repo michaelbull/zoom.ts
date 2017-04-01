@@ -3,9 +3,9 @@ import { vendorProperty } from './Vendor';
 
 export function hasTransitions(window: Window, element: HTMLElement): boolean {
     let computeStyle: any = window.getComputedStyle;
-    let property: string | null = vendorProperty(element.style, 'transitionDuration');
+    let property: string | undefined = vendorProperty(element.style, 'transitionDuration');
 
-    if (typeof computeStyle === 'function' && property !== null) {
+    if (typeof computeStyle === 'function' && property !== undefined) {
         let value: string = computeStyle(element)[property];
         let duration: number = parseFloat(value);
         return !isNaN(duration) && duration !== 0;

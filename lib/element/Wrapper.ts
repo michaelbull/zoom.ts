@@ -3,10 +3,6 @@ import {
     hasClass,
     removeClass
 } from './ClassList';
-import {
-    setHeightPx,
-    unsetHeight
-} from './Style';
 
 export const CLASS: string = 'zoom';
 export const EXPANDING_CLASS: string = `${CLASS}--expanding`;

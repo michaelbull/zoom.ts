@@ -97,14 +97,14 @@ function expanded(wrapper: HTMLElement, container: HTMLElement, target: Vector, 
     }
 }
 
-function zoom(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement | null, transformProperty: string, transitionProperty: string | any, showCloneListener: PotentialEventListener, scrollY: number, overlay: HTMLDivElement): void {
+function zoom(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement | null, transformProperty: string, transitionProperty: string | undefined, showCloneListener: PotentialEventListener, scrollY: number, overlay: HTMLDivElement): void {
     let target: Vector = targetDimensions(wrapper);
     let imageRect: ClientRect = image.getBoundingClientRect();
     let imagePosition: Vector = positionFrom(imageRect);
     let imageSize: Vector = sizeFrom(imageRect);
 
-    let use3d: boolean = transformProperty !== null && hasTranslate3d(window, transformProperty);
-    let transitionEndEvent: string | null = transitionProperty === null ? null : TRANSITION_END_EVENTS[transitionProperty];
+    let use3d: boolean = hasTranslate3d(window, transformProperty);
+    let transitionEndEvent: string | undefined = transitionProperty === undefined ? undefined : TRANSITION_END_EVENTS[transitionProperty];
 
     function recalculateScale(): void {
         if (isWrapperTransitioning(wrapper)) {
@@ -116,7 +116,7 @@ function zoom(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElem
 
     let expandedListener: PotentialEventListener = undefined;
 
-    if (transitionEndEvent !== null) {
+    if (transitionEndEvent !== undefined) {
         expandedListener = addEventListener(container, transitionEndEvent, () => {
             if (expandedListener !== undefined) {
                 removeEventListener(container, transitionEndEvent as string, expandedListener);
@@ -150,7 +150,7 @@ function zoom(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElem
 
         let collapsedListener: PotentialEventListener;
 
-        if (transitionEndEvent !== null) {
+        if (transitionEndEvent !== undefined) {
             collapsedListener = addEventListener(container, transitionEndEvent, () => {
                 if (collapsedListener !== undefined) {
                     removeEventListener(container, transitionEndEvent as string, collapsedListener);
@@ -189,7 +189,7 @@ function zoom(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElem
     setHeightPx(wrapper.style, image.height);
     activateImage(image);
 
-    if (transitionEndEvent === null || expandedListener === undefined) {
+    if (transitionEndEvent === undefined || expandedListener === undefined) {
         expanded(wrapper, container, target, imageSize, imagePosition, clone, showCloneListener, transitionEndEvent, image);
     } else {
         transitionToCentre(container, document, target, imageSize, imagePosition, use3d);
@@ -208,16 +208,16 @@ function clickedZoomable(event: MouseEvent, zoomListener: EventListener, scrollD
     let fullSrc: string | null = wrapper.getAttribute('data-src');
     let actualSrc: string = fullSrc === null ? originalSrc : fullSrc;
 
-    let transformProperty: string | null = vendorProperty(document.body.style, 'transform');
+    let transformProperty: string | undefined = vendorProperty(document.body.style, 'transform');
 
-    if (transformProperty === null || event.metaKey || event.ctrlKey) {
+    if (transformProperty === undefined || event.metaKey || event.ctrlKey) {
         window.open(actualSrc, '_blank');
     } else {
         if (zoomListener !== undefined) {
             removeEventListener(document.body, 'click', zoomListener);
         }
 
-        let transitionProperty: string | null = vendorProperty(document.body.style, 'transition');
+        let transitionProperty: string | undefined = vendorProperty(document.body.style, 'transition');
 
         let container: HTMLElement;
         let clone: HTMLImageElement | null = null;

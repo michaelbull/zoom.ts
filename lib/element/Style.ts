@@ -9,9 +9,9 @@ import {
 import { vendorProperty } from '../Vendor';
 
 export function transform(style: CSSStyleDeclaration, value: string): void {
-    let property: string | null = vendorProperty(style, 'transform');
+    let property: string | undefined = vendorProperty(style, 'transform');
 
-    if (property !== null) {
+    if (property !== undefined) {
         (style as any)[property] = value;
     }
 }

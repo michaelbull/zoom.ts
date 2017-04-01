@@ -11,12 +11,10 @@ export function vendorProperties(property: string): string[] {
     return [property].concat(vendorProperties);
 }
 
-export function vendorProperty(style: CSSStyleDeclaration, property: string): string | null {
+export function vendorProperty(style: CSSStyleDeclaration, property: string): string | undefined {
     for (let vendorProperty of vendorProperties(property)) {
         if (vendorProperty in style) {
             return vendorProperty;
         }
     }
-
-    return null;
 }
