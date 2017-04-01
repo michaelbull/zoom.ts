@@ -8,6 +8,8 @@ import {
     translate,
     unsetHeight
 } from '../../../lib/element/Style';
+import { Bounds } from '../../../lib/math/Bounds';
+import { Vector } from '../../../lib/math/Vector';
 
 describe('transform', () => {
     it('should set the vendor property if non-null', () => {
@@ -79,27 +81,52 @@ describe('setBoundsPx', () => {
     });
 
     it('should set the left property', () => {
-        setBoundsPx(style, [20, 170, 95, 240]);
+        let position: Vector = [20, 170];
+        let size: Vector = [95, 240];
+        let bounds: Bounds = [position, size];
+
+        setBoundsPx(style, bounds);
+
         expect(style.left).toBe('20px');
     });
 
     it('should set the top property', () => {
-        setBoundsPx(style, [50, 130, 155, 0]);
+        let position: Vector = [50, 130];
+        let size: Vector = [155, 0];
+        let bounds: Bounds = [position, size];
+
+        setBoundsPx(style, bounds);
+
         expect(style.top).toBe('130px');
     });
 
     it('should set the width property', () => {
-        setBoundsPx(style, [500, 22, 103, 999]);
+        let position: Vector = [500, 22];
+        let size: Vector = [103, 999];
+        let bounds: Bounds = [position, size];
+
+        setBoundsPx(style, bounds);
+
         expect(style.width).toBe('103px');
     });
 
     it('should set the max-width property', () => {
-        setBoundsPx(style, [5, -105, 1011, 1221]);
+        let position: Vector = [5, -105];
+        let size: Vector = [1011, 1221];
+        let bounds: Bounds = [position, size];
+
+        setBoundsPx(style, bounds);
+
         expect(style.maxWidth).toBe('1011px');
     });
 
     it('should set the height property', () => {
-        setBoundsPx(style, [344, 55, -5, -300]);
+        let position: Vector = [344, 55];
+        let size: Vector = [-5, -300];
+        let bounds: Bounds = [position, size];
+
+        setBoundsPx(style, bounds);
+
         expect(style.height).toBe('-300px');
     });
 });
