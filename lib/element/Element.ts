@@ -1,11 +1,11 @@
-import { Matrix } from '../Matrix';
+import { Vector } from '../math/Vector';
 
 export function repaint(element: HTMLElement): void {
     // tslint:disable-next-line
     element.offsetHeight;
 }
 
-export function clientDimensions(element: HTMLElement): Matrix {
+export function clientDimensions(element: HTMLElement): Vector {
     return [
         element.clientWidth,
         element.clientHeight
@@ -17,7 +17,7 @@ function dimension(element: HTMLElement, dimension: string): number {
     return value === null ? Infinity : Number(value);
 }
 
-export function targetDimensions(element: HTMLElement): Matrix {
+export function targetDimensions(element: HTMLElement): Vector {
     return [
         dimension(element, 'width'),
         dimension(element, 'height')

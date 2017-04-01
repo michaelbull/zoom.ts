@@ -1,6 +1,6 @@
 import { clientDimensions } from './element/Element';
 import { addEventListener } from './event/EventListener';
-import { Matrix } from './Matrix';
+import { Vector } from './math/Vector';
 
 export const QUIRKS_MODE: string = 'BackCompat';
 export const STANDARDS_MODE: string = 'CSS1Compat';
@@ -28,7 +28,7 @@ export function ready(document: Document, callback: Function): any {
     }
 }
 
-export function viewportDimensions(document: Document): Matrix {
+export function viewportDimensions(document: Document): Vector {
     return clientDimensions(rootElement(document));
 }
 

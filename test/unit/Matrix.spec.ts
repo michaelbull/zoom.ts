@@ -1,18 +1,18 @@
 import {
-    addMatrices,
+    addVectors,
     centrePadding,
     centrePosition,
-    divideMatrices,
-    divideMatrix,
-    Matrix,
-    minimizeMatrices,
+    divideVectors,
+    shrinkVector,
+    Vector,
+    minimizeVectors,
     minimumScale,
-    multiplyMatrix,
+    scaleVector,
     positionOf,
     sizeOf,
-    subtractMatrices,
+    subtractVectors,
     translateToCentre
-} from '../../lib/Matrix';
+} from '../../lib/math/Vector';
 
 describe('positionOf', () => {
     it('should return left as the x value', () => {
@@ -26,7 +26,7 @@ describe('positionOf', () => {
     });
 });
 
-describe('sizeOf', () => {
+describe('dimensionsFrom', () => {
     it('should return the width as the x value', () => {
         let rect: any = { width: 200 };
         expect(sizeOf(rect)[0]).toBe(200);
@@ -38,63 +38,63 @@ describe('sizeOf', () => {
     });
 });
 
-describe('multiplyMatrix', () => {
+describe('scaleVector', () => {
     it('should multiply the x value', () => {
-        expect(multiplyMatrix([50, 100], 10)[0]).toBe(500);
+        expect(scaleVector([50, 100], 10)[0]).toBe(500);
     });
 
     it('should multiply the y value', () => {
-        expect(multiplyMatrix([100, 200], 3)[1]).toBe(600);
+        expect(scaleVector([100, 200], 3)[1]).toBe(600);
     });
 });
 
-describe('divideMatrix', () => {
+describe('shrinkVector', () => {
     it('should divide the x value', () => {
-        expect(divideMatrix([20, 30], 5)[0]).toBe(4);
+        expect(shrinkVector([20, 30], 5)[0]).toBe(4);
     });
 
     it('should divide the y value', () => {
-        expect(divideMatrix([140, 280], 4)[1]).toBe(70);
+        expect(shrinkVector([140, 280], 4)[1]).toBe(70);
     });
 });
 
-describe('addMatrices', () => {
+describe('addVectors', () => {
     it('should add the x values', () => {
-        expect(addMatrices([10, 20], [35, 60])[0]).toBe(45);
+        expect(addVectors([10, 20], [35, 60])[0]).toBe(45);
     });
 
     it('should add the y values', () => {
-        expect(addMatrices([50, 70], [40, 10])[1]).toBe(80);
+        expect(addVectors([50, 70], [40, 10])[1]).toBe(80);
     });
 });
 
-describe('subtractMatrices', () => {
+describe('subtractVectors', () => {
     it('should subtract the x values', () => {
-        expect(subtractMatrices([100, 20], [30, 5])[0]).toBe(70);
+        expect(subtractVectors([100, 20], [30, 5])[0]).toBe(70);
     });
 
     it('should subtract the y values', () => {
-        expect(subtractMatrices([230, 7], [50, 20])[0]).toBe(180);
+        expect(subtractVectors([230, 7], [50, 20])[0]).toBe(180);
     });
 });
 
-describe('divideMatrices', () => {
+describe('divideVectors', () => {
     it('should divide the x values', () => {
-        expect(divideMatrices([30, 5], [5, 1])[0]).toBe(6);
+        expect(divideVectors([30, 5], [5, 1])[0]).toBe(6);
     });
 
     it('should divide the y values', () => {
-        expect(divideMatrices([10, 50], [10, 2])[1]).toBe(25);
+        expect(divideVectors([10, 50], [10, 2])[1]).toBe(25);
     });
 });
 
-describe('minimizeMatrices', () => {
+describe('minimizeVectors', () => {
     it('should return the minimum x value', () => {
-        expect(minimizeMatrices([30, 10], [20, 30])[0]).toBe(20);
+        expect(minimizeVectors([30, 10], [20, 30])[0]).toBe(20);
     });
 
     it('should return the minimum y value', () => {
-        expect(minimizeMatrices([50, 15], [10, 13])[1]).toBe(13);
+        expect(minimizeVectors([50, 15], [10, 13])[1]).toBe(13);
     });
 });
 
@@ -110,31 +110,31 @@ describe('minimumScale', () => {
 
 describe('centrePadding', () => {
     it('should calculate the vertical padding', () => {
-        let outer: Matrix = [500, 400];
-        let inner: Matrix = [480, 350];
+        let outer: Vector = [500, 400];
+        let inner: Vector = [480, 350];
         expect(centrePadding(outer, inner)[0]).toBe(10);
     });
 
     it('should calculate the horizontal padding', () => {
-        let outer: Matrix = [400, 500];
-        let inner: Matrix = [300, 450];
+        let outer: Vector = [400, 500];
+        let inner: Vector = [300, 450];
         expect(centrePadding(outer, inner)[1]).toBe(25);
     });
 });
 
 describe('centrePosition', () => {
     it('should calculate the x position', () => {
-        let outer: Matrix = [500, 500];
-        let inner: Matrix = [200, 200];
-        let innerPosition: Matrix = [100, 100];
+        let outer: Vector = [500, 500];
+        let inner: Vector = [200, 200];
+        let innerPosition: Vector = [100, 100];
 
         expect(centrePosition(outer, inner, innerPosition)[0]).toBe(50);
     });
 
     it('should calculate the y position', () => {
-        let outer: Matrix = [800, 800];
-        let inner: Matrix = [400, 400];
-        let innerPosition: Matrix = [30, 30];
+        let outer: Vector = [800, 800];
+        let inner: Vector = [400, 400];
+        let innerPosition: Vector = [30, 30];
 
         expect(centrePosition(outer, inner, innerPosition)[1]).toBe(170);
     });
@@ -142,18 +142,18 @@ describe('centrePosition', () => {
 
 describe('translateToCentre', () => {
     it('should return the translated x value', () => {
-        let outer: Matrix = [650, 650];
-        let inner: Matrix = [250, 250];
-        let innerPosition: Matrix = [20, 20];
+        let outer: Vector = [650, 650];
+        let inner: Vector = [250, 250];
+        let innerPosition: Vector = [20, 20];
         let scale: number = 2;
 
         expect(translateToCentre(outer, inner, innerPosition, scale)[0]).toBe(90);
     });
 
     it('should return the translated y value', () => {
-        let outer: Matrix = [910, 910];
-        let inner: Matrix = [335, 335];
-        let innerPosition: Matrix = [100, 100];
+        let outer: Vector = [910, 910];
+        let inner: Vector = [335, 335];
+        let innerPosition: Vector = [100, 100];
         let scale: number = 1.5;
 
         expect(translateToCentre(outer, inner, innerPosition, scale)[1]).toBe(125);

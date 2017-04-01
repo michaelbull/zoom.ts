@@ -1,7 +1,7 @@
 import {
     resetBounds,
     resetTransformation,
-    scaleAndTranslate,
+    scaleBy,
     setBoundsPx,
     setHeightPx,
     transform,
@@ -79,27 +79,27 @@ describe('setBoundsPx', () => {
     });
 
     it('should set the left property', () => {
-        setBoundsPx(style, [20, 170], [95, 240]);
+        setBoundsPx(style, [20, 170, 95, 240]);
         expect(style.left).toBe('20px');
     });
 
     it('should set the top property', () => {
-        setBoundsPx(style, [50, 130], [155, 0]);
+        setBoundsPx(style, [50, 130, 155, 0]);
         expect(style.top).toBe('130px');
     });
 
     it('should set the width property', () => {
-        setBoundsPx(style, [500, 22], [103, 999]);
+        setBoundsPx(style, [500, 22, 103, 999]);
         expect(style.width).toBe('103px');
     });
 
     it('should set the max-width property', () => {
-        setBoundsPx(style, [5, -105], [1011, 1221]);
+        setBoundsPx(style, [5, -105, 1011, 1221]);
         expect(style.maxWidth).toBe('1011px');
     });
 
     it('should set the height property', () => {
-        setBoundsPx(style, [344, 55], [-5, -300]);
+        setBoundsPx(style, [344, 55, -5, -300]);
         expect(style.height).toBe('-300px');
     });
 });
@@ -130,12 +130,8 @@ describe('translate', () => {
     });
 });
 
-describe('scaleAndTranslate', () => {
-    it('should use translate3d if translate3d is available', () => {
-        expect(scaleAndTranslate(5, [10, 20], true)).toBe('scale(5) translate3d(10px, 20px, 0)');
-    });
-
-    it('should use translate if translate3d is unavailable', () => {
-        expect(scaleAndTranslate(30, [40, 50], false)).toBe('scale(30) translate(40px, 50px)');
+describe('scaleBy', () => {
+    it('should return the correct transformation', () => {
+        expect(scaleBy(5)).toBe('scale(5)');
     });
 });

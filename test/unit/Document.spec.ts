@@ -8,7 +8,7 @@ import {
     viewportDimensions
 } from '../../lib/Document';
 import { fireEventListener } from '../../lib/event/EventListener';
-import { Matrix } from '../../lib/Matrix';
+import { Vector } from '../../lib/math/Vector';
 
 describe('isStandardsMode', () => {
     it('should return true if compatMode is CSS1Compat', () => {
@@ -128,7 +128,7 @@ describe('viewportDimensions', () => {
             }
         };
 
-        let actual: Matrix = viewportDimensions(document);
+        let actual: Vector = viewportDimensions(document);
 
         expect(actual[0]).toBe(300);
         expect(actual[1]).toBe(400);
@@ -147,7 +147,7 @@ describe('viewportDimensions', () => {
             }
         };
 
-        let actual: Matrix = viewportDimensions(document);
+        let actual: Vector = viewportDimensions(document);
 
         expect(actual[0]).toBe(850);
         expect(actual[1]).toBe(950);
