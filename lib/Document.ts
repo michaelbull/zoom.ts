@@ -20,9 +20,9 @@ export function rootElement(document: Document): HTMLElement {
  * @param callback The function to execute.
  * @see http://youmightnotneedjquery.com/#ready
  */
-export function ready(document: Document, callback: Function): any {
+export function ready(document: Document, callback: Function): void {
     if (document.readyState === 'complete') {
-        return callback();
+        callback();
     } else {
         addEventListener(document, 'DOMContentLoaded', () => callback());
     }
