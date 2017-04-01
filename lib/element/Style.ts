@@ -1,7 +1,9 @@
+import { viewportSize } from '../Document';
 import { Bounds } from '../math/Bounds';
 import {
-    ScaleAndTranslate,
-    scaleTranslateToCentre,
+    centreTranslation,
+    minimizeVectors,
+    minimumDivisor,
     Vector
 } from '../math/Vector';
 import { vendorProperty } from '../Vendor';
@@ -56,10 +58,14 @@ export function scaleBy(amount: number): string {
     return `scale(${amount})`;
 }
 
-export function transformToCentre(viewport: Vector, target: Vector, size: Vector, position: Vector, use3d: boolean): string {
-    let transformation: ScaleAndTranslate = scaleTranslateToCentre(viewport, target, size, position);
-    let scale: string = scaleBy(transformation[0]);
-    let translation: string = translate(transformation[1], use3d);
+export function scaleAndTranslate(scale: number, translation: Vector, use3d: boolean): string {
+    return `${scaleBy(scale)} ${translate(translation, use3d)}`;
+}
 
-    return `${scale} ${translation}`;
+export function centreTransformation(document: Document, target: Vector, size: Vector, position: Vector, use3d: boolean): string {
+    let viewport: Vector = viewportSize(document);
+    let cappedTarget: Vector = minimizeVectors(viewport, target);
+    let scale: number = minimumDivisor(cappedTarget, size);
+    let translation: Vector = centreTranslation(viewport, size, position, scale);
+    return scaleAndTranslate(scale, translation, use3d);
 }

@@ -5,7 +5,7 @@ export function repaint(element: HTMLElement): void {
     element.offsetHeight;
 }
 
-export function clientDimensions(element: HTMLElement): Vector {
+export function clientSize(element: HTMLElement): Vector {
     return [
         element.clientWidth,
         element.clientHeight

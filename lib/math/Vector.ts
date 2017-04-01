@@ -56,7 +56,7 @@ export function minimizeVectors(x: Vector, y: Vector): Vector {
     ];
 }
 
-export function minimumScale(x: Vector, y: Vector): number {
+export function minimumDivisor(x: Vector, y: Vector): number {
     let scaled: Vector = divideVectors(x, y);
     return Math.min(scaled[0], scaled[1]);
 }
@@ -90,19 +90,9 @@ export function centrePosition(outer: Vector, inner: Vector, innerPosition: Vect
  * @param innerScale The scale of the inner vector.
  * @returns {Vector} The translation.
  */
-export function translateToCentre(outer: Vector, inner: Vector, innerPosition: Vector, innerScale: number): Vector {
+export function centreTranslation(outer: Vector, inner: Vector, innerPosition: Vector, innerScale: number): Vector {
     let scaled: Vector = scaleVector(inner, innerScale);
     let innerCentredWithinScaled: Vector = addVectors(innerPosition, centrePadding(inner, scaled));
     let scaledCenteredWithinOuter: Vector = centrePosition(outer, scaled, innerCentredWithinScaled);
     return shrinkVector(scaledCenteredWithinOuter, innerScale);
-}
-
-export type ScaleAndTranslate = [number, Vector];
-
-export function scaleTranslateToCentre(viewport: Vector, target: Vector, imageSize: Vector, imagePosition: Vector): ScaleAndTranslate {
-    let cappedTarget: Vector = minimizeVectors(viewport, target);
-    let factor: number = minimumScale(cappedTarget, imageSize);
-
-    let translation: Vector = translateToCentre(viewport, imageSize, imagePosition, factor);
-    return [factor, translation];
 }

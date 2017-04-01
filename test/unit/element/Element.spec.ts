@@ -1,17 +1,17 @@
 import {
-    clientDimensions,
+    clientSize,
     targetDimensions
 } from '../../../lib/element/Element';
 
-describe('clientDimensions', () => {
+describe('clientSize', () => {
     it('should return the clientWidth', () => {
         let element: any = { clientWidth: 330 };
-        expect(clientDimensions(element)[0]).toBe(330);
+        expect(clientSize(element)[0]).toBe(330);
     });
 
     it('should return the clientHeight', () => {
         let element: any = { clientHeight: 440 };
-        expect(clientDimensions(element)[1]).toBe(440);
+        expect(clientSize(element)[1]).toBe(440);
     });
 });
 

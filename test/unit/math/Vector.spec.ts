@@ -2,16 +2,16 @@ import {
     addVectors,
     centrePadding,
     centrePosition,
+    centreTranslation,
     divideVectors,
-    shrinkVector,
-    Vector,
     minimizeVectors,
-    minimumScale,
-    scaleVector,
+    minimumDivisor,
     positionFrom,
+    scaleVector,
+    shrinkVector,
     sizeFrom,
     subtractVectors,
-    translateToCentre
+    Vector
 } from '../../../lib/math/Vector';
 
 describe('positionFrom', () => {
@@ -98,13 +98,13 @@ describe('minimizeVectors', () => {
     });
 });
 
-describe('minimumScale', () => {
+describe('minimumDivisor', () => {
     it('should calculate the minimum vertical scale', () => {
-        expect(minimumScale([900, 500], [300, 50])).toBe(3);
+        expect(minimumDivisor([900, 500], [300, 50])).toBe(3);
     });
 
     it('should calculate the minimum horizontal scale', () => {
-        expect(minimumScale([1000, 600], [10, 50])).toBe(12);
+        expect(minimumDivisor([1000, 600], [10, 50])).toBe(12);
     });
 });
 
@@ -140,14 +140,14 @@ describe('centrePosition', () => {
     });
 });
 
-describe('translateToCentre', () => {
+describe('centreTranslation', () => {
     it('should return the translated x value', () => {
         let outer: Vector = [650, 650];
         let inner: Vector = [250, 250];
         let innerPosition: Vector = [20, 20];
         let scale: number = 2;
 
-        expect(translateToCentre(outer, inner, innerPosition, scale)[0]).toBe(90);
+        expect(centreTranslation(outer, inner, innerPosition, scale)[0]).toBe(90);
     });
 
     it('should return the translated y value', () => {
@@ -156,6 +156,6 @@ describe('translateToCentre', () => {
         let innerPosition: Vector = [100, 100];
         let scale: number = 1.5;
 
-        expect(translateToCentre(outer, inner, innerPosition, scale)[1]).toBe(125);
+        expect(centreTranslation(outer, inner, innerPosition, scale)[1]).toBe(125);
     });
 });

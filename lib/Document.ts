@@ -1,4 +1,4 @@
-import { clientDimensions } from './element/Element';
+import { clientSize } from './element/Element';
 import { addEventListener } from './event/EventListener';
 import { Vector } from './math/Vector';
 
@@ -28,8 +28,8 @@ export function ready(document: Document, callback: Function): void {
     }
 }
 
-export function viewportDimensions(document: Document): Vector {
-    return clientDimensions(rootElement(document));
+export function viewportSize(document: Document): Vector {
+    return clientSize(rootElement(document));
 }
 
 export function createDiv(document: Document, className: string): HTMLDivElement {

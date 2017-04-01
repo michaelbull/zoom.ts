@@ -1,4 +1,3 @@
-import { viewportDimensions } from './Document';
 import {
     createClone,
     hideClone,
@@ -8,9 +7,11 @@ import {
 } from './element/Clone';
 import {
     createContainer,
+    fixToCentre,
     isContainer,
     refreshContainer,
-    restoreContainer
+    restoreContainer,
+    transitionToCentre
 } from './element/Container';
 import { targetDimensions } from './element/Element';
 import {
@@ -23,12 +24,7 @@ import {
     addOverlay,
     hideOverlay
 } from './element/Overlay';
-import {
-    resetTransformation,
-    setBoundsPx,
-    transform,
-    transformToCentre
-} from './element/Style';
+import { transform } from './element/Style';
 import {
     collapseWrapper,
     expandWrapper,
@@ -49,11 +45,10 @@ import {
     escKeyPressed,
     scrolled
 } from './event/EventListeners';
-import { centreBounds } from './math/Bounds';
 import {
-    Vector,
     positionFrom,
-    sizeFrom
+    sizeFrom,
+    Vector
 } from './math/Vector';
 import { vendorProperty } from './Vendor';
 import {
@@ -96,9 +91,7 @@ function expanded(wrapper: HTMLElement, container: HTMLElement, target: Vector, 
     finishExpandingWrapper(wrapper);
 
     refreshContainer(container, () => {
-        let viewport: Vector = viewportDimensions(document);
-        resetTransformation(container.style);
-        setBoundsPx(container.style, centreBounds(viewport, target, imageSize, imagePosition));
+        fixToCentre(container, document, target, imageSize, imagePosition);
     });
 
     if (isCloneLoaded(clone) && !isCloneVisible(clone)) {
@@ -124,13 +117,10 @@ function zoom(wrapper: HTMLElement, image: HTMLImageElement, transformProperty: 
     let transitionEndEvent: string | null = transitionProperty === null ? null : TRANSITION_END_EVENTS[transitionProperty];
 
     function recalculateScale(): void {
-        let viewport: Vector = viewportDimensions(document);
-
         if (isWrapperTransitioning(wrapper)) {
-            transform(container.style, transformToCentre(viewport, target, imageSize, imagePosition, use3d));
+            transitionToCentre(container, document, target, imageSize, imagePosition, use3d);
         } else {
-            resetTransformation(container.style);
-            setBoundsPx(container.style, centreBounds(viewport, target, imageSize, imagePosition));
+            fixToCentre(container, document, target, imageSize, imagePosition);
         }
     }
 
@@ -183,8 +173,7 @@ function zoom(wrapper: HTMLElement, image: HTMLImageElement, transformProperty: 
             if (collapsedListener === undefined) {
                 collapsed(overlay, wrapper);
             } else {
-                let viewport: Vector = viewportDimensions(document);
-                transform(container.style, transformToCentre(viewport, target, imageSize, imagePosition, use3d));
+                transitionToCentre(container, document, target, imageSize, imagePosition, use3d);
             }
         }
 
@@ -215,8 +204,7 @@ function zoom(wrapper: HTMLElement, image: HTMLImageElement, transformProperty: 
     if (transitionEndEvent === null || expandedListener === undefined) {
         expanded(wrapper, container, target, imageSize, imagePosition, clone, showCloneListener, transitionEndEvent, image);
     } else {
-        let viewport: Vector = viewportDimensions(document);
-        transform(container.style, transformToCentre(viewport, target, imageSize, imagePosition, use3d));
+        transitionToCentre(container, document, target, imageSize, imagePosition, use3d);
     }
 }
 

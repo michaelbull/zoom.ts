@@ -5,7 +5,7 @@ import {
     ready,
     rootElement,
     STANDARDS_MODE,
-    viewportDimensions
+    viewportSize
 } from '../../lib/Document';
 import { fireEventListener } from '../../lib/event/EventListener';
 import { Vector } from '../../lib/math/Vector';
@@ -114,7 +114,7 @@ describe('ready', () => {
     });
 });
 
-describe('viewportDimensions', () => {
+describe('viewportSize', () => {
     it('should return the dimensions of document.documentElement if in standards mode', () => {
         let document: any = {
             compatMode: STANDARDS_MODE,
@@ -128,7 +128,7 @@ describe('viewportDimensions', () => {
             }
         };
 
-        let actual: Vector = viewportDimensions(document);
+        let actual: Vector = viewportSize(document);
 
         expect(actual[0]).toBe(300);
         expect(actual[1]).toBe(400);
@@ -147,7 +147,7 @@ describe('viewportDimensions', () => {
             }
         };
 
-        let actual: Vector = viewportDimensions(document);
+        let actual: Vector = viewportSize(document);
 
         expect(actual[0]).toBe(850);
         expect(actual[1]).toBe(950);

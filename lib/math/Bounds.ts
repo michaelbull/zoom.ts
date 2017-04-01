@@ -1,25 +1,18 @@
+import { viewportSize } from '../Document';
 import {
     centrePosition,
     minimizeVectors,
-    minimumScale,
-    positionFrom,
+    minimumDivisor,
     scaleVector,
-    sizeFrom,
     Vector
 } from './Vector';
 
 export type Bounds = [Vector, Vector];
 
-export function boundsFrom(rect: ClientRect): Bounds {
-    return [
-        positionFrom(rect),
-        sizeFrom(rect)
-    ];
-}
-
-export function centreBounds(viewport: Vector, target: Vector, size: Vector, position: Vector): Bounds {
+export function centreBounds(document: Document, target: Vector, size: Vector, position: Vector): Bounds {
+    let viewport: Vector = viewportSize(document);
     let cappedTarget: Vector = minimizeVectors(viewport, target);
-    let factor: number = minimumScale(cappedTarget, size);
+    let factor: number = minimumDivisor(cappedTarget, size);
 
     let scaled: Vector = scaleVector(size, factor);
     let centre: Vector = centrePosition(viewport, scaled, position);
