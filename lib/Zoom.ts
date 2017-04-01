@@ -81,7 +81,9 @@ function setUp(src: string, wrapper: HTMLElement, image: HTMLImageElement): Pote
 }
 
 // TODO: clean this up somehow
-function collapsed(overlay: HTMLDivElement, wrapper: HTMLElement): void {
+function collapsed(overlay: HTMLDivElement, wrapper: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement): void {
+    showImage(image);
+    hideClone(clone);
     document.body.removeChild(overlay);
     finishCollapsingWrapper(wrapper);
     addZoomListener();
@@ -156,22 +158,19 @@ function zoom(wrapper: HTMLElement, image: HTMLImageElement, transformProperty: 
         collapseWrapper(wrapper);
         hideOverlay(overlay);
 
-        showImage(image);
-        hideClone(clone);
-
         if (transitionEndEvent === null) {
-            collapsed(overlay, wrapper);
+            collapsed(overlay, wrapper, image, clone);
         } else {
             let collapsedListener: PotentialEventListener = addEventListener(container, transitionEndEvent, () => {
                 if (collapsedListener !== undefined) {
                     removeEventListener(container, transitionEndEvent as string, collapsedListener);
                 }
 
-                collapsed(overlay, wrapper);
+                collapsed(overlay, wrapper, image, clone);
             });
 
             if (collapsedListener === undefined) {
-                collapsed(overlay, wrapper);
+                collapsed(overlay, wrapper, image, clone);
             } else {
                 transitionToCentre(container, document, target, imageSize, imagePosition, use3d);
             }

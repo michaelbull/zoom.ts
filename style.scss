@@ -1,6 +1,6 @@
 $zoom-z-index: 2000 !default;
 
-$zoom-transition-duration: 300ms !default;
+$zoom-transition-duration: 3000ms !default;
 $zoom-transition-timing-function: cubic-bezier(0.2, 0, 0.2, 1) !default;
 
 $zoom-overlay-z-index: 1000 !default;
@@ -26,12 +26,19 @@ $zoom-overlay-visible-opacity: 100 !default;
   width: 100%;
   line-height: 0;
   text-align: center;
+
+  cursor: pointer;
+  cursor: -moz-zoom-in;
+  cursor: -webkit-zoom-in;
 }
 
 .zoom--expanding,
 .zoom--expanded,
 .zoom--collapsing {
   z-index: $zoom-z-index;
+  cursor: pointer;
+  cursor: -moz-zoom-out;
+  cursor: -webkit-zoom-out;
 }
 
 .zoom__container {
@@ -45,9 +52,6 @@ $zoom-overlay-visible-opacity: 100 !default;
   will-change: visibility, opacity;
 
   max-width: 100%;
-  cursor: pointer;
-  cursor: -moz-zoom-in;
-  cursor: -webkit-zoom-in;
 }
 
 .zoom__element--active {
@@ -69,10 +73,6 @@ $zoom-overlay-visible-opacity: 100 !default;
   left: 0;
 
   width: 100%;
-
-  cursor: pointer;
-  cursor: -moz-zoom-out;
-  cursor: -webkit-zoom-out;
 }
 
 .zoom__clone--visible {
