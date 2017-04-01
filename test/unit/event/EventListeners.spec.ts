@@ -66,19 +66,19 @@ describe('scrolled', () => {
     });
 
     it('should execute the callback if the scroll delta is greater than the minimum delta', () => {
-        let listener: EventListener = scrolled(50, 70, callback, () => 200);
+        let listener: EventListener = scrolled(50, 70, () => 200, callback);
         listener(event);
         expect(callback).toHaveBeenCalled();
     });
 
     it('should execute the callback if the scroll delta is equal to the minimum delta', () => {
-        let listener: EventListener = scrolled(100, 100, callback, () => 200);
+        let listener: EventListener = scrolled(100, 100, () => 200, callback);
         listener(event);
         expect(callback).toHaveBeenCalled();
     });
 
     it('should not execute the callback if the scroll delta is less than the minimum delta', () => {
-        let listener: EventListener = scrolled(100, 100, callback, () => 199);
+        let listener: EventListener = scrolled(100, 100, () => 199, callback);
         listener(event);
         expect(callback).toHaveBeenCalledTimes(0);
     });

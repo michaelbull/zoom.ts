@@ -129,7 +129,7 @@ function zoomInstant(wrapper: HTMLElement, container: HTMLElement, image: HTMLIm
 
     let pressedEsc: PotentialEventListener = addEventListener(document, 'keyup', escKeyPressed(collapse));
     let dismissed: PotentialEventListener = addEventListener(container, 'click', () => collapse());
-    let scrolledAway: PotentialEventListener = addEventListener(window, 'scroll', scrolled(initialScrollY, scrollY, () => collapse(), () => pageScrollY(window)));
+    let scrolledAway: PotentialEventListener = addEventListener(window, 'scroll', scrolled(initialScrollY, scrollY, () => pageScrollY(window), () => collapse()));
     let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
         imagePosition = positionFrom(wrapper.getBoundingClientRect());
         recalculateScale();
@@ -201,7 +201,7 @@ function zoomTransition(wrapper: HTMLElement, container: HTMLElement, image: HTM
 
     let pressedEsc: PotentialEventListener = addEventListener(document, 'keyup', escKeyPressed(collapse));
     let dismissed: PotentialEventListener = addEventListener(container, 'click', () => collapse());
-    let scrolledAway: PotentialEventListener = addEventListener(window, 'scroll', scrolled(initialScrollY, scrollY, () => collapse(), () => pageScrollY(window)));
+    let scrolledAway: PotentialEventListener = addEventListener(window, 'scroll', scrolled(initialScrollY, scrollY, () => pageScrollY(window), () => collapse()));
     let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
         imagePosition = positionFrom(wrapper.getBoundingClientRect());
         recalculateScale();

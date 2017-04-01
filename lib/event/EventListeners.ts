@@ -21,7 +21,7 @@ export function escKeyPressed(callback: Function): EventListener {
     };
 }
 
-export function scrolled(start: number, minAmount: number, callback: Function, current: () => number): EventListener {
+export function scrolled(start: number, minAmount: number, current: () => number, callback: Function): EventListener {
     return (): void => {
         if (Math.abs(start - current()) >= minAmount) {
             callback();
