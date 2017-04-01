@@ -97,7 +97,6 @@ function expanded(wrapper: HTMLElement, container: HTMLElement, target: Vector, 
 
     refreshContainer(container, () => {
         let viewport: Vector = viewportDimensions(document);
-        console.log('bounds: ' + centreBounds(viewport, target, imageSize, imagePosition));
         resetTransformation(container.style);
         setBoundsPx(container.style, centreBounds(viewport, target, imageSize, imagePosition));
     });
