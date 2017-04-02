@@ -24,9 +24,7 @@ import {
 import {
     centreTransformation,
     resetBounds,
-    setBoundsPx,
-    setHeightPx,
-    unsetHeight
+    setBoundsPx
 } from './element/Style';
 import {
     ignoreTransitions,
@@ -53,6 +51,7 @@ import {
     showCloneOnceLoaded
 } from './event/EventListeners';
 import { centreBounds } from './math/Bounds';
+import { pixels } from './math/Unit';
 import {
     positionFrom,
     sizeFrom,
@@ -77,7 +76,7 @@ function collapsed(overlay: HTMLDivElement, wrapper: HTMLElement, image: HTMLIma
 
     document.body.removeChild(overlay);
     stopCollapsingWrapper(wrapper);
-    unsetHeight(wrapper.style);
+    wrapper.style.height = '';
 
     setTimeout(() => addZoomListener(), 1);
 }
@@ -139,7 +138,7 @@ function zoomInstant(wrapper: HTMLElement, container: HTMLElement, image: HTMLIm
     };
 
     setWrapperExpanded(wrapper);
-    setHeightPx(wrapper.style, image.height);
+    wrapper.style.height = pixels(image.height);
     activateImage(image);
 
     setBoundsPx(container.style, centreBounds(document, target, imageSize, imagePosition));
@@ -218,7 +217,7 @@ function zoomTransition(wrapper: HTMLElement, container: HTMLElement, image: HTM
     };
 
     startExpandingWrapper(wrapper);
-    setHeightPx(wrapper.style, image.height);
+    wrapper.style.height = pixels(image.height);
     activateImage(image);
 
     expandedListener = addEventListener(container, transitionEnd, () => {

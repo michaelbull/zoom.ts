@@ -6,6 +6,7 @@ import {
     minimumDivisor,
     Vector
 } from '../math/Vector';
+import { pixels } from '../math/Unit';
 
 function setBounds(style: CSSStyleDeclaration, x: string, y: string, width: string, height: string): void {
     style.left = x;
@@ -22,15 +23,7 @@ export function resetBounds(style: CSSStyleDeclaration): void {
 export function setBoundsPx(style: CSSStyleDeclaration, bounds: Bounds): void {
     let position: Vector = bounds[0];
     let size: Vector = bounds[1];
-    setBounds(style, `${position[0]}px`, `${position[1]}px`, `${size[0]}px`, `${size[1]}px`);
-}
-
-export function setHeightPx(style: CSSStyleDeclaration, height: number): void {
-    style.height = `${height}px`;
-}
-
-export function unsetHeight(style: CSSStyleDeclaration): void {
-    style.height = '';
+    setBounds(style, pixels(position[0]), pixels(position[1]), pixels(size[0]), pixels(size[1]));
 }
 
 export function translate(position: Vector, use3d: boolean): string {
