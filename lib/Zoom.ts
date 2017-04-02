@@ -66,10 +66,10 @@ import {
 const DEFAULT_SCROLL_DELTA: number = 50;
 
 // TODO: clean this up somehow
-function collapsed(overlay: HTMLDivElement, wrapper: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement | null): void {
+function collapsed(overlay: HTMLDivElement, wrapper: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement | undefined): void {
     deactivateImage(image);
 
-    if (clone !== null) {
+    if (clone !== undefined) {
         showImage(image);
         hideClone(clone);
     }
@@ -81,7 +81,7 @@ function collapsed(overlay: HTMLDivElement, wrapper: HTMLElement, image: HTMLIma
     setTimeout(() => addZoomListener(), 1);
 }
 
-function finishedExpanding(wrapper: HTMLElement, container: HTMLElement, target: Vector, imageSize: Vector, imagePosition: Vector, clone: HTMLImageElement | null, showCloneListener: PotentialEventListener, transitionEnd: string | any, image: HTMLImageElement, transformProperty: string, transitionProperty: string): void {
+function finishedExpanding(wrapper: HTMLElement, container: HTMLElement, target: Vector, imageSize: Vector, imagePosition: Vector, clone: HTMLImageElement | undefined, showCloneListener: PotentialEventListener, transitionEnd: string | any, image: HTMLImageElement, transformProperty: string, transitionProperty: string): void {
     stopExpandingWrapper(wrapper);
     setWrapperExpanded(wrapper);
 
@@ -92,7 +92,7 @@ function finishedExpanding(wrapper: HTMLElement, container: HTMLElement, target:
         setBoundsPx(style, centreBounds(document, target, imageSize, imagePosition));
     });
 
-    if (clone !== null && isCloneLoaded(clone) && !isCloneVisible(clone)) {
+    if (clone !== undefined && isCloneLoaded(clone) && !isCloneVisible(clone)) {
         if (showCloneListener !== undefined) {
             removeEventListener(clone, transitionEnd as string, showCloneListener);
         }
@@ -102,7 +102,7 @@ function finishedExpanding(wrapper: HTMLElement, container: HTMLElement, target:
     }
 }
 
-function zoomInstant(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement | any, showCloneListener: PotentialEventListener, scrollY: number, overlay: HTMLDivElement, target: Vector): void {
+function zoomInstant(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement | undefined, showCloneListener: PotentialEventListener, scrollY: number, overlay: HTMLDivElement, target: Vector): void {
     let initialScrollY: number = pageScrollY(window);
     let imageRect: ClientRect = image.getBoundingClientRect();
     let imagePosition: Vector = positionFrom(imageRect);
@@ -113,7 +113,7 @@ function zoomInstant(wrapper: HTMLElement, container: HTMLElement, image: HTMLIm
     function collapse(): void {
         removeListeners();
 
-        if (clone !== null && !isCloneLoaded(clone) && showCloneListener !== undefined) {
+        if (clone !== undefined && !isCloneLoaded(clone) && showCloneListener !== undefined) {
             removeEventListener(clone, 'load', showCloneListener);
         }
 
@@ -144,7 +144,7 @@ function zoomInstant(wrapper: HTMLElement, container: HTMLElement, image: HTMLIm
     setBoundsPx(container.style, centreBounds(document, target, imageSize, imagePosition));
 }
 
-function zoomTransition(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement | any, showCloneListener: PotentialEventListener, scrollY: number, overlay: HTMLDivElement, transitionEnd: string, target: Vector, use3d: boolean, transformProperty: string, transitionProperty: string): void {
+function zoomTransition(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement | undefined, showCloneListener: PotentialEventListener, scrollY: number, overlay: HTMLDivElement, transitionEnd: string, target: Vector, use3d: boolean, transformProperty: string, transitionProperty: string): void {
     let initialScrollY: number = pageScrollY(window);
     let imageRect: ClientRect = image.getBoundingClientRect();
     let imagePosition: Vector = positionFrom(imageRect);
@@ -156,7 +156,7 @@ function zoomTransition(wrapper: HTMLElement, container: HTMLElement, image: HTM
     function collapse(): void {
         removeListeners();
 
-        if (clone !== null && !isCloneLoaded(clone) && showCloneListener !== undefined) {
+        if (clone !== undefined && !isCloneLoaded(clone) && showCloneListener !== undefined) {
             removeEventListener(clone, 'load', showCloneListener);
         }
 
@@ -258,7 +258,7 @@ function clickedZoomable(event: MouseEvent, zoomListener: EventListener, scrollD
         }
 
         let container: HTMLElement;
-        let clone: HTMLImageElement | null = null;
+        let clone: HTMLImageElement | undefined;
 
         let cloneRequired: boolean = fullSrc !== null && fullSrc !== originalSrc;
         let showCloneListener: PotentialEventListener;
