@@ -16,6 +16,22 @@ export function transform(style: CSSStyleDeclaration, value: string): void {
     }
 }
 
+export const TRANSITION_END_EVENTS: { [key: string]: string } = {
+    WebkitTransition: 'webkitTransitionEnd',
+    MozTransition: 'transitionend',
+    OTransition: 'oTransitionEnd',
+    msTransition: 'MSTransitionEnd',
+    transition: 'transitionend'
+};
+
+export function transitionEndEvent(style: CSSStyleDeclaration): string | undefined {
+    let transitionProperty: string | undefined = vendorProperty(style, 'transition');
+
+    if (transitionProperty !== undefined) {
+        return TRANSITION_END_EVENTS[transitionProperty];
+    }
+}
+
 export function resetTransformation(style: CSSStyleDeclaration): void {
     transform(style, '');
 }

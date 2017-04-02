@@ -29,6 +29,7 @@ import {
 import {
     setHeightPx,
     transform,
+    transitionEndEvent,
     unsetHeight
 } from './element/Style';
 import {
@@ -58,8 +59,7 @@ import {
 import { vendorProperty } from './Vendor';
 import {
     hasTranslate3d,
-    pageScrollY,
-    TRANSITION_END_EVENTS
+    pageScrollY
 } from './Window';
 
 const DEFAULT_SCROLL_DELTA: number = 50;
@@ -88,13 +88,13 @@ function expanded(wrapper: HTMLElement, container: HTMLElement, target: Vector, 
     });
 }
 
-function finishedExpanding(wrapper: HTMLElement, container: HTMLElement, target: Vector, imageSize: Vector, imagePosition: Vector, clone: HTMLImageElement | null, showCloneListener: PotentialEventListener, transitionEndEvent: string | any, image: HTMLImageElement): void {
+function finishedExpanding(wrapper: HTMLElement, container: HTMLElement, target: Vector, imageSize: Vector, imagePosition: Vector, clone: HTMLImageElement | null, showCloneListener: PotentialEventListener, transitionEnd: string | any, image: HTMLImageElement): void {
     stopExpandingWrapper(wrapper);
     expanded(wrapper, container, target, imageSize, imagePosition);
 
     if (clone !== null && isCloneLoaded(clone) && !isCloneVisible(clone)) {
         if (showCloneListener !== undefined) {
-            removeEventListener(clone, transitionEndEvent as string, showCloneListener);
+            removeEventListener(clone, transitionEnd as string, showCloneListener);
         }
 
         showClone(clone);
@@ -148,7 +148,7 @@ function zoomInstant(wrapper: HTMLElement, container: HTMLElement, image: HTMLIm
     expanded(wrapper, container, target, imageSize, imagePosition);
 }
 
-function zoomTransition(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement | any, showCloneListener: PotentialEventListener, scrollY: number, overlay: HTMLDivElement, transitionEndEvent: string, target: Vector, use3d: boolean): void {
+function zoomTransition(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement | any, showCloneListener: PotentialEventListener, scrollY: number, overlay: HTMLDivElement, transitionEnd: string, target: Vector, use3d: boolean): void {
     let initialScrollY: number = pageScrollY(window);
     let imageRect: ClientRect = image.getBoundingClientRect();
     let imagePosition: Vector = positionFrom(imageRect);
@@ -170,7 +170,7 @@ function zoomTransition(wrapper: HTMLElement, container: HTMLElement, image: HTM
 
         if (isWrapperExpanding(wrapper)) {
             if (expandedListener !== undefined) {
-                removeEventListener(container, transitionEndEvent, expandedListener);
+                removeEventListener(container, transitionEnd, expandedListener);
             }
 
             stopExpandingWrapper(wrapper);
@@ -181,9 +181,9 @@ function zoomTransition(wrapper: HTMLElement, container: HTMLElement, image: HTM
         startCollapsingWrapper(wrapper);
         hideOverlay(overlay);
 
-        let collapsedListener: PotentialEventListener = addEventListener(container, transitionEndEvent, () => {
+        let collapsedListener: PotentialEventListener = addEventListener(container, transitionEnd, () => {
             if (collapsedListener !== undefined) {
-                removeEventListener(container, transitionEndEvent, collapsedListener);
+                removeEventListener(container, transitionEnd, collapsedListener);
             }
 
             collapsed(overlay, wrapper, image, clone);
@@ -216,16 +216,16 @@ function zoomTransition(wrapper: HTMLElement, container: HTMLElement, image: HTM
     setHeightPx(wrapper.style, image.height);
     activateImage(image);
 
-    expandedListener = addEventListener(container, transitionEndEvent, () => {
+    expandedListener = addEventListener(container, transitionEnd, () => {
         if (expandedListener !== undefined) {
-            removeEventListener(container, transitionEndEvent, expandedListener);
+            removeEventListener(container, transitionEnd, expandedListener);
         }
 
-        finishedExpanding(wrapper, container, target, imageSize, imagePosition, clone, showCloneListener, transitionEndEvent, image);
+        finishedExpanding(wrapper, container, target, imageSize, imagePosition, clone, showCloneListener, transitionEnd, image);
     });
 
     if (expandedListener === undefined) {
-        finishedExpanding(wrapper, container, target, imageSize, imagePosition, clone, showCloneListener, transitionEndEvent, image);
+        finishedExpanding(wrapper, container, target, imageSize, imagePosition, clone, showCloneListener, transitionEnd, image);
     } else {
         transitionToCentre(container, document, target, imageSize, imagePosition, use3d);
     }
@@ -252,8 +252,7 @@ function clickedZoomable(event: MouseEvent, zoomListener: EventListener, scrollD
             removeEventListener(document.body, 'click', zoomListener);
         }
 
-        let transitionProperty: string | undefined = vendorProperty(document.body.style, 'transition');
-        let transitionEndEvent: string | undefined = transitionProperty === undefined ? undefined : TRANSITION_END_EVENTS[transitionProperty];
+        let transitionEnd: string | undefined = transitionEndEvent(document.body.style);
 
         let container: HTMLElement;
         let clone: HTMLImageElement | null = null;
@@ -288,10 +287,10 @@ function clickedZoomable(event: MouseEvent, zoomListener: EventListener, scrollD
 
         let overlay: HTMLDivElement = addOverlay(document);
 
-        if (transitionEndEvent === undefined) {
+        if (transitionEnd === undefined) {
             zoomInstant(wrapper, container, image, clone, showCloneListener, scrollDelta, overlay, target, use3d);
         } else {
-            zoomTransition(wrapper, container, image, clone, showCloneListener, scrollDelta, overlay, transitionEndEvent, target, use3d);
+            zoomTransition(wrapper, container, image, clone, showCloneListener, scrollDelta, overlay, transitionEnd, target, use3d);
         }
     }
 }

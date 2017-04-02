@@ -22,14 +22,6 @@ export const TRANSFORM_PROPERTIES: { [key: string]: string } = {
     transform: 'transform'
 };
 
-export const TRANSITION_END_EVENTS: { [key: string]: string } = {
-    WebkitTransition: 'webkitTransitionEnd',
-    MozTransition: 'transitionend',
-    OTransition: 'oTransitionEnd',
-    msTransition: 'MSTransitionEnd',
-    transition: 'transitionend'
-};
-
 export function hasTranslate3d(window: Window, transformProperty: string): boolean {
     let computeStyle: any = window.getComputedStyle;
     let property: string = TRANSFORM_PROPERTIES[transformProperty];
