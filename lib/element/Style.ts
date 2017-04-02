@@ -6,35 +6,6 @@ import {
     minimumDivisor,
     Vector
 } from '../math/Vector';
-import { vendorProperty } from '../Vendor';
-
-export function transform(style: CSSStyleDeclaration, value: string): void {
-    let property: string | undefined = vendorProperty(style, 'transform');
-
-    if (property !== undefined) {
-        (style as any)[property] = value;
-    }
-}
-
-export const TRANSITION_END_EVENTS: { [key: string]: string } = {
-    WebkitTransition: 'webkitTransitionEnd',
-    MozTransition: 'transitionend',
-    OTransition: 'oTransitionEnd',
-    msTransition: 'MSTransitionEnd',
-    transition: 'transitionend'
-};
-
-export function transitionEndEvent(style: CSSStyleDeclaration): string | undefined {
-    let transitionProperty: string | undefined = vendorProperty(style, 'transition');
-
-    if (transitionProperty !== undefined) {
-        return TRANSITION_END_EVENTS[transitionProperty];
-    }
-}
-
-export function resetTransformation(style: CSSStyleDeclaration): void {
-    transform(style, '');
-}
 
 function setBounds(style: CSSStyleDeclaration, x: string, y: string, width: string, height: string): void {
     style.left = x;

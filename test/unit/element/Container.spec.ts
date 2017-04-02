@@ -2,7 +2,7 @@ import {
     CLASS,
     createContainer,
     isContainer,
-    refreshContainer,
+    ignoreTransitions,
     restoreContainer
 } from '../../../lib/element/Container';
 
@@ -42,7 +42,7 @@ describe('isContainer', () => {
     });
 });
 
-describe('refreshContainer', () => {
+describe('ignoreTransitions', () => {
     let container: any;
 
     beforeEach(() => {
@@ -54,19 +54,19 @@ describe('refreshContainer', () => {
     });
 
     it('should set the transition to initial before executing the callback', () => {
-        refreshContainer(container, () => {
+        ignoreTransitions(container, () => {
             expect(container.style.transition).toBe('initial');
         });
     });
 
     it('should execute the callback', () => {
         let callback: jasmine.Spy = jasmine.createSpy('callback');
-        refreshContainer(container, callback);
+        ignoreTransitions(container, callback);
         expect(callback).toHaveBeenCalled();
     });
 
     it('should clear the transition after executing the callback', () => {
-        refreshContainer(container, jasmine.createSpy('callback'));
+        ignoreTransitions(container, jasmine.createSpy('callback'));
         expect(container.style.transition).toBe('');
     });
 });
