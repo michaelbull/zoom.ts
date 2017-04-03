@@ -387,14 +387,14 @@ function clickedZoomable(event: MouseEvent, zoomListener: EventListener, scrollD
     let fullSrc: string | null = wrapper.getAttribute('data-src');
     let actualSrc: string = fullSrc === null ? originalSrc : fullSrc;
 
-    let transformProperty: string | undefined = vendorProperty(document.body.style, 'transform');
-
-    if (transformProperty === undefined || event.metaKey || event.ctrlKey) {
+    if (event.metaKey || event.ctrlKey) {
         window.open(actualSrc, '_blank');
     } else {
         if (zoomListener !== undefined) {
             removeEventListener(document.body, 'click', zoomListener);
         }
+
+        let overlay: HTMLDivElement = addOverlay(document);
 
         let container: HTMLElement;
         let clone: HTMLImageElement | undefined;
@@ -403,12 +403,12 @@ function clickedZoomable(event: MouseEvent, zoomListener: EventListener, scrollD
         let showCloneListener: PotentialEventListener;
 
         let target: Vector = targetDimensions(wrapper);
-        let use3d: boolean = hasTranslate3d(window, transformProperty);
 
-        let overlay: HTMLDivElement = addOverlay(document);
-
+        let transformProperty: string | undefined = vendorProperty(document.body.style, 'transform');
         let transitionProperty: string | undefined = vendorProperty(document.body.style, 'transition');
         let transitionEnd: string | undefined = transitionProperty === undefined ? undefined : TRANSITION_END_EVENTS[transitionProperty];
+
+        let hasTransitions: boolean = transformProperty !== undefined && transitionProperty !== undefined && transitionEnd !== undefined;
 
         if (alreadySetUp) {
             container = image.parentElement as HTMLElement;
@@ -417,7 +417,7 @@ function clickedZoomable(event: MouseEvent, zoomListener: EventListener, scrollD
                 clone = container.children.item(1) as HTMLImageElement;
 
                 if (isCloneLoaded(clone)) {
-                    if (transitionProperty === undefined || transitionEnd === undefined) {
+                    if (!hasTransitions) {
                         showClone(clone);
                         hideImage(image);
                     }
@@ -437,17 +437,19 @@ function clickedZoomable(event: MouseEvent, zoomListener: EventListener, scrollD
             }
         }
 
-        if (transitionProperty === undefined || transitionEnd === undefined) {
+        if (hasTransitions) {
+            let use3d: boolean = hasTranslate3d(window, transformProperty as string);
+
+            if (cloneRequired) {
+                zoomTransitionWithClone(wrapper, container, image, clone as HTMLImageElement, showCloneListener, scrollDelta, overlay, transitionEnd as string, target, use3d, transformProperty as string, transitionProperty as string);
+            } else {
+                zoomTransitionWithoutClone(wrapper, container, image, scrollDelta, overlay, transitionEnd as string, target, use3d, transformProperty as string, transitionProperty as string);
+            }
+        } else {
             if (cloneRequired) {
                 zoomInstantWithClone(wrapper, container, image, clone as HTMLImageElement, showCloneListener, scrollDelta, overlay, target);
             } else {
                 zoomInstantWithoutClone(wrapper, container, image, scrollDelta, overlay, target);
-            }
-        } else {
-            if (cloneRequired) {
-                zoomTransitionWithClone(wrapper, container, image, clone as HTMLImageElement, showCloneListener, scrollDelta, overlay, transitionEnd, target, use3d, transformProperty, transitionProperty);
-            } else {
-                zoomTransitionWithoutClone(wrapper, container, image, scrollDelta, overlay, transitionEnd, target, use3d, transformProperty, transitionProperty);
             }
         }
     }
