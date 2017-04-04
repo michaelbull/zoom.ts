@@ -1,10 +1,10 @@
-import { viewportSize } from '../window/Document';
 import {
     centreTranslation,
     minimizeVectors,
     minimumDivisor,
     Vector
 } from '../math/Vector';
+import { viewportSize } from '../window/Document';
 
 export function translate(translation: Vector): string {
     return `translate(${translation[0]}px, ${translation[1]}px)`;
@@ -18,14 +18,17 @@ export function scaleBy(amount: number): string {
     return `scale(${amount})`;
 }
 
-export type ScaleAndTranslate = [number, Vector];
+export interface ScaleAndTranslate {
+    scale: number;
+    translation: Vector;
+}
 
 export function scaleTranslate(transformation: ScaleAndTranslate): string {
-    return `${scaleBy(transformation[0])} ${translate(transformation[1])}`;
+    return `${scaleBy(transformation.scale)} ${translate(transformation.translation)}`;
 }
 
 export function scaleTranslate3d(transformation: ScaleAndTranslate): string {
-    return `${scaleBy(transformation[0])} ${translate3d(transformation[1])}`;
+    return `${scaleBy(transformation.scale)} ${translate3d(transformation.translation)}`;
 }
 
 export function centreTransformation(document: Document, target: Vector, size: Vector, position: Vector): ScaleAndTranslate {
@@ -33,5 +36,9 @@ export function centreTransformation(document: Document, target: Vector, size: V
     let cappedTarget: Vector = minimizeVectors(viewport, target);
     let scale: number = minimumDivisor(cappedTarget, size);
     let translation: Vector = centreTranslation(viewport, size, position, scale);
-    return [scale, translation];
+
+    return {
+        scale,
+        translation
+    };
 }

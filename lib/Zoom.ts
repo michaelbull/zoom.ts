@@ -31,10 +31,7 @@ import {
     scaleTranslate,
     scaleTranslate3d
 } from './element/Transform';
-import {
-    ignoreTransitions,
-    TRANSITION_END_EVENTS
-} from './element/Transition';
+import { ignoreTransitions } from './element/Transition';
 import {
     isWrapper,
     isWrapperExpanding,
@@ -64,11 +61,7 @@ import {
     sizeFrom,
     Vector
 } from './math/Vector';
-import { vendorProperty } from './Vendor';
-import {
-    hasTranslate3d,
-    pageScrollY
-} from './window/Window';
+import { pageScrollY } from './window/Window';
 import {
     capabilitiesOf,
     WindowCapabilities
