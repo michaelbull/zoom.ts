@@ -69,6 +69,10 @@ import {
     hasTranslate3d,
     pageScrollY
 } from './window/Window';
+import {
+    capabilitiesOf,
+    WindowCapabilities
+} from './window/WindowCapabilities';
 
 const DEFAULT_SCROLL_DELTA: number = 50;
 
@@ -93,6 +97,17 @@ function finishedExpanding(wrapper: HTMLElement, container: HTMLElement, target:
         style[transformProperty] = '';
         setBoundsPx(style, centreBounds(document, target, imageSize, imagePosition));
     });
+}
+
+function transformToCentre(target: Vector, size: Vector, position: Vector, capabilities: WindowCapabilities, container: HTMLElement) {
+    let transformation: ScaleAndTranslate = centreTransformation(document, target, size, position);
+    let style: any = container.style;
+
+    if (capabilities.hasTranslate3d) {
+        style[capabilities.transformProperty as string] = scaleTranslate3d(transformation);
+    } else {
+        style[capabilities.transformProperty as string] = scaleTranslate(transformation);
+    }
 }
 
 function addDismissListeners(container: HTMLElement, scrollDelta: number, collapse: Function): Function {
@@ -174,8 +189,7 @@ function zoomInstantWithoutClone(wrapper: HTMLElement, container: HTMLElement, i
 
     setBoundsPx(container.style, centreBounds(document, target, imageSize, imagePosition));
 }
-
-function zoomTransitionWithClone(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement, showCloneListener: PotentialEventListener, scrollDelta: number, overlay: HTMLDivElement, transitionEnd: string, target: Vector, use3d: boolean, transformProperty: string, transitionProperty: string): void {
+function zoomTransitionWithClone(capabilities: WindowCapabilities, wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement, showCloneListener: PotentialEventListener, scrollDelta: number, overlay: HTMLDivElement, target: Vector): void {
     let imageRect: ClientRect = image.getBoundingClientRect();
     let imagePosition: Vector = positionFrom(imageRect);
     let imageSize: Vector = sizeFrom(imageRect);
@@ -184,14 +198,7 @@ function zoomTransitionWithClone(wrapper: HTMLElement, container: HTMLElement, i
         imagePosition = positionFrom(wrapper.getBoundingClientRect());
 
         if (isWrapperTransitioning(wrapper)) {
-            let style: any = container.style;
-            let transformation: ScaleAndTranslate = centreTransformation(document, target, imageSize, imagePosition);
-
-            if (use3d) {
-                style[transformProperty] = scaleTranslate3d(transformation);
-            } else {
-                style[transformProperty] = scaleTranslate(transformation);
-            }
+            transformToCentre(target, imageSize, imagePosition, capabilities, container);
         } else {
             setBoundsPx(container.style, centreBounds(document, target, imageSize, imagePosition));
         }
@@ -211,9 +218,9 @@ function zoomTransitionWithClone(wrapper: HTMLElement, container: HTMLElement, i
         hideOverlay(overlay);
         startCollapsingWrapper(wrapper);
 
-        let collapsedListener: PotentialEventListener = addEventListener(container, transitionEnd, () => {
+        let collapsedListener: PotentialEventListener = addEventListener(container, capabilities.transitionEndEvent as string, () => {
             if (collapsedListener !== undefined) {
-                removeEventListener(container, transitionEnd, collapsedListener);
+                removeEventListener(container, capabilities.transitionEndEvent as string, collapsedListener);
             }
 
             showImage(image);
@@ -226,23 +233,17 @@ function zoomTransitionWithClone(wrapper: HTMLElement, container: HTMLElement, i
 
         if (isWrapperExpanding(wrapper)) {
             if (expandedListener !== undefined) {
-                removeEventListener(container, transitionEnd, expandedListener);
+                removeEventListener(container, capabilities.transitionEndEvent as string, expandedListener);
             }
 
-            style[transformProperty] = '';
+            style[capabilities.transformProperty as string] = '';
             stopExpandingWrapper(wrapper);
         } else {
-            ignoreTransitions(container, transitionProperty, () => {
-                let transformation: ScaleAndTranslate = centreTransformation(document, target, imageSize, imagePosition);
-
-                if (use3d) {
-                    style[transformProperty] = scaleTranslate3d(transformation);
-                } else {
-                    style[transformProperty] = scaleTranslate(transformation);
-                }
+            ignoreTransitions(container, capabilities.transitionProperty as string, () => {
+                transformToCentre(target, imageSize, imagePosition, capabilities, container);
             });
 
-            style[transformProperty] = '';
+            style[capabilities.transformProperty as string] = '';
             resetBounds(container.style);
             unsetWrapperExpanded(wrapper);
         }
@@ -258,14 +259,14 @@ function zoomTransitionWithClone(wrapper: HTMLElement, container: HTMLElement, i
     function expanded() {
         if (isCloneLoaded(clone) && !isCloneVisible(clone)) {
             if (showCloneListener !== undefined) {
-                removeEventListener(clone, transitionEnd as string, showCloneListener);
+                removeEventListener(clone, capabilities.transitionEndEvent as string, showCloneListener);
             }
 
             showClone(clone);
             hideImage(image);
         }
 
-        finishedExpanding(wrapper, container, target, imageSize, imagePosition, transformProperty, transitionProperty);
+        finishedExpanding(wrapper, container, target, imageSize, imagePosition, capabilities.transformProperty as string, capabilities.transitionProperty as string);
     }
 
     removeDismissListeners = addDismissListeners(container, scrollDelta, collapse);
@@ -274,9 +275,9 @@ function zoomTransitionWithClone(wrapper: HTMLElement, container: HTMLElement, i
     wrapper.style.height = pixels(image.height);
     activateImage(image);
 
-    expandedListener = addEventListener(container, transitionEnd, () => {
+    expandedListener = addEventListener(container, capabilities.transitionEndEvent as string, () => {
         if (expandedListener !== undefined) {
-            removeEventListener(container, transitionEnd, expandedListener);
+            removeEventListener(container, capabilities.transitionEndEvent as string, expandedListener);
         }
 
         expanded();
@@ -285,18 +286,11 @@ function zoomTransitionWithClone(wrapper: HTMLElement, container: HTMLElement, i
     if (expandedListener === undefined) {
         expanded();
     } else {
-        let style: any = container.style;
-        let transformation: ScaleAndTranslate = centreTransformation(document, target, imageSize, imagePosition);
-
-        if (use3d) {
-            style[transformProperty] = scaleTranslate3d(transformation);
-        } else {
-            style[transformProperty] = scaleTranslate(transformation);
-        }
+        transformToCentre(target, imageSize, imagePosition, capabilities, container);
     }
 }
 
-function zoomTransitionWithoutClone(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElement, scrollDelta: number, overlay: HTMLDivElement, transitionEnd: string, target: Vector, use3d: boolean, transformProperty: string, transitionProperty: string): void {
+function zoomTransitionWithoutClone(capabilities: WindowCapabilities, wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElement, scrollDelta: number, overlay: HTMLDivElement, target: Vector): void {
     let imageRect: ClientRect = image.getBoundingClientRect();
     let imagePosition: Vector = positionFrom(imageRect);
     let imageSize: Vector = sizeFrom(imageRect);
@@ -304,15 +298,8 @@ function zoomTransitionWithoutClone(wrapper: HTMLElement, container: HTMLElement
     let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
         imagePosition = positionFrom(wrapper.getBoundingClientRect());
 
-        let style: any = container.style;
         if (isWrapperTransitioning(wrapper)) {
-            let transformation: ScaleAndTranslate = centreTransformation(document, target, imageSize, imagePosition);
-
-            if (use3d) {
-                style[transformProperty] = scaleTranslate3d(transformation);
-            } else {
-                style[transformProperty] = scaleTranslate(transformation);
-            }
+            transformToCentre(target, imageSize, imagePosition, capabilities, container);
         } else {
             setBoundsPx(container.style, centreBounds(document, target, imageSize, imagePosition));
         }
@@ -328,9 +315,9 @@ function zoomTransitionWithoutClone(wrapper: HTMLElement, container: HTMLElement
         hideOverlay(overlay);
         startCollapsingWrapper(wrapper);
 
-        let collapsedListener: PotentialEventListener = addEventListener(container, transitionEnd, () => {
+        let collapsedListener: PotentialEventListener = addEventListener(container, capabilities.transitionEndEvent as string, () => {
             if (collapsedListener !== undefined) {
-                removeEventListener(container, transitionEnd, collapsedListener);
+                removeEventListener(container, capabilities.transitionEndEvent as string, collapsedListener);
             }
 
             collapsed(overlay, wrapper, image);
@@ -340,23 +327,17 @@ function zoomTransitionWithoutClone(wrapper: HTMLElement, container: HTMLElement
 
         if (isWrapperExpanding(wrapper)) {
             if (expandedListener !== undefined) {
-                removeEventListener(container, transitionEnd, expandedListener);
+                removeEventListener(container, capabilities.transitionEndEvent as string, expandedListener);
             }
 
-            style[transformProperty] = '';
+            style[capabilities.transformProperty as string] = '';
             stopExpandingWrapper(wrapper);
         } else {
-            ignoreTransitions(container, transitionProperty, () => {
-                let transformation: ScaleAndTranslate = centreTransformation(document, target, imageSize, imagePosition);
-
-                if (use3d) {
-                    style[transformProperty] = scaleTranslate3d(transformation);
-                } else {
-                    style[transformProperty] = scaleTranslate(transformation);
-                }
+            ignoreTransitions(container, capabilities.transitionProperty as string, () => {
+                transformToCentre(target, imageSize, imagePosition, capabilities, container);
             });
 
-            style[transformProperty] = '';
+            style[capabilities.transformProperty as string] = '';
             resetBounds(container.style);
             unsetWrapperExpanded(wrapper);
         }
@@ -372,25 +353,18 @@ function zoomTransitionWithoutClone(wrapper: HTMLElement, container: HTMLElement
     wrapper.style.height = pixels(image.height);
     activateImage(image);
 
-    expandedListener = addEventListener(container, transitionEnd, () => {
+    expandedListener = addEventListener(container, capabilities.transitionEndEvent as string, () => {
         if (expandedListener !== undefined) {
-            removeEventListener(container, transitionEnd, expandedListener);
+            removeEventListener(container, capabilities.transitionEndEvent as string, expandedListener);
         }
 
-        finishedExpanding(wrapper, container, target, imageSize, imagePosition, transformProperty, transitionProperty);
+        finishedExpanding(wrapper, container, target, imageSize, imagePosition, capabilities.transformProperty as string, capabilities.transitionProperty as string);
     });
 
     if (expandedListener === undefined) {
-        finishedExpanding(wrapper, container, target, imageSize, imagePosition, transformProperty, transitionProperty);
+        finishedExpanding(wrapper, container, target, imageSize, imagePosition, capabilities.transformProperty as string, capabilities.transitionProperty as string);
     } else {
-        let style: any = container.style;
-        let transformation: ScaleAndTranslate = centreTransformation(document, target, imageSize, imagePosition);
-
-        if (use3d) {
-            style[transformProperty] = scaleTranslate3d(transformation);
-        } else {
-            style[transformProperty] = scaleTranslate(transformation);
-        }
+        transformToCentre(target, imageSize, imagePosition, capabilities, container);
     }
 }
 
@@ -428,6 +402,9 @@ function clickedZoomable(event: MouseEvent, zoomListener: EventListener, scrollD
             setWrapper(wrapper);
         }
 
+        let capabilities: WindowCapabilities = capabilitiesOf(window);
+        let transition: boolean = capabilities.hasTransform && capabilities.hasTransitions && capabilities.transitionEndEvent !== undefined;
+
         let overlay: HTMLDivElement = addOverlay(document);
 
         let container: HTMLElement;
@@ -438,12 +415,6 @@ function clickedZoomable(event: MouseEvent, zoomListener: EventListener, scrollD
 
         let target: Vector = targetDimensions(wrapper);
 
-        let transformProperty: string | undefined = vendorProperty(document.body.style, 'transform');
-        let transitionProperty: string | undefined = vendorProperty(document.body.style, 'transition');
-        let transitionEnd: string | undefined = transitionProperty === undefined ? undefined : TRANSITION_END_EVENTS[transitionProperty];
-
-        let hasTransitions: boolean = transformProperty !== undefined && transitionProperty !== undefined && transitionEnd !== undefined;
-
         if (previouslyZoomed) {
             container = image.parentElement as HTMLElement;
 
@@ -451,7 +422,7 @@ function clickedZoomable(event: MouseEvent, zoomListener: EventListener, scrollD
                 clone = container.children.item(1) as HTMLImageElement;
 
                 if (isCloneLoaded(clone)) {
-                    if (!hasTransitions) {
+                    if (!transition) {
                         showClone(clone);
                         hideImage(image);
                     }
@@ -471,13 +442,11 @@ function clickedZoomable(event: MouseEvent, zoomListener: EventListener, scrollD
             }
         }
 
-        if (hasTransitions) {
-            let use3d: boolean = hasTranslate3d(window, transformProperty as string);
-
+        if (transition) {
             if (cloneRequired) {
-                zoomTransitionWithClone(wrapper, container, image, clone as HTMLImageElement, showCloneListener, scrollDelta, overlay, transitionEnd as string, target, use3d, transformProperty as string, transitionProperty as string);
+                zoomTransitionWithClone(capabilities, wrapper, container, image, clone as HTMLImageElement, showCloneListener, scrollDelta, overlay, target);
             } else {
-                zoomTransitionWithoutClone(wrapper, container, image, scrollDelta, overlay, transitionEnd as string, target, use3d, transformProperty as string, transitionProperty as string);
+                zoomTransitionWithoutClone(capabilities, wrapper, container, image, scrollDelta, overlay, target);
             }
         } else {
             if (cloneRequired) {

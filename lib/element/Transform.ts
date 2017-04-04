@@ -11,7 +11,7 @@ export function translate(translation: Vector): string {
 }
 
 export function translate3d(translation: Vector): string {
-    return `translate3d(${translation[0]}px, ${translation[1]}px)`;
+    return `translate3d(${translation[0]}px, ${translation[1]}px, 0)`;
 }
 
 export function scaleBy(amount: number): string {
