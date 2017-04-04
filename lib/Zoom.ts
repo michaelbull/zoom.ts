@@ -31,8 +31,10 @@ import {
     TRANSITION_END_EVENTS
 } from './element/Transition';
 import {
+    isWrapper,
     isWrapperExpanding,
     isWrapperTransitioning,
+    setWrapper,
     setWrapperExpanded,
     startCollapsingWrapper,
     startExpandingWrapper,
@@ -62,6 +64,7 @@ import {
     hasTranslate3d,
     pageScrollY
 } from './Window';
+import { addClass } from './element/ClassList';
 
 const DEFAULT_SCROLL_DELTA: number = 50;
 
@@ -378,10 +381,21 @@ function zoomTransitionWithoutClone(wrapper: HTMLElement, container: HTMLElement
 function clickedZoomable(event: MouseEvent, zoomListener: EventListener, scrollDelta: number): void {
     let image: HTMLImageElement = event.target as HTMLImageElement;
     let parent: HTMLElement = image.parentElement as HTMLElement;
-    let grandParent: HTMLElement = parent.parentElement as HTMLElement;
+    let previouslyZoomed: boolean = isContainer(parent);
 
-    let alreadySetUp: boolean = isContainer(parent);
-    let wrapper: HTMLElement = alreadySetUp ? grandParent : parent;
+    let wrapper: HTMLElement;
+
+    if (previouslyZoomed) {
+        let grandParent: HTMLElement | null = parent.parentElement;
+
+        if (grandParent === null) {
+            throw new Error('No wrapper found.');
+        } else {
+            wrapper = grandParent;
+        }
+    } else {
+        wrapper = parent;
+    }
 
     let originalSrc: string = image.src;
     let fullSrc: string | null = wrapper.getAttribute('data-src');
@@ -392,6 +406,10 @@ function clickedZoomable(event: MouseEvent, zoomListener: EventListener, scrollD
     } else {
         if (zoomListener !== undefined) {
             removeEventListener(document.body, 'click', zoomListener);
+        }
+
+        if (!isWrapper(wrapper)) {
+            setWrapper(wrapper);
         }
 
         let overlay: HTMLDivElement = addOverlay(document);
@@ -410,7 +428,7 @@ function clickedZoomable(event: MouseEvent, zoomListener: EventListener, scrollD
 
         let hasTransitions: boolean = transformProperty !== undefined && transitionProperty !== undefined && transitionEnd !== undefined;
 
-        if (alreadySetUp) {
+        if (previouslyZoomed) {
             container = image.parentElement as HTMLElement;
 
             if (cloneRequired) {
