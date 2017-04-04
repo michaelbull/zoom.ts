@@ -95,16 +95,34 @@ function finishedExpanding(wrapper: HTMLElement, container: HTMLElement, target:
     });
 }
 
-function zoomInstantWithClone(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement, showCloneListener: PotentialEventListener, scrollY: number, overlay: HTMLDivElement, target: Vector): void {
+function addDismissListeners(container: HTMLElement, scrollDelta: number, collapse: Function): Function {
     let initialScrollY: number = pageScrollY(window);
+    let scrolledAway: PotentialEventListener = addEventListener(window, 'scroll', scrolled(initialScrollY, scrollDelta, () => pageScrollY(window), () => collapse()));
+    let pressedEsc: PotentialEventListener = addEventListener(document, 'keyup', escKeyPressed(collapse));
+    let dismissed: PotentialEventListener = addEventListener(container, 'click', () => collapse());
+
+    return (): void => {
+        removeEventListener(document, 'keyup', pressedEsc as EventListener);
+        removeEventListener(container, 'click', dismissed as EventListener);
+        removeEventListener(window, 'scroll', scrolledAway as EventListener);
+    };
+}
+
+function zoomInstantWithClone(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement, showCloneListener: PotentialEventListener, scrollDelta: number, overlay: HTMLDivElement, target: Vector): void {
     let imageRect: ClientRect = image.getBoundingClientRect();
     let imagePosition: Vector = positionFrom(imageRect);
     let imageSize: Vector = sizeFrom(imageRect);
 
-    let removeListeners: Function;
+    let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
+        imagePosition = positionFrom(wrapper.getBoundingClientRect());
+        setBoundsPx(container.style, centreBounds(document, target, imageSize, imagePosition));
+    });
+
+    let removeDismissListeners: Function;
 
     function collapse(): void {
-        removeListeners();
+        removeDismissListeners();
+        removeEventListener(window, 'resize', resized as EventListener);
 
         if (!isCloneLoaded(clone) && showCloneListener !== undefined) {
             removeEventListener(clone, 'load', showCloneListener);
@@ -118,20 +136,7 @@ function zoomInstantWithClone(wrapper: HTMLElement, container: HTMLElement, imag
         collapsed(overlay, wrapper, image);
     }
 
-    let pressedEsc: PotentialEventListener = addEventListener(document, 'keyup', escKeyPressed(collapse));
-    let dismissed: PotentialEventListener = addEventListener(container, 'click', () => collapse());
-    let scrolledAway: PotentialEventListener = addEventListener(window, 'scroll', scrolled(initialScrollY, scrollY, () => pageScrollY(window), () => collapse()));
-    let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
-        imagePosition = positionFrom(wrapper.getBoundingClientRect());
-        setBoundsPx(container.style, centreBounds(document, target, imageSize, imagePosition));
-    });
-
-    removeListeners = (): void => {
-        removeEventListener(document, 'keyup', pressedEsc as EventListenerOrEventListenerObject);
-        removeEventListener(container, 'click', dismissed as EventListenerOrEventListenerObject);
-        removeEventListener(window, 'scroll', scrolledAway as EventListenerOrEventListenerObject);
-        removeEventListener(window, 'resize', resized as EventListenerOrEventListenerObject);
-    };
+    removeDismissListeners = addDismissListeners(container, scrollDelta, collapse);
 
     setWrapperExpanded(wrapper);
     wrapper.style.height = pixels(image.height);
@@ -140,36 +145,28 @@ function zoomInstantWithClone(wrapper: HTMLElement, container: HTMLElement, imag
     setBoundsPx(container.style, centreBounds(document, target, imageSize, imagePosition));
 }
 
-function zoomInstantWithoutClone(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElement, scrollY: number, overlay: HTMLDivElement, target: Vector): void {
-    let initialScrollY: number = pageScrollY(window);
+function zoomInstantWithoutClone(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElement, scrollDelta: number, overlay: HTMLDivElement, target: Vector): void {
     let imageRect: ClientRect = image.getBoundingClientRect();
     let imagePosition: Vector = positionFrom(imageRect);
     let imageSize: Vector = sizeFrom(imageRect);
 
-    let removeListeners: Function;
+    let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
+        imagePosition = positionFrom(wrapper.getBoundingClientRect());
+        setBoundsPx(container.style, centreBounds(document, target, imageSize, imagePosition));
+    });
+
+    let removeDismissListeners: Function;
 
     function collapse(): void {
-        removeListeners();
+        removeDismissListeners();
+        removeEventListener(window, 'resize', resized as EventListener);
 
         unsetWrapperExpanded(wrapper);
         resetBounds(container.style);
         collapsed(overlay, wrapper, image);
     }
 
-    let pressedEsc: PotentialEventListener = addEventListener(document, 'keyup', escKeyPressed(collapse));
-    let dismissed: PotentialEventListener = addEventListener(container, 'click', () => collapse());
-    let scrolledAway: PotentialEventListener = addEventListener(window, 'scroll', scrolled(initialScrollY, scrollY, () => pageScrollY(window), () => collapse()));
-    let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
-        imagePosition = positionFrom(wrapper.getBoundingClientRect());
-        setBoundsPx(container.style, centreBounds(document, target, imageSize, imagePosition));
-    });
-
-    removeListeners = (): void => {
-        removeEventListener(document, 'keyup', pressedEsc as EventListenerOrEventListenerObject);
-        removeEventListener(container, 'click', dismissed as EventListenerOrEventListenerObject);
-        removeEventListener(window, 'scroll', scrolledAway as EventListenerOrEventListenerObject);
-        removeEventListener(window, 'resize', resized as EventListenerOrEventListenerObject);
-    };
+    removeDismissListeners = addDismissListeners(container, scrollDelta, collapse);
 
     setWrapperExpanded(wrapper);
     wrapper.style.height = pixels(image.height);
@@ -178,17 +175,34 @@ function zoomInstantWithoutClone(wrapper: HTMLElement, container: HTMLElement, i
     setBoundsPx(container.style, centreBounds(document, target, imageSize, imagePosition));
 }
 
-function zoomTransitionWithClone(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement, showCloneListener: PotentialEventListener, scrollY: number, overlay: HTMLDivElement, transitionEnd: string, target: Vector, use3d: boolean, transformProperty: string, transitionProperty: string): void {
-    let initialScrollY: number = pageScrollY(window);
+function zoomTransitionWithClone(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement, showCloneListener: PotentialEventListener, scrollDelta: number, overlay: HTMLDivElement, transitionEnd: string, target: Vector, use3d: boolean, transformProperty: string, transitionProperty: string): void {
     let imageRect: ClientRect = image.getBoundingClientRect();
     let imagePosition: Vector = positionFrom(imageRect);
     let imageSize: Vector = sizeFrom(imageRect);
 
+    let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
+        imagePosition = positionFrom(wrapper.getBoundingClientRect());
+
+        if (isWrapperTransitioning(wrapper)) {
+            let style: any = container.style;
+            let transformation: ScaleAndTranslate = centreTransformation(document, target, imageSize, imagePosition);
+
+            if (use3d) {
+                style[transformProperty] = scaleTranslate3d(transformation);
+            } else {
+                style[transformProperty] = scaleTranslate(transformation);
+            }
+        } else {
+            setBoundsPx(container.style, centreBounds(document, target, imageSize, imagePosition));
+        }
+    });
+
     let expandedListener: PotentialEventListener = undefined;
-    let removeListeners: Function;
+    let removeDismissListeners: Function;
 
     function collapse(): void {
-        removeListeners();
+        removeDismissListeners();
+        removeEventListener(window, 'resize', resized as EventListener);
 
         if (!isCloneLoaded(clone) && showCloneListener !== undefined) {
             removeEventListener(clone, 'load', showCloneListener);
@@ -241,32 +255,7 @@ function zoomTransitionWithClone(wrapper: HTMLElement, container: HTMLElement, i
         }
     }
 
-    let pressedEsc: PotentialEventListener = addEventListener(document, 'keyup', escKeyPressed(collapse));
-    let dismissed: PotentialEventListener = addEventListener(container, 'click', () => collapse());
-    let scrolledAway: PotentialEventListener = addEventListener(window, 'scroll', scrolled(initialScrollY, scrollY, () => pageScrollY(window), () => collapse()));
-    let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
-        imagePosition = positionFrom(wrapper.getBoundingClientRect());
-
-        if (isWrapperTransitioning(wrapper)) {
-            let style: any = container.style;
-            let transformation: ScaleAndTranslate = centreTransformation(document, target, imageSize, imagePosition);
-
-            if (use3d) {
-                style[transformProperty] = scaleTranslate3d(transformation);
-            } else {
-                style[transformProperty] = scaleTranslate(transformation);
-            }
-        } else {
-            setBoundsPx(container.style, centreBounds(document, target, imageSize, imagePosition));
-        }
-    });
-
-    removeListeners = (): void => {
-        removeEventListener(document, 'keyup', pressedEsc as EventListenerOrEventListenerObject);
-        removeEventListener(container, 'click', dismissed as EventListenerOrEventListenerObject);
-        removeEventListener(window, 'scroll', scrolledAway as EventListenerOrEventListenerObject);
-        removeEventListener(window, 'resize', resized as EventListenerOrEventListenerObject);
-    };
+    removeDismissListeners = addDismissListeners(container, scrollDelta, collapse);
 
     startExpandingWrapper(wrapper);
     wrapper.style.height = pixels(image.height);
@@ -312,17 +301,34 @@ function zoomTransitionWithClone(wrapper: HTMLElement, container: HTMLElement, i
     }
 }
 
-function zoomTransitionWithoutClone(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElement, scrollY: number, overlay: HTMLDivElement, transitionEnd: string, target: Vector, use3d: boolean, transformProperty: string, transitionProperty: string): void {
-    let initialScrollY: number = pageScrollY(window);
+function zoomTransitionWithoutClone(wrapper: HTMLElement, container: HTMLElement, image: HTMLImageElement, scrollDelta: number, overlay: HTMLDivElement, transitionEnd: string, target: Vector, use3d: boolean, transformProperty: string, transitionProperty: string): void {
     let imageRect: ClientRect = image.getBoundingClientRect();
     let imagePosition: Vector = positionFrom(imageRect);
     let imageSize: Vector = sizeFrom(imageRect);
 
+    let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
+        imagePosition = positionFrom(wrapper.getBoundingClientRect());
+
+        let style: any = container.style;
+        if (isWrapperTransitioning(wrapper)) {
+            let transformation: ScaleAndTranslate = centreTransformation(document, target, imageSize, imagePosition);
+
+            if (use3d) {
+                style[transformProperty] = scaleTranslate3d(transformation);
+            } else {
+                style[transformProperty] = scaleTranslate(transformation);
+            }
+        } else {
+            setBoundsPx(container.style, centreBounds(document, target, imageSize, imagePosition));
+        }
+    });
+
     let expandedListener: PotentialEventListener = undefined;
-    let removeListeners: Function;
+    let removeDismissListeners: Function;
 
     function collapse(): void {
-        removeListeners();
+        removeDismissListeners();
+        removeEventListener(window, 'resize', resized as EventListener);
 
         hideOverlay(overlay);
         startCollapsingWrapper(wrapper);
@@ -365,32 +371,7 @@ function zoomTransitionWithoutClone(wrapper: HTMLElement, container: HTMLElement
         }
     }
 
-    let pressedEsc: PotentialEventListener = addEventListener(document, 'keyup', escKeyPressed(collapse));
-    let dismissed: PotentialEventListener = addEventListener(container, 'click', () => collapse());
-    let scrolledAway: PotentialEventListener = addEventListener(window, 'scroll', scrolled(initialScrollY, scrollY, () => pageScrollY(window), () => collapse()));
-    let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
-        imagePosition = positionFrom(wrapper.getBoundingClientRect());
-
-        let style: any = container.style;
-        if (isWrapperTransitioning(wrapper)) {
-            let transformation: ScaleAndTranslate = centreTransformation(document, target, imageSize, imagePosition);
-
-            if (use3d) {
-                style[transformProperty] = scaleTranslate3d(transformation);
-            } else {
-                style[transformProperty] = scaleTranslate(transformation);
-            }
-        } else {
-            setBoundsPx(container.style, centreBounds(document, target, imageSize, imagePosition));
-        }
-    });
-
-    removeListeners = (): void => {
-        removeEventListener(document, 'keyup', pressedEsc as EventListenerOrEventListenerObject);
-        removeEventListener(container, 'click', dismissed as EventListenerOrEventListenerObject);
-        removeEventListener(window, 'scroll', scrolledAway as EventListenerOrEventListenerObject);
-        removeEventListener(window, 'resize', resized as EventListenerOrEventListenerObject);
-    };
+    removeDismissListeners = addDismissListeners(container, scrollDelta, collapse);
 
     startExpandingWrapper(wrapper);
     wrapper.style.height = pixels(image.height);

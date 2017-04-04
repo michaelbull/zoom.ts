@@ -3,7 +3,7 @@ import {
     polyfillEvent
 } from './Event';
 
-export type PotentialEventListener = EventListenerOrEventListenerObject | undefined;
+export type PotentialEventListener = EventListener | undefined;
 
 export function fireEventListener(listener: EventListenerOrEventListenerObject, event: Event): void {
     if (typeof listener === 'function') {
