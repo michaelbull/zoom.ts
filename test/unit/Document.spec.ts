@@ -6,7 +6,7 @@ import {
     rootElement,
     STANDARDS_MODE,
     viewportSize
-} from '../../lib/Document';
+} from '../../lib/window/Document';
 import { fireEventListener } from '../../lib/event/EventListener';
 import { Vector } from '../../lib/math/Vector';
 

@@ -1,5 +1,5 @@
 import { rootElement } from './Document';
-import { vendorProperty } from './Vendor';
+import { vendorProperty } from '../Vendor';
 
 export function hasTransitions(window: Window, element: HTMLElement): boolean {
     let computeStyle: any = window.getComputedStyle;

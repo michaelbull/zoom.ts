@@ -1,12 +1,12 @@
 import {
     QUIRKS_MODE,
     STANDARDS_MODE
-} from '../../lib/Document';
+} from '../../lib/window/Document';
 import {
     hasTransitions,
     hasTranslate3d,
     pageScrollY
-} from '../../lib/Window';
+} from '../../lib/window/Window';
 
 describe('hasTransitions', () => {
     it('should return false if window.getComputedStyle is undefined', () => {

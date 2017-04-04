@@ -1,7 +1,7 @@
-import { clientSize } from './element/Element';
-import { addEventListener } from './event/EventListener';
-import { Vector } from './math/Vector';
-import { vendorProperty } from './Vendor';
+import { clientSize } from '../element/Element';
+import { addEventListener } from '../event/EventListener';
+import { Vector } from '../math/Vector';
+import { vendorProperty } from '../Vendor';
 
 export const QUIRKS_MODE: string = 'BackCompat';
 export const STANDARDS_MODE: string = 'CSS1Compat';

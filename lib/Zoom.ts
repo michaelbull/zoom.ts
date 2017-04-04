@@ -68,7 +68,7 @@ import { vendorProperty } from './Vendor';
 import {
     hasTranslate3d,
     pageScrollY
-} from './Window';
+} from './window/Window';
 
 const DEFAULT_SCROLL_DELTA: number = 50;
 

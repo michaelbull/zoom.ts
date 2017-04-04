@@ -1,4 +1,4 @@
-import { viewportSize } from '../Document';
+import { viewportSize } from '../window/Document';
 import {
     centreTranslation,
     minimizeVectors,
