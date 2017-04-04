@@ -22,10 +22,15 @@ import {
     hideOverlay
 } from './element/Overlay';
 import {
-    centreTransformation,
     resetBounds,
     setBoundsPx
 } from './element/Style';
+import {
+    centreTransformation,
+    ScaleAndTranslate,
+    scaleTranslate,
+    scaleTranslate3d
+} from './element/Transform';
 import {
     ignoreTransitions,
     TRANSITION_END_EVENTS
@@ -64,7 +69,6 @@ import {
     hasTranslate3d,
     pageScrollY
 } from './Window';
-import { addClass } from './element/ClassList';
 
 const DEFAULT_SCROLL_DELTA: number = 50;
 
@@ -215,7 +219,13 @@ function zoomTransitionWithClone(wrapper: HTMLElement, container: HTMLElement, i
             stopExpandingWrapper(wrapper);
         } else {
             ignoreTransitions(container, transitionProperty, () => {
-                style[transformProperty] = centreTransformation(document, target, imageSize, imagePosition, use3d);
+                let transformation: ScaleAndTranslate = centreTransformation(document, target, imageSize, imagePosition);
+
+                if (use3d) {
+                    style[transformProperty] = scaleTranslate3d(transformation);
+                } else {
+                    style[transformProperty] = scaleTranslate(transformation);
+                }
             });
 
             style[transformProperty] = '';
@@ -237,9 +247,15 @@ function zoomTransitionWithClone(wrapper: HTMLElement, container: HTMLElement, i
     let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
         imagePosition = positionFrom(wrapper.getBoundingClientRect());
 
-        let style: any = container.style;
         if (isWrapperTransitioning(wrapper)) {
-            style[transformProperty] = centreTransformation(document, target, imageSize, imagePosition, use3d);
+            let style: any = container.style;
+            let transformation: ScaleAndTranslate = centreTransformation(document, target, imageSize, imagePosition);
+
+            if (use3d) {
+                style[transformProperty] = scaleTranslate3d(transformation);
+            } else {
+                style[transformProperty] = scaleTranslate(transformation);
+            }
         } else {
             setBoundsPx(container.style, centreBounds(document, target, imageSize, imagePosition));
         }
@@ -286,7 +302,13 @@ function zoomTransitionWithClone(wrapper: HTMLElement, container: HTMLElement, i
         finishedExpanding(wrapper, container, target, imageSize, imagePosition, transformProperty, transitionProperty);
     } else {
         let style: any = container.style;
-        style[transformProperty] = centreTransformation(document, target, imageSize, imagePosition, use3d);
+        let transformation: ScaleAndTranslate = centreTransformation(document, target, imageSize, imagePosition);
+
+        if (use3d) {
+            style[transformProperty] = scaleTranslate3d(transformation);
+        } else {
+            style[transformProperty] = scaleTranslate(transformation);
+        }
     }
 }
 
@@ -324,7 +346,13 @@ function zoomTransitionWithoutClone(wrapper: HTMLElement, container: HTMLElement
             stopExpandingWrapper(wrapper);
         } else {
             ignoreTransitions(container, transitionProperty, () => {
-                style[transformProperty] = centreTransformation(document, target, imageSize, imagePosition, use3d);
+                let transformation: ScaleAndTranslate = centreTransformation(document, target, imageSize, imagePosition);
+
+                if (use3d) {
+                    style[transformProperty] = scaleTranslate3d(transformation);
+                } else {
+                    style[transformProperty] = scaleTranslate(transformation);
+                }
             });
 
             style[transformProperty] = '';
@@ -345,7 +373,13 @@ function zoomTransitionWithoutClone(wrapper: HTMLElement, container: HTMLElement
 
         let style: any = container.style;
         if (isWrapperTransitioning(wrapper)) {
-            style[transformProperty] = centreTransformation(document, target, imageSize, imagePosition, use3d);
+            let transformation: ScaleAndTranslate = centreTransformation(document, target, imageSize, imagePosition);
+
+            if (use3d) {
+                style[transformProperty] = scaleTranslate3d(transformation);
+            } else {
+                style[transformProperty] = scaleTranslate(transformation);
+            }
         } else {
             setBoundsPx(container.style, centreBounds(document, target, imageSize, imagePosition));
         }
@@ -374,7 +408,13 @@ function zoomTransitionWithoutClone(wrapper: HTMLElement, container: HTMLElement
         finishedExpanding(wrapper, container, target, imageSize, imagePosition, transformProperty, transitionProperty);
     } else {
         let style: any = container.style;
-        style[transformProperty] = centreTransformation(document, target, imageSize, imagePosition, use3d);
+        let transformation: ScaleAndTranslate = centreTransformation(document, target, imageSize, imagePosition);
+
+        if (use3d) {
+            style[transformProperty] = scaleTranslate3d(transformation);
+        } else {
+            style[transformProperty] = scaleTranslate(transformation);
+        }
     }
 }
 
