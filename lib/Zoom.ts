@@ -255,6 +255,19 @@ function zoomTransitionWithClone(wrapper: HTMLElement, container: HTMLElement, i
         }
     }
 
+    function expanded() {
+        if (isCloneLoaded(clone) && !isCloneVisible(clone)) {
+            if (showCloneListener !== undefined) {
+                removeEventListener(clone, transitionEnd as string, showCloneListener);
+            }
+
+            showClone(clone);
+            hideImage(image);
+        }
+
+        finishedExpanding(wrapper, container, target, imageSize, imagePosition, transformProperty, transitionProperty);
+    }
+
     removeDismissListeners = addDismissListeners(container, scrollDelta, collapse);
 
     startExpandingWrapper(wrapper);
@@ -266,29 +279,11 @@ function zoomTransitionWithClone(wrapper: HTMLElement, container: HTMLElement, i
             removeEventListener(container, transitionEnd, expandedListener);
         }
 
-        if (isCloneLoaded(clone) && !isCloneVisible(clone)) {
-            if (showCloneListener !== undefined) {
-                removeEventListener(clone, transitionEnd as string, showCloneListener);
-            }
-
-            showClone(clone);
-            hideImage(image);
-        }
-
-        finishedExpanding(wrapper, container, target, imageSize, imagePosition, transformProperty, transitionProperty);
+        expanded();
     });
 
     if (expandedListener === undefined) {
-        if (isCloneLoaded(clone) && !isCloneVisible(clone)) {
-            if (showCloneListener !== undefined) {
-                removeEventListener(clone, transitionEnd as string, showCloneListener);
-            }
-
-            showClone(clone);
-            hideImage(image);
-        }
-
-        finishedExpanding(wrapper, container, target, imageSize, imagePosition, transformProperty, transitionProperty);
+        expanded();
     } else {
         let style: any = container.style;
         let transformation: ScaleAndTranslate = centreTransformation(document, target, imageSize, imagePosition);
