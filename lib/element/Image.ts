@@ -35,3 +35,8 @@ export function isImageActive(image: HTMLImageElement): boolean {
 export function isZoomable(target: EventTarget): boolean {
     return target instanceof HTMLImageElement && target.parentElement !== null && hasClass(target, CLASS);
 }
+
+export function fullSrc(wrapper: HTMLElement, image: HTMLImageElement): string {
+    let fullSrc: string | null = wrapper.getAttribute('data-src');
+    return fullSrc === null ? image.src : fullSrc;
+}
