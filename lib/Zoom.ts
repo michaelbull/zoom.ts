@@ -19,9 +19,10 @@ import {
     hideOverlay
 } from './element/Overlay';
 import {
+    centreBounds,
     resetBounds,
     setBoundsPx
-} from './element/Style';
+} from './element/Bounds';
 import {
     centreTransformation,
     ScaleAndTranslate,
@@ -56,7 +57,6 @@ import {
     escKeyPressed,
     scrolled
 } from './event/EventListeners';
-import { centreBounds } from './math/Bounds';
 import { pixels } from './math/Unit';
 import {
     positionFrom,

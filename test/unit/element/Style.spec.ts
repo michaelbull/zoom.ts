@@ -7,7 +7,7 @@ import {
     transform,
     translate,
     unsetHeight
-} from '../../../lib/element/Style';
+} from '../../../lib/element/Bounds';
 import { Bounds } from '../../../lib/math/Bounds';
 import { Vector } from '../../../lib/math/Vector';
 
