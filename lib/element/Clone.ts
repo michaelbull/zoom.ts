@@ -1,8 +1,4 @@
-import {
-    addEventListener,
-    PotentialEventListener,
-    removeEventListener
-} from '../event/EventListener';
+import { listenForEvent } from '../event/EventListener';
 import {
     addClass,
     hasClass,
@@ -17,15 +13,7 @@ export function createClone(src: string): HTMLImageElement {
     let clone: HTMLImageElement = document.createElement('img');
     clone.className = CLASS;
     clone.src = src;
-
-    let listener: PotentialEventListener = addEventListener(clone, 'load', () => {
-        if (listener !== undefined) {
-            removeEventListener(clone, 'load', listener);
-        }
-
-        addClass(clone, LOADED_CLASS);
-    });
-
+    listenForEvent(clone, 'load', () => addClass(clone, LOADED_CLASS));
     return clone;
 }
 

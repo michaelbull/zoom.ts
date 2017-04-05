@@ -1,4 +1,7 @@
-import { PotentialEventListener } from '../event/EventListener';
+import {
+    addEventListener,
+    PotentialEventListener
+} from '../event/EventListener';
 import { showCloneOnceLoaded } from '../event/EventListeners';
 import {
     createClone,
@@ -52,7 +55,9 @@ export function setUpElements(overlay: HTMLDivElement, wrapper: HTMLElement, ima
 
     if (cloneRequired) {
         clone = createClone(src);
-        showCloneListener = showCloneOnceLoaded(wrapper, image, clone);
+        showCloneListener = addEventListener(clone, 'load', () => {
+            showCloneOnceLoaded(wrapper, image, clone as HTMLImageElement);
+        });
     }
 
     return {

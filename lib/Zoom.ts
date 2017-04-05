@@ -48,6 +48,7 @@ import {
 } from './element/ZoomElements';
 import {
     addEventListener,
+    listenForEvent,
     PotentialEventListener,
     removeEventListener
 } from './event/EventListener';
@@ -194,11 +195,7 @@ function zoomTransition(capabilities: WindowCapabilities, elements: ZoomElements
         hideOverlay(elements.overlay);
         startCollapsingWrapper(elements.wrapper);
 
-        let collapsedListener: PotentialEventListener = addEventListener(elements.container, capabilities.transitionEndEvent as string, () => {
-            if (collapsedListener !== undefined) {
-                removeEventListener(elements.container, capabilities.transitionEndEvent as string, collapsedListener);
-            }
-
+        let collapsedListener: PotentialEventListener = listenForEvent(elements.container, capabilities.transitionEndEvent as string, () => {
             if (elements.clone !== undefined) {
                 replaceCloneWithImage(elements.image, elements.clone);
             }
@@ -234,7 +231,7 @@ function zoomTransition(capabilities: WindowCapabilities, elements: ZoomElements
         }
     }
 
-    function expanded() {
+    function expanded(): void {
         if (elements.clone !== undefined && isCloneLoaded(elements.clone) && !isCloneVisible(elements.clone)) {
             if (elements.showCloneListener !== undefined) {
                 removeEventListener(elements.clone, capabilities.transitionEndEvent as string, elements.showCloneListener);
@@ -252,13 +249,7 @@ function zoomTransition(capabilities: WindowCapabilities, elements: ZoomElements
     elements.wrapper.style.height = pixels(elements.image.height);
     activateImage(elements.image);
 
-    expandedListener = addEventListener(elements.container, capabilities.transitionEndEvent as string, () => {
-        if (expandedListener !== undefined) {
-            removeEventListener(elements.container, capabilities.transitionEndEvent as string, expandedListener);
-        }
-
-        expanded();
-    });
+    expandedListener = listenForEvent(elements.container, capabilities.transitionEndEvent as string, () => expanded());
 
     if (expandedListener === undefined) {
         expanded();

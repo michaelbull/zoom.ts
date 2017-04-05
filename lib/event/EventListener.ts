@@ -31,6 +31,18 @@ export function addEventListener(target: any, type: string, listener: EventListe
     return undefined;
 }
 
+export function listenForEvent(target: any, type: any, listener: EventListenerOrEventListenerObject, useCapture: boolean = false): PotentialEventListener {
+    let registered: PotentialEventListener = addEventListener(target, type, (event: Event) => {
+        if (registered !== undefined) {
+            removeEventListener(target, type, registered);
+        }
+
+        fireEventListener(listener, event);
+    }, useCapture);
+
+    return registered;
+}
+
 export function removeEventListener(target: any, type: string, listener: EventListenerOrEventListenerObject): boolean {
     let standard: any = target['removeEventListener'];
     let fallback: any = target['detachEvent'];

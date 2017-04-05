@@ -4,11 +4,6 @@ import {
 } from '../element/Clone';
 import { hideImage } from '../element/Image';
 import { isWrapperExpanded } from '../element/Wrapper';
-import {
-    addEventListener,
-    PotentialEventListener,
-    removeEventListener
-} from './EventListener';
 
 export const ESCAPE_KEY_CODE: number = 27;
 
@@ -29,17 +24,11 @@ export function scrolled(start: number, minAmount: number, current: () => number
     };
 }
 
-export function showCloneOnceLoaded(wrapper: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement): PotentialEventListener {
-    let listener: PotentialEventListener = addEventListener(clone, 'load', () => {
-        if (listener !== undefined) {
-            removeEventListener(clone, 'load', listener);
-        }
-
+export function showCloneOnceLoaded(wrapper: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement): EventListener {
+    return (): void => {
         if (isWrapperExpanded(wrapper) && !isCloneVisible(clone)) {
             showClone(clone);
             hideImage(image);
         }
-    });
-
-    return listener;
+    };
 }

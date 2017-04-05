@@ -1,7 +1,6 @@
 import { clientSize } from '../element/Element';
-import { addEventListener } from '../event/EventListener';
+import { listenForEvent } from '../event/EventListener';
 import { Vector } from '../math/Vector';
-import { vendorProperty } from '../Vendor';
 
 export const QUIRKS_MODE: string = 'BackCompat';
 export const STANDARDS_MODE: string = 'CSS1Compat';
@@ -25,7 +24,7 @@ export function ready(document: Document, callback: Function): void {
     if (document.readyState === 'complete') {
         callback();
     } else {
-        addEventListener(document, 'DOMContentLoaded', () => callback());
+        listenForEvent(document, 'DOMContentLoaded', () => callback());
     }
 }
 
