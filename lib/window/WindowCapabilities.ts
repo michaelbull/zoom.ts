@@ -1,5 +1,5 @@
 import { TRANSITION_END_EVENTS } from '../element/Transition';
-import { vendorProperty } from '../Vendor';
+import { vendorProperty } from './Vendor';
 import { hasTranslate3d as windowHasTranslate3d } from './Window';
 
 export interface WindowCapabilities {

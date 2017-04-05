@@ -1,4 +1,4 @@
-import { vendorProperty } from '../Vendor';
+import { vendorProperty } from './Vendor';
 import { rootElement } from './Document';
 
 export function hasTransitions(window: Window, element: HTMLElement): boolean {

@@ -2,7 +2,7 @@ import {
     VENDOR_PREFIXES,
     vendorProperties,
     vendorProperty
-} from '../../lib/Vendor';
+} from '../../lib/window/Vendor';
 
 describe('vendorProperties', () => {
     it('should contain the property itself', () => {
