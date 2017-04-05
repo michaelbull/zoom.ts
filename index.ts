@@ -1,5 +1,11 @@
+import {
+    Config,
+    defaultConfig
+} from './lib/Config';
+import { ready } from './lib/window/Document';
 import { addZoomListener } from './lib/Zoom';
 import './style.scss';
-import { ready } from './lib/window/Document';
 
-ready(document, () => addZoomListener());
+let config: Config = defaultConfig();
+
+ready(document, () => addZoomListener(config));

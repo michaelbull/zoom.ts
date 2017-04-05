@@ -68,18 +68,16 @@ import {
     capabilitiesOf,
     WindowCapabilities
 } from './window/WindowCapabilities';
+import { Config } from './Config';
 
-const DEFAULT_SCROLL_DELTA: number = 50;
-
-// TODO: clean this up somehow
-function collapsed(overlay: HTMLDivElement, wrapper: HTMLElement, image: HTMLImageElement): void {
+function collapsed(config: Config, overlay: HTMLDivElement, wrapper: HTMLElement, image: HTMLImageElement): void {
     deactivateImage(image);
 
     document.body.removeChild(overlay);
     stopCollapsingWrapper(wrapper);
     wrapper.style.height = '';
 
-    setTimeout(() => addZoomListener(), 1);
+    setTimeout(() => addZoomListener(config), 1);
 }
 
 function finishedExpanding(wrapper: HTMLElement, container: HTMLElement, target: Vector, imageSize: Vector, imagePosition: Vector, capabilities: WindowCapabilities): void {
@@ -105,9 +103,9 @@ function transformToCentre(target: Vector, size: Vector, position: Vector, capab
     }
 }
 
-function addDismissListeners(container: HTMLElement, scrollDelta: number, collapse: Function): Function {
+function addDismissListeners(config: Config, container: HTMLElement, collapse: Function): Function {
     let initialScrollY: number = pageScrollY(window);
-    let scrolledAway: PotentialEventListener = addEventListener(window, 'scroll', scrolled(initialScrollY, scrollDelta, () => pageScrollY(window), () => collapse()));
+    let scrolledAway: PotentialEventListener = addEventListener(window, 'scroll', scrolled(initialScrollY, config.scrollDelta, () => pageScrollY(window), () => collapse()));
     let pressedEsc: PotentialEventListener = addEventListener(document, 'keyup', escKeyPressed(collapse));
     let dismissed: PotentialEventListener = addEventListener(container, 'click', () => collapse());
 
@@ -128,7 +126,7 @@ function replaceCloneWithImage(image: HTMLImageElement, clone: HTMLImageElement)
     hideClone(clone);
 }
 
-function zoomInstant(elements: ZoomElements, scrollDelta: number, target: Vector): void {
+function zoomInstant(config: Config, elements: ZoomElements, target: Vector): void {
     let imageRect: ClientRect = elements.image.getBoundingClientRect();
     let imagePosition: Vector = positionFrom(imageRect);
     let imageSize: Vector = sizeFrom(imageRect);
@@ -154,10 +152,10 @@ function zoomInstant(elements: ZoomElements, scrollDelta: number, target: Vector
 
         unsetWrapperExpanded(elements.wrapper);
         resetBounds(elements.container.style);
-        collapsed(elements.overlay, elements.wrapper, elements.image);
+        collapsed(config, elements.overlay, elements.wrapper, elements.image);
     }
 
-    removeDismissListeners = addDismissListeners(elements.container, scrollDelta, collapse);
+    removeDismissListeners = addDismissListeners(config, elements.container, collapse);
 
     setWrapperExpanded(elements.wrapper);
     elements.wrapper.style.height = pixels(elements.image.height);
@@ -166,7 +164,7 @@ function zoomInstant(elements: ZoomElements, scrollDelta: number, target: Vector
     setBoundsPx(elements.container.style, centreBounds(document, target, imageSize, imagePosition));
 }
 
-function zoomTransition(capabilities: WindowCapabilities, elements: ZoomElements, scrollDelta: number, target: Vector): void {
+function zoomTransition(config: Config, elements: ZoomElements, target: Vector, capabilities: WindowCapabilities): void {
     let imageRect: ClientRect = elements.image.getBoundingClientRect();
     let imagePosition: Vector = positionFrom(imageRect);
     let imageSize: Vector = sizeFrom(imageRect);
@@ -200,7 +198,7 @@ function zoomTransition(capabilities: WindowCapabilities, elements: ZoomElements
                 replaceCloneWithImage(elements.image, elements.clone);
             }
 
-            collapsed(elements.overlay, elements.wrapper, elements.image);
+            collapsed(config, elements.overlay, elements.wrapper, elements.image);
         });
 
         let style: any = elements.container.style;
@@ -227,7 +225,7 @@ function zoomTransition(capabilities: WindowCapabilities, elements: ZoomElements
                 replaceCloneWithImage(elements.image, elements.clone);
             }
 
-            collapsed(elements.overlay, elements.wrapper, elements.image);
+            collapsed(config, elements.overlay, elements.wrapper, elements.image);
         }
     }
 
@@ -243,7 +241,7 @@ function zoomTransition(capabilities: WindowCapabilities, elements: ZoomElements
         finishedExpanding(elements.wrapper, elements.container, target, imageSize, imagePosition, capabilities);
     }
 
-    removeDismissListeners = addDismissListeners(elements.container, scrollDelta, collapse);
+    removeDismissListeners = addDismissListeners(config, elements.container, collapse);
 
     startExpandingWrapper(elements.wrapper);
     elements.wrapper.style.height = pixels(elements.image.height);
@@ -258,7 +256,7 @@ function zoomTransition(capabilities: WindowCapabilities, elements: ZoomElements
     }
 }
 
-function clickedZoomable(event: MouseEvent, zoomListener: EventListener, scrollDelta: number): void {
+function clickedZoomable(config: Config, event: MouseEvent, zoomListener: EventListener): void {
     let image: HTMLImageElement = event.target as HTMLImageElement;
     let parent: HTMLElement = image.parentElement as HTMLElement;
     let previouslyZoomed: boolean = isContainer(parent);
@@ -313,19 +311,19 @@ function clickedZoomable(event: MouseEvent, zoomListener: EventListener, scrollD
         }
 
         if (transition) {
-            zoomInstant(elements, scrollDelta, target);
+            zoomInstant(config, elements, target);
         } else {
-            zoomTransition(capabilities, elements, scrollDelta, target);
+            zoomTransition(config, elements, target, capabilities);
         }
     }
 }
 
-export function addZoomListener(scrollDelta: number = DEFAULT_SCROLL_DELTA): void {
+export function addZoomListener(config: Config): void {
     let listener: PotentialEventListener = addEventListener(document.body, 'click', (event: MouseEvent) => {
         if (isZoomable(event.target)) {
             event.preventDefault();
             event.stopPropagation();
-            clickedZoomable(event, listener as EventListener, scrollDelta);
+            clickedZoomable(config, event, listener as EventListener);
         }
     });
 }
