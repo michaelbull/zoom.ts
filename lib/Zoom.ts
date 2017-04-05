@@ -1,3 +1,11 @@
+import { Config } from './Config';
+import {
+    Bounds,
+    boundsFrom,
+    centreBounds,
+    resetBounds,
+    setBoundsPx
+} from './element/Bounds';
 import {
     hideClone,
     isCloneLoaded,
@@ -18,11 +26,6 @@ import {
     addOverlay,
     hideOverlay
 } from './element/Overlay';
-import {
-    centreBounds,
-    resetBounds,
-    setBoundsPx
-} from './element/Bounds';
 import {
     centreTransformation,
     ScaleAndTranslate,
@@ -60,7 +63,6 @@ import {
 import { pixels } from './math/Unit';
 import {
     positionFrom,
-    sizeFrom,
     Vector
 } from './math/Vector';
 import { pageScrollY } from './window/Window';
@@ -68,7 +70,6 @@ import {
     capabilitiesOf,
     WindowCapabilities
 } from './window/WindowCapabilities';
-import { Config } from './Config';
 
 function collapsed(config: Config, overlay: HTMLDivElement, wrapper: HTMLElement, image: HTMLImageElement): void {
     deactivateImage(image);
@@ -127,13 +128,12 @@ function replaceCloneWithImage(image: HTMLImageElement, clone: HTMLImageElement)
 }
 
 function zoomInstant(config: Config, elements: ZoomElements, target: Vector): void {
-    let imageRect: ClientRect = elements.image.getBoundingClientRect();
-    let imagePosition: Vector = positionFrom(imageRect);
-    let imageSize: Vector = sizeFrom(imageRect);
+    let bounds: Bounds = boundsFrom(elements.image);
+    let currentPosition: Vector = bounds.position;
 
     let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
-        imagePosition = positionFrom(elements.wrapper.getBoundingClientRect());
-        setBoundsPx(elements.container.style, centreBounds(document, target, imageSize, imagePosition));
+        currentPosition = positionFrom(elements.wrapper.getBoundingClientRect());
+        setBoundsPx(elements.container.style, centreBounds(document, target, bounds.size, currentPosition));
     });
 
     let removeDismissListeners: Function;
@@ -161,21 +161,20 @@ function zoomInstant(config: Config, elements: ZoomElements, target: Vector): vo
     elements.wrapper.style.height = pixels(elements.image.height);
     activateImage(elements.image);
 
-    setBoundsPx(elements.container.style, centreBounds(document, target, imageSize, imagePosition));
+    setBoundsPx(elements.container.style, centreBounds(document, target, bounds.size, currentPosition));
 }
 
 function zoomTransition(config: Config, elements: ZoomElements, target: Vector, capabilities: WindowCapabilities): void {
-    let imageRect: ClientRect = elements.image.getBoundingClientRect();
-    let imagePosition: Vector = positionFrom(imageRect);
-    let imageSize: Vector = sizeFrom(imageRect);
+    let bounds: Bounds = boundsFrom(elements.image);
+    let currentPosition: Vector = bounds.position;
 
     let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
-        imagePosition = positionFrom(elements.wrapper.getBoundingClientRect());
+        currentPosition = positionFrom(elements.wrapper.getBoundingClientRect());
 
         if (isWrapperTransitioning(elements.wrapper)) {
-            transformToCentre(target, imageSize, imagePosition, capabilities, elements.container);
+            transformToCentre(target, bounds.size, currentPosition, capabilities, elements.container);
         } else {
-            setBoundsPx(elements.container.style, centreBounds(document, target, imageSize, imagePosition));
+            setBoundsPx(elements.container.style, centreBounds(document, target, bounds.size, currentPosition));
         }
     });
 
@@ -212,7 +211,7 @@ function zoomTransition(config: Config, elements: ZoomElements, target: Vector, 
             stopExpandingWrapper(elements.wrapper);
         } else {
             ignoreTransitions(elements.container, capabilities.transitionProperty as string, () => {
-                transformToCentre(target, imageSize, imagePosition, capabilities, elements.container);
+                transformToCentre(target, bounds.size, currentPosition, capabilities, elements.container);
             });
 
             style[capabilities.transformProperty as string] = '';
@@ -238,7 +237,7 @@ function zoomTransition(config: Config, elements: ZoomElements, target: Vector, 
             replaceImageWithClone(elements.image, elements.clone);
         }
 
-        finishedExpanding(elements.wrapper, elements.container, target, imageSize, imagePosition, capabilities);
+        finishedExpanding(elements.wrapper, elements.container, target, bounds.position, currentPosition, capabilities);
     }
 
     removeDismissListeners = addDismissListeners(config, elements.container, collapse);
@@ -252,7 +251,7 @@ function zoomTransition(config: Config, elements: ZoomElements, target: Vector, 
     if (expandedListener === undefined) {
         expanded();
     } else {
-        transformToCentre(target, imageSize, imagePosition, capabilities, elements.container);
+        transformToCentre(target, bounds.size, currentPosition, capabilities, elements.container);
     }
 }
 

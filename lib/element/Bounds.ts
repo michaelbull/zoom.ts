@@ -3,7 +3,9 @@ import {
     centrePosition,
     minimizeVectors,
     minimumDivisor,
+    positionFrom,
     scaleVector,
+    sizeFrom,
     Vector
 } from '../math/Vector';
 import { viewportSize } from '../window/Document';
@@ -13,7 +15,16 @@ export interface Bounds {
     size: Vector;
 }
 
-function setBounds(style: CSSStyleDeclaration, x: string, y: string, width: string, height: string): void {
+export function boundsFrom(element: HTMLElement): Bounds {
+    let rect: ClientRect = element.getBoundingClientRect();
+
+    return {
+        position: positionFrom(rect),
+        size: sizeFrom(rect)
+    };
+}
+
+export function setBounds(style: CSSStyleDeclaration, x: string, y: string, width: string, height: string): void {
     style.left = x;
     style.top = y;
     style.width = width;
