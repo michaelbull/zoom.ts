@@ -45,13 +45,13 @@ export function setBoundsPx(style: CSSStyleDeclaration, bounds: Bounds): void {
     setBounds(style, pixels(position[0]), pixels(position[1]), pixels(size[0]), pixels(size[1]));
 }
 
-export function centreBounds(document: Document, target: Vector, size: Vector, position: Vector): Bounds {
+export function centreBounds(document: Document, target: Vector, bounds: Bounds): Bounds {
     let viewport: Vector = viewportSize(document);
     let cappedTarget: Vector = minimizeVectors(viewport, target);
-    let factor: number = minimumDivisor(cappedTarget, size);
+    let factor: number = minimumDivisor(cappedTarget, bounds.size);
 
-    let scaled: Vector = scaleVector(size, factor);
-    let centre: Vector = centrePosition(viewport, createBounds(position, scaled));
+    let scaled: Vector = scaleVector(bounds.size, factor);
+    let centre: Vector = centrePosition(viewport, createBounds(bounds.position, scaled));
 
     return {
         position: centre,

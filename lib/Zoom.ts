@@ -14,7 +14,10 @@ import {
     replaceImageWithClone
 } from './element/Clone';
 import { isContainer } from './element/Container';
-import { targetDimensions } from './element/Element';
+import {
+    resetStyle,
+    targetDimensions
+} from './element/Element';
 import {
     activateImage,
     deactivateImage,
@@ -73,21 +76,9 @@ function collapsed(config: Config, elements: ZoomElements): void {
 
     document.body.removeChild(elements.overlay);
     stopCollapsingWrapper(elements.wrapper);
-    elements.wrapper.style.height = '';
+    resetStyle(elements.wrapper, 'height');
 
     setTimeout(() => addZoomListener(config), 1);
-}
-
-function finishedExpanding(wrapper: HTMLElement, container: HTMLElement, target: Vector, imageSize: Vector, imagePosition: Vector, capabilities: WindowCapabilities): void {
-    stopExpandingWrapper(wrapper);
-    setWrapperExpanded(wrapper);
-
-    ignoreTransitions(container, capabilities.transitionProperty as string, () => {
-        let style: any = container.style;
-
-        style[capabilities.transformProperty as string] = '';
-        setBoundsPx(style, centreBounds(document, target, imageSize, imagePosition));
-    });
 }
 
 function addDismissListeners(config: Config, container: HTMLElement, collapse: Function): Function {
@@ -105,11 +96,12 @@ function addDismissListeners(config: Config, container: HTMLElement, collapse: F
 
 function zoomInstant(config: Config, elements: ZoomElements, target: Vector, showCloneListener: PotentialEventListener): void {
     let bounds: Bounds = boundsFrom(elements.image);
-    let currentPosition: Vector = bounds.position;
 
     let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
-        currentPosition = positionFrom(elements.wrapper.getBoundingClientRect());
-        setBoundsPx(elements.container.style, centreBounds(document, target, bounds.size, currentPosition));
+        let wrapperPosition: Vector = positionFrom(elements.wrapper.getBoundingClientRect());
+        bounds = createBounds(wrapperPosition, bounds.size);
+
+        setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
     });
 
     let removeDismissListeners: Function;
@@ -132,20 +124,20 @@ function zoomInstant(config: Config, elements: ZoomElements, target: Vector, sho
     elements.wrapper.style.height = pixels(elements.image.height);
     activateImage(elements.image);
 
-    setBoundsPx(elements.container.style, centreBounds(document, target, bounds.size, currentPosition));
+    setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
 }
 
 function zoomTransition(config: Config, elements: ZoomElements, target: Vector, showCloneListener: PotentialEventListener, capabilities: WindowCapabilities): void {
     let bounds: Bounds = boundsFrom(elements.image);
-    let currentPosition: Vector = bounds.position;
 
     let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
-        currentPosition = positionFrom(elements.wrapper.getBoundingClientRect());
+        let wrapperPosition: Vector = positionFrom(elements.wrapper.getBoundingClientRect());
+        bounds = createBounds(wrapperPosition, bounds.size);
 
         if (isWrapperTransitioning(elements.wrapper)) {
-            expandToViewport(elements.container, target, createBounds(currentPosition, bounds.size), capabilities, document);
+            expandToViewport(elements.container, target, bounds, capabilities, document);
         } else {
-            setBoundsPx(elements.container.style, centreBounds(document, target, bounds.size, currentPosition));
+            setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
         }
     });
 
@@ -167,21 +159,19 @@ function zoomTransition(config: Config, elements: ZoomElements, target: Vector, 
             collapsed(config, elements);
         });
 
-        let style: any = elements.container.style;
-
         if (isWrapperExpanding(elements.wrapper)) {
             if (expandedListener !== undefined) {
                 removeEventListener(elements.container, capabilities.transitionEndEvent as string, expandedListener);
             }
 
-            style[capabilities.transformProperty as string] = '';
+            resetStyle(elements.container, capabilities.transformProperty as string);
             stopExpandingWrapper(elements.wrapper);
         } else {
             ignoreTransitions(elements.container, capabilities.transitionProperty as string, () => {
-                expandToViewport(elements.container, target, createBounds(currentPosition, bounds.size), capabilities, document);
+                expandToViewport(elements.container, target, bounds, capabilities, document);
             });
 
-            style[capabilities.transformProperty as string] = '';
+            resetStyle(elements.container, capabilities.transformProperty as string);
             resetBounds(elements.container.style);
             unsetWrapperExpanded(elements.wrapper);
         }
@@ -200,7 +190,13 @@ function zoomTransition(config: Config, elements: ZoomElements, target: Vector, 
             replaceImageWithClone(elements.image, elements.clone);
         }
 
-        finishedExpanding(elements.wrapper, elements.container, target, bounds.size, currentPosition, capabilities);
+        stopExpandingWrapper(elements.wrapper);
+        setWrapperExpanded(elements.wrapper);
+
+        ignoreTransitions(elements.container, capabilities.transitionProperty as string, () => {
+            resetStyle(elements.container, capabilities.transformProperty as string);
+            setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
+        });
     }
 
     removeDismissListeners = addDismissListeners(config, elements.container, collapse);
@@ -214,7 +210,7 @@ function zoomTransition(config: Config, elements: ZoomElements, target: Vector, 
     if (expandedListener === undefined) {
         expanded();
     } else {
-        expandToViewport(elements.container, target, createBounds(currentPosition, bounds.size), capabilities, document);
+        expandToViewport(elements.container, target, bounds, capabilities, document);
     }
 }
 

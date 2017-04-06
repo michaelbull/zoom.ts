@@ -1,4 +1,7 @@
-import { repaint } from './Element';
+import {
+    repaint,
+    resetStyle
+} from './Element';
 
 export const TRANSITION_END_EVENTS: { [key: string]: string } = {
     WebkitTransition: 'webkitTransitionEnd',
@@ -17,5 +20,5 @@ export function ignoreTransitions(element: HTMLElement, transitionProperty: stri
     style[transitionProperty] = 'initial';
     callback();
     repaint(element);
-    style[transitionProperty] = '';
+    resetStyle(element, transitionProperty);
 }

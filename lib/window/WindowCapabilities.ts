@@ -1,3 +1,4 @@
+import { TRANSFORM_PROPERTIES } from '../element/Transform';
 import { TRANSITION_END_EVENTS } from '../element/Transition';
 import { vendorProperty } from './Vendor';
 
@@ -27,10 +28,7 @@ export function capabilitiesOf(window: Window): WindowCapabilities {
     let hasTransitions: boolean = false;
     if (transitionProperty !== undefined) {
         transitionEndEvent = TRANSITION_END_EVENTS[transitionProperty];
-
-        if (transitionEndEvent !== undefined) {
-            hasTransitions = supportsTransitions(window, body)
-        }
+        hasTransitions = transitionEndEvent !== null;
     }
 
     let hasTranslate3d: boolean = false;
@@ -47,27 +45,6 @@ export function capabilitiesOf(window: Window): WindowCapabilities {
         hasTranslate3d
     };
 }
-
-export function supportsTransitions(window: Window, element: HTMLElement): boolean {
-    let computeStyle: any = window.getComputedStyle;
-    let property: string | undefined = vendorProperty(element.style, 'transitionDuration');
-
-    if (typeof computeStyle === 'function' && property !== undefined) {
-        let value: string = computeStyle(element)[property];
-        let duration: number = parseFloat(value);
-        return !isNaN(duration) && duration !== 0;
-    } else {
-        return false;
-    }
-}
-
-export const TRANSFORM_PROPERTIES: { [key: string]: string } = {
-    WebkitTransform: '-webkit-transform',
-    MozTransform: '-moz-transform',
-    msTransform: '-ms-transform',
-    OTransform: '-o-transform',
-    transform: 'transform'
-};
 
 export function supportsTranslate3d(window: Window, transformProperty: string): boolean {
     let computeStyle: any = window.getComputedStyle;

@@ -23,3 +23,7 @@ export function targetDimensions(element: HTMLElement): Vector {
         dimension(element, 'height')
     ];
 }
+
+export function resetStyle(element: HTMLElement, property: string): void {
+    (element.style as any)[property] = '';
+}
