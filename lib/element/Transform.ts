@@ -5,8 +5,8 @@ import {
     Vector
 } from '../math/Vector';
 import { viewportSize } from '../window/Document';
-import { Bounds } from './Bounds';
 import { WindowCapabilities } from '../window/WindowCapabilities';
+import { Bounds } from './Bounds';
 
 export function translate(translation: Vector): string {
     return `translate(${translation[0]}px, ${translation[1]}px)`;

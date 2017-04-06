@@ -1,12 +1,4 @@
-import {
-    addEventListener,
-    PotentialEventListener
-} from '../event/EventListener';
-import { showCloneOnceLoaded } from '../event/EventListeners';
-import {
-    createClone,
-    isCloneLoaded
-} from './Clone';
+import { createClone } from './Clone';
 import { createContainer } from './Container';
 import { fullSrc } from './Image';
 
