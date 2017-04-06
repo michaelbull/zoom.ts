@@ -21,12 +21,12 @@ export function createClone(src: string): HTMLImageElement {
     return clone;
 }
 
-export function replaceImageWithClone(image: HTMLImageElement, clone: HTMLImageElement) {
+export function replaceImageWithClone(image: HTMLImageElement, clone: HTMLImageElement): void {
     showClone(clone);
     hideImage(image);
 }
 
-export function replaceCloneWithImage(image: HTMLImageElement, clone: HTMLImageElement) {
+export function replaceCloneWithImage(image: HTMLImageElement, clone: HTMLImageElement): void {
     showImage(image);
     hideClone(clone);
 }

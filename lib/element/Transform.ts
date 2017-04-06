@@ -53,7 +53,7 @@ export function centreTransformation(document: Document, target: Vector, bounds:
     };
 }
 
-export function expandToViewport(element: HTMLElement, target: Vector, bounds: Bounds, capabilities: WindowCapabilities, document: Document) {
+export function expandToViewport(document: Document, capabilities: WindowCapabilities, element: HTMLElement, target: Vector, bounds: Bounds): void {
     let transformation: ScaleAndTranslate = centreTransformation(document, target, bounds);
     let style: any = element.style;
 

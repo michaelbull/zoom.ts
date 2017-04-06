@@ -135,7 +135,7 @@ function zoomTransition(config: Config, elements: ZoomElements, target: Vector, 
         bounds = createBounds(wrapperPosition, bounds.size);
 
         if (isWrapperTransitioning(elements.wrapper)) {
-            expandToViewport(elements.container, target, bounds, capabilities, document);
+            expandToViewport(document, capabilities, elements.container, target, bounds);
         } else {
             setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
         }
@@ -168,7 +168,7 @@ function zoomTransition(config: Config, elements: ZoomElements, target: Vector, 
             stopExpandingWrapper(elements.wrapper);
         } else {
             ignoreTransitions(elements.container, capabilities.transitionProperty as string, () => {
-                expandToViewport(elements.container, target, bounds, capabilities, document);
+                expandToViewport(document, capabilities, elements.container, target, bounds);
             });
 
             resetStyle(elements.container, capabilities.transformProperty as string);
@@ -210,7 +210,7 @@ function zoomTransition(config: Config, elements: ZoomElements, target: Vector, 
     if (expandedListener === undefined) {
         expanded();
     } else {
-        expandToViewport(elements.container, target, bounds, capabilities, document);
+        expandToViewport(document, capabilities, elements.container, target, bounds);
     }
 }
 
