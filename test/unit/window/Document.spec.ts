@@ -6,9 +6,9 @@ import {
     rootElement,
     STANDARDS_MODE,
     viewportSize
-} from '../../lib/window/Document';
-import { fireEventListener } from '../../lib/event/EventListener';
-import { Vector } from '../../lib/math/Vector';
+} from '../../../lib/window/Document';
+import { fireEventListener } from '../../../lib/event/EventListener';
+import { Vector } from '../../../lib/math/Vector';
 
 describe('isStandardsMode', () => {
     it('should return true if compatMode is CSS1Compat', () => {
