@@ -4,6 +4,10 @@ import {
     hasClass,
     removeClass
 } from './ClassList';
+import {
+    hideImage,
+    showImage
+} from './Image';
 
 export const CLASS: string = 'zoom__clone';
 export const VISIBLE_CLASS: string = `${CLASS}--visible`;
@@ -15,6 +19,16 @@ export function createClone(src: string): HTMLImageElement {
     clone.src = src;
     listenForEvent(clone, 'load', () => addClass(clone, LOADED_CLASS));
     return clone;
+}
+
+export function replaceImageWithClone(image: HTMLImageElement, clone: HTMLImageElement) {
+    showClone(clone);
+    hideImage(image);
+}
+
+export function replaceCloneWithImage(image: HTMLImageElement, clone: HTMLImageElement) {
+    showImage(image);
+    hideClone(clone);
 }
 
 export function showClone(clone: HTMLImageElement): void {

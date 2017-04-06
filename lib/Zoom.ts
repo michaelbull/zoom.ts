@@ -8,10 +8,10 @@ import {
     setBoundsPx
 } from './element/Bounds';
 import {
-    hideClone,
     isCloneLoaded,
     isCloneVisible,
-    showClone
+    replaceCloneWithImage,
+    replaceImageWithClone
 } from './element/Clone';
 import { isContainer } from './element/Container';
 import { targetDimensions } from './element/Element';
@@ -19,9 +19,7 @@ import {
     activateImage,
     deactivateImage,
     fullSrc,
-    hideImage,
-    isZoomable,
-    showImage
+    isZoomable
 } from './element/Image';
 import {
     addOverlay,
@@ -103,16 +101,6 @@ function addDismissListeners(config: Config, container: HTMLElement, collapse: F
         removeEventListener(container, 'click', dismissed as EventListener);
         removeEventListener(window, 'scroll', scrolledAway as EventListener);
     };
-}
-
-function replaceImageWithClone(image: HTMLImageElement, clone: HTMLImageElement) {
-    showClone(clone);
-    hideImage(image);
-}
-
-function replaceCloneWithImage(image: HTMLImageElement, clone: HTMLImageElement) {
-    showImage(image);
-    hideClone(clone);
 }
 
 function zoomInstant(config: Config, elements: ZoomElements, target: Vector, showCloneListener: PotentialEventListener): void {
