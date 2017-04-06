@@ -9,14 +9,6 @@ export const EXPANDING_CLASS: string = `${CLASS}--expanding`;
 export const EXPANDED_CLASS: string = `${CLASS}--expanded`;
 export const COLLAPSING_CLASS: string = `${CLASS}--collapsing`;
 
-export function isWrapper(element: HTMLElement): boolean {
-    return hasClass(element, CLASS);
-}
-
-export function setWrapper(element: HTMLElement): void {
-    addClass(element, CLASS);
-}
-
 export function isWrapperExpanding(wrapper: HTMLElement): boolean {
     return hasClass(wrapper, EXPANDING_CLASS);
 }

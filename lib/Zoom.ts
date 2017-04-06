@@ -30,10 +30,8 @@ import {
 import { expandToViewport } from './element/Transform';
 import { ignoreTransitions } from './element/Transition';
 import {
-    isWrapper,
     isWrapperExpanding,
     isWrapperTransitioning,
-    setWrapper,
     setWrapperExpanded,
     startCollapsingWrapper,
     startExpandingWrapper,
@@ -54,7 +52,8 @@ import {
 } from './event/EventListener';
 import {
     escKeyPressed,
-    scrolled
+    scrolled,
+    showCloneOnceLoaded
 } from './event/EventListeners';
 import { pixels } from './math/Unit';
 import {
@@ -116,7 +115,7 @@ function replaceCloneWithImage(image: HTMLImageElement, clone: HTMLImageElement)
     hideClone(clone);
 }
 
-function zoomInstant(config: Config, elements: ZoomElements, target: Vector): void {
+function zoomInstant(config: Config, elements: ZoomElements, target: Vector, showCloneListener: PotentialEventListener): void {
     let bounds: Bounds = boundsFrom(elements.image);
     let currentPosition: Vector = bounds.position;
 
@@ -130,8 +129,8 @@ function zoomInstant(config: Config, elements: ZoomElements, target: Vector): vo
     function collapse(): void {
         removeDismissListeners();
         removeEventListener(window, 'resize', resized as EventListener);
-        if (elements.clone !== undefined && elements.showCloneListener !== undefined && !isCloneLoaded(elements.clone)) {
-            removeEventListener(elements.clone, 'load', elements.showCloneListener);
+        if (elements.clone !== undefined && showCloneListener !== undefined && !isCloneLoaded(elements.clone)) {
+            removeEventListener(elements.clone, 'load', showCloneListener);
         }
 
         unsetWrapperExpanded(elements.wrapper);
@@ -148,7 +147,7 @@ function zoomInstant(config: Config, elements: ZoomElements, target: Vector): vo
     setBoundsPx(elements.container.style, centreBounds(document, target, bounds.size, currentPosition));
 }
 
-function zoomTransition(config: Config, elements: ZoomElements, target: Vector, capabilities: WindowCapabilities): void {
+function zoomTransition(config: Config, elements: ZoomElements, target: Vector, showCloneListener: PotentialEventListener, capabilities: WindowCapabilities): void {
     let bounds: Bounds = boundsFrom(elements.image);
     let currentPosition: Vector = bounds.position;
 
@@ -169,8 +168,8 @@ function zoomTransition(config: Config, elements: ZoomElements, target: Vector, 
         removeDismissListeners();
         removeEventListener(window, 'resize', resized as EventListener);
 
-        if (elements.clone !== undefined && elements.showCloneListener !== undefined && !isCloneLoaded(elements.clone)) {
-            removeEventListener(elements.clone, 'load', elements.showCloneListener);
+        if (elements.clone !== undefined && showCloneListener !== undefined && !isCloneLoaded(elements.clone)) {
+            removeEventListener(elements.clone, 'load', showCloneListener);
         }
 
         hideOverlay(elements.overlay);
@@ -206,8 +205,8 @@ function zoomTransition(config: Config, elements: ZoomElements, target: Vector, 
 
     function expanded(): void {
         if (elements.clone !== undefined && isCloneLoaded(elements.clone) && !isCloneVisible(elements.clone)) {
-            if (elements.showCloneListener !== undefined) {
-                removeEventListener(elements.clone, capabilities.transitionEndEvent as string, elements.showCloneListener);
+            if (showCloneListener !== undefined) {
+                removeEventListener(elements.clone, capabilities.transitionEndEvent as string, showCloneListener);
             }
 
             replaceImageWithClone(elements.image, elements.clone);
@@ -235,20 +234,7 @@ function clickedZoomable(config: Config, event: MouseEvent, zoomListener: EventL
     let image: HTMLImageElement = event.target as HTMLImageElement;
     let parent: HTMLElement = image.parentElement as HTMLElement;
     let previouslyZoomed: boolean = isContainer(parent);
-
-    let wrapper: HTMLElement;
-
-    if (previouslyZoomed) {
-        let grandParent: HTMLElement | null = parent.parentElement;
-
-        if (grandParent === null) {
-            throw new Error('No wrapper found.');
-        } else {
-            wrapper = grandParent;
-        }
-    } else {
-        wrapper = parent;
-    }
+    let wrapper: HTMLElement = previouslyZoomed ? parent.parentElement as HTMLElement : parent;
 
     if (event.metaKey || event.ctrlKey) {
         window.open(fullSrc(wrapper, image), '_blank');
@@ -257,27 +243,22 @@ function clickedZoomable(config: Config, event: MouseEvent, zoomListener: EventL
             removeEventListener(document.body, 'click', zoomListener);
         }
 
-        if (!isWrapper(wrapper)) {
-            setWrapper(wrapper);
-        }
-
         let capabilities: WindowCapabilities = capabilitiesOf(window);
         let transition: boolean = capabilities.hasTransform && capabilities.hasTransitions && capabilities.transitionEndEvent !== undefined;
 
         let elements: ZoomElements;
         let overlay: HTMLDivElement = addOverlay(document);
-        let target: Vector = targetDimensions(wrapper);
 
         if (previouslyZoomed) {
-            elements = useExistingElements(overlay, wrapper, image);
+            elements = useExistingElements(overlay, image);
 
             if (elements.clone !== undefined && isCloneLoaded(elements.clone)) {
                 replaceImageWithClone(image, elements.clone);
             }
         } else {
-            elements = setUpElements(overlay, wrapper, image);
+            elements = setUpElements(overlay, image);
 
-            wrapper.replaceChild(elements.container, image);
+            elements.wrapper.replaceChild(elements.container, image);
             elements.container.appendChild(image);
 
             if (elements.clone !== undefined) {
@@ -285,10 +266,22 @@ function clickedZoomable(config: Config, event: MouseEvent, zoomListener: EventL
             }
         }
 
+        let showCloneListener: PotentialEventListener;
+
+        if (elements.clone !== undefined) {
+            if (isCloneLoaded(elements.clone)) {
+                replaceImageWithClone(image, elements.clone);
+            } else {
+                showCloneListener = addEventListener(elements.clone, 'load', showCloneOnceLoaded(elements));
+            }
+        }
+
+        let target: Vector = targetDimensions(elements.wrapper);
+
         if (transition) {
-            zoomTransition(config, elements, target, capabilities);
+            zoomTransition(config, elements, target, showCloneListener, capabilities);
         } else {
-            zoomInstant(config, elements, target);
+            zoomInstant(config, elements, target, showCloneListener);
         }
     }
 }

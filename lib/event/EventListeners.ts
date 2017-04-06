@@ -4,6 +4,7 @@ import {
 } from '../element/Clone';
 import { hideImage } from '../element/Image';
 import { isWrapperExpanded } from '../element/Wrapper';
+import { ZoomElements } from '../element/ZoomElements';
 
 export const ESCAPE_KEY_CODE: number = 27;
 
@@ -24,11 +25,11 @@ export function scrolled(start: number, minAmount: number, current: () => number
     };
 }
 
-export function showCloneOnceLoaded(wrapper: HTMLElement, image: HTMLImageElement, clone: HTMLImageElement): EventListener {
+export function showCloneOnceLoaded(elements: ZoomElements): EventListener {
     return (): void => {
-        if (isWrapperExpanded(wrapper) && !isCloneVisible(clone)) {
-            showClone(clone);
-            hideImage(image);
+        if (elements.clone !== undefined && isWrapperExpanded(elements.wrapper) && !isCloneVisible(elements.clone)) {
+            showClone(elements.clone);
+            hideImage(elements.image);
         }
     };
 }
