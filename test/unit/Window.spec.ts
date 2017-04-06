@@ -8,7 +8,7 @@ import {
     pageScrollY
 } from '../../lib/window/Window';
 
-describe('hasTransitions', () => {
+describe('supportsTransitions', () => {
     it('should return false if window.getComputedStyle is undefined', () => {
         let window: any = {};
         let element: any = { style: {} };

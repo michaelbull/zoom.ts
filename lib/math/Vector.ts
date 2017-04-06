@@ -2,6 +2,7 @@ import {
     Bounds,
     createBounds
 } from '../element/Bounds';
+
 export type Vector = [number, number];
 
 export function positionFrom(rect: ClientRect): Vector {
