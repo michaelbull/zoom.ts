@@ -1,5 +1,5 @@
 export interface Config {
-    scrollDelta: number;
+    readonly scrollDelta: number;
 }
 
 export function defaultConfig(): Config {

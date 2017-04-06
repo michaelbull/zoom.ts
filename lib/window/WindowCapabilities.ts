@@ -3,13 +3,13 @@ import { vendorProperty } from './Vendor';
 import { hasTranslate3d as windowHasTranslate3d } from './Window';
 
 export interface WindowCapabilities {
-    transformProperty: string | undefined;
-    transitionProperty: string | undefined;
-    transitionEndEvent: string | undefined;
+    readonly transformProperty: string | undefined;
+    readonly transitionProperty: string | undefined;
+    readonly transitionEndEvent: string | undefined;
 
-    hasTransform: boolean;
-    hasTransitions: boolean;
-    hasTranslate3d: boolean;
+    readonly hasTransform: boolean;
+    readonly hasTransitions: boolean;
+    readonly hasTranslate3d: boolean;
 }
 
 export function capabilitiesOf(window: Window): WindowCapabilities {

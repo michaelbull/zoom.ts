@@ -3,6 +3,7 @@ import {
     Bounds,
     boundsFrom,
     centreBounds,
+    createBounds,
     resetBounds,
     setBoundsPx
 } from './element/Bounds';
@@ -26,12 +27,7 @@ import {
     addOverlay,
     hideOverlay
 } from './element/Overlay';
-import {
-    centreTransformation,
-    ScaleAndTranslate,
-    scaleTranslate,
-    scaleTranslate3d
-} from './element/Transform';
+import { expandToViewport } from './element/Transform';
 import { ignoreTransitions } from './element/Transition';
 import {
     isWrapper,
@@ -71,12 +67,16 @@ import {
     WindowCapabilities
 } from './window/WindowCapabilities';
 
-function collapsed(config: Config, overlay: HTMLDivElement, wrapper: HTMLElement, image: HTMLImageElement): void {
-    deactivateImage(image);
+function collapsed(config: Config, elements: ZoomElements): void {
+    if (elements.clone !== undefined) {
+        replaceCloneWithImage(elements.image, elements.clone);
+    }
 
-    document.body.removeChild(overlay);
-    stopCollapsingWrapper(wrapper);
-    wrapper.style.height = '';
+    deactivateImage(elements.image);
+
+    document.body.removeChild(elements.overlay);
+    stopCollapsingWrapper(elements.wrapper);
+    elements.wrapper.style.height = '';
 
     setTimeout(() => addZoomListener(config), 1);
 }
@@ -91,17 +91,6 @@ function finishedExpanding(wrapper: HTMLElement, container: HTMLElement, target:
         style[capabilities.transformProperty as string] = '';
         setBoundsPx(style, centreBounds(document, target, imageSize, imagePosition));
     });
-}
-
-function transformToCentre(target: Vector, size: Vector, position: Vector, capabilities: WindowCapabilities, container: HTMLElement) {
-    let transformation: ScaleAndTranslate = centreTransformation(document, target, size, position);
-    let style: any = container.style;
-
-    if (capabilities.hasTranslate3d) {
-        style[capabilities.transformProperty as string] = scaleTranslate3d(transformation);
-    } else {
-        style[capabilities.transformProperty as string] = scaleTranslate(transformation);
-    }
 }
 
 function addDismissListeners(config: Config, container: HTMLElement, collapse: Function): Function {
@@ -141,18 +130,13 @@ function zoomInstant(config: Config, elements: ZoomElements, target: Vector): vo
     function collapse(): void {
         removeDismissListeners();
         removeEventListener(window, 'resize', resized as EventListener);
-
-        if (elements.clone !== undefined) {
-            if (!isCloneLoaded(elements.clone) && elements.showCloneListener !== undefined) {
-                removeEventListener(elements.clone, 'load', elements.showCloneListener);
-            }
-
-            replaceCloneWithImage(elements.image, elements.clone);
+        if (elements.clone !== undefined && elements.showCloneListener !== undefined && !isCloneLoaded(elements.clone)) {
+            removeEventListener(elements.clone, 'load', elements.showCloneListener);
         }
 
         unsetWrapperExpanded(elements.wrapper);
         resetBounds(elements.container.style);
-        collapsed(config, elements.overlay, elements.wrapper, elements.image);
+        collapsed(config, elements);
     }
 
     removeDismissListeners = addDismissListeners(config, elements.container, collapse);
@@ -172,7 +156,7 @@ function zoomTransition(config: Config, elements: ZoomElements, target: Vector, 
         currentPosition = positionFrom(elements.wrapper.getBoundingClientRect());
 
         if (isWrapperTransitioning(elements.wrapper)) {
-            transformToCentre(target, bounds.size, currentPosition, capabilities, elements.container);
+            expandToViewport(elements.container, target, createBounds(currentPosition, bounds.size), capabilities, document);
         } else {
             setBoundsPx(elements.container.style, centreBounds(document, target, bounds.size, currentPosition));
         }
@@ -185,7 +169,7 @@ function zoomTransition(config: Config, elements: ZoomElements, target: Vector, 
         removeDismissListeners();
         removeEventListener(window, 'resize', resized as EventListener);
 
-        if (elements.clone !== undefined && !isCloneLoaded(elements.clone) && elements.showCloneListener !== undefined) {
+        if (elements.clone !== undefined && elements.showCloneListener !== undefined && !isCloneLoaded(elements.clone)) {
             removeEventListener(elements.clone, 'load', elements.showCloneListener);
         }
 
@@ -193,11 +177,7 @@ function zoomTransition(config: Config, elements: ZoomElements, target: Vector, 
         startCollapsingWrapper(elements.wrapper);
 
         let collapsedListener: PotentialEventListener = listenForEvent(elements.container, capabilities.transitionEndEvent as string, () => {
-            if (elements.clone !== undefined) {
-                replaceCloneWithImage(elements.image, elements.clone);
-            }
-
-            collapsed(config, elements.overlay, elements.wrapper, elements.image);
+            collapsed(config, elements);
         });
 
         let style: any = elements.container.style;
@@ -211,7 +191,7 @@ function zoomTransition(config: Config, elements: ZoomElements, target: Vector, 
             stopExpandingWrapper(elements.wrapper);
         } else {
             ignoreTransitions(elements.container, capabilities.transitionProperty as string, () => {
-                transformToCentre(target, bounds.size, currentPosition, capabilities, elements.container);
+                expandToViewport(elements.container, target, createBounds(currentPosition, bounds.size), capabilities, document);
             });
 
             style[capabilities.transformProperty as string] = '';
@@ -220,11 +200,7 @@ function zoomTransition(config: Config, elements: ZoomElements, target: Vector, 
         }
 
         if (collapsedListener === undefined) {
-            if (elements.clone !== undefined) {
-                replaceCloneWithImage(elements.image, elements.clone);
-            }
-
-            collapsed(config, elements.overlay, elements.wrapper, elements.image);
+            collapsed(config, elements);
         }
     }
 
@@ -237,7 +213,7 @@ function zoomTransition(config: Config, elements: ZoomElements, target: Vector, 
             replaceImageWithClone(elements.image, elements.clone);
         }
 
-        finishedExpanding(elements.wrapper, elements.container, target, bounds.position, currentPosition, capabilities);
+        finishedExpanding(elements.wrapper, elements.container, target, bounds.size, currentPosition, capabilities);
     }
 
     removeDismissListeners = addDismissListeners(config, elements.container, collapse);
@@ -251,7 +227,7 @@ function zoomTransition(config: Config, elements: ZoomElements, target: Vector, 
     if (expandedListener === undefined) {
         expanded();
     } else {
-        transformToCentre(target, bounds.size, currentPosition, capabilities, elements.container);
+        expandToViewport(elements.container, target, createBounds(currentPosition, bounds.size), capabilities, document);
     }
 }
 
@@ -295,7 +271,7 @@ function clickedZoomable(config: Config, event: MouseEvent, zoomListener: EventL
         if (previouslyZoomed) {
             elements = useExistingElements(overlay, wrapper, image);
 
-            if (elements.clone !== undefined && !isCloneLoaded(elements.clone)) {
+            if (elements.clone !== undefined && isCloneLoaded(elements.clone)) {
                 replaceImageWithClone(image, elements.clone);
             }
         } else {
@@ -310,9 +286,9 @@ function clickedZoomable(config: Config, event: MouseEvent, zoomListener: EventL
         }
 
         if (transition) {
-            zoomInstant(config, elements, target);
-        } else {
             zoomTransition(config, elements, target, capabilities);
+        } else {
+            zoomInstant(config, elements, target);
         }
     }
 }

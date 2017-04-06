@@ -11,12 +11,12 @@ import { createContainer } from './Container';
 import { fullSrc } from './Image';
 
 export interface ZoomElements {
-    overlay: HTMLDivElement;
-    wrapper: HTMLElement;
-    container: HTMLElement;
-    image: HTMLImageElement;
-    clone: HTMLImageElement | undefined;
-    showCloneListener: PotentialEventListener;
+    readonly overlay: HTMLDivElement;
+    readonly wrapper: HTMLElement;
+    readonly container: HTMLElement;
+    readonly image: HTMLImageElement;
+    readonly clone: HTMLImageElement | undefined;
+    readonly showCloneListener: PotentialEventListener;
 }
 
 export function useExistingElements(overlay: HTMLDivElement, wrapper: HTMLElement, image: HTMLImageElement): ZoomElements {
@@ -31,7 +31,7 @@ export function useExistingElements(overlay: HTMLDivElement, wrapper: HTMLElemen
         clone = container.children.item(1) as HTMLImageElement;
 
         if (!isCloneLoaded(clone)) {
-            showCloneListener = showCloneOnceLoaded(wrapper, image, clone);
+            showCloneListener = addEventListener(clone, 'load', showCloneOnceLoaded(wrapper, image, clone));
         }
     }
 
@@ -55,9 +55,7 @@ export function setUpElements(overlay: HTMLDivElement, wrapper: HTMLElement, ima
 
     if (cloneRequired) {
         clone = createClone(src);
-        showCloneListener = addEventListener(clone, 'load', () => {
-            showCloneOnceLoaded(wrapper, image, clone as HTMLImageElement);
-        });
+        showCloneListener = addEventListener(clone, 'load', showCloneOnceLoaded(wrapper, image, clone));
     }
 
     return {

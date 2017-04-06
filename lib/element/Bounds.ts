@@ -11,17 +11,20 @@ import {
 import { viewportSize } from '../window/Document';
 
 export interface Bounds {
-    position: Vector;
-    size: Vector;
+    readonly position: Vector;
+    readonly size: Vector;
+}
+
+export function createBounds(position: Vector, size: Vector): Bounds {
+    return {
+        position,
+        size
+    };
 }
 
 export function boundsFrom(element: HTMLElement): Bounds {
     let rect: ClientRect = element.getBoundingClientRect();
-
-    return {
-        position: positionFrom(rect),
-        size: sizeFrom(rect)
-    };
+    return createBounds(positionFrom(rect), sizeFrom(rect));
 }
 
 export function setBounds(style: CSSStyleDeclaration, x: string, y: string, width: string, height: string): void {
@@ -48,7 +51,7 @@ export function centreBounds(document: Document, target: Vector, size: Vector, p
     let factor: number = minimumDivisor(cappedTarget, size);
 
     let scaled: Vector = scaleVector(size, factor);
-    let centre: Vector = centrePosition(viewport, scaled, position);
+    let centre: Vector = centrePosition(viewport, createBounds(position, scaled));
 
     return {
         position: centre,
