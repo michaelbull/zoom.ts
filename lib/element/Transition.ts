@@ -4,11 +4,11 @@ import {
 } from './Element';
 
 export const TRANSITION_END_EVENTS: { [key: string]: string } = {
-    WebkitTransition: 'webkitTransitionEnd',
-    MozTransition: 'transitionend',
-    OTransition: 'oTransitionEnd',
-    msTransition: 'MSTransitionEnd',
-    transition: 'transitionend'
+    'WebkitTransition': 'webkitTransitionEnd',
+    'MozTransition': 'transitionend',
+    'OTransition': 'oTransitionEnd',
+    'msTransition': 'MSTransitionEnd',
+    'transition': 'transitionend'
 };
 
 /**

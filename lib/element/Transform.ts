@@ -9,11 +9,11 @@ import { WindowCapabilities } from '../window/WindowCapabilities';
 import { Bounds } from './Bounds';
 
 export const TRANSFORM_PROPERTIES: { [key: string]: string } = {
-    WebkitTransform: '-webkit-transform',
-    MozTransform: '-moz-transform',
-    msTransform: '-ms-transform',
-    OTransform: '-o-transform',
-    transform: 'transform'
+    'WebkitTransform': '-webkit-transform',
+    'MozTransform': '-moz-transform',
+    'msTransform': '-ms-transform',
+    'OTransform': '-o-transform',
+    'transform': 'transform'
 };
 
 export function translate(translation: Vector): string {
