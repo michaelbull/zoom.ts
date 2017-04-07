@@ -3,6 +3,10 @@ import {
     hasClass,
     removeClass
 } from './ClassList';
+import {
+    hasGrandParent,
+    hasParent
+} from './Element';
 
 export const CLASS: string = 'zoom__element';
 export const HIDDEN_CLASS: string = `${CLASS}--hidden`;
@@ -33,7 +37,10 @@ export function isImageActive(image: HTMLImageElement): boolean {
 }
 
 export function isZoomable(target: EventTarget): boolean {
-    return target instanceof HTMLImageElement && target.parentElement !== null && hasClass(target, CLASS);
+    return target instanceof HTMLImageElement
+        && hasParent(target)
+        && hasGrandParent(target)
+        && hasClass(target, CLASS);
 }
 
 export function fullSrc(wrapper: HTMLElement, image: HTMLImageElement): string {

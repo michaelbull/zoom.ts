@@ -12,7 +12,7 @@ export function clientSize(element: HTMLElement): Vector {
     ];
 }
 
-function dimension(element: HTMLElement, dimension: string): number {
+export function dimension(element: HTMLElement, dimension: string): number {
     let value: string | null = element.getAttribute(`data-${dimension}`);
     return value === null ? Infinity : Number(value);
 }
@@ -26,4 +26,12 @@ export function targetDimensions(element: HTMLElement): Vector {
 
 export function resetStyle(element: HTMLElement, property: string): void {
     (element.style as any)[property] = '';
+}
+
+export function hasParent(element: HTMLElement): boolean {
+    return element.parentElement !== null;
+}
+
+export function hasGrandParent(element: HTMLElement): boolean {
+    return hasParent(element) && hasParent(element.parentElement as HTMLElement);
 }
