@@ -8,6 +8,8 @@ import {
     hideImage,
     showImage
 } from './Image';
+import { isWrapperExpanded } from './Wrapper';
+import { ZoomElements } from './ZoomElements';
 
 export const CLASS: string = 'zoom__clone';
 export const VISIBLE_CLASS: string = `${CLASS}--visible`;
@@ -19,6 +21,15 @@ export function createClone(src: string): HTMLImageElement {
     clone.src = src;
     listenForEvent(clone, 'load', () => addClass(clone, LOADED_CLASS));
     return clone;
+}
+
+export function showCloneOnceLoaded(elements: ZoomElements): EventListener {
+    return (): void => {
+        if (elements.clone !== undefined && isWrapperExpanded(elements.wrapper) && !isCloneVisible(elements.clone)) {
+            showClone(elements.clone);
+            hideImage(elements.image);
+        }
+    };
 }
 
 export function replaceImageWithClone(image: HTMLImageElement, clone: HTMLImageElement): void {
