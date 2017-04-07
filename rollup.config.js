@@ -4,7 +4,7 @@ import livereload from 'rollup-plugin-livereload';
 import sass from 'rollup-plugin-sass';
 import serve from 'rollup-plugin-serve';
 import typescript from 'rollup-plugin-typescript2';
-import uglify from 'rollup-plugin-uglify';
+import closure from 'rollup-plugin-closure-compiler-js';
 
 let copyright = [
     'zoom.ts v' + require('./package.json').version,
@@ -24,6 +24,7 @@ let postcssPlugins = [
 ];
 
 let prodEnv = (process.env.NODE_ENV === 'production');
+let devEnv = (process.env.NODE_ENV === 'development');
 
 let configuration = {
     moduleName: 'zoom',
@@ -48,14 +49,15 @@ let configuration = {
 };
 
 if (prodEnv) {
-    configuration.plugins.push(uglify({
-        output: {
-            comments: (node, comment) => {
-                return comment.line === 1;
-            }
-        }
-    }));
-} else {
+    configuration.plugins.push(
+        closure({
+            languageIn: 'ES5',
+            languageOut: 'ES5',
+            compilationLevel: 'ADVANCED',
+            warningLevel: 'QUIET'
+        })
+    );
+} else if (devEnv) {
     configuration.plugins.push(serve({ port: 8080 }), livereload());
 }
 

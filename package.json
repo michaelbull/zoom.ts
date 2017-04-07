@@ -26,7 +26,7 @@
   },
   "scripts": {
     "clean": "rm -rf dist/* && rm -rf reports/*",
-    "start": "npm run clean && rollup --config --watch",
+    "start": "npm run clean && cross-env NODE_ENV=development rollup --config --watch",
     "build": "npm run clean && rollup --config",
     "test": "karma start test/karma.conf.js --singleRun",
     "test:watch": "karma start test/karma.conf.js",
@@ -45,6 +45,7 @@
     "karma-typescript": "github:monounity/karma-typescript",
     "node-sass": "4.5.0",
     "rollup": "0.41.6",
+    "rollup-plugin-closure-compiler-js": "1.0.4",
     "rollup-plugin-livereload": "0.4.0",
     "rollup-plugin-sass": "0.4.10",
     "rollup-plugin-serve": "0.1.0",
