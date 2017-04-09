@@ -1,15 +1,44 @@
 import {
     addClass,
+    classesFrom,
+    classFilter,
     hasClass,
     removeClass
 } from '../../../lib/element/ClassList';
 
-describe('hasClass', () => {
-    it('should return true if the class is in the className', () => {
-        let element: any = { className: 'class-yes class-no' };
-        expect(hasClass(element, 'class-yes')).toBe(true);
+describe('classFilter', () => {
+    it('should return false if the className is an empty string', () => {
+        expect(classFilter('', 1, [])).toBe(false);
     });
 
+    it('should return false if the class list already contains the className', () => {
+        expect(classFilter('duped', 20, ['this', 'class', 'is', 'duped'])).toBe(false);
+    });
+
+    it('should return true if the className is not empty and it is not in the class list', () => {
+        expect(classFilter('one', 1, ['zero', 'one', 'two'])).toBe(true);
+    });
+});
+
+describe('classesFrom', () => {
+    it('should return an empty array if the class list is empty', () => {
+        expect(classesFrom('')).toEqual([]);
+    });
+
+    it('should return a single-element array if the class list has no separators', () => {
+        expect(classesFrom('example')).toEqual(['example']);
+    });
+
+    it('should not contain duplicates', () => {
+        expect(classesFrom('dupe not-dupe dupe   another-dupe  dupe')).toEqual(['dupe', 'not-dupe', 'another-dupe']);
+    });
+
+    it('should not contain empty classes', () => {
+        expect(classesFrom('example  class one   two     three')).toEqual(['example', 'class', 'one', 'two', 'three']);
+    });
+});
+
+describe('hasClass', () => {
     it('should return false if the class is not in the className', () => {
         let element: any = { className: 'class-high class-low' };
         expect(hasClass(element, 'class-medium')).toBe(false);
@@ -18,6 +47,11 @@ describe('hasClass', () => {
     it('should return false if the className is empty', () => {
         let element: any = { className: '' };
         expect(hasClass(element, 'class')).toBe(false);
+    });
+
+    it('should return true if the class is in the className', () => {
+        let element: any = { className: 'class-yes class-no' };
+        expect(hasClass(element, 'class-yes')).toBe(true);
     });
 });
 
@@ -50,6 +84,12 @@ describe('addClass', () => {
         let element: any = { className: 'existing' };
         addClass(element, '');
         expect(element.className).toBe('existing');
+    });
+
+    it('should not modify the className when adding a duplicate class to a populated class list', () => {
+        let element: any = { className: 'duplicate' };
+        addClass(element, 'duplicate');
+        expect(element.className).toBe('duplicate');
     });
 });
 

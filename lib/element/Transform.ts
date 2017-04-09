@@ -41,7 +41,7 @@ export function scaleTranslate3d(transformation: ScaleAndTranslate): string {
     return `${scaleBy(transformation.scale)} ${translate3d(transformation.translation)}`;
 }
 
-export function centreTransformation(document: Document, target: Vector, bounds: Bounds): ScaleAndTranslate {
+export function centreTransformation(target: Vector, bounds: Bounds): ScaleAndTranslate {
     let viewport: Vector = viewportSize(document);
     let cappedTarget: Vector = minimizeVectors(viewport, target);
     let scale: number = minimumDivisor(cappedTarget, bounds.size);
@@ -53,8 +53,8 @@ export function centreTransformation(document: Document, target: Vector, bounds:
     };
 }
 
-export function expandToViewport(document: Document, capabilities: WindowCapabilities, element: HTMLElement, target: Vector, bounds: Bounds): void {
-    let transformation: ScaleAndTranslate = centreTransformation(document, target, bounds);
+export function expandToViewport(capabilities: WindowCapabilities, element: HTMLElement, target: Vector, bounds: Bounds): void {
+    let transformation: ScaleAndTranslate = centreTransformation(target, bounds);
     let style: any = element.style;
 
     if (capabilities.hasTranslate3d) {

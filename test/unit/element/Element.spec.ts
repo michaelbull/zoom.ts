@@ -1,74 +1,120 @@
 import {
     clientSize,
-    targetDimensions
+    hasGrandParent,
+    hasParent,
+    resetStyle,
+    targetDimension,
+    targetSize
 } from '../../../lib/element/Element';
 
 describe('clientSize', () => {
-    it('should return the clientWidth', () => {
-        let element: any = { clientWidth: 330 };
-        expect(clientSize(element)[0]).toBe(330);
-    });
+    it('should return the width and height', () => {
+        let element: any = {
+            clientWidth: 330,
+            clientHeight: 440
+        };
 
-    it('should return the clientHeight', () => {
-        let element: any = { clientHeight: 440 };
-        expect(clientSize(element)[1]).toBe(440);
+        expect(clientSize(element)).toEqual([330, 440]);
     });
 });
 
-describe('targetDimensions', () => {
-    it('should return the specified width if the data-width attribute is present', () => {
+describe('targetDimension', () => {
+    it('should return Infinity if the attribute is null', () => {
         let element: any = {
-            getAttribute: (attribute: string): string | null => {
-                if (attribute === 'data-width') {
-                    return '550';
-                } else {
-                    return null;
-                }
+            getAttribute: (): string | null => {
+                return null;
             }
         };
 
-        expect(targetDimensions(element)[0]).toBe(550);
+        expect(targetDimension(element, '')).toBe(Infinity);
     });
 
-    it('should return the specified height if the data-height attribute is present', () => {
+    it('should return Infinity if the attribute is NaN', () => {
         let element: any = {
-            getAttribute: (attribute: string): string | null => {
-                if (attribute === 'data-height') {
-                    return '660';
-                } else {
-                    return null;
-                }
+            getAttribute: (): string | null => {
+                return 'not a number';
             }
         };
 
-        expect(targetDimensions(element)[1]).toBe(660);
+        expect(targetDimension(element, '')).toBe(Infinity);
     });
 
-    it('should return Infinity as the width if the data-width attribute is absent', () => {
+    it('should return the numeric value if the attribute is a number', () => {
         let element: any = {
-            getAttribute: (attribute: string): string | null => {
-                if (attribute === 'data-width') {
-                    return null;
+            getAttribute: (): string | null => {
+                return '503';
+            }
+        };
+
+        expect(targetDimension(element, '')).toBe(503);
+    });
+});
+
+describe('targetSize', () => {
+    it('should return the width and height', () => {
+        let element: any = {
+            getAttribute: (name: string): string | null => {
+                if (name === 'data-width') {
+                    return '1920';
+                } else if (name === 'data-height') {
+                    return '1080';
                 } else {
-                    return '500';
+                    return null;
                 }
             }
         };
 
-        expect(targetDimensions(element)[0]).toBe(Infinity);
+        expect(targetSize(element)).toEqual([1920, 1080]);
+    });
+});
+
+describe('resetStyle', () => {
+    it('should set the style property to an empty string', () => {
+        let element: any = {
+            style: {
+                width: '500px'
+            }
+        };
+
+        resetStyle(element, 'width');
+
+        expect(element.style.width).toBe('');
+    });
+});
+
+describe('hasParent', () => {
+    it('should return false if the parent is null', () => {
+        let element: any = { parentElement: null };
+        expect(hasParent(element)).toBe(false);
     });
 
-    it('should return Infinity as the height if the data-height attribute is absent', () => {
+    it('should return true if the parent is non-null', () => {
+        let element: any = { parentElement: 'parent' };
+        expect(hasParent(element)).toBe(true);
+    });
+});
+
+describe('hasGrandParent', () => {
+    it('should return false if the parent is null', () => {
+        let element: any = { parentElement: null };
+        expect(hasGrandParent(element)).toBe(false);
+    });
+
+    it('should return false if the parent is non-null and the grandparent is null', () => {
         let element: any = {
-            getAttribute: (attribute: string): string | null => {
-                if (attribute === 'data-height') {
-                    return null;
-                } else {
-                    return '600';
-                }
+            parentElement: {
+                parentElement: null
             }
         };
+        expect(hasGrandParent(element)).toBe(false);
+    });
 
-        expect(targetDimensions(element)[1]).toBe(Infinity);
+    it('should return true if the parent is non-null and the grandparent is non-null', () => {
+        let element: any = {
+            parentElement: {
+                parentElement: 'grandparent'
+            }
+        };
+        expect(hasGrandParent(element)).toBe(true);
     });
 });

@@ -9,7 +9,7 @@ import { repaint } from './Element';
 export const CLASS: string = 'zoom__overlay';
 export const VISIBLE_CLASS: string = `${CLASS}--visible`;
 
-export function addOverlay(document: Document): HTMLDivElement {
+export function addOverlay(): HTMLDivElement {
     let overlay: HTMLDivElement = createDiv(document, CLASS);
     document.body.appendChild(overlay);
     repaint(overlay);

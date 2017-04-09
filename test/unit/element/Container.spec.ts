@@ -1,102 +1,29 @@
-// import {
-//     CLASS,
-//     createContainer,
-//     isContainer,
-//     ignoreTransitions,
-//     restoreContainer
-// } from '../../../lib/element/Container';
-//
-// describe('createContainer', () => {
-//     let container: any;
-//     let document: any;
-//
-//     beforeEach(() => {
-//         container = {};
-//         document = {
-//             createElement: jasmine.createSpy('createElement').and.callFake((tagName: string): any => {
-//                 expect(tagName).toBe('div');
-//                 return container;
-//             })
-//         };
-//     });
-//
-//     it('should create a div element', () => {
-//         createContainer(document);
-//         expect(document.createElement).toHaveBeenCalledWith('div');
-//     });
-//
-//     it('should assign the className', () => {
-//         expect(createContainer(document).className).toBe(CLASS);
-//     });
-// });
-//
-// describe('isContainer', () => {
-//     it('should return true if the class is present', () => {
-//         let element: any = { className: CLASS };
-//         expect(isContainer(element)).toBe(true);
-//     });
-//
-//     it('should return false if the class is absent', () => {
-//         let element: any = { className: '' };
-//         expect(isContainer(element)).toBe(false);
-//     });
-// });
-//
-// describe('ignoreTransitions', () => {
-//     let container: any;
-//
-//     beforeEach(() => {
-//         container = {
-//             style: {
-//                 transition: 'example'
-//             }
-//         };
-//     });
-//
-//     it('should set the transition to initial before executing the callback', () => {
-//         ignoreTransitions(container, () => {
-//             expect(container.style.transition).toBe('initial');
-//         });
-//     });
-//
-//     it('should execute the callback', () => {
-//         let callback: jasmine.Spy = jasmine.createSpy('callback');
-//         ignoreTransitions(container, callback);
-//         expect(callback).toHaveBeenCalled();
-//     });
-//
-//     it('should clear the transition after executing the callback', () => {
-//         ignoreTransitions(container, jasmine.createSpy('callback'));
-//         expect(container.style.transition).toBe('');
-//     });
-// });
-//
-// describe('restoreContainer', () => {
-//     it('should reset the transformation', () => {
-//         let container: any = {
-//             style: {
-//                 msTransform: 'scale(5)'
-//             }
-//         };
-//         restoreContainer(container);
-//         expect(container.style.msTransform).toBe('');
-//     });
-//
-//     it('should reset the bounds', () => {
-//         let container: any = {
-//             style: {
-//                 left: '50px',
-//                 top: '10px',
-//                 width: '100px',
-//                 maxWidth: '100px',
-//                 height: '200px'
-//             }
-//         };
-//         restoreContainer(container);
-//         expect(container.style.left).toBe('');
-//         expect(container.style.top).toBe('');
-//         expect(container.style.width).toBe('');
-//         expect(container.style.maxWidth).toBe('');
-//         expect(container.style.height).toBe('');
-//     });
-// });
+import * as ClassList from '../../../lib/element/ClassList';
+import {
+    CLASS,
+    createContainer,
+    isContainer
+} from '../../../lib/element/Container';
+import * as Document from '../../../lib/window/Document';
+
+describe('createContainer', () => {
+    it('should create a div element with the correct class', () => {
+        let document: jasmine.Spy = jasmine.createSpy('document');
+        let createDiv: jasmine.Spy = spyOn(Document, 'createDiv');
+
+        createContainer(document as any);
+
+        expect(createDiv).toHaveBeenCalledWith(document, CLASS);
+    });
+});
+
+describe('isContainer', () => {
+    it('should call hasClass with the container class', () => {
+        let element: jasmine.Spy = jasmine.createSpy('element');
+        let hasClass: jasmine.Spy = spyOn(ClassList, 'hasClass');
+
+        isContainer(element as any);
+
+        expect(hasClass).toHaveBeenCalledWith(element, CLASS);
+    });
+});

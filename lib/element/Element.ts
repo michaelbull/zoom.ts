@@ -12,15 +12,24 @@ export function clientSize(element: HTMLElement): Vector {
     ];
 }
 
-export function dimension(element: HTMLElement, dimension: string): number {
-    let value: string | null = element.getAttribute(`data-${dimension}`);
-    return value === null ? Infinity : Number(value);
+export function targetDimension(element: HTMLElement, dimension: string): number {
+    let attribute: string | null = element.getAttribute(`data-${dimension}`);
+
+    if (attribute !== null) {
+        let value: number = Number(attribute);
+
+        if (!isNaN(value)) {
+            return value;
+        }
+    }
+
+    return Infinity;
 }
 
-export function targetDimensions(element: HTMLElement): Vector {
+export function targetSize(element: HTMLElement): Vector {
     return [
-        dimension(element, 'width'),
-        dimension(element, 'height')
+        targetDimension(element, 'width'),
+        targetDimension(element, 'height')
     ];
 }
 

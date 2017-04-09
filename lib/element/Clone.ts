@@ -26,20 +26,9 @@ export function createClone(src: string): HTMLImageElement {
 export function showCloneOnceLoaded(elements: ZoomElements): EventListener {
     return (): void => {
         if (elements.clone !== undefined && isWrapperExpanded(elements.wrapper) && !isCloneVisible(elements.clone)) {
-            showClone(elements.clone);
-            hideImage(elements.image);
+            replaceImageWithClone(elements.image, elements.clone);
         }
     };
-}
-
-export function replaceImageWithClone(image: HTMLImageElement, clone: HTMLImageElement): void {
-    showClone(clone);
-    hideImage(image);
-}
-
-export function replaceCloneWithImage(image: HTMLImageElement, clone: HTMLImageElement): void {
-    showImage(image);
-    hideClone(clone);
 }
 
 export function showClone(clone: HTMLImageElement): void {
@@ -56,4 +45,14 @@ export function isCloneVisible(clone: HTMLImageElement): boolean {
 
 export function isCloneLoaded(clone: HTMLImageElement): boolean {
     return hasClass(clone, LOADED_CLASS);
+}
+
+export function replaceImageWithClone(image: HTMLImageElement, clone: HTMLImageElement): void {
+    showClone(clone);
+    hideImage(image);
+}
+
+export function replaceCloneWithImage(image: HTMLImageElement, clone: HTMLImageElement): void {
+    showImage(image);
+    hideClone(clone);
 }

@@ -1,23 +1,823 @@
-/*
- zoom.ts v7.5.0
- https://www.michael-bull.com/projects/zoom.ts
+/*!
+ * zoom.ts v7.5.0
+ * https://www.michael-bull.com/projects/zoom.ts
+ * 
+ * Copyright (c) 2017 Michael Bull (https://www.michael-bull.com)
+ * @license ISC
+ */
 
- Copyright (c) 2017 Michael Bull (https://www.michael-bull.com)
- @license ISC
-*/
-function C(){function D(a){return[a.left,a.top]}function E(a,b){return[a[0]/b,a[1]/b]}function F(a,b){return[a[0]-b[0],a[1]-b[1]]}function L(a,b){a=[a[0]/b[0],a[1]/b[1]];return Math.min(a[0],a[1])}function M(a,b){return F(E(F(a,b.size),2),b.position)}function N(a){return[a.clientWidth,a.clientHeight]}function O(a,b){a=a.getAttribute("data-"+b);return null===a?Infinity:Number(a)}function Y(a){"function"!==typeof a.preventDefault&&(a.preventDefault=function(){a.returnValue=!1});"function"!==typeof a.stopPropagation&&
-(a.stopPropagation=function(){a.cancelBubble=!0});if("mouseover"===a.type){var b=a;void 0===b.relatedTarget&&void 0!==b.fromElement&&(b.relatedTarget=b.fromElement)}else"mouseout"===a.type&&(b=a,void 0===b.relatedTarget&&void 0!==b.toElement&&(b.relatedTarget=b.toElement));return a}function v(a,b){"function"===typeof a?a(b):a.handleEvent(b)}function u(a,b,e,c){function d(a){var b;void 0===b&&(b=window);if(void 0===a)if(void 0!==b.event)a=b.event;else throw Error("No current event to handle.");v(e,
-Y(a))}void 0===c&&(c=!1);var f=a.addEventListener,k=a.attachEvent;if("function"===typeof f)return f.call(a,b,d,c),d;if("function"===typeof k&&k.call(a,"on"+b,d))return d}function y(a,b,e){var c;void 0===c&&(c=!1);var d=u(a,b,function(c){void 0!==d&&n(a,b,d);v(e,c)},c);return d}function n(a,b,e){var c=a.removeEventListener,d=a.detachEvent;"function"===typeof c?c.call(a,b,e):"function"===typeof d&&d.call(a,b,e)}function z(a){return"CSS1Compat"===a.compatMode?a.documentElement:a.body}function Z(a,b){"complete"===
-a.readyState?b():y(a,"DOMContentLoaded",function(){return b()})}function P(a,b){a=a.createElement("div");a.className=b;return a}function p(a,b){return{position:a,size:b}}function Q(a){a=a.getBoundingClientRect();return p(D(a),[a.width,a.height])}function G(a,b,e,c,d){a.left=b;a.top=e;a.width=c;a.maxWidth=c;a.height=d}function A(a,b){var e=b.position;b=b.size;G(a,e[0]+"px",e[1]+"px",b[0]+"px",b[1]+"px")}function B(a,b,e){a=N(z(a));var c=e.size;b=L([Math.min(a[0],b[0]),Math.min(a[1],b[1])],e.size);
-b=[c[0]*b,c[1]*b];return{position:M(a,p(e.position,b)),size:b}}function R(a){return 0<a.length}function t(a,b){return-1!==a.className.indexOf(b)}function q(a,b){a.className=a.className.split(" ").concat(b).filter(R).join(" ")}function l(a,b){a.className=a.className.split(" ").filter(function(a){return R(a)&&a!==b}).join(" ")}function S(a){q(a,"zoom__element--hidden")}function T(a){q(a,"zoom__element--active")}function H(a,b){a=a.getAttribute("data-src");return null===a?b.src:a}function aa(a){var b=
-document.createElement("img");b.className="zoom__clone";b.src=a;y(b,"load",function(){return q(b,"zoom__clone--loaded")});return b}function ba(a){return function(){void 0!==a.clone&&t(a.b,"zoom--expanded")&&!t(a.clone,"zoom__clone--visible")&&(q(a.clone,"zoom__clone--visible"),S(a.c))}}function I(a,b){q(b,"zoom__clone--visible");S(a)}function ca(a,b){l(a,"zoom__element--hidden");l(b,"zoom__clone--visible")}function x(a){return t(a,"zoom__clone--loaded")}function J(a,b,e,c,d){a=N(z(a));c=L([Math.min(a[0],
-c[0]),Math.min(a[1],c[1])],d.size);var f;f=d.size;f=[f[0]*c,f[1]*c];var k=d.position;d=E(F(d.size,f),2);d=E(M(a,p([k[0]+d[0],k[1]+d[1]],f)),c);e.style[b.f]=b.l?"scale("+c+") "+("translate3d("+d[0]+"px, "+d[1]+"px, 0)"):"scale("+c+") "+("translate("+d[0]+"px, "+d[1]+"px)")}function U(a,b,e){a.style[b]="initial";e();a.offsetHeight;a.style[b]=""}function da(a){return function(b){27===b.keyCode&&(b.preventDefault(),b.stopPropagation(),v(a,b))}}function ea(a,b,e,c){return function(d){Math.abs(a-e())>=
-b&&v(c,d)}}function V(a,b,e,c){var d=u(a,"scroll",ea(void 0===a.pageYOffset?z(a.document).scrollTop:a.pageYOffset,b.m,function(){return void 0===a.pageYOffset?z(a.document).scrollTop:a.pageYOffset},c)),f=u(a.document,"keyup",da(c)),k=u(e,"click",c);return function(){n(a,"scroll",d);n(a.document,"keyup",f);n(e,"click",k)}}function fa(a){var b=""+a.charAt(0).toUpperCase()+a.substr(1),e=ga.map(function(a){return""+a+b});return[a].concat(e)}function W(a,b){var e=0;for(b=fa(b);e<b.length;e++){var c=b[e];
-if(c in a)return c}}function K(a,b,e){void 0!==e.clone&&ca(e.c,e.clone);l(e.c,"zoom__element--active");a.document.body.removeChild(e.h);l(e.b,"zoom--collapsing");e.b.style.height="";setTimeout(function(){return X(a,b)},1)}function ha(a,b,e,c,d){var f=Q(e.c),k=u(a,"resize",function(){var b=D(e.b.getBoundingClientRect());f=p(b,f.size);A(e.a.style,B(a.document,c,f))}),h;h=V(a,b,e.a,function(){h();n(a,"resize",k);void 0===e.clone||void 0===d||x(e.clone)||n(e.clone,"load",d);l(e.b,"zoom--expanded");G(e.a.style,
-"","","","");K(a,b,e)});q(e.b,"zoom--expanded");e.b.style.height=e.c.height+"px";T(e.c);A(e.a.style,B(document,c,f))}function ia(a,b,e,c,d,f){function k(){void 0!==c.clone&&x(c.clone)&&!t(c.clone,"zoom__clone--visible")&&(void 0!==f&&n(c.clone,b.g,f),I(c.c,c.clone));l(c.b,"zoom--expanding");q(c.b,"zoom--expanded");U(c.a,b.transitionProperty,function(){c.a.style[b.f]="";A(c.a.style,B(a.document,d,h))})}var h=Q(c.c),g=u(a,"resize",function(){var e=D(c.b.getBoundingClientRect());h=p(e,h.size);e=c.b;
-t(e,"zoom--expanding")||t(e,"zoom--collapsing")?J(a.document,b,c.a,d,h):A(c.a.style,B(a.document,d,h))}),m,r;r=V(a,e,c.a,function(){r();n(a,"resize",g);void 0===c.clone||void 0===f||x(c.clone)||n(c.clone,"load",f);l(c.h,"zoom__overlay--visible");q(c.b,"zoom--collapsing");var k=y(c.a,b.g,function(){K(a,e,c)});t(c.b,"zoom--expanding")?(void 0!==m&&n(c.a,b.g,m),c.a.style[b.f]="",l(c.b,"zoom--expanding")):(U(c.a,b.transitionProperty,function(){J(a.document,b,c.a,d,h)}),c.a.style[b.f]="",G(c.a.style,"",
-"","",""),l(c.b,"zoom--expanded"));void 0===k&&K(a,e,c)});q(c.b,"zoom--expanding");c.b.style.height=c.c.height+"px";T(c.c);m=y(c.a,b.g,function(){return k()});void 0===m?k():J(a.document,b,c.a,d,h)}function X(a,b){var e=u(a.document.body,"click",function(c){var d=c.target;if(d instanceof HTMLImageElement&&null!==d.parentElement&&null!==d.parentElement&&null!==d.parentElement.parentElement&&t(d,"zoom__element")){c.preventDefault();c.stopPropagation();var f=e,d=c.target,k=d.parentElement,h=t(k,"zoom__container"),
-k=h?k.parentElement:k;if(c.metaKey||c.ctrlKey)a.open(H(k,d),"_blank");else{void 0!==f&&n(a.document.body,"click",f);var g,f=a.document;c=P(f,"zoom__overlay");f.body.appendChild(c);c.offsetHeight;q(c,"zoom__overlay--visible");if(h){g=d.parentElement;var h=g.parentElement,m;H(h,d)!==d.src&&(m=g.children.item(1));g={h:c,b:h,a:g,c:d,clone:m};void 0!==g.clone&&x(g.clone)&&I(d,g.clone)}else m=P(document,"zoom__container"),h=d.parentElement,f=H(h,d),f!==d.src&&(g=aa(f)),g={h:c,b:h,a:m,c:d,clone:g},g.b.replaceChild(g.a,
-d),g.a.appendChild(d),void 0!==g.clone&&g.a.appendChild(g.clone);m=void 0;void 0!==g.clone&&(x(g.clone)?I(d,g.clone):m=u(g.clone,"load",ba(g)));var d=g.b,d=[O(d,"width"),O(d,"height")],r,h=document.body.style;c=W(h,"transform");h=W(h,"transition");f=!1;void 0!==c&&(f=!0);k=!1;void 0!==h&&(r=ja[h],k=null!==r);var l=!1;if(void 0!==c){var p=a.getComputedStyle,v=ka[c];if("function"===typeof p&&void 0!==v){var w=a.document,l=w.body,w=w.createElement("p");w.style[c]="translate3d(1px,1px,1px)";l.appendChild(w);
-p=p(w).getPropertyValue(v);l.removeChild(w);l=0<p.length&&"none"!==p}else l=!1}r={f:c,transitionProperty:h,g:r,i:f,j:k,l:l};r.i&&r.j?ia(a,r,b,g,d,m):ha(a,b,g,d,m)}}})}var ka={WebkitTransform:"-webkit-transform",MozTransform:"-moz-transform",msTransform:"-ms-transform",OTransform:"-o-transform",transform:"transform"},ja={WebkitTransition:"webkitTransitionEnd",MozTransition:"transitionend",OTransition:"oTransitionEnd",msTransition:"MSTransitionEnd",transition:"transitionend"},ga=["Webkit","Moz","ms",
-"O"];(function(a,b){void 0===b&&(b={m:50});Z(a.document,function(){return X(a,b)})})(window)}"undefined"!==typeof module?C():"function"===typeof define&&define.o?define(C):C();
+document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>');
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory() :
+	typeof define === 'function' && define.amd ? define(factory) :
+	(factory());
+}(this, (function () { 'use strict';
+
+function defaultConfig() {
+    return {
+        scrollDelta: 50
+    };
+}
+
+function pixels(amount) {
+    return amount + "px";
+}
+
+function positionFrom(rect) {
+    return [
+        rect.left,
+        rect.top
+    ];
+}
+function sizeFrom(rect) {
+    return [
+        rect.width,
+        rect.height
+    ];
+}
+function scaleVector(vector, amount) {
+    return [
+        vector[0] * amount,
+        vector[1] * amount
+    ];
+}
+function shrinkVector(vector, amount) {
+    return [
+        vector[0] / amount,
+        vector[1] / amount
+    ];
+}
+function addVectors(x, y) {
+    return [
+        x[0] + y[0],
+        x[1] + y[1]
+    ];
+}
+function subtractVectors(x, y) {
+    return [
+        x[0] - y[0],
+        x[1] - y[1]
+    ];
+}
+function divideVectors(x, y) {
+    return [
+        x[0] / y[0],
+        x[1] / y[1]
+    ];
+}
+function minimizeVectors(x, y) {
+    return [
+        Math.min(x[0], y[0]),
+        Math.min(x[1], y[1])
+    ];
+}
+function minimumDivisor(x, y) {
+    var scaled = divideVectors(x, y);
+    return Math.min(scaled[0], scaled[1]);
+}
+/**
+ * Calculates the padding that must be applied to an inner vector for it to appear in the centre of an outer vector.
+ * @param outer The outer vector.
+ * @param inner The inner vector.
+ * @returns {Vector} The padding.
+ */
+function centrePadding(outer, inner) {
+    return shrinkVector(subtractVectors(outer, inner), 2);
+}
+/**
+ * Calculates the position that must be applied to an inner vector for it to appear in the centre of an outer vector.
+ * @param outer The outer vector.
+ * @param inner The inner vector.
+ * @param innerPosition The current position of the inner vector.
+ * @returns {Vector} The new position of the inner vector.
+ */
+function centrePosition(outer, bounds) {
+    return subtractVectors(centrePadding(outer, bounds.size), bounds.position);
+}
+/**
+ * Calculates the translation required for an inner vector to appear in the centre of an outer vector.
+ * @param outer The outer vector.
+ * @param inner The inner vector.
+ * @param innerPosition The position of the inner vector.
+ * @param innerScale The scale of the inner vector.
+ * @returns {Vector} The translation.
+ */
+function centreTranslation(outer, bounds, innerScale) {
+    var scaled = scaleVector(bounds.size, innerScale);
+    var centredWithinScaled = addVectors(bounds.position, centrePadding(bounds.size, scaled));
+    var centeredWithinOuter = centrePosition(outer, createBounds(centredWithinScaled, scaled));
+    return shrinkVector(centeredWithinOuter, innerScale);
+}
+
+function repaint(element) {
+    // tslint:disable-next-line
+    element.offsetHeight;
+}
+function clientSize(element) {
+    return [
+        element.clientWidth,
+        element.clientHeight
+    ];
+}
+function targetDimension(element, dimension) {
+    var attribute = element.getAttribute("data-" + dimension);
+    if (attribute !== null) {
+        var value = Number(attribute);
+        if (!isNaN(value)) {
+            return value;
+        }
+    }
+    return Infinity;
+}
+function targetSize(element) {
+    return [
+        targetDimension(element, 'width'),
+        targetDimension(element, 'height')
+    ];
+}
+function resetStyle(element, property) {
+    element.style[property] = '';
+}
+function hasParent(element) {
+    return element.parentElement !== null;
+}
+function hasGrandParent(element) {
+    return hasParent(element) && hasParent(element.parentElement);
+}
+
+function currentEvent(event, context) {
+    if (context === void 0) { context = window; }
+    if (event !== undefined) {
+        return event;
+    }
+    else if (context.event !== undefined) {
+        return context.event;
+    }
+    else {
+        throw new Error('No current event to handle.');
+    }
+}
+function polyfillEvent(event) {
+    if (typeof event.preventDefault !== 'function') {
+        event.preventDefault = function () {
+            event.returnValue = false;
+        };
+    }
+    if (typeof event.stopPropagation !== 'function') {
+        event.stopPropagation = function () {
+            event.cancelBubble = true;
+        };
+    }
+    if (event.type === 'mouseover') {
+        var mouseEvent = event;
+        if (mouseEvent.relatedTarget === undefined && mouseEvent.fromElement !== undefined) {
+            mouseEvent.relatedTarget = mouseEvent.fromElement;
+        }
+    }
+    else if (event.type === 'mouseout') {
+        var mouseEvent = event;
+        if (mouseEvent.relatedTarget === undefined && mouseEvent.toElement !== undefined) {
+            mouseEvent.relatedTarget = mouseEvent.toElement;
+        }
+    }
+    return event;
+}
+
+function fireEventListener(listener, event) {
+    if (typeof listener === 'function') {
+        listener(event);
+    }
+    else {
+        listener.handleEvent(event);
+    }
+}
+function addEventListener(target, type, listener, useCapture) {
+    if (useCapture === void 0) { useCapture = false; }
+    var standard = target['addEventListener'];
+    var fallback = target['attachEvent'];
+    var wrappedListener = function (event) {
+        fireEventListener(listener, polyfillEvent(currentEvent(event)));
+    };
+    if (typeof standard === 'function') {
+        standard.call(target, type, wrappedListener, useCapture);
+        return wrappedListener;
+    }
+    else if (typeof fallback === 'function' && fallback.call(target, "on" + type, wrappedListener)) {
+        return wrappedListener;
+    }
+    return undefined;
+}
+function listenForEvent(target, type, listener, useCapture) {
+    if (useCapture === void 0) { useCapture = false; }
+    var registered = addEventListener(target, type, function (event) {
+        if (registered !== undefined) {
+            removeEventListener(target, type, registered);
+        }
+        fireEventListener(listener, event);
+    }, useCapture);
+    return registered;
+}
+function removeEventListener(target, type, listener) {
+    var standard = target['removeEventListener'];
+    var fallback = target['detachEvent'];
+    if (typeof standard === 'function') {
+        standard.call(target, type, listener);
+        return true;
+    }
+    else if (typeof fallback === 'function') {
+        fallback.call(target, type, listener);
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+var STANDARDS_MODE = 'CSS1Compat';
+function isStandardsMode(document) {
+    return document.compatMode === STANDARDS_MODE;
+}
+function rootElement(document) {
+    return isStandardsMode(document) ? document.documentElement : document.body;
+}
+/**
+ * Executes a callback function when a document has finished loading, or immediately if the document has already
+ * finished loading.
+ * @param document The document.
+ * @param callback The function to execute.
+ * @see http://youmightnotneedjquery.com/#ready
+ */
+function ready(document, callback) {
+    if (document.readyState === 'complete') {
+        callback();
+    }
+    else {
+        listenForEvent(document, 'DOMContentLoaded', function () { return callback(); });
+    }
+}
+function viewportSize(document) {
+    return clientSize(rootElement(document));
+}
+function createDiv(document, className) {
+    var overlay = document.createElement('div');
+    overlay.className = className;
+    return overlay;
+}
+
+function createBounds(position, size) {
+    return {
+        position: position,
+        size: size
+    };
+}
+function boundsFrom(element) {
+    var rect = element.getBoundingClientRect();
+    return createBounds(positionFrom(rect), sizeFrom(rect));
+}
+function setBounds(style, x, y, width, height) {
+    style.left = x;
+    style.top = y;
+    style.width = width;
+    style.maxWidth = width;
+    style.height = height;
+}
+function resetBounds(style) {
+    setBounds(style, '', '', '', '');
+}
+function setBoundsPx(style, bounds) {
+    var position = bounds.position;
+    var size = bounds.size;
+    setBounds(style, pixels(position[0]), pixels(position[1]), pixels(size[0]), pixels(size[1]));
+}
+function centreBounds(document, target, bounds) {
+    var viewport = viewportSize(document);
+    var cappedTarget = minimizeVectors(viewport, target);
+    var factor = minimumDivisor(cappedTarget, bounds.size);
+    var scaled = scaleVector(bounds.size, factor);
+    var centre = centrePosition(viewport, createBounds(bounds.position, scaled));
+    return {
+        position: centre,
+        size: scaled
+    };
+}
+
+var CLASS_SEPARATOR = ' ';
+function classFilter(className, index, classList) {
+    return className.length > 0 && classList.indexOf(className) === index;
+}
+function excludeClass(excluded) {
+    return function (className, index, classList) {
+        return className !== excluded && classFilter(className, index, classList);
+    };
+}
+function classesFrom(classList) {
+    return classList
+        .split(CLASS_SEPARATOR)
+        .filter(classFilter);
+}
+function hasClass(element, className) {
+    return element.className.indexOf(className) !== -1;
+}
+function addClass(element, add) {
+    element.className = classesFrom(element.className)
+        .concat(add)
+        .filter(classFilter)
+        .join(CLASS_SEPARATOR);
+}
+function removeClass(element, remove) {
+    element.className = classesFrom(element.className)
+        .filter(excludeClass(remove))
+        .join(CLASS_SEPARATOR);
+}
+
+var CLASS$1 = 'zoom__element';
+var HIDDEN_CLASS = CLASS$1 + "--hidden";
+var ACTIVE_CLASS = CLASS$1 + "--active";
+function hideImage(image) {
+    addClass(image, HIDDEN_CLASS);
+}
+function showImage(image) {
+    removeClass(image, HIDDEN_CLASS);
+}
+
+function activateImage(image) {
+    addClass(image, ACTIVE_CLASS);
+}
+function deactivateImage(image) {
+    removeClass(image, ACTIVE_CLASS);
+}
+
+function isZoomable(target) {
+    return target instanceof HTMLImageElement
+        && hasParent(target)
+        && hasGrandParent(target)
+        && hasClass(target, CLASS$1);
+}
+function fullSrc(wrapper, image) {
+    var fullSrc = wrapper.getAttribute('data-src');
+    return fullSrc === null ? image.src : fullSrc;
+}
+
+var CLASS$2 = 'zoom';
+var EXPANDING_CLASS = CLASS$2 + "--expanding";
+var EXPANDED_CLASS = CLASS$2 + "--expanded";
+var COLLAPSING_CLASS = CLASS$2 + "--collapsing";
+function isWrapperExpanding(wrapper) {
+    return hasClass(wrapper, EXPANDING_CLASS);
+}
+function startExpandingWrapper(wrapper) {
+    addClass(wrapper, EXPANDING_CLASS);
+}
+function stopExpandingWrapper(wrapper) {
+    removeClass(wrapper, EXPANDING_CLASS);
+}
+function isWrapperExpanded(wrapper) {
+    return hasClass(wrapper, EXPANDED_CLASS);
+}
+function setWrapperExpanded(wrapper) {
+    addClass(wrapper, EXPANDED_CLASS);
+}
+function unsetWrapperExpanded(wrapper) {
+    removeClass(wrapper, EXPANDED_CLASS);
+}
+function isWrapperCollapsing(wrapper) {
+    return hasClass(wrapper, COLLAPSING_CLASS);
+}
+function startCollapsingWrapper(wrapper) {
+    addClass(wrapper, COLLAPSING_CLASS);
+}
+function stopCollapsingWrapper(wrapper) {
+    removeClass(wrapper, COLLAPSING_CLASS);
+}
+function isWrapperTransitioning(wrapper) {
+    return isWrapperExpanding(wrapper) || isWrapperCollapsing(wrapper);
+}
+
+var CLASS$$1 = 'zoom__clone';
+var VISIBLE_CLASS = CLASS$$1 + "--visible";
+var LOADED_CLASS = CLASS$$1 + "--loaded";
+function createClone(src) {
+    var clone = document.createElement('img');
+    clone.className = CLASS$$1;
+    clone.src = src;
+    listenForEvent(clone, 'load', function () { return addClass(clone, LOADED_CLASS); });
+    return clone;
+}
+function showCloneOnceLoaded(elements) {
+    return function () {
+        if (elements.clone !== undefined && isWrapperExpanded(elements.wrapper) && !isCloneVisible(elements.clone)) {
+            replaceImageWithClone(elements.image, elements.clone);
+        }
+    };
+}
+function showClone(clone) {
+    addClass(clone, VISIBLE_CLASS);
+}
+function hideClone(clone) {
+    removeClass(clone, VISIBLE_CLASS);
+}
+function isCloneVisible(clone) {
+    return hasClass(clone, VISIBLE_CLASS);
+}
+function isCloneLoaded(clone) {
+    return hasClass(clone, LOADED_CLASS);
+}
+function replaceImageWithClone(image, clone) {
+    showClone(clone);
+    hideImage(image);
+}
+function replaceCloneWithImage(image, clone) {
+    showImage(image);
+    hideClone(clone);
+}
+
+var CLASS$3 = 'zoom__container';
+function createContainer(document) {
+    return createDiv(document, CLASS$3);
+}
+function isContainer(element) {
+    return hasClass(element, CLASS$3);
+}
+
+var CLASS$4 = 'zoom__overlay';
+var VISIBLE_CLASS$1 = CLASS$4 + "--visible";
+function addOverlay() {
+    var overlay = createDiv(document, CLASS$4);
+    document.body.appendChild(overlay);
+    repaint(overlay);
+    addClass(overlay, VISIBLE_CLASS$1);
+    return overlay;
+}
+function hideOverlay(overlay) {
+    removeClass(overlay, VISIBLE_CLASS$1);
+}
+
+var TRANSFORM_PROPERTIES = {
+    'WebkitTransform': '-webkit-transform',
+    'MozTransform': '-moz-transform',
+    'msTransform': '-ms-transform',
+    'OTransform': '-o-transform',
+    'transform': 'transform'
+};
+function translate(translation) {
+    return "translate(" + translation[0] + "px, " + translation[1] + "px)";
+}
+function translate3d(translation) {
+    return "translate3d(" + translation[0] + "px, " + translation[1] + "px, 0)";
+}
+function scaleBy(amount) {
+    return "scale(" + amount + ")";
+}
+function scaleTranslate(transformation) {
+    return scaleBy(transformation.scale) + " " + translate(transformation.translation);
+}
+function scaleTranslate3d(transformation) {
+    return scaleBy(transformation.scale) + " " + translate3d(transformation.translation);
+}
+function centreTransformation(target, bounds) {
+    var viewport = viewportSize(document);
+    var cappedTarget = minimizeVectors(viewport, target);
+    var scale = minimumDivisor(cappedTarget, bounds.size);
+    var translation = centreTranslation(viewport, bounds, scale);
+    return {
+        scale: scale,
+        translation: translation
+    };
+}
+function expandToViewport(capabilities, element, target, bounds) {
+    var transformation = centreTransformation(target, bounds);
+    var style = element.style;
+    if (capabilities.hasTranslate3d) {
+        style[capabilities.transformProperty] = scaleTranslate3d(transformation);
+    }
+    else {
+        style[capabilities.transformProperty] = scaleTranslate(transformation);
+    }
+}
+
+var TRANSITION_END_EVENTS = {
+    'WebkitTransition': 'webkitTransitionEnd',
+    'MozTransition': 'transitionend',
+    'OTransition': 'oTransitionEnd',
+    'msTransition': 'MSTransitionEnd',
+    'transition': 'transitionend'
+};
+/**
+ * Ignore the transition lifecycle to perform a callback, then restore the element's original transitions.
+ */
+function ignoreTransitions(element, transitionProperty, callback) {
+    var style = element.style;
+    style[transitionProperty] = 'initial';
+    callback();
+    repaint(element);
+    resetStyle(element, transitionProperty);
+}
+
+function useExistingElements(overlay, image) {
+    var container = image.parentElement;
+    var wrapper = container.parentElement;
+    var clone;
+    var src = fullSrc(wrapper, image);
+    var cloneRequired = src !== image.src;
+    if (cloneRequired) {
+        clone = container.children.item(1);
+    }
+    return {
+        overlay: overlay,
+        wrapper: wrapper,
+        container: container,
+        image: image,
+        clone: clone
+    };
+}
+function setUpElements(overlay, image) {
+    var container = createContainer(document);
+    var wrapper = image.parentElement;
+    var clone;
+    var src = fullSrc(wrapper, image);
+    var cloneRequired = src !== image.src;
+    if (cloneRequired) {
+        clone = createClone(src);
+    }
+    return {
+        overlay: overlay,
+        wrapper: wrapper,
+        container: container,
+        image: image,
+        clone: clone
+    };
+}
+
+function pageScrollY(window) {
+    if (window.pageYOffset === undefined) {
+        return rootElement(window.document).scrollTop;
+    }
+    else {
+        return window.pageYOffset;
+    }
+}
+
+var ESCAPE_KEY_CODE = 27;
+function escKeyPressed(listener) {
+    return function (event) {
+        if (event.keyCode === ESCAPE_KEY_CODE) {
+            event.preventDefault();
+            event.stopPropagation();
+            fireEventListener(listener, event);
+        }
+    };
+}
+function scrolled(start, minAmount, current, listener) {
+    return function (event) {
+        if (Math.abs(start - current()) >= minAmount) {
+            fireEventListener(listener, event);
+        }
+    };
+}
+function addDismissListeners(window, config, container, collapse) {
+    var initialScrollY = pageScrollY(window);
+    var scrolledAway = addEventListener(window, 'scroll', scrolled(initialScrollY, config.scrollDelta, function () { return pageScrollY(window); }, collapse));
+    var pressedEsc = addEventListener(window.document, 'keyup', escKeyPressed(collapse));
+    var dismissed = addEventListener(container, 'click', collapse);
+    return function () {
+        removeEventListener(window, 'scroll', scrolledAway);
+        removeEventListener(window.document, 'keyup', pressedEsc);
+        removeEventListener(container, 'click', dismissed);
+    };
+}
+
+var VENDOR_PREFIXES = [
+    'Webkit',
+    'Moz',
+    'ms',
+    'O'
+];
+function vendorProperties(property) {
+    var suffix = "" + property.charAt(0).toUpperCase() + property.substr(1);
+    var vendorProperties = VENDOR_PREFIXES.map(function (prefix) { return "" + prefix + suffix; });
+    return [property].concat(vendorProperties);
+}
+function vendorProperty(style, property) {
+    for (var _i = 0, _a = vendorProperties(property); _i < _a.length; _i++) {
+        var vendorProperty_1 = _a[_i];
+        if (vendorProperty_1 in style) {
+            return vendorProperty_1;
+        }
+    }
+}
+
+function capabilitiesOf(window) {
+    var body = document.body;
+    var bodyStyle = body.style;
+    var transformProperty = vendorProperty(bodyStyle, 'transform');
+    var transitionProperty = vendorProperty(bodyStyle, 'transition');
+    var transitionEndEvent;
+    var hasTransform = false;
+    if (transformProperty !== undefined) {
+        hasTransform = true;
+    }
+    var hasTransitions = false;
+    if (transitionProperty !== undefined) {
+        transitionEndEvent = TRANSITION_END_EVENTS[transitionProperty];
+        hasTransitions = transitionEndEvent !== null;
+    }
+    var hasTranslate3d = false;
+    if (transformProperty !== undefined) {
+        hasTranslate3d = supportsTranslate3d(window, transformProperty);
+    }
+    return {
+        transformProperty: transformProperty,
+        transitionProperty: transitionProperty,
+        transitionEndEvent: transitionEndEvent,
+        hasTransform: hasTransform,
+        hasTransitions: hasTransitions,
+        hasTranslate3d: hasTranslate3d
+    };
+}
+function supportsTranslate3d(window, transformProperty) {
+    var computeStyle = window.getComputedStyle;
+    var property = TRANSFORM_PROPERTIES[transformProperty];
+    if (typeof computeStyle === 'function' && property !== undefined) {
+        var document_1 = window.document;
+        var body = document_1.body;
+        var child = document_1.createElement('p');
+        child.style[transformProperty] = 'translate3d(1px,1px,1px)';
+        body.appendChild(child);
+        var value = computeStyle(child).getPropertyValue(property);
+        body.removeChild(child);
+        return value.length > 0 && value !== 'none';
+    }
+    else {
+        return false;
+    }
+}
+
+function collapsed(window, config, elements) {
+    if (elements.clone !== undefined) {
+        replaceCloneWithImage(elements.image, elements.clone);
+    }
+    deactivateImage(elements.image);
+    window.document.body.removeChild(elements.overlay);
+    stopCollapsingWrapper(elements.wrapper);
+    resetStyle(elements.wrapper, 'height');
+    setTimeout(function () { return addZoomListener(window, config); }, 1);
+}
+function zoomInstant(window, config, elements, target, showCloneListener) {
+    var bounds = boundsFrom(elements.image);
+    var resized = addEventListener(window, 'resize', function () {
+        var wrapperPosition = positionFrom(elements.wrapper.getBoundingClientRect());
+        bounds = createBounds(wrapperPosition, bounds.size);
+        setBoundsPx(elements.container.style, centreBounds(window.document, target, bounds));
+    });
+    var removeDismissListeners;
+    var collapse = function () {
+        removeDismissListeners();
+        removeEventListener(window, 'resize', resized);
+        if (elements.clone !== undefined && showCloneListener !== undefined && !isCloneLoaded(elements.clone)) {
+            removeEventListener(elements.clone, 'load', showCloneListener);
+        }
+        unsetWrapperExpanded(elements.wrapper);
+        resetBounds(elements.container.style);
+        collapsed(window, config, elements);
+    };
+    removeDismissListeners = addDismissListeners(window, config, elements.container, collapse);
+    setWrapperExpanded(elements.wrapper);
+    elements.wrapper.style.height = pixels(elements.image.height);
+    activateImage(elements.image);
+    setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
+}
+function zoomTransition(window, capabilities, config, elements, target, showCloneListener) {
+    var bounds = boundsFrom(elements.image);
+    var resized = addEventListener(window, 'resize', function () {
+        var wrapperPosition = positionFrom(elements.wrapper.getBoundingClientRect());
+        bounds = createBounds(wrapperPosition, bounds.size);
+        if (isWrapperTransitioning(elements.wrapper)) {
+            expandToViewport(capabilities, elements.container, target, bounds);
+        }
+        else {
+            setBoundsPx(elements.container.style, centreBounds(window.document, target, bounds));
+        }
+    });
+    var expandedListener;
+    var removeDismissListeners;
+    var collapse = function () {
+        removeDismissListeners();
+        removeEventListener(window, 'resize', resized);
+        if (elements.clone !== undefined && showCloneListener !== undefined && !isCloneLoaded(elements.clone)) {
+            removeEventListener(elements.clone, 'load', showCloneListener);
+        }
+        hideOverlay(elements.overlay);
+        startCollapsingWrapper(elements.wrapper);
+        var collapsedListener = listenForEvent(elements.container, capabilities.transitionEndEvent, function () {
+            collapsed(window, config, elements);
+        });
+        if (isWrapperExpanding(elements.wrapper)) {
+            if (expandedListener !== undefined) {
+                removeEventListener(elements.container, capabilities.transitionEndEvent, expandedListener);
+            }
+            resetStyle(elements.container, capabilities.transformProperty);
+            stopExpandingWrapper(elements.wrapper);
+        }
+        else {
+            ignoreTransitions(elements.container, capabilities.transitionProperty, function () {
+                expandToViewport(capabilities, elements.container, target, bounds);
+            });
+            resetStyle(elements.container, capabilities.transformProperty);
+            resetBounds(elements.container.style);
+            unsetWrapperExpanded(elements.wrapper);
+        }
+        if (collapsedListener === undefined) {
+            collapsed(window, config, elements);
+        }
+    };
+    function expanded() {
+        if (elements.clone !== undefined && isCloneLoaded(elements.clone) && !isCloneVisible(elements.clone)) {
+            if (showCloneListener !== undefined) {
+                removeEventListener(elements.clone, capabilities.transitionEndEvent, showCloneListener);
+            }
+            replaceImageWithClone(elements.image, elements.clone);
+        }
+        stopExpandingWrapper(elements.wrapper);
+        setWrapperExpanded(elements.wrapper);
+        ignoreTransitions(elements.container, capabilities.transitionProperty, function () {
+            resetStyle(elements.container, capabilities.transformProperty);
+            setBoundsPx(elements.container.style, centreBounds(window.document, target, bounds));
+        });
+    }
+    removeDismissListeners = addDismissListeners(window, config, elements.container, collapse);
+    startExpandingWrapper(elements.wrapper);
+    elements.wrapper.style.height = pixels(elements.image.height);
+    activateImage(elements.image);
+    expandedListener = listenForEvent(elements.container, capabilities.transitionEndEvent, function () { return expanded(); });
+    if (expandedListener === undefined) {
+        expanded();
+    }
+    else {
+        expandToViewport(capabilities, elements.container, target, bounds);
+    }
+}
+function clickedZoomable(window, config, event, zoomListener) {
+    var image = event.target;
+    var parent = image.parentElement;
+    var previouslyZoomed = isContainer(parent);
+    var wrapper = previouslyZoomed ? parent.parentElement : parent;
+    if (event.metaKey || event.ctrlKey) {
+        window.open(fullSrc(wrapper, image), '_blank');
+    }
+    else {
+        if (zoomListener !== undefined) {
+            removeEventListener(window.document.body, 'click', zoomListener);
+        }
+        var elements = void 0;
+        var overlay = addOverlay();
+        if (previouslyZoomed) {
+            elements = useExistingElements(overlay, image);
+            if (elements.clone !== undefined && isCloneLoaded(elements.clone)) {
+                replaceImageWithClone(image, elements.clone);
+            }
+        }
+        else {
+            elements = setUpElements(overlay, image);
+            elements.wrapper.replaceChild(elements.container, image);
+            elements.container.appendChild(image);
+            if (elements.clone !== undefined) {
+                elements.container.appendChild(elements.clone);
+            }
+        }
+        var showCloneListener = void 0;
+        if (elements.clone !== undefined) {
+            if (isCloneLoaded(elements.clone)) {
+                replaceImageWithClone(image, elements.clone);
+            }
+            else {
+                showCloneListener = addEventListener(elements.clone, 'load', showCloneOnceLoaded(elements));
+            }
+        }
+        var target = targetSize(elements.wrapper);
+        var capabilities = capabilitiesOf(window);
+        if (capabilities.hasTransform && capabilities.hasTransitions) {
+            zoomTransition(window, capabilities, config, elements, target, showCloneListener);
+        }
+        else {
+            zoomInstant(window, config, elements, target, showCloneListener);
+        }
+    }
+}
+function addZoomListener(window, config) {
+    var listener = addEventListener(window.document.body, 'click', function (event) {
+        if (isZoomable(event.target)) {
+            event.preventDefault();
+            event.stopPropagation();
+            clickedZoomable(window, config, event, listener);
+        }
+    });
+}
+function listenWhenReady(window, config) {
+    if (config === void 0) { config = defaultConfig(); }
+    ready(window.document, function () { return addZoomListener(window, config); });
+}
+
+listenWhenReady(window);
+
+})));
+//# sourceMappingURL=zoom.js.map

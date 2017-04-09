@@ -20,7 +20,7 @@ import {
 import { isContainer } from './element/Container';
 import {
     resetStyle,
-    targetDimensions
+    targetSize
 } from './element/Element';
 import {
     activateImage,
@@ -122,7 +122,7 @@ function zoomTransition(window: Window, capabilities: WindowCapabilities, config
         bounds = createBounds(wrapperPosition, bounds.size);
 
         if (isWrapperTransitioning(elements.wrapper)) {
-            expandToViewport(window.document, capabilities, elements.container, target, bounds);
+            expandToViewport(capabilities, elements.container, target, bounds);
         } else {
             setBoundsPx(elements.container.style, centreBounds(window.document, target, bounds));
         }
@@ -155,7 +155,7 @@ function zoomTransition(window: Window, capabilities: WindowCapabilities, config
             stopExpandingWrapper(elements.wrapper);
         } else {
             ignoreTransitions(elements.container, capabilities.transitionProperty as string, () => {
-                expandToViewport(window.document, capabilities, elements.container, target, bounds);
+                expandToViewport(capabilities, elements.container, target, bounds);
             });
 
             resetStyle(elements.container, capabilities.transformProperty as string);
@@ -197,7 +197,7 @@ function zoomTransition(window: Window, capabilities: WindowCapabilities, config
     if (expandedListener === undefined) {
         expanded();
     } else {
-        expandToViewport(window.document, capabilities, elements.container, target, bounds);
+        expandToViewport(capabilities, elements.container, target, bounds);
     }
 }
 
@@ -215,7 +215,7 @@ export function clickedZoomable(window: Window, config: Config, event: MouseEven
         }
 
         let elements: ZoomElements;
-        let overlay: HTMLDivElement = addOverlay(window.document);
+        let overlay: HTMLDivElement = addOverlay();
 
         if (previouslyZoomed) {
             elements = useExistingElements(overlay, image);
@@ -244,7 +244,7 @@ export function clickedZoomable(window: Window, config: Config, event: MouseEven
             }
         }
 
-        let target: Vector = targetDimensions(elements.wrapper);
+        let target: Vector = targetSize(elements.wrapper);
         let capabilities: WindowCapabilities = capabilitiesOf(window);
 
         if (capabilities.hasTransform && capabilities.hasTransitions) {
