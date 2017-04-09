@@ -10,14 +10,12 @@ describe('currentEvent', () => {
     });
 
     it('should return window.event if the input event is undefined', () => {
-        let window: any = {
-            event: jasmine.createSpy('Event')
-        };
-
-        expect(currentEvent(undefined, window)).toBe(window.event);
+        window.event = jasmine.createSpy('Event') as any;
+        expect(currentEvent(undefined)).toBe(window.event);
     });
 
     it('should throw an error otherwise', () => {
+        window.event = undefined;
         expect(() => currentEvent(undefined)).toThrowError(Error, 'No current event to handle.');
     });
 });

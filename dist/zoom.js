@@ -145,13 +145,12 @@ function hasGrandParent(element) {
     return hasParent(element) && hasParent(element.parentElement);
 }
 
-function currentEvent(event, context) {
-    if (context === void 0) { context = window; }
+function currentEvent(event) {
     if (event !== undefined) {
         return event;
     }
-    else if (context.event !== undefined) {
-        return context.event;
+    else if (window.event !== undefined) {
+        return window.event;
     }
     else {
         throw new Error('No current event to handle.');

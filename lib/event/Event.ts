@@ -1,8 +1,8 @@
-export function currentEvent(event: Event | undefined, context: Window = window): Event {
+export function currentEvent(event: any): Event {
     if (event !== undefined) {
         return event;
-    } else if (context.event !== undefined) {
-        return context.event;
+    } else if (window.event !== undefined) {
+        return window.event;
     } else {
         throw new Error('No current event to handle.');
     }
