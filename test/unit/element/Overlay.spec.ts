@@ -10,19 +10,23 @@ import {
 import * as Document from '../../../lib/window/Document';
 
 describe('addOverlay', () => {
+    let overlay: any;
+    let createDiv: jasmine.Spy;
+
+    beforeEach(() => {
+        overlay = { className: 'overlay' };
+        createDiv = spyOn(Document, 'createDiv').and.returnValue(overlay);
+    });
+
     it('should create a div element', () => {
-        let overlay: any = { className: 'overlay' };
-        let createDiv: jasmine.Spy = spyOn(Document, 'createDiv').and.returnValue(overlay);
         spyOn(document.body, 'appendChild');
 
         addOverlay();
 
-        expect(createDiv).toHaveBeenCalledWith(document, CLASS);
+        expect(createDiv).toHaveBeenCalledWith(CLASS);
     });
 
     it('should append the hidden overlay to the document body', () => {
-        let overlay: any = { className: 'overlay' };
-        spyOn(Document, 'createDiv').and.returnValue(overlay);
         let appendChild: jasmine.Spy = spyOn(document.body, 'appendChild').and.callFake((): void => {
             expect(isOverlayVisible(overlay)).toBe(false);
         });
@@ -33,9 +37,6 @@ describe('addOverlay', () => {
     });
 
     it('should repaint the hidden overlay after adding it to the document body', () => {
-        let overlay: any = { className: 'overlay' };
-        spyOn(Document, 'createDiv').and.returnValue(overlay);
-
         let repaint: jasmine.Spy = spyOn(Element, 'repaint');
         spyOn(document.body, 'appendChild').and.callFake((): void => {
             expect(repaint).toHaveBeenCalledTimes(0);
@@ -47,10 +48,7 @@ describe('addOverlay', () => {
     });
 
     it('should show the overlay after repainting it', () => {
-        let overlay: any = { className: 'overlay' };
-        spyOn(Document, 'createDiv').and.returnValue(overlay);
         spyOn(document.body, 'appendChild');
-
         let repaint: jasmine.Spy = spyOn(Element, 'repaint');
         let addClass: jasmine.Spy = spyOn(ClassList, 'addClass').and.callFake((): void => {
             expect(repaint).toHaveBeenCalled();
@@ -62,10 +60,7 @@ describe('addOverlay', () => {
     });
 
     it('should return the overlay', () => {
-        let overlay: any = { className: 'overlay' };
-        spyOn(Document, 'createDiv').and.returnValue(overlay);
         spyOn(document.body, 'appendChild');
-
         expect(addOverlay()).toBe(overlay);
     });
 });
@@ -82,12 +77,13 @@ describe('hideOverlay', () => {
 });
 
 describe('isOverlayVisible', () => {
-    it('should call hasClass with the visible class', () => {
-        let overlay: jasmine.Spy = jasmine.createSpy('overlay');
-        let hasClass: jasmine.Spy = spyOn(ClassList, 'hasClass');
+    it('should return true if the visible class is present', () => {
+        let overlay: any = { className: VISIBLE_CLASS };
+        expect(isOverlayVisible(overlay)).toBe(true);
+    });
 
-        isOverlayVisible(overlay as any);
-
-        expect(hasClass).toHaveBeenCalledWith(overlay, VISIBLE_CLASS);
+    it('should return false if the visible class is absent', () => {
+        let overlay: any = { className: '' };
+        expect(isOverlayVisible(overlay)).toBe(false);
     });
 });

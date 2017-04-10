@@ -10,7 +10,7 @@ export const CLASS: string = 'zoom__overlay';
 export const VISIBLE_CLASS: string = `${CLASS}--visible`;
 
 export function addOverlay(): HTMLDivElement {
-    let overlay: HTMLDivElement = createDiv(document, CLASS);
+    let overlay: HTMLDivElement = createDiv(CLASS);
     document.body.appendChild(overlay);
     repaint(overlay);
     addClass(overlay, VISIBLE_CLASS);

@@ -3,8 +3,8 @@ import { hasClass } from './ClassList';
 
 export const CLASS: string = 'zoom__container';
 
-export function createContainer(document: Document): HTMLDivElement {
-    return createDiv(document, CLASS);
+export function createContainer(): HTMLDivElement {
+    return createDiv(CLASS);
 }
 
 export function isContainer(element: HTMLElement): boolean {

@@ -32,7 +32,7 @@ export function viewportSize(document: Document): Vector {
     return clientSize(rootElement(document));
 }
 
-export function createDiv(document: Document, className: string): HTMLDivElement {
+export function createDiv(className: string): HTMLDivElement {
     let overlay: HTMLDivElement = document.createElement('div');
     overlay.className = className;
     return overlay;

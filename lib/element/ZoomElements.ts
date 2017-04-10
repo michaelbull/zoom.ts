@@ -32,7 +32,7 @@ export function useExistingElements(overlay: HTMLDivElement, image: HTMLImageEle
 }
 
 export function setUpElements(overlay: HTMLDivElement, image: HTMLImageElement): ZoomElements {
-    let container: HTMLElement = createContainer(document);
+    let container: HTMLElement = createContainer();
     let wrapper: HTMLElement = image.parentElement as HTMLElement;
 
     let clone: HTMLImageElement | undefined;

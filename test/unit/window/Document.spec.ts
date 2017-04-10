@@ -156,25 +156,23 @@ describe('viewportSize', () => {
 
 describe('createDiv', () => {
     let element: any;
-    let document: any;
+    let createElement: jasmine.Spy;
 
     beforeEach(() => {
         element = {};
-        document = {
-            createElement: jasmine.createSpy('createElement').and.callFake(() => element)
-        };
+        createElement = spyOn(document, 'createElement').and.returnValue(element);
     });
 
     it('should create a div element', () => {
-        createDiv(document, '');
-        expect(document.createElement).toHaveBeenCalledWith('div');
+        createDiv('');
+        expect(createElement).toHaveBeenCalledWith('div');
     });
 
     it('should assign the className', () => {
-        expect(createDiv(document, 'example').className).toBe('example');
+        expect(createDiv('example').className).toBe('example');
     });
 
     it('should return the created element', () => {
-        expect(createDiv(document, '')).toBe(element);
+        expect(createDiv('')).toBe(element);
     });
 });

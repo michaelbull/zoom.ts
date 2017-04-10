@@ -37,13 +37,14 @@ describe('showImage', () => {
 });
 
 describe('isImageHidden', () => {
-    it('should call hasClass with the hidden class', () => {
-        let image: jasmine.Spy = jasmine.createSpy('image');
-        let hasClass: jasmine.Spy = spyOn(ClassList, 'hasClass');
+    it('should return true if the hidden class is present', () => {
+        let image: any = { className: HIDDEN_CLASS };
+        expect(isImageHidden(image)).toBe(true);
+    });
 
-        isImageHidden(image as any);
-
-        expect(hasClass).toHaveBeenCalledWith(image, HIDDEN_CLASS);
+    it('should return false if the hidden class is absent', () => {
+        let image: any = { className: '' };
+        expect(isImageHidden(image)).toBe(false);
     });
 });
 
@@ -70,13 +71,14 @@ describe('deactivateImage', () => {
 });
 
 describe('isImageActive', () => {
-    it('should call hasClass with the active class', () => {
-        let image: jasmine.Spy = jasmine.createSpy('image');
-        let hasClass: jasmine.Spy = spyOn(ClassList, 'hasClass');
+    it('should return true if the active class is present', () => {
+        let image: any = { className: ACTIVE_CLASS };
+        expect(isImageActive(image)).toBe(true);
+    });
 
-        isImageActive(image as any);
-
-        expect(hasClass).toHaveBeenCalledWith(image, ACTIVE_CLASS);
+    it('should return false if the active class is absent', () => {
+        let image: any = { className: '' };
+        expect(isImageActive(image)).toBe(false);
     });
 });
 

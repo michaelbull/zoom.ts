@@ -13,12 +13,15 @@ import {
     replaceCloneWithImage,
     replaceImageWithClone,
     showClone,
+    showCloneOnceLoaded,
     VISIBLE_CLASS
 } from '../../../lib/element/Clone';
 import {
     HIDDEN_CLASS,
     isImageHidden
 } from '../../../lib/element/Image';
+import * as Wrapper from '../../../lib/element/Wrapper';
+import { fireEventListener } from '../../../lib/event/EventListener';
 
 describe('createClone', () => {
     let element: any;
@@ -72,6 +75,68 @@ describe('createClone', () => {
     });
 });
 
+describe('showCloneOnceLoaded', () => {
+    let event: any;
+    let addClass: jasmine.Spy;
+
+    beforeEach(() => {
+        event = jasmine.createSpy('event');
+        addClass = spyOn(ClassList, 'addClass');
+    });
+
+    it('should not show the clone if the clone is undefined', () => {
+        let elements: any = {};
+        let listener: EventListener = showCloneOnceLoaded(elements);
+        spyOn(Wrapper, 'isWrapperExpanded').and.returnValue(true);
+
+        fireEventListener(listener, event);
+
+        expect(addClass).toHaveBeenCalledTimes(0);
+    });
+
+    it('should not show the clone if the wrapper is not expanded', () => {
+        let elements: any = {
+            clone: {
+                className: 'clone'
+            }
+        };
+        let listener: EventListener = showCloneOnceLoaded(elements);
+        spyOn(Wrapper, 'isWrapperExpanded').and.returnValue(false);
+
+        fireEventListener(listener, event);
+
+        expect(addClass).toHaveBeenCalledTimes(0);
+    });
+
+    it('should not show the clone if the clone is already visible', () => {
+        let elements: any = {
+            clone: {
+                className: `clone ${VISIBLE_CLASS}`
+            }
+        };
+        let listener: EventListener = showCloneOnceLoaded(elements);
+        spyOn(Wrapper, 'isWrapperExpanded').and.returnValue(true);
+
+        fireEventListener(listener, event);
+
+        expect(addClass).toHaveBeenCalledTimes(0);
+    });
+
+    it('should show the clone if the wrapper is expanded and the clone is not already visible', () => {
+        let elements: any = {
+            clone: {
+                className: 'clone'
+            }
+        };
+        let listener: EventListener = showCloneOnceLoaded(elements);
+        spyOn(Wrapper, 'isWrapperExpanded').and.returnValue(true);
+
+        fireEventListener(listener, event);
+
+        expect(addClass).toHaveBeenCalledTimes(2);
+    });
+});
+
 describe('showClone', () => {
     it('should add the visible class', () => {
         let clone: jasmine.Spy = jasmine.createSpy('clone');
@@ -95,24 +160,26 @@ describe('hideClone', () => {
 });
 
 describe('isCloneVisible', () => {
-    it('should call hasClass with the visible class', () => {
-        let clone: jasmine.Spy = jasmine.createSpy('clone');
-        let hasClass: jasmine.Spy = spyOn(ClassList, 'hasClass');
+    it('should return true if the visible class is present', () => {
+        let clone: any = { className: VISIBLE_CLASS };
+        expect(isCloneVisible(clone)).toBe(true);
+    });
 
-        isCloneVisible(clone as any);
-
-        expect(hasClass).toHaveBeenCalledWith(clone, VISIBLE_CLASS);
+    it('should return false if the visible class is absent', () => {
+        let clone: any = { className: '' };
+        expect(isCloneVisible(clone)).toBe(false);
     });
 });
 
 describe('isCloneLoaded', () => {
-    it('should call hasClass with the visible class', () => {
-        let clone: jasmine.Spy = jasmine.createSpy('clone');
-        let hasClass: jasmine.Spy = spyOn(ClassList, 'hasClass');
+    it('should return true if the loaded class is present', () => {
+        let clone: any = { className: LOADED_CLASS };
+        expect(isCloneLoaded(clone)).toBe(true);
+    });
 
-        isCloneLoaded(clone as any);
-
-        expect(hasClass).toHaveBeenCalledWith(clone, LOADED_CLASS);
+    it('should return false if the loaded class is absent', () => {
+        let clone: any = { className: '' };
+        expect(isCloneLoaded(clone)).toBe(false);
     });
 });
 

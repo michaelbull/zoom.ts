@@ -1,4 +1,3 @@
-import * as ClassList from '../../../lib/element/ClassList';
 import {
     CLASS,
     createContainer,
@@ -8,22 +7,22 @@ import * as Document from '../../../lib/window/Document';
 
 describe('createContainer', () => {
     it('should create a div element with the correct class', () => {
-        let document: jasmine.Spy = jasmine.createSpy('document');
         let createDiv: jasmine.Spy = spyOn(Document, 'createDiv');
 
-        createContainer(document as any);
+        createContainer();
 
-        expect(createDiv).toHaveBeenCalledWith(document, CLASS);
+        expect(createDiv).toHaveBeenCalledWith(CLASS);
     });
 });
 
 describe('isContainer', () => {
-    it('should call hasClass with the container class', () => {
-        let element: jasmine.Spy = jasmine.createSpy('element');
-        let hasClass: jasmine.Spy = spyOn(ClassList, 'hasClass');
+    it('should return true if the container class is present', () => {
+        let container: any = { className: CLASS };
+        expect(isContainer(container)).toBe(true);
+    });
 
-        isContainer(element as any);
-
-        expect(hasClass).toHaveBeenCalledWith(element, CLASS);
+    it('should return false if the container class is absent', () => {
+        let container: any = { className: '' };
+        expect(isContainer(container)).toBe(false);
     });
 });
