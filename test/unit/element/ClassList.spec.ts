@@ -1,6 +1,5 @@
 import {
     addClass,
-    classesFrom,
     classFilter,
     hasClass,
     removeClass
@@ -17,24 +16,6 @@ describe('classFilter', () => {
 
     it('should return true if the className is not empty and it is not in the class list', () => {
         expect(classFilter('one', 1, ['zero', 'one', 'two'])).toBe(true);
-    });
-});
-
-describe('classesFrom', () => {
-    it('should return an empty array if the class list is empty', () => {
-        expect(classesFrom('')).toEqual([]);
-    });
-
-    it('should return a single-element array if the class list has no separators', () => {
-        expect(classesFrom('example')).toEqual(['example']);
-    });
-
-    it('should not contain duplicates', () => {
-        expect(classesFrom('dupe not-dupe dupe   another-dupe  dupe')).toEqual(['dupe', 'not-dupe', 'another-dupe']);
-    });
-
-    it('should not contain empty classes', () => {
-        expect(classesFrom('example  class one   two     three')).toEqual(['example', 'class', 'one', 'two', 'three']);
     });
 });
 

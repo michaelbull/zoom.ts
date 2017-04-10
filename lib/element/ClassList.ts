@@ -12,25 +12,21 @@ export function excludeClass(excluded: string): ClassFilter {
     };
 }
 
-export function classesFrom(classList: string): string[] {
-    return classList
-        .split(CLASS_SEPARATOR)
-        .filter(classFilter);
-}
-
 export function hasClass(element: HTMLElement, className: string): boolean {
     return element.className.indexOf(className) !== -1;
 }
 
 export function addClass(element: HTMLElement, add: string): void {
-    element.className = classesFrom(element.className)
+    element.className = element.className
+        .split(CLASS_SEPARATOR)
         .concat(add)
         .filter(classFilter)
         .join(CLASS_SEPARATOR);
 }
 
 export function removeClass(element: HTMLElement, remove: string): void {
-    element.className = classesFrom(element.className)
+    element.className = element.className
+        .split(CLASS_SEPARATOR)
         .filter(excludeClass(remove))
         .join(CLASS_SEPARATOR);
 }
