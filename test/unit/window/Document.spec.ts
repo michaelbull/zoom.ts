@@ -1,5 +1,4 @@
 import { fireEventListener } from '../../../lib/event/EventListener';
-import { Vector } from '../../../lib/math/Vector';
 import {
     createDiv,
     isStandardsMode,
@@ -128,10 +127,7 @@ describe('viewportSize', () => {
             }
         };
 
-        let actual: Vector = viewportSize(document);
-
-        expect(actual[0]).toBe(300);
-        expect(actual[1]).toBe(400);
+        expect(viewportSize(document)).toEqual([300, 400]);
     });
 
     it('should return the dimensions of document.body if not in standards mode', () => {
@@ -147,10 +143,7 @@ describe('viewportSize', () => {
             }
         };
 
-        let actual: Vector = viewportSize(document);
-
-        expect(actual[0]).toBe(850);
-        expect(actual[1]).toBe(950);
+        expect(viewportSize(document)).toEqual([850, 950]);
     });
 });
 
