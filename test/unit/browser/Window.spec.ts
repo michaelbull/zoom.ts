@@ -1,6 +1,6 @@
-import * as Document from '../../../lib/window/Document';
-import { rootElement } from '../../../lib/window/Document';
-import { pageScrollY } from '../../../lib/window/Window';
+import * as Document from '../../../lib/browser/Document';
+import { rootElement } from '../../../lib/browser/Document';
+import { pageScrollY } from '../../../lib/browser/Window';
 
 describe('pageScrollY', () => {
     it('should use window.pageYOffset if present', () => {

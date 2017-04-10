@@ -1,5 +1,5 @@
+import { pageScrollY } from '../browser/Window';
 import { Config } from '../Config';
-import { pageScrollY } from '../window/Window';
 import {
     addEventListener,
     fireEventListener,

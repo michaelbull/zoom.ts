@@ -1,4 +1,4 @@
-import { createDiv } from '../window/Document';
+import { createDiv } from '../browser/Document';
 import { hasClass } from './ClassList';
 
 export const CLASS: string = 'zoom__container';

@@ -1,4 +1,4 @@
-import { createDiv } from '../window/Document';
+import { createDiv } from '../browser/Document';
 import {
     addClass,
     hasClass,

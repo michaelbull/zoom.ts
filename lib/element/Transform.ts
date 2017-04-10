@@ -1,11 +1,11 @@
+import { viewportSize } from '../browser/Document';
+import { Features } from '../browser/Features';
 import {
     centreTranslation,
     minimizeVectors,
     minimumDivisor,
     Vector
 } from '../math/Vector';
-import { viewportSize } from '../window/Document';
-import { WindowCapabilities } from '../window/WindowCapabilities';
 import { Bounds } from './Bounds';
 
 export const TRANSFORM_PROPERTIES: { [key: string]: string } = {
@@ -53,7 +53,7 @@ export function centreTransformation(target: Vector, bounds: Bounds): ScaleAndTr
     };
 }
 
-export function expandToViewport(capabilities: WindowCapabilities, element: HTMLElement, target: Vector, bounds: Bounds): void {
+export function expandToViewport(capabilities: Features, element: HTMLElement, target: Vector, bounds: Bounds): void {
     let transformation: ScaleAndTranslate = centreTransformation(target, bounds);
     let style: any = element.style;
 
@@ -61,5 +61,23 @@ export function expandToViewport(capabilities: WindowCapabilities, element: HTML
         style[capabilities.transformProperty as string] = scaleTranslate3d(transformation);
     } else {
         style[capabilities.transformProperty as string] = scaleTranslate(transformation);
+    }
+}
+
+export function supportsTranslate3d(transformProperty: string): boolean {
+    let computeStyle: any = window.getComputedStyle;
+    let property: string = TRANSFORM_PROPERTIES[transformProperty];
+
+    if (typeof computeStyle === 'function' && property !== undefined) {
+        let child: HTMLParagraphElement = document.createElement('p');
+        (child.style as any)[transformProperty] = 'translate3d(1px,1px,1px)';
+
+        document.body.appendChild(child);
+        let value: string = computeStyle(child).getPropertyValue(property);
+        document.body.removeChild(child);
+
+        return value.length > 0 && value !== 'none';
+    } else {
+        return false;
     }
 }

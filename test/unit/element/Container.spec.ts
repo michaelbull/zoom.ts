@@ -1,9 +1,9 @@
+import * as Document from '../../../lib/browser/Document';
 import {
     CLASS,
     createContainer,
     isContainer
 } from '../../../lib/element/Container';
-import * as Document from '../../../lib/window/Document';
 
 describe('createContainer', () => {
     it('should create a div element with the correct class', () => {

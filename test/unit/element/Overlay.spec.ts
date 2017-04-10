@@ -1,3 +1,4 @@
+import * as Document from '../../../lib/browser/Document';
 import * as ClassList from '../../../lib/element/ClassList';
 import * as Element from '../../../lib/element/Element';
 import {
@@ -7,7 +8,6 @@ import {
     isOverlayVisible,
     VISIBLE_CLASS
 } from '../../../lib/element/Overlay';
-import * as Document from '../../../lib/window/Document';
 
 describe('addOverlay', () => {
     let overlay: any;

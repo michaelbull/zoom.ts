@@ -1,3 +1,4 @@
+import { STANDARDS_MODE } from '../../../lib/browser/Document';
 import {
     Bounds,
     boundsFrom,
@@ -8,7 +9,6 @@ import {
     setBoundsPx
 } from '../../../lib/element/Bounds';
 import { Vector } from '../../../lib/math/Vector';
-import { STANDARDS_MODE } from '../../../lib/window/Document';
 
 describe('createBounds', () => {
     it('should construct a Bounds object', () => {

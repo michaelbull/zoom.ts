@@ -1,3 +1,4 @@
+import * as Document from '../../../lib/browser/Document';
 import {
     Bounds,
     createBounds
@@ -9,11 +10,11 @@ import {
     scaleBy,
     scaleTranslate,
     scaleTranslate3d,
+    supportsTranslate3d,
     translate,
     translate3d
 } from '../../../lib/element/Transform';
 import * as Vector from '../../../lib/math/Vector';
-import * as Document from '../../../lib/window/Document';
 
 describe('translate', () => {
     it('should return the transformation', () => {
@@ -122,5 +123,38 @@ describe('expandToViewport', () => {
         expandToViewport(capabilities, element, [200, 100], createBounds([1000, 250], [900, 500]));
 
         expect(element.style.webkitTransform).toBe('scale(0.2) translate(-6250px, -1750px)');
+    });
+});
+
+describe('supportsTranslate3d', () => {
+    it('should return false if there is no transform vendor property', () => {
+        expect(supportsTranslate3d('invalid')).toBe(false);
+    });
+
+    it('should return false if the calculated transformation is an empty string', () => {
+        let calculatedStyle: any = {
+            getPropertyValue: (propertyName: string): string => ''
+        };
+        spyOn(window, 'getComputedStyle').and.returnValue(calculatedStyle);
+
+        expect(supportsTranslate3d('OTransform')).toBe(false);
+    });
+
+    it('should return false if the calculated transformation is "none"', () => {
+        let calculatedStyle: any = {
+            getPropertyValue: (propertyName: string): string => 'none'
+        };
+        spyOn(window, 'getComputedStyle').and.returnValue(calculatedStyle);
+
+        expect(supportsTranslate3d('MozTransform')).toBe(false);
+    });
+
+    it('should return true if the calculated transformation is a 3d matrix', () => {
+        let calculatedStyle: any = {
+            getPropertyValue: (propertyName: string): string => 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1)'
+        };
+        spyOn(window, 'getComputedStyle').and.returnValue(calculatedStyle);
+
+        expect(supportsTranslate3d('WebkitTransform')).toBe(true);
     });
 });

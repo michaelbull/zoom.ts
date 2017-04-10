@@ -1,3 +1,8 @@
+import { ready } from './browser/Document';
+import {
+    detectFeatures,
+    Features
+} from './browser/Features';
 import {
     Config,
     defaultConfig
@@ -61,11 +66,6 @@ import {
     positionFrom,
     Vector
 } from './math/Vector';
-import { ready } from './window/Document';
-import {
-    capabilitiesOf,
-    WindowCapabilities
-} from './window/WindowCapabilities';
 
 function collapsed(window: Window, config: Config, elements: ZoomElements): void {
     if (elements.clone !== undefined) {
@@ -114,7 +114,7 @@ function zoomInstant(window: Window, config: Config, elements: ZoomElements, tar
     setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
 }
 
-function zoomTransition(window: Window, capabilities: WindowCapabilities, config: Config, elements: ZoomElements, target: Vector, showCloneListener: PotentialEventListener): void {
+function zoomTransition(window: Window, capabilities: Features, config: Config, elements: ZoomElements, target: Vector, showCloneListener: PotentialEventListener): void {
     let bounds: Bounds = boundsFrom(elements.image);
 
     let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
@@ -245,7 +245,7 @@ export function clickedZoomable(window: Window, config: Config, event: MouseEven
         }
 
         let target: Vector = targetSize(elements.wrapper);
-        let capabilities: WindowCapabilities = capabilitiesOf(window);
+        let capabilities: Features = detectFeatures();
 
         if (capabilities.hasTransform && capabilities.hasTransitions) {
             zoomTransition(window, capabilities, config, elements, target, showCloneListener);

@@ -1,3 +1,4 @@
+import { viewportSize } from '../browser/Document';
 import { pixels } from '../math/Unit';
 import {
     centrePosition,
@@ -8,7 +9,6 @@ import {
     sizeFrom,
     Vector
 } from '../math/Vector';
-import { viewportSize } from '../window/Document';
 
 export interface Bounds {
     readonly position: Vector;
