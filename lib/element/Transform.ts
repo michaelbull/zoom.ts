@@ -1,5 +1,7 @@
 import { viewportSize } from '../browser/Document';
 import { Features } from '../browser/Features';
+import { vendorProperty } from '../browser/Vendor';
+import { pixels } from '../math/Unit';
 import {
     centreTranslation,
     minimizeVectors,
@@ -80,4 +82,41 @@ export function supportsTranslate3d(transformProperty: string): boolean {
     } else {
         return false;
     }
+}
+
+export function supports3dTransformations(): boolean {
+    let body: HTMLElement = document.body;
+    let bodyStyle: CSSStyleDeclaration = body.style;
+    let perspectiveProperty: string | undefined = vendorProperty(bodyStyle, 'perspective');
+
+    if (perspectiveProperty !== undefined) {
+
+        // Account for Webkit false positive
+        if ('WebkitPerspective' in bodyStyle) {
+            const ID: string = 'test3d';
+            const WIDTH: number = 4;
+            const HEIGHT: number = 8;
+
+            let element: HTMLParagraphElement = document.createElement('p');
+            element.id = ID;
+
+            let style: HTMLStyleElement = document.createElement('style');
+            style.textContent = `@media (-webkit-transform-3d){#${ID}{width:${pixels(WIDTH)};height:${pixels(HEIGHT)};margin:0;padding:0;border:0}}`;
+
+            body.appendChild(style);
+            body.appendChild(element);
+
+            let offsetWidth: number = element.offsetWidth;
+            let offsetHeight: number = element.offsetHeight;
+
+            body.removeChild(style);
+            body.removeChild(element);
+
+            return offsetWidth === WIDTH && offsetHeight === HEIGHT;
+        } else {
+            return true;
+        }
+    }
+
+    return false;
 }
