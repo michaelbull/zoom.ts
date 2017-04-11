@@ -265,6 +265,6 @@ export function addZoomListener(config: Config): void {
     });
 }
 
-export function listenWhenReady(config: Config = defaultConfig()): void {
+export function listenForZoom(config: Config = defaultConfig()): void {
     ready(document, () => addZoomListener(config));
 }
