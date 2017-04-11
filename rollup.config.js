@@ -30,7 +30,7 @@ let configuration = {
     moduleName: 'zoom',
     entry: 'index.ts',
     dest: 'dist/zoom.js',
-    format: 'umd',
+    format: 'iife',
     sourceMap: !prodEnv,
     banner: '/*!' + '\n' + ' * ' + copyright.join('\n * ') + '\n' + ' */' + '\n',
     plugins: [
@@ -51,8 +51,7 @@ let configuration = {
 if (prodEnv) {
     configuration.plugins.push(
         closure({
-            languageIn: 'ES5',
-            languageOut: 'ES5',
+            languageOut: 'ECMASCRIPT5_STRICT',
             compilationLevel: 'ADVANCED',
             warningLevel: 'QUIET'
         })
