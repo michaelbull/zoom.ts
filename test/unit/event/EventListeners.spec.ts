@@ -135,9 +135,9 @@ describe('addDismissListeners', () => {
 
         it('should calculate the current vertical page scroll when fired', () => {
             let scrollListener: any;
-            let addEventListener: jasmine.Spy = spyOn(EventListener, 'addEventListener').and.callFake((target: any, type: string, listener: EventListenerOrEventListenerObject): any => {
+            let addEventListener: jasmine.Spy = spyOn(EventListener, 'addEventListener').and.callFake((target: any, type: string, evtListener: EventListenerOrEventListenerObject): any => {
                 if (type === 'scroll') {
-                    scrollListener = listener;
+                    scrollListener = evtListener;
                 }
             });
             let pageScrollY: jasmine.Spy = spyOn(Window, 'pageScrollY');
