@@ -169,21 +169,21 @@ function zoomTransition(config: Config, elements: ZoomElements, target: Vector, 
     };
 
     function expanded(): void {
-        if (elements.clone !== undefined && isCloneLoaded(elements.clone) && !isCloneVisible(elements.clone)) {
-            if (showCloneListener !== undefined) {
-                removeEventListener(elements.clone, features.transitionEndEvent as string, showCloneListener);
-            }
-
-            replaceImageWithClone(elements.image, elements.clone);
-        }
-
-        stopExpandingWrapper(elements.wrapper);
-        setWrapperExpanded(elements.wrapper);
-
-        ignoreTransitions(elements.container, features.transitionProperty as string, () => {
-            resetStyle(elements.container, features.transformProperty as string);
-            setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
-        });
+        // if (elements.clone !== undefined && isCloneLoaded(elements.clone) && !isCloneVisible(elements.clone)) {
+        //     if (showCloneListener !== undefined) {
+        //         removeEventListener(elements.clone, features.transitionEndEvent as string, showCloneListener);
+        //     }
+        //
+        //     replaceImageWithClone(elements.image, elements.clone);
+        // }
+        //
+        // stopExpandingWrapper(elements.wrapper);
+        // setWrapperExpanded(elements.wrapper);
+        //
+        // ignoreTransitions(elements.container, features.transitionProperty as string, () => {
+        //     resetStyle(elements.container, features.transformProperty as string);
+        //     setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
+        // });
     }
 
     removeDismissListeners = addDismissListeners(config, elements.container, collapse);

@@ -1,4 +1,6 @@
-import { supportsTranslate3d } from '../element/Transform';
+import {
+    supports3dTransformations
+} from '../element/Transform';
 import { TRANSITION_END_EVENTS } from '../element/Transition';
 import { vendorProperty } from './Vendor';
 
@@ -8,8 +10,8 @@ export interface Features {
     readonly transitionEndEvent: string | undefined;
 
     readonly hasTransform: boolean;
+    readonly hasTransform3d: boolean;
     readonly hasTransitions: boolean;
-    readonly hasTranslate3d: boolean;
 }
 
 export function detectFeatures(): Features {
@@ -29,9 +31,9 @@ export function detectFeatures(): Features {
         hasTransitions = transitionEndEvent !== undefined;
     }
 
-    let hasTranslate3d: boolean = false;
+    let hasTransform3d: boolean = false;
     if (transformProperty !== undefined) {
-        hasTranslate3d = supportsTranslate3d(transformProperty);
+        hasTransform3d = supports3dTransformations(document.body.style);
     }
 
     return {
@@ -39,7 +41,7 @@ export function detectFeatures(): Features {
         transitionProperty,
         transitionEndEvent,
         hasTransform,
-        hasTransitions,
-        hasTranslate3d
+        hasTransform3d,
+        hasTransitions
     };
 }
