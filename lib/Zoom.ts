@@ -17,7 +17,6 @@ import {
 } from './element/Bounds';
 import {
     isCloneLoaded,
-    isCloneVisible,
     replaceCloneWithImage,
     replaceImageWithClone,
     showCloneOnceLoaded

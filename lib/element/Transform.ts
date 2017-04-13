@@ -85,10 +85,12 @@ export const TEST3D_STYLE: string = `` +
     `#${TEST3D_ID}{width:${pixels(TEST3D_WIDTH)};height:${pixels(TEST3D_HEIGHT)}}` +
     `}`;
 
-function testWebkitTransform3d(): boolean {
+export function testWebkitTransform3d(): boolean {
     let element: HTMLDivElement = document.createElement('div');
     element.id = TEST3D_ID;
-    element.style.position = 'absolute'; // remove the test element from the document flow to avoid affecting document size
+
+    // remove the test element from the document flow to avoid affecting document size
+    element.style.position = 'absolute';
 
     let style: HTMLStyleElement = document.createElement('style');
     style.textContent = TEST3D_STYLE;

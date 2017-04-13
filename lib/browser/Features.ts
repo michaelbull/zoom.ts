@@ -1,6 +1,4 @@
-import {
-    supports3dTransformations
-} from '../element/Transform';
+import { supports3dTransformations } from '../element/Transform';
 import { TRANSITION_END_EVENTS } from '../element/Transition';
 import { vendorProperty } from './Vendor';
 
