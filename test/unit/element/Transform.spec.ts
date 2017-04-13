@@ -12,7 +12,10 @@ import {
     scaleTranslate,
     scaleTranslate3d,
     supports3dTransformations,
+    TEST3D_HEIGHT,
+    TEST3D_ID,
     TEST3D_STYLE,
+    TEST3D_WIDTH,
     translate,
     translate3d
 } from '../../../lib/element/Transform';
@@ -155,9 +158,14 @@ describe('supports3dTransformations', () => {
         let style: any;
         let divElement: any;
         let styleElement: any;
+        let appendChild: jasmine.Spy;
+        let removeChild: jasmine.Spy;
 
         beforeEach(() => {
-            style = { WebkitPerspective: '' };
+            style = {
+                WebkitPerspective: ''
+            };
+
             divElement = {
                 id: 'div-element',
                 offsetWidth: 0,
@@ -166,13 +174,11 @@ describe('supports3dTransformations', () => {
                     position: ''
                 }
             };
+
             styleElement = {
                 textContent: 'content'
             };
 
-            spyOn(Vendor, 'vendorProperty').and.returnValue('WebkitPerspective');
-            spyOn(document.body, 'appendChild');
-            spyOn(document.body, 'removeChild');
             spyOn(document, 'createElement').and.callFake((tagName: string): HTMLElement => {
                 if (tagName === 'div') {
                     return divElement;
@@ -182,6 +188,10 @@ describe('supports3dTransformations', () => {
                     throw new Error();
                 }
             });
+
+            appendChild = spyOn(document.body, 'appendChild');
+            removeChild = spyOn(document.body, 'removeChild');
+            spyOn(Vendor, 'vendorProperty').and.returnValue('WebkitPerspective');
         });
 
         it('should create a test div element', () => {
@@ -189,12 +199,12 @@ describe('supports3dTransformations', () => {
             expect(document.createElement).toHaveBeenCalledWith('div');
         });
 
-        it('should set the test div’s ID to the test ID', () => {
+        it('should set the test div element’s ID to the correct ID', () => {
             supports3dTransformations(style);
-            expect(divElement.id).toBe('test3d');
+            expect(divElement.id).toBe(TEST3D_ID);
         });
 
-        it('should prevent the test div from affecting the page size', () => {
+        it('should prevent the test div element from affecting the page size', () => {
             supports3dTransformations(style);
             expect(divElement.style.position).toBe('absolute');
         });
@@ -204,49 +214,44 @@ describe('supports3dTransformations', () => {
             expect(document.createElement).toHaveBeenCalledWith('style');
         });
 
-        it('should set the style elements text content to the correct CSS', () => {
+        it('should set the test style elements text content to the correct CSS', () => {
             supports3dTransformations(style);
             expect(styleElement.textContent).toBe(TEST3D_STYLE);
         });
 
-        // TODO: finish these
+        it('should append the test div element as a child of the document.body', () => {
+            supports3dTransformations(style);
+            expect(appendChild).toHaveBeenCalledWith(divElement);
+        });
+
+        it('should append the test style element as a child of the document.body', () => {
+            supports3dTransformations(style);
+            expect(appendChild).toHaveBeenCalledWith(divElement);
+        });
+
+        it('should remove the test div element from the document.body', () => {
+            supports3dTransformations(style);
+            expect(removeChild).toHaveBeenCalledWith(divElement);
+        });
+
+        it('should remove the test style element from the document.body', () => {
+            supports3dTransformations(style);
+            expect(removeChild).toHaveBeenCalledWith(styleElement);
+        });
+
+        describe('if the element’s offset size is unmodified by the media query', () => {
+            it('should return false', () => {
+                expect(supports3dTransformations(style)).toBe(false);
+            });
+        });
 
         describe('if the element’s offset size is modified by the media query', () => {
             it('should return true', () => {
-                divElement.offsetWidth = 4;
-                divElement.offsetHeight = 8;
+                divElement.offsetWidth = TEST3D_WIDTH;
+                divElement.offsetHeight = TEST3D_HEIGHT;
 
                 expect(supports3dTransformations(style)).toBe(true);
             });
         });
     });
 });
-
-// describe('supportsTranslate3d', () => {
-//     it('should return false if there is no transform vendor property', () => {
-//         expect(supportsTranslate3d('invalid')).toBe(false);
-//     });
-//
-//     it('should return false if the calculated transformation is an empty string', () => {
-//         let calculatedStyle: any = {
-//             getPropertyValue: (propertyName: string): string => ''
-//         };
-//         spyOn(window, 'getComputedStyle').and.returnValue(calculatedStyle);
-//
-//         expect(supportsTranslate3d('OTransform')).toBe(false);
-//     });
-//
-//     it('should return false if the calculated transformation is "none"', () => {
-//         let calculatedStyle: any = {
-//             getPropertyValue: (propertyName: string): string => 'none'
-//         };
-//         spyOn(window, 'getComputedStyle').and.returnValue(calculatedStyle);
-//
-//         expect(supportsTranslate3d('MozTransform')).toBe(false);
-//     });
-//
-//     it('should return true if the calculated transformation is a 3d matrix', () => {
-//         let calculatedStyle: any = {
-//             getPropertyValue: (propertyName: string): string => 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1,
-// 1, 1)' }; spyOn(window, 'getComputedStyle').and.returnValue(calculatedStyle);
-// expect(supportsTranslate3d('WebkitTransform')).toBe(true); }); });
