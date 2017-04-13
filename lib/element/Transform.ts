@@ -99,7 +99,6 @@ function testWebkitTransform3d(): boolean {
 
     let offsetWidth: number = element.offsetWidth;
     let offsetHeight: number = element.offsetHeight;
-    console.log(`offset ${offsetWidth},${offsetHeight}`);
 
     body.removeChild(style);
     body.removeChild(element);
