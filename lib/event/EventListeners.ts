@@ -28,8 +28,8 @@ export function scrolled(start: number, minAmount: number, current: () => number
 }
 
 export function addDismissListeners(config: Config, container: HTMLElement, collapse: EventListener): Function {
-    let initialScrollY: number = pageScrollY(window);
-    let scrolledAway: PotentialEventListener = addEventListener(window, 'scroll', scrolled(initialScrollY, config.scrollDelta, () => pageScrollY(window), collapse));
+    let initialScrollY: number = pageScrollY();
+    let scrolledAway: PotentialEventListener = addEventListener(window, 'scroll', scrolled(initialScrollY, config.scrollDelta, () => pageScrollY(), collapse));
     let pressedEsc: PotentialEventListener = addEventListener(document, 'keyup', escKeyPressed(collapse));
     let dismissed: PotentialEventListener = addEventListener(container, 'click', collapse);
 
