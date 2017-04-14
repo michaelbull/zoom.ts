@@ -1,5 +1,5 @@
 import { clientSize } from '../element/Element';
-import { listenForEvent } from '../event/EventListener';
+import { listenForEvent } from '../event/EventListeners';
 import { Vector } from '../math/Vector';
 
 export const QUIRKS_MODE: string = 'BackCompat';

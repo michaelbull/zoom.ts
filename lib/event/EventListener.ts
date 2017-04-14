@@ -1,5 +1,5 @@
 import {
-    currentEvent,
+    getCurrentEvent,
     polyfillEvent
 } from './Event';
 
@@ -18,7 +18,7 @@ export function addEventListener(target: any, type: string, listener: EventListe
     let fallback: any = target['attachEvent'];
 
     let wrappedListener: EventListener = (event: Event): void => {
-        fireEventListener(listener, polyfillEvent(currentEvent(event)));
+        fireEventListener(listener, polyfillEvent(getCurrentEvent(event)));
     };
 
     if (typeof standard === 'function') {
@@ -29,18 +29,6 @@ export function addEventListener(target: any, type: string, listener: EventListe
     }
 
     return undefined;
-}
-
-export function listenForEvent(target: any, type: any, listener: EventListenerOrEventListenerObject, useCapture: boolean = false): PotentialEventListener {
-    let registered: PotentialEventListener = addEventListener(target, type, (event: Event) => {
-        if (registered !== undefined) {
-            removeEventListener(target, type, registered);
-        }
-
-        fireEventListener(listener, event);
-    }, useCapture);
-
-    return registered;
 }
 
 export function removeEventListener(target: any, type: string, listener: EventListenerOrEventListenerObject): boolean {

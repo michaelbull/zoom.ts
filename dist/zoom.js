@@ -1,22 +1,836 @@
-/*
- zoom.ts v7.5.0
- https://www.michael-bull.com/projects/zoom.ts
+/*!
+ * zoom.ts v7.5.0
+ * https://www.michael-bull.com/projects/zoom.ts
+ * 
+ * Copyright (c) 2017 Michael Bull (https://www.michael-bull.com)
+ * @license ISC
+ */
 
- Copyright (c) 2017 Michael Bull (https://www.michael-bull.com)
- @license ISC
-*/
-'use strict';(function(){function L(a,b){a=a.getAttribute("data-"+b);return null===a||(a=Number(a),isNaN(a))?Infinity:a}function Y(a){"function"!==typeof a.preventDefault&&(a.preventDefault=function(){a.returnValue=!1});"function"!==typeof a.stopPropagation&&(a.stopPropagation=function(){a.cancelBubble=!0});if("mouseover"===a.type){var b=a;void 0===b.relatedTarget&&void 0!==b.fromElement&&(b.relatedTarget=b.fromElement)}else"mouseout"===a.type&&(b=a,void 0===b.relatedTarget&&void 0!==b.toElement&&
-(b.relatedTarget=b.toElement));return a}function v(a,b){"function"===typeof a?a(b):a.handleEvent(b)}function r(a,b,d,c){function e(a){if(void 0===a)if(void 0!==window.event)a=window.event;else throw Error("No current event to handle.");v(d,Y(a))}void 0===c&&(c=!1);var g=a.addEventListener,h=a.attachEvent;if("function"===typeof g)return g.call(a,b,e,c),e;if("function"===typeof h&&h.call(a,"on"+b,e))return e}function w(a,b,d){var c;void 0===c&&(c=!1);var e=r(a,b,function(c){void 0!==e&&n(a,b,e);v(d,
-c)},c);return e}function n(a,b,d){var c=a.removeEventListener,e=a.detachEvent;"function"===typeof c?c.call(a,b,d):"function"===typeof e&&e.call(a,b,d)}function Z(a){var b=document;"complete"===b.readyState?a():w(b,"DOMContentLoaded",function(){return a()})}function M(){var a=document,a="CSS1Compat"===a.compatMode?a.documentElement:a.body;return[a.clientWidth,a.clientHeight]}function N(a){var b=document.createElement("div");b.className=a;return b}function aa(a){var b=""+a.charAt(0).toUpperCase()+a.substr(1),
-d=ba.map(function(a){return""+a+b});return[a].concat(d)}function y(a,b){var d=0;for(b=aa(b);d<b.length;d++){var c=b[d];if(c in a)return c}}function p(a,b){return{position:a,size:b}}function O(a){a=a.getBoundingClientRect();return p(z(a),[a.width,a.height])}function A(a,b,d,c,e){a.left=b;a.top=d;a.width=c;a.maxWidth=c;a.height=e}function B(a,b){var d=b.position;b=b.size;A(a,d[0]+"px",d[1]+"px",b[0]+"px",b[1]+"px")}function C(a,b){var d=M(),c;c=b.size;a=P([Math.min(d[0],a[0]),Math.min(d[1],a[1])],b.size);
-c=[c[0]*a,c[1]*a];return{position:Q(d,p(b.position,c)),size:c}}function z(a){return[a.left,a.top]}function D(a,b){return[a[0]/b,a[1]/b]}function E(a,b){return[a[0]-b[0],a[1]-b[1]]}function P(a,b){a=[a[0]/b[0],a[1]/b[1]];return Math.min(a[0],a[1])}function Q(a,b){return E(D(E(a,b.size),2),b.position)}function F(a,b,d,c){var e;e=M();d=P([Math.min(e[0],d[0]),Math.min(e[1],d[1])],c.size);var g;g=c.size;g=[g[0]*d,g[1]*d];var h=c.position;c=D(E(c.size,g),2);e=D(Q(e,p([h[0]+c[0],h[1]+c[1]],g)),d);b.style[a.g]=
-a.j?"scale3d("+d+", "+d+", 1) "+("translate3d("+e[0]+"px, "+e[1]+"px, 0)"):"scale("+d+") "+("translate("+e[0]+"px, "+e[1]+"px)")}function ca(a,b,d){a.style[b]="initial";d();a.offsetHeight;a.style[b]=""}function R(a,b,d){return 0<a.length&&d.indexOf(a)===b}function da(a){return function(b,d,c){return b!==a&&R(b,d,c)}}function t(a,b){return-1!==a.className.indexOf(b)}function u(a,b){a.className=a.className.split(" ").concat(b).filter(R).join(" ")}function l(a,b){a.className=a.className.split(" ").filter(da(b)).join(" ")}
-function G(a){u(a,"zoom__element--hidden")}function S(a){u(a,"zoom__element--active")}function H(a,b){a=a.getAttribute("data-src");return null===a?b.src:a}function ea(a){var b=document.createElement("img");b.className="zoom__clone";b.src=a;w(b,"load",function(){return u(b,"zoom__clone--loaded")});return b}function fa(a){return function(){if(void 0!==a.clone&&t(a.b,"zoom--expanded")&&!t(a.clone,"zoom__clone--visible")){var b=a.c;I(a.clone);G(b)}}}function I(a){u(a,"zoom__clone--visible")}function x(a){return t(a,
-"zoom__clone--loaded")}function ga(a,b){l(a,"zoom__element--hidden");l(b,"zoom__clone--visible")}function T(){var a=window;void 0===a.pageYOffset?(a=a.document,a=("CSS1Compat"===a.compatMode?a.documentElement:a.body).scrollTop):a=a.pageYOffset;return a}function ha(a){return function(b){27===b.keyCode&&(b.preventDefault(),b.stopPropagation(),v(a,b))}}function ia(a,b,d,c){return function(e){Math.abs(a-d())>=b&&v(c,e)}}function U(a,b,d){var c=r(window,"scroll",ia(T(),a.m,function(){return T()},d)),e=
-r(document,"keyup",ha(d)),g=r(b,"click",d);return function(){n(window,"scroll",c);n(document,"keyup",e);n(b,"click",g)}}function J(a,b){void 0!==b.clone&&ga(b.c,b.clone);l(b.c,"zoom__element--active");document.body.removeChild(b.f);l(b.b,"zoom--collapsing");b.b.style.height="";setTimeout(function(){return V(a)},1)}function ja(a,b,d,c){var e=O(b.c),g=r(window,"resize",function(){var a=z(b.b.getBoundingClientRect());e=p(a,e.size);B(b.a.style,C(d,e))}),h;h=U(a,b.a,function(){h();n(window,"resize",g);
-void 0===b.clone||void 0===c||x(b.clone)||n(b.clone,"load",c);l(b.b,"zoom--expanded");A(b.a.style,"","","","");J(a,b)});u(b.b,"zoom--expanded");b.b.style.height=b.c.height+"px";S(b.c);B(b.a.style,C(d,e))}function ka(a,b,d,c,e){var g=O(b.c),h=r(window,"resize",function(){var a=z(b.b.getBoundingClientRect());g=p(a,g.size);a=b.b;t(a,"zoom--expanding")||t(a,"zoom--collapsing")?F(e,b.a,d,g):B(b.a.style,C(d,g))}),f,m;m=U(a,b.a,function(){m();n(window,"resize",h);void 0===b.clone||void 0===c||x(b.clone)||
-n(b.clone,"load",c);l(b.f,"zoom__overlay--visible");u(b.b,"zoom--collapsing");var q=w(b.a,e.h,function(){J(a,b)});t(b.b,"zoom--expanding")?(void 0!==f&&n(b.a,e.h,f),b.a.style[e.g]="",l(b.b,"zoom--expanding")):(ca(b.a,e.transitionProperty,function(){F(e,b.a,d,g)}),b.a.style[e.g]="",A(b.a.style,"","","",""),l(b.b,"zoom--expanded"));void 0===q&&J(a,b)});u(b.b,"zoom--expanding");b.b.style.height=b.c.height+"px";S(b.c);f=w(b.a,e.h,function(){});void 0!==f&&F(e,b.a,d,g)}function V(a){var b=r(document.body,
-"click",function(d){var c=d.target;if(c instanceof HTMLImageElement&&null!==c.parentElement&&null!==c.parentElement&&null!==c.parentElement.parentElement&&t(c,"zoom__element")){d.preventDefault();d.stopPropagation();var e=b,c=d.target,g=c.parentElement,h=t(g,"zoom__container"),g=h?g.parentElement:g;if(d.metaKey||d.ctrlKey)window.open(H(g,c),"_blank");else{void 0!==e&&n(document.body,"click",e);var f;d=N("zoom__overlay");document.body.appendChild(d);d.offsetHeight;u(d,"zoom__overlay--visible");if(h){f=
-c.parentElement;var h=f.parentElement,m;H(h,c)!==c.src&&(m=f.children.item(1));f={f:d,b:h,a:f,c:c,clone:m};void 0!==f.clone&&x(f.clone)&&(I(f.clone),G(c))}else m=N("zoom__container"),h=c.parentElement,e=H(h,c),e!==c.src&&(f=ea(e)),f={f:d,b:h,a:m,c:c,clone:f},f.b.replaceChild(f.a,c),f.a.appendChild(c),void 0!==f.clone&&f.a.appendChild(f.clone);m=void 0;void 0!==f.clone&&(x(f.clone)?(I(f.clone),G(c)):m=r(f.clone,"load",fa(f)));var c=f.b,c=[L(c,"width"),L(c,"height")],q,h=document.body.style;d=y(h,"transform");
-h=y(h,"transition");e=!1;void 0!==d&&(e=!0);g=!1;void 0!==h&&(q=la[h],g=void 0!==q);var k=!1;if(void 0!==d)if(k=document.body.style,void 0!==y(k,"perspective"))if("WebkitPerspective"in k){k=document.createElement("div");k.id=K;k.style.position="absolute";var l=document.createElement("style");l.textContent=ma;var p=document.body;p.appendChild(l);p.appendChild(k);var v=k.offsetWidth,w=k.offsetHeight;p.removeChild(l);p.removeChild(k);k=v===W&&w===X}else k=!0;else k=!1;q={g:d,transitionProperty:h,h:q,
-i:e,j:k,l:g};q.i&&q.l?ka(a,f,c,m,q):ja(a,f,c,m)}}})}var ba=["Webkit","Moz","ms","O"],K="test3d",W=4,X=8,ma=""+("#"+K+"{margin:0;padding:0;border:0;width:0;height:0}")+"@media (transform-3d),(-webkit-transform-3d){"+("#"+K+"{width:"+(W+"px")+";height:"+(X+"px")+"}")+"}",la={WebkitTransition:"webkitTransitionEnd",MozTransition:"transitionend",OTransition:"oTransitionEnd",msTransition:"MSTransitionEnd",transition:"transitionend"};(function(a){void 0===a&&(a={m:50});Z(function(){return V(a)})})()})();
+document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>');
+(function () {
+'use strict';
+
+function repaint(element) {
+    // tslint:disable-next-line
+    element.offsetHeight;
+}
+function clientSize(element) {
+    return [
+        element.clientWidth,
+        element.clientHeight
+    ];
+}
+function targetDimension(element, dimension) {
+    var attribute = element.getAttribute("data-" + dimension);
+    if (attribute !== null) {
+        var value = Number(attribute);
+        if (!isNaN(value)) {
+            return value;
+        }
+    }
+    return Infinity;
+}
+function targetSize(element) {
+    return [
+        targetDimension(element, 'width'),
+        targetDimension(element, 'height')
+    ];
+}
+function resetStyle(element, property) {
+    element.style[property] = '';
+}
+function hasParent(element) {
+    return element.parentElement !== null;
+}
+function hasGrandParent(element) {
+    return hasParent(element) && hasParent(element.parentElement);
+}
+
+/**
+ * Calculates the number of pixels in the document have been scrolled past vertically.
+ * @returns {number} The number of pixels in the document have been scrolled past vertically.
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Window/scrollY#Notes
+ */
+function pageScrollY(context) {
+    if (context === void 0) { context = window; }
+    if (context.pageYOffset === undefined) {
+        return rootElement(context.document).scrollTop;
+    }
+    else {
+        return context.pageYOffset;
+    }
+}
+
+function currentEvent(event) {
+    if (event !== undefined) {
+        return event;
+    }
+    else if (window.event !== undefined) {
+        return window.event;
+    }
+    else {
+        throw new Error('No current event to handle.');
+    }
+}
+function polyfillEvent(event) {
+    if (typeof event.preventDefault !== 'function') {
+        event.preventDefault = function () {
+            event.returnValue = false;
+        };
+    }
+    if (typeof event.stopPropagation !== 'function') {
+        event.stopPropagation = function () {
+            event.cancelBubble = true;
+        };
+    }
+    if (event.type === 'mouseover') {
+        var mouseEvent = event;
+        if (mouseEvent.relatedTarget === undefined && mouseEvent.fromElement !== undefined) {
+            mouseEvent.relatedTarget = mouseEvent.fromElement;
+        }
+    }
+    else if (event.type === 'mouseout') {
+        var mouseEvent = event;
+        if (mouseEvent.relatedTarget === undefined && mouseEvent.toElement !== undefined) {
+            mouseEvent.relatedTarget = mouseEvent.toElement;
+        }
+    }
+    return event;
+}
+
+function fireEventListener(listener, event) {
+    if (typeof listener === 'function') {
+        listener(event);
+    }
+    else {
+        listener.handleEvent(event);
+    }
+}
+function addEventListener(target, type, listener, useCapture) {
+    if (useCapture === void 0) { useCapture = false; }
+    var standard = target['addEventListener'];
+    var fallback = target['attachEvent'];
+    var wrappedListener = function (event) {
+        fireEventListener(listener, polyfillEvent(currentEvent(event)));
+    };
+    if (typeof standard === 'function') {
+        standard.call(target, type, wrappedListener, useCapture);
+        return wrappedListener;
+    }
+    else if (typeof fallback === 'function' && fallback.call(target, "on" + type, wrappedListener)) {
+        return wrappedListener;
+    }
+    return undefined;
+}
+function removeEventListener(target, type, listener) {
+    var standard = target['removeEventListener'];
+    var fallback = target['detachEvent'];
+    if (typeof standard === 'function') {
+        standard.call(target, type, listener);
+        return true;
+    }
+    else if (typeof fallback === 'function') {
+        fallback.call(target, type, listener);
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+var ESCAPE_KEY_CODE = 27;
+function escKeyPressed(listener) {
+    return function (event) {
+        if (event.keyCode === ESCAPE_KEY_CODE) {
+            event.preventDefault();
+            event.stopPropagation();
+            fireEventListener(listener, event);
+        }
+    };
+}
+function scrolled(start, minAmount, current, listener) {
+    return function (event) {
+        if (Math.abs(start - current()) >= minAmount) {
+            fireEventListener(listener, event);
+        }
+    };
+}
+function addDismissListeners(config, container, collapse) {
+    var initialScrollY = pageScrollY();
+    var scrolledAway = addEventListener(window, 'scroll', scrolled(initialScrollY, config.scrollDelta, function () { return pageScrollY(); }, collapse));
+    var pressedEsc = addEventListener(document, 'keyup', escKeyPressed(collapse));
+    var dismissed = addEventListener(container, 'click', collapse);
+    return function () {
+        removeEventListener(window, 'scroll', scrolledAway);
+        removeEventListener(document, 'keyup', pressedEsc);
+        removeEventListener(container, 'click', dismissed);
+    };
+}
+function listenForEvent(target, type, listener, useCapture) {
+    if (useCapture === void 0) { useCapture = false; }
+    var registered = addEventListener(target, type, function (event) {
+        if (registered !== undefined) {
+            removeEventListener(target, type, registered);
+        }
+        fireEventListener(listener, event);
+    }, useCapture);
+    return registered;
+}
+
+var STANDARDS_MODE = 'CSS1Compat';
+function isStandardsMode(document) {
+    return document.compatMode === STANDARDS_MODE;
+}
+function rootElement(document) {
+    return isStandardsMode(document) ? document.documentElement : document.body;
+}
+/**
+ * Executes a callback function when a document has finished loading, or immediately if the document has already
+ * finished loading.
+ * @param document The document.
+ * @param callback The function to execute.
+ * @see http://youmightnotneedjquery.com/#ready
+ */
+function ready(document, callback) {
+    if (document.readyState === 'complete') {
+        callback();
+    }
+    else {
+        listenForEvent(document, 'DOMContentLoaded', function () { return callback(); });
+    }
+}
+function viewportSize(document) {
+    return clientSize(rootElement(document));
+}
+function createDiv(className) {
+    var overlay = document.createElement('div');
+    overlay.className = className;
+    return overlay;
+}
+
+var VENDOR_PREFIXES = [
+    'Webkit',
+    'Moz',
+    'ms',
+    'O'
+];
+function vendorProperties(property) {
+    var suffix = "" + property.charAt(0).toUpperCase() + property.substr(1);
+    var vendorProperties = VENDOR_PREFIXES.map(function (prefix) { return "" + prefix + suffix; });
+    return [property].concat(vendorProperties);
+}
+function vendorProperty(style, property) {
+    for (var _i = 0, _a = vendorProperties(property); _i < _a.length; _i++) {
+        var vendorProperty_1 = _a[_i];
+        if (vendorProperty_1 in style) {
+            return vendorProperty_1;
+        }
+    }
+}
+
+function pixels(amount) {
+    return amount + "px";
+}
+
+function createBounds(position, size) {
+    return {
+        position: position,
+        size: size
+    };
+}
+function boundsFrom(element) {
+    var rect = element.getBoundingClientRect();
+    return createBounds(positionFrom(rect), sizeFrom(rect));
+}
+function setBounds(style, x, y, width, height) {
+    style.left = x;
+    style.top = y;
+    style.width = width;
+    style.maxWidth = width;
+    style.height = height;
+}
+function resetBounds(style) {
+    setBounds(style, '', '', '', '');
+}
+function setBoundsPx(style, bounds) {
+    var position = bounds.position;
+    var size = bounds.size;
+    setBounds(style, pixels(position[0]), pixels(position[1]), pixels(size[0]), pixels(size[1]));
+}
+function centreBounds(document, target, bounds) {
+    var viewport = viewportSize(document);
+    var cappedTarget = minimizeVectors(viewport, target);
+    var factor = minimumDivisor(cappedTarget, bounds.size);
+    var scaled = scaleVector(bounds.size, factor);
+    var centre = centrePosition(viewport, createBounds(bounds.position, scaled));
+    return {
+        position: centre,
+        size: scaled
+    };
+}
+
+function positionFrom(rect) {
+    return [
+        rect.left,
+        rect.top
+    ];
+}
+function sizeFrom(rect) {
+    return [
+        rect.width,
+        rect.height
+    ];
+}
+function scaleVector(vector, amount) {
+    return [
+        vector[0] * amount,
+        vector[1] * amount
+    ];
+}
+function shrinkVector(vector, amount) {
+    return [
+        vector[0] / amount,
+        vector[1] / amount
+    ];
+}
+function addVectors(x, y) {
+    return [
+        x[0] + y[0],
+        x[1] + y[1]
+    ];
+}
+function subtractVectors(x, y) {
+    return [
+        x[0] - y[0],
+        x[1] - y[1]
+    ];
+}
+function divideVectors(x, y) {
+    return [
+        x[0] / y[0],
+        x[1] / y[1]
+    ];
+}
+function minimizeVectors(x, y) {
+    return [
+        Math.min(x[0], y[0]),
+        Math.min(x[1], y[1])
+    ];
+}
+function minimumDivisor(x, y) {
+    var scaled = divideVectors(x, y);
+    return Math.min(scaled[0], scaled[1]);
+}
+/**
+ * Calculates the padding that must be applied to an inner vector for it to appear in the centre of an outer vector.
+ * @param outer The outer vector.
+ * @param inner The inner vector.
+ * @returns {Vector} The padding.
+ */
+function centrePadding(outer, inner) {
+    return shrinkVector(subtractVectors(outer, inner), 2);
+}
+/**
+ * Calculates the position that must be applied to an inner vector for it to appear in the centre of an outer vector.
+ * @param outer The outer vector.
+ * @param inner The inner vector.
+ * @param innerPosition The current position of the inner vector.
+ * @returns {Vector} The new position of the inner vector.
+ */
+function centrePosition(outer, bounds) {
+    return subtractVectors(centrePadding(outer, bounds.size), bounds.position);
+}
+/**
+ * Calculates the translation required for an inner vector to appear in the centre of an outer vector.
+ * @param outer The outer vector.
+ * @param inner The inner vector.
+ * @param innerPosition The position of the inner vector.
+ * @param innerScale The scale of the inner vector.
+ * @returns {Vector} The translation.
+ */
+function centreTranslation(outer, bounds, innerScale) {
+    var scaled = scaleVector(bounds.size, innerScale);
+    var centredWithinScaled = addVectors(bounds.position, centrePadding(bounds.size, scaled));
+    var centeredWithinOuter = centrePosition(outer, createBounds(centredWithinScaled, scaled));
+    return shrinkVector(centeredWithinOuter, innerScale);
+}
+
+function translate(translation) {
+    return "translate(" + translation[0] + "px, " + translation[1] + "px)";
+}
+function translate3d(translation) {
+    return "translate3d(" + translation[0] + "px, " + translation[1] + "px, 0)";
+}
+function scale(amount) {
+    return "scale(" + amount + ")";
+}
+function scale3d(amount) {
+    return "scale3d(" + amount + ", " + amount + ", 1)";
+}
+function scaleTranslate(transformation) {
+    return scale(transformation.scale) + " " + translate(transformation.translation);
+}
+function scaleTranslate3d(transformation) {
+    return scale3d(transformation.scale) + " " + translate3d(transformation.translation);
+}
+function centreTransformation(target, bounds) {
+    var viewport = viewportSize(document);
+    var cappedTarget = minimizeVectors(viewport, target);
+    var scale = minimumDivisor(cappedTarget, bounds.size);
+    var translation = centreTranslation(viewport, bounds, scale);
+    return {
+        scale: scale,
+        translation: translation
+    };
+}
+function expandToViewport(features, element, target, bounds) {
+    var transformation = centreTransformation(target, bounds);
+    var style = element.style;
+    if (features.hasTransform3d) {
+        style[features.transformProperty] = scaleTranslate3d(transformation);
+    }
+    else {
+        style[features.transformProperty] = scaleTranslate(transformation);
+    }
+}
+function supports3dTransformations(style) {
+    var perspectiveProperty = vendorProperty(style, 'perspective');
+    if (perspectiveProperty !== undefined) {
+        if ('WebkitPerspective' in style) {
+            return testWebkitTransform3d();
+        }
+        else {
+            return true;
+        }
+    }
+    return false;
+}
+var TEST3D_ID = 'test3d';
+var TEST3D_WIDTH = 4;
+var TEST3D_HEIGHT = 8;
+var TEST3D_STYLE = "" +
+    ("#" + TEST3D_ID + "{margin:0;padding:0;border:0;width:0;height:0}") +
+    "@media (transform-3d),(-webkit-transform-3d){" +
+    ("#" + TEST3D_ID + "{width:" + pixels(TEST3D_WIDTH) + ";height:" + pixels(TEST3D_HEIGHT) + "}") +
+    "}";
+function testWebkitTransform3d() {
+    var element = document.createElement('div');
+    element.id = TEST3D_ID;
+    // remove the test element from the document flow to avoid affecting document size
+    element.style.position = 'absolute';
+    var style = document.createElement('style');
+    style.textContent = TEST3D_STYLE;
+    var body = document.body;
+    body.appendChild(style);
+    body.appendChild(element);
+    var offsetWidth = element.offsetWidth;
+    var offsetHeight = element.offsetHeight;
+    body.removeChild(style);
+    body.removeChild(element);
+    return offsetWidth === TEST3D_WIDTH && offsetHeight === TEST3D_HEIGHT;
+}
+
+var TRANSITION_END_EVENTS = {
+    'WebkitTransition': 'webkitTransitionEnd',
+    'MozTransition': 'transitionend',
+    'OTransition': 'oTransitionEnd',
+    'msTransition': 'MSTransitionEnd',
+    'transition': 'transitionend'
+};
+/**
+ * Ignore the transition lifecycle to perform a callback, then restore the element's original transitions.
+ */
+function ignoreTransitions(element, transitionProperty, callback) {
+    var style = element.style;
+    style[transitionProperty] = 'initial';
+    callback();
+    repaint(element);
+    resetStyle(element, transitionProperty);
+}
+
+function detectFeatures() {
+    var style = document.body.style;
+    var transformProperty = vendorProperty(style, 'transform');
+    var transitionProperty = vendorProperty(style, 'transition');
+    var transitionEndEvent;
+    var hasTransform = false;
+    if (transformProperty !== undefined) {
+        hasTransform = true;
+    }
+    var hasTransitions = false;
+    if (transitionProperty !== undefined) {
+        transitionEndEvent = TRANSITION_END_EVENTS[transitionProperty];
+        hasTransitions = transitionEndEvent !== undefined;
+    }
+    var hasTransform3d = false;
+    if (transformProperty !== undefined) {
+        hasTransform3d = supports3dTransformations(document.body.style);
+    }
+    return {
+        transformProperty: transformProperty,
+        transitionProperty: transitionProperty,
+        transitionEndEvent: transitionEndEvent,
+        hasTransform: hasTransform,
+        hasTransform3d: hasTransform3d,
+        hasTransitions: hasTransitions
+    };
+}
+
+function defaultConfig() {
+    return {
+        scrollDelta: 50
+    };
+}
+
+var CLASS_SEPARATOR = ' ';
+function classFilter(className, index, classList) {
+    return className.length > 0 && classList.indexOf(className) === index;
+}
+function excludeClass(excluded) {
+    return function (className, index, classList) {
+        return className !== excluded && classFilter(className, index, classList);
+    };
+}
+function hasClass(element, className) {
+    return element.className.indexOf(className) !== -1;
+}
+function addClass(element, add) {
+    element.className = element.className
+        .split(CLASS_SEPARATOR)
+        .concat(add)
+        .filter(classFilter)
+        .join(CLASS_SEPARATOR);
+}
+function removeClass(element, remove) {
+    element.className = element.className
+        .split(CLASS_SEPARATOR)
+        .filter(excludeClass(remove))
+        .join(CLASS_SEPARATOR);
+}
+
+var CLASS$1 = 'zoom__element';
+var HIDDEN_CLASS = CLASS$1 + "--hidden";
+var ACTIVE_CLASS = CLASS$1 + "--active";
+function hideImage(image) {
+    addClass(image, HIDDEN_CLASS);
+}
+function showImage(image) {
+    removeClass(image, HIDDEN_CLASS);
+}
+
+function activateImage(image) {
+    addClass(image, ACTIVE_CLASS);
+}
+function deactivateImage(image) {
+    removeClass(image, ACTIVE_CLASS);
+}
+
+function isZoomable(target) {
+    return target instanceof HTMLImageElement
+        && hasParent(target)
+        && hasGrandParent(target)
+        && hasClass(target, CLASS$1);
+}
+function fullSrc(wrapper, image) {
+    var fullSrc = wrapper.getAttribute('data-src');
+    return fullSrc === null ? image.src : fullSrc;
+}
+
+var CLASS$2 = 'zoom';
+var EXPANDING_CLASS = CLASS$2 + "--expanding";
+var EXPANDED_CLASS = CLASS$2 + "--expanded";
+var COLLAPSING_CLASS = CLASS$2 + "--collapsing";
+function isWrapperExpanding(wrapper) {
+    return hasClass(wrapper, EXPANDING_CLASS);
+}
+function startExpandingWrapper(wrapper) {
+    addClass(wrapper, EXPANDING_CLASS);
+}
+function stopExpandingWrapper(wrapper) {
+    removeClass(wrapper, EXPANDING_CLASS);
+}
+function isWrapperExpanded(wrapper) {
+    return hasClass(wrapper, EXPANDED_CLASS);
+}
+function setWrapperExpanded(wrapper) {
+    addClass(wrapper, EXPANDED_CLASS);
+}
+function unsetWrapperExpanded(wrapper) {
+    removeClass(wrapper, EXPANDED_CLASS);
+}
+function isWrapperCollapsing(wrapper) {
+    return hasClass(wrapper, COLLAPSING_CLASS);
+}
+function startCollapsingWrapper(wrapper) {
+    addClass(wrapper, COLLAPSING_CLASS);
+}
+function stopCollapsingWrapper(wrapper) {
+    removeClass(wrapper, COLLAPSING_CLASS);
+}
+function isWrapperTransitioning(wrapper) {
+    return isWrapperExpanding(wrapper) || isWrapperCollapsing(wrapper);
+}
+
+var CLASS$$1 = 'zoom__clone';
+var VISIBLE_CLASS = CLASS$$1 + "--visible";
+var LOADED_CLASS = CLASS$$1 + "--loaded";
+function createClone(src) {
+    var clone = document.createElement('img');
+    clone.className = CLASS$$1;
+    clone.src = src;
+    listenForEvent(clone, 'load', function () { return addClass(clone, LOADED_CLASS); });
+    return clone;
+}
+function showCloneOnceLoaded(elements) {
+    return function () {
+        if (elements.clone !== undefined && isWrapperExpanded(elements.wrapper) && !isCloneVisible(elements.clone)) {
+            replaceImageWithClone(elements.image, elements.clone);
+        }
+    };
+}
+function showClone(clone) {
+    addClass(clone, VISIBLE_CLASS);
+}
+function hideClone(clone) {
+    removeClass(clone, VISIBLE_CLASS);
+}
+function isCloneVisible(clone) {
+    return hasClass(clone, VISIBLE_CLASS);
+}
+function isCloneLoaded(clone) {
+    return hasClass(clone, LOADED_CLASS);
+}
+function replaceImageWithClone(image, clone) {
+    showClone(clone);
+    hideImage(image);
+}
+function replaceCloneWithImage(image, clone) {
+    showImage(image);
+    hideClone(clone);
+}
+
+var CLASS$3 = 'zoom__container';
+function createContainer() {
+    return createDiv(CLASS$3);
+}
+function isContainer(element) {
+    return hasClass(element, CLASS$3);
+}
+
+var CLASS$4 = 'zoom__overlay';
+var VISIBLE_CLASS$1 = CLASS$4 + "--visible";
+function addOverlay() {
+    var overlay = createDiv(CLASS$4);
+    document.body.appendChild(overlay);
+    repaint(overlay);
+    addClass(overlay, VISIBLE_CLASS$1);
+    return overlay;
+}
+function hideOverlay(overlay) {
+    removeClass(overlay, VISIBLE_CLASS$1);
+}
+
+function useExistingElements(overlay, image) {
+    var container = image.parentElement;
+    var wrapper = container.parentElement;
+    var clone;
+    var src = fullSrc(wrapper, image);
+    var cloneRequired = src !== image.src;
+    if (cloneRequired) {
+        clone = container.children.item(1);
+    }
+    return {
+        overlay: overlay,
+        wrapper: wrapper,
+        container: container,
+        image: image,
+        clone: clone
+    };
+}
+function setUpElements(overlay, image) {
+    var container = createContainer();
+    var wrapper = image.parentElement;
+    var clone;
+    var src = fullSrc(wrapper, image);
+    var cloneRequired = src !== image.src;
+    if (cloneRequired) {
+        clone = createClone(src);
+    }
+    return {
+        overlay: overlay,
+        wrapper: wrapper,
+        container: container,
+        image: image,
+        clone: clone
+    };
+}
+
+function collapsed(config, elements) {
+    if (elements.clone !== undefined) {
+        replaceCloneWithImage(elements.image, elements.clone);
+    }
+    deactivateImage(elements.image);
+    document.body.removeChild(elements.overlay);
+    stopCollapsingWrapper(elements.wrapper);
+    resetStyle(elements.wrapper, 'height');
+    setTimeout(function () { return addZoomListener(config); }, 1);
+}
+function zoomInstant(config, elements, target, showCloneListener) {
+    var bounds = boundsFrom(elements.image);
+    var resized = addEventListener(window, 'resize', function () {
+        var wrapperPosition = positionFrom(elements.wrapper.getBoundingClientRect());
+        bounds = createBounds(wrapperPosition, bounds.size);
+        setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
+    });
+    var removeDismissListeners;
+    var collapse = function () {
+        removeDismissListeners();
+        removeEventListener(window, 'resize', resized);
+        if (elements.clone !== undefined && showCloneListener !== undefined && !isCloneLoaded(elements.clone)) {
+            removeEventListener(elements.clone, 'load', showCloneListener);
+        }
+        unsetWrapperExpanded(elements.wrapper);
+        resetBounds(elements.container.style);
+        collapsed(config, elements);
+    };
+    removeDismissListeners = addDismissListeners(config, elements.container, collapse);
+    setWrapperExpanded(elements.wrapper);
+    elements.wrapper.style.height = pixels(elements.image.height);
+    activateImage(elements.image);
+    setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
+}
+function zoomTransition(config, elements, target, showCloneListener, features) {
+    var bounds = boundsFrom(elements.image);
+    var resized = addEventListener(window, 'resize', function () {
+        var wrapperPosition = positionFrom(elements.wrapper.getBoundingClientRect());
+        bounds = createBounds(wrapperPosition, bounds.size);
+        if (isWrapperTransitioning(elements.wrapper)) {
+            expandToViewport(features, elements.container, target, bounds);
+        }
+        else {
+            setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
+        }
+    });
+    var expandedListener;
+    var removeDismissListeners;
+    var collapse = function () {
+        removeDismissListeners();
+        removeEventListener(window, 'resize', resized);
+        if (elements.clone !== undefined && showCloneListener !== undefined && !isCloneLoaded(elements.clone)) {
+            removeEventListener(elements.clone, 'load', showCloneListener);
+        }
+        hideOverlay(elements.overlay);
+        startCollapsingWrapper(elements.wrapper);
+        var collapsedListener = listenForEvent(elements.container, features.transitionEndEvent, function () {
+            collapsed(config, elements);
+        });
+        if (isWrapperExpanding(elements.wrapper)) {
+            if (expandedListener !== undefined) {
+                removeEventListener(elements.container, features.transitionEndEvent, expandedListener);
+            }
+            resetStyle(elements.container, features.transformProperty);
+            stopExpandingWrapper(elements.wrapper);
+        }
+        else {
+            ignoreTransitions(elements.container, features.transitionProperty, function () {
+                expandToViewport(features, elements.container, target, bounds);
+            });
+            resetStyle(elements.container, features.transformProperty);
+            resetBounds(elements.container.style);
+            unsetWrapperExpanded(elements.wrapper);
+        }
+        if (collapsedListener === undefined) {
+            collapsed(config, elements);
+        }
+    };
+    function expanded() {
+        if (elements.clone !== undefined && isCloneLoaded(elements.clone) && !isCloneVisible(elements.clone)) {
+            if (showCloneListener !== undefined) {
+                removeEventListener(elements.clone, features.transitionEndEvent, showCloneListener);
+            }
+            replaceImageWithClone(elements.image, elements.clone);
+        }
+        stopExpandingWrapper(elements.wrapper);
+        setWrapperExpanded(elements.wrapper);
+        ignoreTransitions(elements.container, features.transitionProperty, function () {
+            resetStyle(elements.container, features.transformProperty);
+            setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
+        });
+    }
+    removeDismissListeners = addDismissListeners(config, elements.container, collapse);
+    startExpandingWrapper(elements.wrapper);
+    elements.wrapper.style.height = pixels(elements.image.height);
+    activateImage(elements.image);
+    expandedListener = listenForEvent(elements.container, features.transitionEndEvent, function () { return expanded(); });
+    if (expandedListener === undefined) {
+        expanded();
+    }
+    else {
+        expandToViewport(features, elements.container, target, bounds);
+    }
+}
+function clickedZoomable(config, event, zoomListener) {
+    var image = event.target;
+    var parent = image.parentElement;
+    var previouslyZoomed = isContainer(parent);
+    var wrapper = previouslyZoomed ? parent.parentElement : parent;
+    if (event.metaKey || event.ctrlKey) {
+        window.open(fullSrc(wrapper, image), '_blank');
+    }
+    else {
+        if (zoomListener !== undefined) {
+            removeEventListener(document.body, 'click', zoomListener);
+        }
+        var elements = void 0;
+        var overlay = addOverlay();
+        if (previouslyZoomed) {
+            elements = useExistingElements(overlay, image);
+            if (elements.clone !== undefined && isCloneLoaded(elements.clone)) {
+                replaceImageWithClone(image, elements.clone);
+            }
+        }
+        else {
+            elements = setUpElements(overlay, image);
+            elements.wrapper.replaceChild(elements.container, image);
+            elements.container.appendChild(image);
+            if (elements.clone !== undefined) {
+                elements.container.appendChild(elements.clone);
+            }
+        }
+        var showCloneListener = void 0;
+        if (elements.clone !== undefined) {
+            if (isCloneLoaded(elements.clone)) {
+                replaceImageWithClone(image, elements.clone);
+            }
+            else {
+                showCloneListener = addEventListener(elements.clone, 'load', showCloneOnceLoaded(elements));
+            }
+        }
+        var target = targetSize(elements.wrapper);
+        var features = detectFeatures();
+        if (features.hasTransform && features.hasTransitions) {
+            zoomTransition(config, elements, target, showCloneListener, features);
+        }
+        else {
+            zoomInstant(config, elements, target, showCloneListener);
+        }
+    }
+}
+function addZoomListener(config) {
+    var listener = addEventListener(document.body, 'click', function (event) {
+        if (isZoomable(event.target)) {
+            event.preventDefault();
+            event.stopPropagation();
+            clickedZoomable(config, event, listener);
+        }
+    });
+}
+function listenForZoom(config) {
+    if (config === void 0) { config = defaultConfig(); }
+    ready(document, function () { return addZoomListener(config); });
+}
+
+listenForZoom();
+
+}());
+//# sourceMappingURL=zoom.js.map

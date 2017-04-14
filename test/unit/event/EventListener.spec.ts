@@ -1,3 +1,4 @@
+import * as Event from '../../../lib/event/Event';
 import {
     addEventListener,
     fireEventListener,
@@ -13,7 +14,7 @@ describe('fireEventListener', () => {
     });
 
     it('should call the listener if the listener is an EventListener', () => {
-        let listener: any = jasmine.createSpy('EventListener');
+        let listener: any = jasmine.createSpy('listener');
 
         fireEventListener(listener, event);
 
@@ -35,13 +36,14 @@ describe('addEventListener', () => {
     let listener: jasmine.Spy;
 
     beforeEach(() => {
-        listener = jasmine.createSpy('EventListener');
+        listener = jasmine.createSpy('listener');
     });
 
     it('should use addEventListener if present', () => {
         let element: any = {
             addEventListener: jasmine.createSpy('addEventListener')
         };
+
         let added: PotentialEventListener = addEventListener(element, 'click', listener);
 
         expect(element.addEventListener).toHaveBeenCalledWith('click', added, false);
@@ -51,6 +53,7 @@ describe('addEventListener', () => {
         let element: any = {
             attachEvent: jasmine.createSpy('attachEvent').and.returnValue(true)
         };
+
         let added: PotentialEventListener = addEventListener(element, 'click', listener);
 
         expect(element.attachEvent).toHaveBeenCalledWith('onclick', added);
@@ -60,13 +63,55 @@ describe('addEventListener', () => {
         let element: any = {};
         expect(addEventListener(element, 'click', listener)).toBeUndefined();
     });
+
+    describe('the wrapped listener', () => {
+        let event: any;
+        let currentEvent: any;
+        let polyfilledEvent: any;
+        let getCurrentEvent: jasmine.Spy;
+        let polyfillEvent: jasmine.Spy;
+
+        let wrappedListener: EventListener;
+
+        beforeEach(() => {
+            event = jasmine.createSpy('event');
+            currentEvent = jasmine.createSpy('currentEvent');
+            polyfilledEvent = jasmine.createSpy('polyfilledEvent');
+
+            getCurrentEvent = spyOn(Event, 'getCurrentEvent').and.returnValue(currentEvent);
+            polyfillEvent = spyOn(Event, 'polyfillEvent').and.returnValue(polyfilledEvent);
+
+            let element: any = {
+                addEventListener: (type: string, listener: EventListener): void => {
+                    wrappedListener = listener;
+                }
+            };
+
+            addEventListener(element, 'click', listener);
+        });
+
+        it('should get the current event', () => {
+            wrappedListener(event);
+            expect(getCurrentEvent).toHaveBeenCalledWith(event);
+        });
+
+        it('should polyfill the current event', () => {
+            wrappedListener(event);
+            expect(polyfillEvent).toHaveBeenCalledWith(currentEvent);
+        });
+
+        it('should fire the inner event listener with the polyfilled current event', () => {
+            wrappedListener(event);
+            expect(listener).toHaveBeenCalledWith(polyfilledEvent);
+        });
+    });
 });
 
 describe('removeEventListener', () => {
     let listener: jasmine.Spy;
 
     beforeEach(() => {
-        listener = jasmine.createSpy('EventListener');
+        listener = jasmine.createSpy('listener');
     });
 
     it('should use removeEventListener if present', () => {

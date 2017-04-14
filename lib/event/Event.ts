@@ -1,4 +1,4 @@
-export function currentEvent(event: any): Event {
+export function getCurrentEvent(event: Event | undefined): Event {
     if (event !== undefined) {
         return event;
     } else if (window.event !== undefined) {

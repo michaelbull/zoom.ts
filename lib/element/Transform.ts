@@ -85,7 +85,7 @@ export const TEST3D_STYLE: string = `` +
     `#${TEST3D_ID}{width:${pixels(TEST3D_WIDTH)};height:${pixels(TEST3D_HEIGHT)}}` +
     `}`;
 
-export function testWebkitTransform3d(): boolean {
+function testWebkitTransform3d(): boolean {
     let element: HTMLDivElement = document.createElement('div');
     element.id = TEST3D_ID;
 

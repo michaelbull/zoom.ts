@@ -8,6 +8,7 @@ import {
     centreTransformation,
     expandToViewport,
     scale,
+    scale3d,
     ScaleAndTranslate,
     scaleTranslate,
     scaleTranslate3d,
@@ -36,6 +37,12 @@ describe('translate3d', () => {
 describe('scale', () => {
     it('should return the transformation', () => {
         expect(scale(50)).toBe('scale(50)');
+    });
+});
+
+describe('scale3d', () => {
+    it('should return the transformation', () => {
+        expect(scale3d(150)).toBe('scale3d(150, 150, 1)');
     });
 });
 

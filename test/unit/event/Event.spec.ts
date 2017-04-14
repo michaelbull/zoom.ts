@@ -1,22 +1,22 @@
 import {
-    currentEvent,
+    getCurrentEvent,
     polyfillEvent
 } from '../../../lib/event/Event';
 
-describe('currentEvent', () => {
+describe('getCurrentEvent', () => {
     it('should return the input event if not undefined', () => {
         let event: any = jasmine.createSpy('Event');
-        expect(currentEvent(event)).toBe(event);
+        expect(getCurrentEvent(event)).toBe(event);
     });
 
     it('should return window.event if the input event is undefined', () => {
         window.event = jasmine.createSpy('Event') as any;
-        expect(currentEvent(undefined)).toBe(window.event);
+        expect(getCurrentEvent(undefined)).toBe(window.event);
     });
 
     it('should throw an error otherwise', () => {
         window.event = undefined;
-        expect(() => currentEvent(undefined)).toThrowError(Error, 'No current event to handle.');
+        expect(() => getCurrentEvent(undefined)).toThrowError(Error, 'No current event to handle.');
     });
 });
 

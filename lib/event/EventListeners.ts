@@ -39,3 +39,15 @@ export function addDismissListeners(config: Config, container: HTMLElement, coll
         removeEventListener(container, 'click', dismissed as EventListener);
     };
 }
+
+export function listenForEvent(target: any, type: any, listener: EventListenerOrEventListenerObject, useCapture: boolean = false): PotentialEventListener {
+    let added: PotentialEventListener = addEventListener(target, type, (event: Event) => {
+        if (added !== undefined) {
+            removeEventListener(target, type, added);
+        }
+
+        fireEventListener(listener, event);
+    }, useCapture);
+
+    return added;
+}

@@ -56,11 +56,13 @@ import {
 } from './element/ZoomElements';
 import {
     addEventListener,
-    listenForEvent,
     PotentialEventListener,
     removeEventListener
 } from './event/EventListener';
-import { addDismissListeners } from './event/EventListeners';
+import {
+    addDismissListeners,
+    listenForEvent
+} from './event/EventListeners';
 import { pixels } from './math/Unit';
 import {
     positionFrom,

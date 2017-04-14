@@ -1,4 +1,4 @@
-import { listenForEvent } from '../event/EventListener';
+import { listenForEvent } from '../event/EventListeners';
 import {
     addClass,
     hasClass,
