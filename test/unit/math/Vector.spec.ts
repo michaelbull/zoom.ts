@@ -1,6 +1,9 @@
+import { Bounds } from '../../../lib/element/Bounds';
 import {
     addVectors,
     centrePadding,
+    centrePosition,
+    centreTranslation,
     divideVectors,
     minimizeVectors,
     minimumDivisor,
@@ -85,5 +88,30 @@ describe('centrePadding', () => {
         let outer: Vector = [500, 400];
         let inner: Vector = [480, 350];
         expect(centrePadding(outer, inner)).toEqual([10, 25]);
+    });
+});
+
+describe('centrePosition', () => {
+    it('should return the correct position', () => {
+        let outer: Vector = [1920, 1080];
+        let bounds: Bounds = {
+            position: [300, 200],
+            size: [500, 500]
+        };
+
+        expect(centrePosition(outer, bounds)).toEqual([410, 90]);
+    });
+});
+
+describe('centreTranslation', () => {
+    it('should return the correct translation', () => {
+        let outer: Vector = [3800, 1900];
+        let bounds: Bounds = {
+            position: [250, 250],
+            size: [1000, 1000]
+        };
+        let scale: number = 2;
+
+        expect(centreTranslation(outer, bounds, scale)).toEqual([575, 100]);
     });
 });
