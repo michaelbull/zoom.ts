@@ -113,7 +113,7 @@ describe('addDismissListeners', () => {
     let removeEventListener: jasmine.Spy;
 
     beforeEach(() => {
-        config = { scrollDelta: 100 };
+        config = { scrollDismissPx: 100 };
         container = jasmine.createSpy('container');
         collapse = jasmine.createSpy('collapse');
         listener = jasmine.createSpy('listener');

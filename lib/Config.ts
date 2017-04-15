@@ -1,9 +1,9 @@
 export interface Config {
-    readonly scrollDelta: number;
+    readonly scrollDismissPx: number;
 }
 
 export function defaultConfig(): Config {
     return {
-        scrollDelta: 50
+        scrollDismissPx: 50
     };
 }

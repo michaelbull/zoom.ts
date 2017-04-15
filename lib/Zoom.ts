@@ -69,7 +69,7 @@ import {
     Vector
 } from './math/Vector';
 
-function collapsed(config: Config, elements: ZoomElements): void {
+export function collapsed(config: Config, elements: ZoomElements): void {
     if (elements.clone !== undefined) {
         replaceCloneWithImage(elements.image, elements.clone);
     }
@@ -83,7 +83,7 @@ function collapsed(config: Config, elements: ZoomElements): void {
     setTimeout(() => addZoomListener(config), 1);
 }
 
-function zoomInstant(config: Config, elements: ZoomElements, target: Vector, showCloneListener: PotentialEventListener): void {
+export function zoomInstant(config: Config, elements: ZoomElements, target: Vector, showCloneListener: PotentialEventListener): void {
     let bounds: Bounds = boundsFrom(elements.image);
 
     let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
@@ -116,7 +116,7 @@ function zoomInstant(config: Config, elements: ZoomElements, target: Vector, sho
     setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
 }
 
-function zoomTransition(config: Config, elements: ZoomElements, target: Vector, showCloneListener: PotentialEventListener, features: Features): void {
+export function zoomTransition(config: Config, elements: ZoomElements, target: Vector, showCloneListener: PotentialEventListener, features: Features): void {
     let bounds: Bounds = boundsFrom(elements.image);
 
     let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
@@ -144,7 +144,7 @@ function zoomTransition(config: Config, elements: ZoomElements, target: Vector, 
         hideOverlay(elements.overlay);
         startCollapsingWrapper(elements.wrapper);
 
-        let collapsedListener: PotentialEventListener = listenForEvent(elements.container, features.transitionEndEvent as string, () => {
+        let collapsedListener: PotentialEventListener = listenForEvent(elements.container, features.transitionEndEvent, () => {
             collapsed(config, elements);
         });
 
