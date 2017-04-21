@@ -2,8 +2,6 @@ export interface Config {
     readonly scrollDismissPx: number;
 }
 
-export function defaultConfig(): Config {
-    return {
-        scrollDismissPx: 50
-    };
-}
+export const DEFAULT_CONFIG: Config = {
+    scrollDismissPx: 50
+};

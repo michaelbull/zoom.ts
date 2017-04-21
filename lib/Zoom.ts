@@ -5,7 +5,7 @@ import {
 } from './browser/Features';
 import {
     Config,
-    defaultConfig
+    DEFAULT_CONFIG
 } from './Config';
 import {
     Bounds,
@@ -267,6 +267,6 @@ export function addZoomListener(config: Config): void {
     });
 }
 
-export function listenForZoom(config: Config = defaultConfig()): void {
+export function listenForZoom(config: Config = DEFAULT_CONFIG): void {
     ready(document, () => addZoomListener(config));
 }
