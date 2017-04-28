@@ -33,10 +33,10 @@ describe('fireEventListener', () => {
 });
 
 describe('addEventListener', () => {
-    let listener: jasmine.Spy;
+    let eventListener: jasmine.Spy;
 
     beforeEach(() => {
-        listener = jasmine.createSpy('listener');
+        eventListener = jasmine.createSpy('eventListener');
     });
 
     it('should use addEventListener if present', () => {
@@ -44,7 +44,7 @@ describe('addEventListener', () => {
             addEventListener: jasmine.createSpy('addEventListener')
         };
 
-        let added: PotentialEventListener = addEventListener(element, 'click', listener);
+        let added: PotentialEventListener = addEventListener(element, 'click', eventListener);
 
         expect(element.addEventListener).toHaveBeenCalledWith('click', added, false);
     });
@@ -54,14 +54,14 @@ describe('addEventListener', () => {
             attachEvent: jasmine.createSpy('attachEvent').and.returnValue(true)
         };
 
-        let added: PotentialEventListener = addEventListener(element, 'click', listener);
+        let added: PotentialEventListener = addEventListener(element, 'click', eventListener);
 
         expect(element.attachEvent).toHaveBeenCalledWith('onclick', added);
     });
 
     it('should return undefined otherwise', () => {
         let element: any = {};
-        expect(addEventListener(element, 'click', listener)).toBeUndefined();
+        expect(addEventListener(element, 'click', eventListener)).toBeUndefined();
     });
 
     describe('the wrapped listener', () => {
@@ -87,7 +87,7 @@ describe('addEventListener', () => {
                 }
             };
 
-            addEventListener(element, 'click', listener);
+            addEventListener(element, 'click', eventListener);
         });
 
         it('should get the current event', () => {
@@ -102,7 +102,7 @@ describe('addEventListener', () => {
 
         it('should fire the inner event listener with the polyfilled current event', () => {
             wrappedListener(event);
-            expect(listener).toHaveBeenCalledWith(polyfilledEvent);
+            expect(eventListener).toHaveBeenCalledWith(polyfilledEvent);
         });
     });
 });

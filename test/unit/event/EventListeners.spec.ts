@@ -202,30 +202,30 @@ describe('addDismissListeners', () => {
 });
 
 describe('listenForEvent', () => {
-    let target: jasmine.Spy;
-    let listener: jasmine.Spy;
+    let eventTarget: jasmine.Spy;
+    let eventListener: jasmine.Spy;
 
     beforeEach(() => {
-        target = jasmine.createSpy('target');
-        listener = jasmine.createSpy('listener');
+        eventTarget = jasmine.createSpy('eventTarget');
+        eventListener = jasmine.createSpy('eventListener');
     });
 
-    it('should add the event listener', () => {
+    it('should add the event eventListener', () => {
         let addEventListener: jasmine.Spy = spyOn(EventListener, 'addEventListener');
 
-        listenForEvent(target, 'click', listener);
+        listenForEvent(eventTarget, 'click', eventListener);
 
-        expect(addEventListener).toHaveBeenCalledWith(target, 'click', jasmine.any(Function), false);
+        expect(addEventListener).toHaveBeenCalledWith(eventTarget, 'click', jasmine.any(Function), false);
     });
 
-    it('should return the added event listener', () => {
+    it('should return the added event eventListener', () => {
         let added: jasmine.Spy = jasmine.createSpy('added');
         spyOn(EventListener, 'addEventListener').and.returnValue(added);
 
-        expect(listenForEvent(target, 'keyup', listener)).toEqual(added);
+        expect(listenForEvent(eventTarget, 'keyup', eventListener)).toEqual(added);
     });
 
-    describe('the added event listener', () => {
+    describe('the added event eventListener', () => {
         let event: any;
         let added: EventListener;
 
@@ -237,7 +237,7 @@ describe('listenForEvent', () => {
                 return added;
             });
 
-            listenForEvent(target, 'keyup', listener);
+            listenForEvent(eventTarget, 'keyup', eventListener);
         });
 
         it('should remove itself once fired', () => {
@@ -245,15 +245,15 @@ describe('listenForEvent', () => {
 
             added(event);
 
-            expect(removeEventListener).toHaveBeenCalledWith(target, 'keyup', added);
+            expect(removeEventListener).toHaveBeenCalledWith(eventTarget, 'keyup', added);
         });
 
-        it('should fire the inner event listener', () => {
+        it('should fire the inner event eventListener', () => {
             let fireEventListener: jasmine.Spy = spyOn(EventListener, 'fireEventListener');
 
             added(event);
 
-            expect(fireEventListener).toHaveBeenCalledWith(listener, event);
+            expect(fireEventListener).toHaveBeenCalledWith(eventListener, event);
         });
     });
 });
