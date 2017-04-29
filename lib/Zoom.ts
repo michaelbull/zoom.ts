@@ -221,10 +221,6 @@ export function clickedZoomable(config: Config, event: MouseEvent, zoomListener:
 
         if (previouslyZoomed) {
             elements = useExistingElements(overlay, image);
-
-            if (elements.clone !== undefined && isCloneLoaded(elements.clone)) {
-                replaceImageWithClone(image, elements.clone);
-            }
         } else {
             elements = setUpElements(overlay, image);
 
