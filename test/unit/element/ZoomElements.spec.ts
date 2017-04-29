@@ -81,7 +81,7 @@ describe('useExistingElements', () => {
             it('should be the second child element of the container', () => {
                 let clone: jasmine.Spy = jasmine.createSpy('clone');
                 container.children = {
-                    item: (index: number) => {
+                    item: (index: number): jasmine.Spy => {
                         expect(index).toBe(1);
                         return clone;
                     }
