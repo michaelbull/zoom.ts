@@ -16,6 +16,9 @@ module.exports = (config) => {
             'unit/**/*.spec.ts'
         ],
 
+        // list of files to exclude
+        exclude: [],
+
         // mime types
         mime: {
             'text/x-typescript': ['ts', 'tsx']
@@ -31,7 +34,10 @@ module.exports = (config) => {
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['spec', 'karma-typescript'],
+        reporters: [
+            'spec',
+            'karma-typescript'
+        ],
 
         // web server port
         port: 9876,
@@ -40,21 +46,14 @@ module.exports = (config) => {
         colors: true,
 
         // level of logging
-        // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO ||
-        // config.LOG_DEBUG
+        // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
         logLevel: config.LOG_INFO,
 
         // enable / disable watching file and executing tests whenever any file changes
         autoWatch: true,
 
-        // Start these browsers, currently available:
-        // - Chrome
-        // - ChromeCanary
-        // - Firefox
-        // - Opera
-        // - Safari (only Mac)
-        // - PhantomJS
-        // - IE (only Windows)
+        // start these browsers
+        // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         browsers: [
             'PhantomJS'
         ],
