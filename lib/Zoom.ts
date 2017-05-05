@@ -34,8 +34,9 @@ import {
     isZoomable
 } from './element/Image';
 import {
-    addOverlay,
-    hideOverlay
+    createOverlay,
+    hideOverlay,
+    addOverlay
 } from './element/Overlay';
 import { expandToViewport } from './element/Transform';
 import { ignoreTransitions } from './element/Transition';
@@ -109,6 +110,7 @@ export function zoomInstant(config: Config, elements: ZoomElements, target: Vect
 
     removeDismissListeners = addDismissListeners(config, elements.container, collapse);
 
+    addOverlay(elements.overlay);
     setWrapperExpanded(elements.wrapper);
     elements.wrapper.style.height = pixels(elements.image.height);
     activateImage(elements.image);
@@ -190,6 +192,7 @@ export function zoomTransition(config: Config, elements: ZoomElements, target: V
 
     removeDismissListeners = addDismissListeners(config, elements.container, collapse);
 
+    addOverlay(elements.overlay);
     startExpandingWrapper(elements.wrapper);
     elements.wrapper.style.height = pixels(elements.image.height);
     activateImage(elements.image);
@@ -217,7 +220,7 @@ export function clickedZoomable(config: Config, event: MouseEvent, zoomListener:
         }
 
         let elements: ZoomElements;
-        let overlay: HTMLDivElement = addOverlay();
+        let overlay: HTMLDivElement = createOverlay();
 
         if (previouslyZoomed) {
             elements = useExistingElements(overlay, image);

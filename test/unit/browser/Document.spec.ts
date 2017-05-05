@@ -161,7 +161,7 @@ describe('createDiv', () => {
         expect(createElement).toHaveBeenCalledWith('div');
     });
 
-    it('should assign the className', () => {
+    it('should set the className', () => {
         expect(createDiv('example').className).toBe('example');
     });
 

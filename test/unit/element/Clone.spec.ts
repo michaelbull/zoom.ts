@@ -45,7 +45,7 @@ describe('createClone', () => {
         expect(document.createElement).toHaveBeenCalledWith('img');
     });
 
-    it('should assign the className', () => {
+    it('should set the className', () => {
         expect(clone.className).toBe(CLASS);
     });
 

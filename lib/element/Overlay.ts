@@ -9,12 +9,14 @@ import { repaint } from './Element';
 export const CLASS: string = 'zoom__overlay';
 export const VISIBLE_CLASS: string = `${CLASS}--visible`;
 
-export function addOverlay(): HTMLDivElement {
-    let overlay: HTMLDivElement = createDiv(CLASS);
+export function createOverlay(): HTMLDivElement {
+    return createDiv(CLASS);
+}
+
+export function addOverlay(overlay: HTMLDivElement): void {
     document.body.appendChild(overlay);
     repaint(overlay);
     addClass(overlay, VISIBLE_CLASS);
-    return overlay;
 }
 
 export function hideOverlay(overlay: HTMLDivElement): void {
