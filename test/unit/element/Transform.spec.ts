@@ -186,7 +186,7 @@ describe('supports3dTransformations', () => {
                 textContent: 'content'
             };
 
-            spyOn(document, 'createElement').and.callFake((tagName: string): HTMLElement => {
+            spyOn(document, 'createElement').and.callFake((tagName: string): HTMLElement | undefined => {
                 if (tagName === 'div') {
                     return divElement;
                 } else if (tagName === 'style') {
