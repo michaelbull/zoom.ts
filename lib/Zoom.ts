@@ -15,7 +15,11 @@ import {
     resetBounds,
     setBoundsPx
 } from './element/Bounds';
-import { hasClass } from './element/ClassList';
+import {
+    addClass,
+    hasClass,
+    removeClass
+} from './element/ClassList';
 import {
     removeCloneLoadedListener,
     replaceCloneWithImage,
@@ -27,8 +31,6 @@ import {
     targetSize
 } from './element/Element';
 import {
-    activateImage,
-    deactivateImage,
     fullSrc,
     isZoomable
 } from './element/Image';
@@ -74,8 +76,7 @@ export function collapsed(config: Config, elements: ZoomElements): void {
         replaceCloneWithImage(config, elements.image, elements.clone);
     }
 
-    deactivateImage(elements.image);
-
+    removeClass(elements.image, config.imageActiveClass);
     document.body.removeChild(elements.overlay);
     stopCollapsingWrapper(elements.wrapper);
     resetStyle(elements.wrapper, 'height');
@@ -110,7 +111,7 @@ export function zoomInstant(config: Config, elements: ZoomElements, target: Vect
     addOverlay(elements.overlay);
     setWrapperExpanded(elements.wrapper);
     elements.wrapper.style.height = pixels(elements.image.height);
-    activateImage(elements.image);
+    addClass(elements.image, config.imageActiveClass);
 
     setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
 }
@@ -189,7 +190,7 @@ export function zoomTransition(config: Config, elements: ZoomElements, target: V
     addOverlay(elements.overlay);
     startExpandingWrapper(elements.wrapper);
     elements.wrapper.style.height = pixels(elements.image.height);
-    activateImage(elements.image);
+    addClass(elements.image, config.imageActiveClass);
 
     expandedListener = listenForEvent(elements.container, features.transitionEndEvent as string, () => expanded());
 
@@ -252,7 +253,7 @@ export function clickedZoomable(config: Config, event: MouseEvent, zoomListener:
 
 export function addZoomListener(config: Config): void {
     let listener: PotentialEventListener = addEventListener(document.body, 'click', (event: MouseEvent) => {
-        if (isZoomable(event.target)) {
+        if (isZoomable(config, event.target)) {
             event.preventDefault();
             event.stopPropagation();
             clickedZoomable(config, event, listener as EventListener);

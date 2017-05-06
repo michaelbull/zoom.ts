@@ -9,10 +9,6 @@ import {
     hasClass,
     removeClass
 } from './ClassList';
-import {
-    hideImage,
-    showImage
-} from './Image';
 import { isWrapperExpanded } from './Wrapper';
 import { ZoomElements } from './ZoomElements';
 
@@ -48,10 +44,10 @@ export function removeCloneLoadedListener(config: Config, elements: ZoomElements
 
 export function replaceImageWithClone(config: Config, image: HTMLImageElement, clone: HTMLImageElement): void {
     addClass(clone, config.cloneVisibleClass);
-    hideImage(image);
+    addClass(image, config.imageHiddenClass);
 }
 
 export function replaceCloneWithImage(config: Config, image: HTMLImageElement, clone: HTMLImageElement): void {
-    showImage(image);
+    removeClass(image, config.imageHiddenClass);
     removeClass(clone, config.cloneVisibleClass);
 }

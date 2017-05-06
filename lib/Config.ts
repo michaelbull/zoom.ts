@@ -4,6 +4,9 @@ export interface Config {
     readonly cloneVisibleClass: string;
     readonly cloneLoadedClass: string;
     readonly containerClass: string;
+    readonly imageClass: string;
+    readonly imageHiddenClass: string;
+    readonly imageActiveClass: string;
 }
 
 export const DEFAULT_CONFIG: Config = {
@@ -11,5 +14,8 @@ export const DEFAULT_CONFIG: Config = {
     cloneClass: 'zoom__clone',
     cloneVisibleClass: 'zoom__clone--visible',
     cloneLoadedClass: 'zoom__clone--loaded',
-    containerClass: 'zoom__container'
+    containerClass: 'zoom__container',
+    imageClass: 'zoom__element',
+    imageHiddenClass: 'zoom__element--hidden',
+    imageActiveClass: 'zoom__element--active'
 };

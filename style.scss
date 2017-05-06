@@ -10,6 +10,9 @@ $zoom-overlay-visible-opacity: 100 !default;
 $zoom-clone-class: 'zoom__clone' !default;
 $zoom-clone-loaded-class: 'zoom__clone--visible' !default;
 $zoom-container-class: 'zoom__container' !default;
+$zoom-image-class: 'zoom__element' !default;
+$zoom-image-hidden-class: 'zoom__element--hidden' !default;
+$zoom-image-active-class: 'zoom__element--active' !default;
 
 @mixin zoom-hidden() {
   visibility: hidden;
@@ -51,18 +54,18 @@ $zoom-container-class: 'zoom__container' !default;
   will-change: transform;
 }
 
-.zoom__element {
+.#{$zoom-image-class} {
   @include zoom-visible();
   will-change: visibility, opacity;
 
   max-width: 100%;
 }
 
-.zoom__element--active {
+.#{$zoom-image-active-class} {
   width: 100%;
 }
 
-.zoom__element--hidden {
+.#{$zoom-image-hidden-class} {
   @include zoom-hidden();
 }
 

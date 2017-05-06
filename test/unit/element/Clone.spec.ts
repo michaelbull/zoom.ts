@@ -11,10 +11,6 @@ import {
     replaceImageWithClone,
     showCloneOnceLoaded
 } from '../../../lib/element/Clone';
-import {
-    HIDDEN_CLASS,
-    isImageHidden
-} from '../../../lib/element/Image';
 import * as Wrapper from '../../../lib/element/Wrapper';
 import * as EventListener from '../../../lib/event/EventListener';
 import { fireEventListener } from '../../../lib/event/EventListener';
@@ -208,7 +204,8 @@ describe('replaceImageWithClone', () => {
 
     beforeEach(() => {
         config = {
-            cloneVisibleClass: 'clone-visible'
+            cloneVisibleClass: 'clone-visible',
+            imageHiddenClass: 'image-hidden'
         };
     });
 
@@ -217,7 +214,7 @@ describe('replaceImageWithClone', () => {
         let clone: any = { className: 'clone' };
         let addClass: jasmine.Spy = spyOn(ClassList, 'addClass').and.callFake((element: HTMLElement) => {
             if (element === clone) {
-                expect(isImageHidden(image)).toBe(false);
+                expect(hasClass(image, config.imageHiddenClass)).toBe(false);
             }
         });
 
@@ -249,12 +246,13 @@ describe('replaceCloneWithImage', () => {
 
     beforeEach(() => {
         config = {
-            cloneVisibleClass: 'clone-visible'
+            cloneVisibleClass: 'clone-visible',
+            imageHiddenClass: 'image-hidden'
         };
     });
 
     it('should show the image before hiding the clone', () => {
-        let image: any = { className: `image ${HIDDEN_CLASS}` };
+        let image: any = { className: `image ${config.imageHiddenClass}` };
         let clone: any = { className: `clone ${config.cloneVisibleClass}` };
         let removeClass: jasmine.Spy = spyOn(ClassList, 'removeClass').and.callFake((element: HTMLElement) => {
             if (element === image) {
@@ -268,12 +266,12 @@ describe('replaceCloneWithImage', () => {
     });
 
     it('should hide the clone after showing the image', () => {
-        let image: any = { className: `image ${HIDDEN_CLASS}` };
+        let image: any = { className: `image ${config.imageHiddenClass}` };
         let clone: any = { className: `clone ${config.cloneVisibleClass}` };
         let original: Function = ClassList.removeClass;
         let removeClass: jasmine.Spy = spyOn(ClassList, 'removeClass').and.callFake((element: HTMLElement, remove: string) => {
             if (element === clone) {
-                expect(isImageHidden(image)).toBe(false);
+                expect(hasClass(image, config.imageHiddenClass)).toBe(false);
             } else {
                 original(element, remove);
             }
