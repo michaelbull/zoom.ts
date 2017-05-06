@@ -12,7 +12,7 @@ import {
 } from './Config';
 import {
     Bounds,
-    boundsFrom,
+    boundsOf,
     centreBounds,
     createBounds,
     resetBounds,
@@ -37,21 +37,10 @@ import {
     fullSrc,
     isZoomable
 } from './element/Image';
-import {
-    addOverlay,
-} from './element/Overlay';
+import { addOverlay } from './element/Overlay';
 import { expandToViewport } from './element/Transform';
 import { ignoreTransitions } from './element/Transition';
-import {
-    isWrapperExpanding,
-    isWrapperTransitioning,
-    setWrapperExpanded,
-    startCollapsingWrapper,
-    startExpandingWrapper,
-    stopCollapsingWrapper,
-    stopExpandingWrapper,
-    unsetWrapperExpanded
-} from './element/Wrapper';
+import { isWrapperTransitioning } from './element/Wrapper';
 import {
     setUpElements,
     useExistingElements,
@@ -77,16 +66,16 @@ export function collapsed(config: Config, elements: ZoomElements): void {
         replaceCloneWithImage(config, elements.image, elements.clone);
     }
 
-    removeClass(elements.image, config.imageActiveClass);
     document.body.removeChild(elements.overlay);
-    stopCollapsingWrapper(elements.wrapper);
+    removeClass(elements.image, config.imageActiveClass);
+    removeClass(elements.wrapper, config.wrapperCollapsingClass);
     resetStyle(elements.wrapper, 'height');
 
     setTimeout(() => addZoomListener(config), 1);
 }
 
 export function zoomInstant(config: Config, elements: ZoomElements, target: Vector, showCloneListener: PotentialEventListener): void {
-    let bounds: Bounds = boundsFrom(elements.image);
+    let bounds: Bounds = boundsOf(elements.image);
 
     let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
         let wrapperPosition: Vector = positionFrom(elements.wrapper.getBoundingClientRect());
@@ -102,7 +91,7 @@ export function zoomInstant(config: Config, elements: ZoomElements, target: Vect
         removeEventListener(window, 'resize', resized as EventListener);
         removeCloneLoadedListener(config, elements, showCloneListener);
 
-        unsetWrapperExpanded(elements.wrapper);
+        removeClass(elements.wrapper, config.wrapperExpandedClass);
         resetBounds(elements.container.style);
         collapsed(config, elements);
     };
@@ -110,7 +99,7 @@ export function zoomInstant(config: Config, elements: ZoomElements, target: Vect
     removeDismissListeners = addDismissListeners(config, elements.container, collapse);
 
     addOverlay(config, elements.overlay);
-    setWrapperExpanded(elements.wrapper);
+    addClass(elements.wrapper, config.wrapperExpandedClass);
     elements.wrapper.style.height = pixels(elements.image.height);
     addClass(elements.image, config.imageActiveClass);
 
@@ -118,13 +107,13 @@ export function zoomInstant(config: Config, elements: ZoomElements, target: Vect
 }
 
 export function zoomTransition(config: Config, elements: ZoomElements, target: Vector, showCloneListener: PotentialEventListener, features: Features): void {
-    let bounds: Bounds = boundsFrom(elements.image);
+    let bounds: Bounds = boundsOf(elements.image);
 
     let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
         let wrapperPosition: Vector = positionFrom(elements.wrapper.getBoundingClientRect());
         bounds = createBounds(wrapperPosition, bounds.size);
 
-        if (isWrapperTransitioning(elements.wrapper)) {
+        if (isWrapperTransitioning(config, elements.wrapper)) {
             expandToViewport(features, elements.container, target, bounds);
         } else {
             setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
@@ -140,19 +129,19 @@ export function zoomTransition(config: Config, elements: ZoomElements, target: V
         removeCloneLoadedListener(config, elements, showCloneListener);
 
         removeClass(elements.overlay, config.overlayVisibleClass);
-        startCollapsingWrapper(elements.wrapper);
+        addClass(elements.wrapper, config.wrapperCollapsingClass);
 
         let collapsedListener: PotentialEventListener = listenForEvent(elements.container, features.transitionEndEvent, () => {
             collapsed(config, elements);
         });
 
-        if (isWrapperExpanding(elements.wrapper)) {
+        if (hasClass(elements.wrapper, config.wrapperExpandingClass)) {
             if (expandedListener !== undefined) {
                 removeEventListener(elements.container, features.transitionEndEvent as string, expandedListener);
             }
 
             resetStyle(elements.container, features.transformProperty as string);
-            stopExpandingWrapper(elements.wrapper);
+            removeClass(elements.wrapper, config.wrapperExpandingClass);
         } else {
             ignoreTransitions(elements.container, features.transitionProperty as string, () => {
                 expandToViewport(features, elements.container, target, bounds);
@@ -160,7 +149,7 @@ export function zoomTransition(config: Config, elements: ZoomElements, target: V
 
             resetStyle(elements.container, features.transformProperty as string);
             resetBounds(elements.container.style);
-            unsetWrapperExpanded(elements.wrapper);
+            removeClass(elements.wrapper, config.wrapperExpandedClass);
         }
 
         if (collapsedListener === undefined) {
@@ -177,8 +166,8 @@ export function zoomTransition(config: Config, elements: ZoomElements, target: V
             replaceImageWithClone(config, elements.image, elements.clone);
         }
 
-        stopExpandingWrapper(elements.wrapper);
-        setWrapperExpanded(elements.wrapper);
+        removeClass(elements.wrapper, config.wrapperExpandingClass);
+        addClass(elements.wrapper, config.wrapperExpandedClass);
 
         ignoreTransitions(elements.container, features.transitionProperty as string, () => {
             resetStyle(elements.container, features.transformProperty as string);
@@ -189,7 +178,7 @@ export function zoomTransition(config: Config, elements: ZoomElements, target: V
     removeDismissListeners = addDismissListeners(config, elements.container, collapse);
 
     addOverlay(config, elements.overlay);
-    startExpandingWrapper(elements.wrapper);
+    addClass(elements.wrapper, config.wrapperExpandingClass);
     elements.wrapper.style.height = pixels(elements.image.height);
     addClass(elements.image, config.imageActiveClass);
 

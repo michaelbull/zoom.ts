@@ -11,7 +11,6 @@ import {
     replaceImageWithClone,
     showCloneOnceLoaded
 } from '../../../lib/element/Clone';
-import * as Wrapper from '../../../lib/element/Wrapper';
 import * as EventListener from '../../../lib/event/EventListener';
 import { fireEventListener } from '../../../lib/event/EventListener';
 
@@ -80,7 +79,9 @@ describe('showCloneOnceLoaded', () => {
 
     beforeEach(() => {
         config = {
-            cloneVisibleClass: 'visible'
+            cloneVisibleClass: 'visible',
+            imageHiddenClass: 'hidden',
+            wrapperExpandedClass: 'expanded'
         };
 
         event = jasmine.createSpy('event');
@@ -89,10 +90,8 @@ describe('showCloneOnceLoaded', () => {
 
     it('should not show the clone if the clone is undefined', () => {
         let elements: any = {};
-        let listener: EventListener = showCloneOnceLoaded(config, elements);
-        spyOn(Wrapper, 'isWrapperExpanded').and.returnValue(true);
 
-        fireEventListener(listener, event);
+        fireEventListener(showCloneOnceLoaded(config, elements), event);
 
         expect(addClass).toHaveBeenCalledTimes(0);
     });
@@ -101,12 +100,13 @@ describe('showCloneOnceLoaded', () => {
         let elements: any = {
             clone: {
                 className: 'clone'
+            },
+            wrapper: {
+                className: 'wrapper'
             }
         };
-        let listener: EventListener = showCloneOnceLoaded(config, elements);
-        spyOn(Wrapper, 'isWrapperExpanded').and.returnValue(false);
 
-        fireEventListener(listener, event);
+        fireEventListener(showCloneOnceLoaded(config, elements), event);
 
         expect(addClass).toHaveBeenCalledTimes(0);
     });
@@ -115,28 +115,34 @@ describe('showCloneOnceLoaded', () => {
         let elements: any = {
             clone: {
                 className: `clone ${config.cloneVisibleClass}`
+            },
+            wrapper: {
+                className: `wrapper ${config.wrapperExpandedClass}`
             }
         };
-        let listener: EventListener = showCloneOnceLoaded(config, elements);
-        spyOn(Wrapper, 'isWrapperExpanded').and.returnValue(true);
 
-        fireEventListener(listener, event);
+        fireEventListener(showCloneOnceLoaded(config, elements), event);
 
         expect(addClass).toHaveBeenCalledTimes(0);
     });
 
-    it('should show the clone if the wrapper is expanded and the clone is not already visible', () => {
+    it('should show the clone if the wrapper is expanded', () => {
         let elements: any = {
             clone: {
                 className: 'clone'
+            },
+            image: {
+                className: 'image'
+            },
+            wrapper: {
+                className: `wrapper ${config.wrapperExpandedClass}`
             }
         };
-        let listener: EventListener = showCloneOnceLoaded(config, elements);
-        spyOn(Wrapper, 'isWrapperExpanded').and.returnValue(true);
 
-        fireEventListener(listener, event);
+        fireEventListener(showCloneOnceLoaded(config, elements), event);
 
-        expect(addClass).toHaveBeenCalledTimes(2);
+        expect(addClass).toHaveBeenCalledWith(elements.clone, config.cloneVisibleClass);
+        expect(addClass).toHaveBeenCalledWith(elements.image, config.imageHiddenClass);
     });
 });
 

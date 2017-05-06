@@ -9,7 +9,6 @@ import {
     hasClass,
     removeClass
 } from './ClassList';
-import { isWrapperExpanded } from './Wrapper';
 import { ZoomElements } from './ZoomElements';
 
 export function createClone(config: Config, src: string): HTMLImageElement {
@@ -24,8 +23,9 @@ export function showCloneOnceLoaded(config: Config, elements: ZoomElements): Eve
     return (): void => {
         if (elements.clone !== undefined) {
             let cloneHidden: boolean = !hasClass(elements.clone, config.cloneVisibleClass);
+            let wrapperExpanded: boolean = hasClass(elements.wrapper, config.wrapperExpandedClass);
 
-            if (cloneHidden && isWrapperExpanded(elements.wrapper)) {
+            if (cloneHidden && wrapperExpanded) {
                 replaceImageWithClone(config, elements.image, elements.clone);
             }
         }

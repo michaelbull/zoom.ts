@@ -1,7 +1,7 @@
+import { createDiv } from '../browser/Document';
 import { Config } from '../Config';
 import { createClone } from './Clone';
 import { fullSrc } from './Image';
-import { createDiv } from '../browser/Document';
 
 export interface ZoomElements {
     readonly overlay: HTMLDivElement;

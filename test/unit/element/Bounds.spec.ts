@@ -1,7 +1,7 @@
 import { STANDARDS_MODE } from '../../../lib/browser/Document';
 import {
     Bounds,
-    boundsFrom,
+    boundsOf,
     centreBounds,
     createBounds,
     resetBounds,
@@ -21,7 +21,7 @@ describe('createBounds', () => {
     });
 });
 
-describe('boundsFrom', () => {
+describe('boundsOf', () => {
     it('should construct a Bounds object using the position and size of the rect', () => {
         let rect: ClientRect = {
             top: 300,
@@ -41,7 +41,7 @@ describe('boundsFrom', () => {
             size: [99, 100]
         };
 
-        expect(boundsFrom(element)).toEqual(expected);
+        expect(boundsOf(element)).toEqual(expected);
     });
 });
 

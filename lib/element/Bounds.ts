@@ -22,7 +22,7 @@ export function createBounds(position: Vector, size: Vector): Bounds {
     };
 }
 
-export function boundsFrom(element: HTMLElement): Bounds {
+export function boundsOf(element: HTMLElement): Bounds {
     let rect: ClientRect = element.getBoundingClientRect();
     return createBounds(positionFrom(rect), sizeFrom(rect));
 }
