@@ -9,6 +9,7 @@ $zoom-overlay-visible-opacity: 100 !default;
 
 $zoom-clone-class: 'zoom__clone' !default;
 $zoom-clone-loaded-class: 'zoom__clone--visible' !default;
+$zoom-container-class: 'zoom__container' !default;
 
 @mixin zoom-hidden() {
   visibility: hidden;
@@ -44,7 +45,7 @@ $zoom-clone-loaded-class: 'zoom__clone--visible' !default;
   cursor: -webkit-zoom-out;
 }
 
-.zoom__container {
+.#{$zoom-container-class} {
   position: relative;
   transition: transform $zoom-transition-duration $zoom-transition-timing-function;
   will-change: transform;

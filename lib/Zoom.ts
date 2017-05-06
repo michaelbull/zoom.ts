@@ -22,7 +22,6 @@ import {
     replaceImageWithClone,
     showCloneOnceLoaded
 } from './element/Clone';
-import { isContainer } from './element/Container';
 import {
     resetStyle,
     targetSize
@@ -204,7 +203,7 @@ export function zoomTransition(config: Config, elements: ZoomElements, target: V
 export function clickedZoomable(config: Config, event: MouseEvent, zoomListener: EventListener): void {
     let image: HTMLImageElement = event.target as HTMLImageElement;
     let parent: HTMLElement = image.parentElement as HTMLElement;
-    let previouslyZoomed: boolean = isContainer(parent);
+    let previouslyZoomed: boolean = hasClass(parent, config.containerClass);
     let wrapper: HTMLElement = previouslyZoomed ? parent.parentElement as HTMLElement : parent;
 
     if (event.metaKey || event.ctrlKey) {

@@ -1,5 +1,5 @@
+import * as Document from '../../../lib/browser/Document';
 import * as Clone from '../../../lib/element/Clone';
-import * as Container from '../../../lib/element/Container';
 import * as Image from '../../../lib/element/Image';
 import {
     setUpElements,
@@ -99,10 +99,13 @@ describe('setUpElements', () => {
     let wrapper: any;
     let container: any;
     let image: any;
-    let createContainer: jasmine.Spy;
+    let createDiv: jasmine.Spy;
 
     beforeEach(() => {
-        config = jasmine.createSpy('config');
+        config = {
+            containerClass: 'container'
+        };
+
         overlay = jasmine.createSpy('overlay');
         wrapper = jasmine.createSpy('wrapper');
         container = jasmine.createSpy('container');
@@ -112,7 +115,7 @@ describe('setUpElements', () => {
             src: 'example-src'
         };
 
-        createContainer = spyOn(Container, 'createContainer').and.returnValue(container);
+        createDiv = spyOn(Document, 'createDiv').and.returnValue(container);
     });
 
     it('should determine the full src of the image', () => {
@@ -143,7 +146,7 @@ describe('setUpElements', () => {
 
             setUpElements(config, overlay, image);
 
-            expect(createContainer).toHaveBeenCalled();
+            expect(createDiv).toHaveBeenCalledWith(config.containerClass);
         });
 
         it('should be the created container', () => {

@@ -1,7 +1,7 @@
 import { Config } from '../Config';
 import { createClone } from './Clone';
-import { createContainer } from './Container';
 import { fullSrc } from './Image';
+import { createDiv } from '../browser/Document';
 
 export interface ZoomElements {
     readonly overlay: HTMLDivElement;
@@ -33,7 +33,7 @@ export function useExistingElements(overlay: HTMLDivElement, image: HTMLImageEle
 }
 
 export function setUpElements(config: Config, overlay: HTMLDivElement, image: HTMLImageElement): ZoomElements {
-    let container: HTMLElement = createContainer();
+    let container: HTMLElement = createDiv(config.containerClass);
     let wrapper: HTMLElement = image.parentElement as HTMLElement;
 
     let clone: HTMLImageElement | undefined;

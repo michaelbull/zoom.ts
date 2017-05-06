@@ -3,11 +3,13 @@ export interface Config {
     readonly cloneClass: string;
     readonly cloneVisibleClass: string;
     readonly cloneLoadedClass: string;
+    readonly containerClass: string;
 }
 
 export const DEFAULT_CONFIG: Config = {
     scrollDismissPx: 50,
     cloneClass: 'zoom__clone',
     cloneVisibleClass: 'zoom__clone--visible',
-    cloneLoadedClass: 'zoom__clone--loaded'
+    cloneLoadedClass: 'zoom__clone--loaded',
+    containerClass: 'zoom__container'
 };
