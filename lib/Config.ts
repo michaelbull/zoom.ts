@@ -7,6 +7,8 @@ export interface Config {
     readonly imageClass: string;
     readonly imageHiddenClass: string;
     readonly imageActiveClass: string;
+    readonly overlayClass: string;
+    readonly overlayVisibleClass: string;
 }
 
 export const DEFAULT_CONFIG: Config = {
@@ -17,5 +19,7 @@ export const DEFAULT_CONFIG: Config = {
     containerClass: 'zoom__container',
     imageClass: 'zoom__element',
     imageHiddenClass: 'zoom__element--hidden',
-    imageActiveClass: 'zoom__element--active'
+    imageActiveClass: 'zoom__element--active',
+    overlayClass: 'zoom__overlay',
+    overlayVisibleClass: 'zoom__overlay--visible'
 };

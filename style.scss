@@ -13,6 +13,8 @@ $zoom-container-class: 'zoom__container' !default;
 $zoom-image-class: 'zoom__element' !default;
 $zoom-image-hidden-class: 'zoom__element--hidden' !default;
 $zoom-image-active-class: 'zoom__element--active' !default;
+$zoom-overlay-class: 'zoom__overlay' !default;
+$zoom-overlay-visible-class: 'zoom__overlay--visible' !default;
 
 @mixin zoom-hidden() {
   visibility: hidden;
@@ -86,7 +88,7 @@ $zoom-image-active-class: 'zoom__element--active' !default;
   @include zoom-visible();
 }
 
-.zoom__overlay {
+.#{$zoom-overlay-class} {
   position: fixed;
   top: 0;
   right: 0;
@@ -102,7 +104,7 @@ $zoom-image-active-class: 'zoom__element--active' !default;
   will-change: opacity, filter;
 }
 
-.zoom__overlay--visible {
+.#{$zoom-overlay-visible-class} {
   opacity: $zoom-overlay-visible-opacity / 100;
   filter: 'alpha(opacity=' + $zoom-overlay-visible-opacity + ')';
 }

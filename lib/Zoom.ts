@@ -1,4 +1,7 @@
-import { ready } from './browser/Document';
+import {
+    createDiv,
+    ready
+} from './browser/Document';
 import {
     detectFeatures,
     Features
@@ -36,8 +39,6 @@ import {
 } from './element/Image';
 import {
     addOverlay,
-    createOverlay,
-    hideOverlay
 } from './element/Overlay';
 import { expandToViewport } from './element/Transform';
 import { ignoreTransitions } from './element/Transition';
@@ -108,7 +109,7 @@ export function zoomInstant(config: Config, elements: ZoomElements, target: Vect
 
     removeDismissListeners = addDismissListeners(config, elements.container, collapse);
 
-    addOverlay(elements.overlay);
+    addOverlay(config, elements.overlay);
     setWrapperExpanded(elements.wrapper);
     elements.wrapper.style.height = pixels(elements.image.height);
     addClass(elements.image, config.imageActiveClass);
@@ -138,7 +139,7 @@ export function zoomTransition(config: Config, elements: ZoomElements, target: V
         removeEventListener(window, 'resize', resized as EventListener);
         removeCloneLoadedListener(config, elements, showCloneListener);
 
-        hideOverlay(elements.overlay);
+        removeClass(elements.overlay, config.overlayVisibleClass);
         startCollapsingWrapper(elements.wrapper);
 
         let collapsedListener: PotentialEventListener = listenForEvent(elements.container, features.transitionEndEvent, () => {
@@ -187,7 +188,7 @@ export function zoomTransition(config: Config, elements: ZoomElements, target: V
 
     removeDismissListeners = addDismissListeners(config, elements.container, collapse);
 
-    addOverlay(elements.overlay);
+    addOverlay(config, elements.overlay);
     startExpandingWrapper(elements.wrapper);
     elements.wrapper.style.height = pixels(elements.image.height);
     addClass(elements.image, config.imageActiveClass);
@@ -215,7 +216,7 @@ export function clickedZoomable(config: Config, event: MouseEvent, zoomListener:
         }
 
         let elements: ZoomElements;
-        let overlay: HTMLDivElement = createOverlay();
+        let overlay: HTMLDivElement = createDiv(config.overlayClass);
 
         if (previouslyZoomed) {
             elements = useExistingElements(overlay, image);
