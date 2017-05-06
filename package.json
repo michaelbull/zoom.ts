@@ -30,11 +30,13 @@
     "build": "npm run clean && rollup --config",
     "test": "karma start test/karma.conf.js --singleRun",
     "test:watch": "karma start test/karma.conf.js",
+    "coveralls": "cat ./reports/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "dist": "npm run clean && cross-env NODE_ENV=production rollup --config",
     "lint": "tslint lib/**/*.ts test/**/*.ts"
   },
   "devDependencies": {
     "@types/jasmine": "2.5.41",
+    "coveralls": "2.13.1",
     "cross-env": "3.1.4",
     "cssnano": "3.10.0",
     "jasmine-core": "2.5.2",

@@ -36,6 +36,7 @@ module.exports = (config) => {
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
         reporters: [
             'spec',
+            'coverage',
             'karma-typescript'
         ],
 
@@ -57,6 +58,17 @@ module.exports = (config) => {
         browsers: [
             'PhantomJS'
         ],
+
+        coverageReporter: {
+            dir: '../reports/coverage',
+            reporters: [
+                {
+                    type: 'lcovonly',
+                    subdir: '.',
+                    file: 'lcov.info'
+                }
+            ]
+        },
 
         karmaTypescriptConfig: {
             include: [
