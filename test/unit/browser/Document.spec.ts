@@ -94,6 +94,7 @@ describe('ready', () => {
 
             ready(document, jasmine.createSpy('callback'));
 
+            expect(registeredListener).toBeDefined();
             expect(document.addEventListener).toHaveBeenCalledWith('DOMContentLoaded', registeredListener, false);
         });
 
@@ -108,6 +109,7 @@ describe('ready', () => {
             ready(document, callback);
             fireEventListener(registeredListener, event);
 
+            expect(registeredListener).toBeDefined();
             expect(callback).toHaveBeenCalled();
         });
     });

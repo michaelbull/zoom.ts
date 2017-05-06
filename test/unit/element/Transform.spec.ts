@@ -192,7 +192,7 @@ describe('supports3dTransformations', () => {
                 } else if (tagName === 'style') {
                     return styleElement;
                 } else {
-                    throw new Error();
+                    fail();
                 }
             });
 

@@ -7,6 +7,9 @@ $zoom-overlay-z-index: 1000 !default;
 $zoom-overlay-background-color: hsl(0, 0%, 100%) !default;
 $zoom-overlay-visible-opacity: 100 !default;
 
+$zoom-clone-class: 'zoom__clone' !default;
+$zoom-clone-loaded-class: 'zoom__clone--visible' !default;
+
 @mixin zoom-hidden() {
   visibility: hidden;
   opacity: 0;
@@ -62,7 +65,7 @@ $zoom-overlay-visible-opacity: 100 !default;
   @include zoom-hidden();
 }
 
-.zoom__clone {
+.#{$zoom-clone-class} {
   @include zoom-hidden();
   will-change: visibility, opacity;
 
@@ -75,7 +78,7 @@ $zoom-overlay-visible-opacity: 100 !default;
   width: 100%;
 }
 
-.zoom__clone--visible {
+.#{$zoom-clone-loaded-class} {
   @include zoom-visible();
 }
 

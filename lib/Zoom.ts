@@ -15,9 +15,9 @@ import {
     resetBounds,
     setBoundsPx
 } from './element/Bounds';
+import { hasClass } from './element/ClassList';
 import {
-    isCloneLoaded,
-    isCloneVisible,
+    removeCloneLoadedListener,
     replaceCloneWithImage,
     replaceImageWithClone,
     showCloneOnceLoaded
@@ -34,9 +34,9 @@ import {
     isZoomable
 } from './element/Image';
 import {
+    addOverlay,
     createOverlay,
-    hideOverlay,
-    addOverlay
+    hideOverlay
 } from './element/Overlay';
 import { expandToViewport } from './element/Transform';
 import { ignoreTransitions } from './element/Transition';
@@ -72,7 +72,7 @@ import {
 
 export function collapsed(config: Config, elements: ZoomElements): void {
     if (elements.clone !== undefined) {
-        replaceCloneWithImage(elements.image, elements.clone);
+        replaceCloneWithImage(config, elements.image, elements.clone);
     }
 
     deactivateImage(elements.image);
@@ -99,9 +99,7 @@ export function zoomInstant(config: Config, elements: ZoomElements, target: Vect
     let collapse: EventListener = (): void => {
         removeDismissListeners();
         removeEventListener(window, 'resize', resized as EventListener);
-        if (elements.clone !== undefined && showCloneListener !== undefined && !isCloneLoaded(elements.clone)) {
-            removeEventListener(elements.clone, 'load', showCloneListener);
-        }
+        removeCloneLoadedListener(config, elements, showCloneListener);
 
         unsetWrapperExpanded(elements.wrapper);
         resetBounds(elements.container.style);
@@ -138,10 +136,7 @@ export function zoomTransition(config: Config, elements: ZoomElements, target: V
     let collapse: EventListener = (): void => {
         removeDismissListeners();
         removeEventListener(window, 'resize', resized as EventListener);
-
-        if (elements.clone !== undefined && showCloneListener !== undefined && !isCloneLoaded(elements.clone)) {
-            removeEventListener(elements.clone, 'load', showCloneListener);
-        }
+        removeCloneLoadedListener(config, elements, showCloneListener);
 
         hideOverlay(elements.overlay);
         startCollapsingWrapper(elements.wrapper);
@@ -173,12 +168,12 @@ export function zoomTransition(config: Config, elements: ZoomElements, target: V
     };
 
     function expanded(): void {
-        if (elements.clone !== undefined && isCloneLoaded(elements.clone) && !isCloneVisible(elements.clone)) {
+        if (elements.clone !== undefined && hasClass(elements.clone, config.cloneLoadedClass) && !hasClass(elements.clone, config.cloneVisibleClass)) {
             if (showCloneListener !== undefined) {
                 removeEventListener(elements.clone, features.transitionEndEvent as string, showCloneListener);
             }
 
-            replaceImageWithClone(elements.image, elements.clone);
+            replaceImageWithClone(config, elements.image, elements.clone);
         }
 
         stopExpandingWrapper(elements.wrapper);
@@ -225,7 +220,7 @@ export function clickedZoomable(config: Config, event: MouseEvent, zoomListener:
         if (previouslyZoomed) {
             elements = useExistingElements(overlay, image);
         } else {
-            elements = setUpElements(overlay, image);
+            elements = setUpElements(config, overlay, image);
 
             elements.wrapper.replaceChild(elements.container, image);
             elements.container.appendChild(image);
@@ -238,10 +233,10 @@ export function clickedZoomable(config: Config, event: MouseEvent, zoomListener:
         let showCloneListener: PotentialEventListener;
 
         if (elements.clone !== undefined) {
-            if (isCloneLoaded(elements.clone)) {
-                replaceImageWithClone(image, elements.clone);
+            if (hasClass(elements.clone, config.cloneLoadedClass)) {
+                replaceImageWithClone(config, image, elements.clone);
             } else {
-                showCloneListener = addEventListener(elements.clone, 'load', showCloneOnceLoaded(elements));
+                showCloneListener = addEventListener(elements.clone, 'load', showCloneOnceLoaded(config, elements));
             }
         }
 

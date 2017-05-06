@@ -1,34 +1,36 @@
 import * as ClassList from '../../../lib/element/ClassList';
 import {
     addClass,
+    hasClass,
     removeClass
 } from '../../../lib/element/ClassList';
 import {
-    CLASS,
     createClone,
-    hideClone,
-    isCloneLoaded,
-    isCloneVisible,
-    LOADED_CLASS,
+    removeCloneLoadedListener,
     replaceCloneWithImage,
     replaceImageWithClone,
-    showClone,
-    showCloneOnceLoaded,
-    VISIBLE_CLASS
+    showCloneOnceLoaded
 } from '../../../lib/element/Clone';
 import {
     HIDDEN_CLASS,
     isImageHidden
 } from '../../../lib/element/Image';
 import * as Wrapper from '../../../lib/element/Wrapper';
+import * as EventListener from '../../../lib/event/EventListener';
 import { fireEventListener } from '../../../lib/event/EventListener';
 
 describe('createClone', () => {
+    let config: any;
     let element: any;
     let listener: EventListener;
     let clone: any;
 
     beforeEach(() => {
+        config = {
+            cloneClass: 'clone',
+            cloneLoadedClass: 'clone--loaded'
+        };
+
         element = {
             addEventListener: jasmine.createSpy('addEventListener').and.callFake((event: string, evtListener: EventListener) => {
                 listener = evtListener;
@@ -38,7 +40,7 @@ describe('createClone', () => {
 
         spyOn(document, 'createElement').and.returnValue(element);
 
-        clone = createClone('dummy-src');
+        clone = createClone(config, 'dummy-src');
     });
 
     it('should create an img element', () => {
@@ -46,7 +48,7 @@ describe('createClone', () => {
     });
 
     it('should set the className', () => {
-        expect(clone.className).toBe(CLASS);
+        expect(clone.className).toBe(config.cloneClass);
     });
 
     it('should set the src', () => {
@@ -70,23 +72,28 @@ describe('createClone', () => {
         });
 
         it('should add the loaded class', () => {
-            expect(isCloneLoaded(clone)).toBe(true);
+            expect(hasClass(clone, config.cloneLoadedClass)).toBe(true);
         });
     });
 });
 
 describe('showCloneOnceLoaded', () => {
+    let config: any;
     let event: any;
     let addClass: jasmine.Spy;
 
     beforeEach(() => {
+        config = {
+            cloneVisibleClass: 'visible'
+        };
+
         event = jasmine.createSpy('event');
         addClass = spyOn(ClassList, 'addClass');
     });
 
     it('should not show the clone if the clone is undefined', () => {
         let elements: any = {};
-        let listener: EventListener = showCloneOnceLoaded(elements);
+        let listener: EventListener = showCloneOnceLoaded(config, elements);
         spyOn(Wrapper, 'isWrapperExpanded').and.returnValue(true);
 
         fireEventListener(listener, event);
@@ -100,7 +107,7 @@ describe('showCloneOnceLoaded', () => {
                 className: 'clone'
             }
         };
-        let listener: EventListener = showCloneOnceLoaded(elements);
+        let listener: EventListener = showCloneOnceLoaded(config, elements);
         spyOn(Wrapper, 'isWrapperExpanded').and.returnValue(false);
 
         fireEventListener(listener, event);
@@ -111,10 +118,10 @@ describe('showCloneOnceLoaded', () => {
     it('should not show the clone if the clone is already visible', () => {
         let elements: any = {
             clone: {
-                className: `clone ${VISIBLE_CLASS}`
+                className: `clone ${config.cloneVisibleClass}`
             }
         };
-        let listener: EventListener = showCloneOnceLoaded(elements);
+        let listener: EventListener = showCloneOnceLoaded(config, elements);
         spyOn(Wrapper, 'isWrapperExpanded').and.returnValue(true);
 
         fireEventListener(listener, event);
@@ -128,7 +135,7 @@ describe('showCloneOnceLoaded', () => {
                 className: 'clone'
             }
         };
-        let listener: EventListener = showCloneOnceLoaded(elements);
+        let listener: EventListener = showCloneOnceLoaded(config, elements);
         spyOn(Wrapper, 'isWrapperExpanded').and.returnValue(true);
 
         fireEventListener(listener, event);
@@ -137,53 +144,74 @@ describe('showCloneOnceLoaded', () => {
     });
 });
 
-describe('showClone', () => {
-    it('should add the visible class', () => {
-        let clone: jasmine.Spy = jasmine.createSpy('clone');
-        let addClass: jasmine.Spy = spyOn(ClassList, 'addClass');
+describe('removeCloneLoadedListener', () => {
+    let config: any;
+    let showCloneListener: any;
+    let removeEventListener: jasmine.Spy;
 
-        showClone(clone as any);
-
-        expect(addClass).toHaveBeenCalledWith(clone, VISIBLE_CLASS);
-    });
-});
-
-describe('hideClone', () => {
-    it('should remove the visible class', () => {
-        let clone: jasmine.Spy = jasmine.createSpy('clone');
-        let removeClass: jasmine.Spy = spyOn(ClassList, 'removeClass');
-
-        hideClone(clone as any);
-
-        expect(removeClass).toHaveBeenCalledWith(clone, VISIBLE_CLASS);
-    });
-});
-
-describe('isCloneVisible', () => {
-    it('should return true if the visible class is present', () => {
-        let clone: any = { className: VISIBLE_CLASS };
-        expect(isCloneVisible(clone)).toBe(true);
+    beforeEach(() => {
+        config = {
+            cloneLoadedClass: 'loaded'
+        };
+        showCloneListener = jasmine.createSpy('showCloneListener');
+        removeEventListener = spyOn(EventListener, 'removeEventListener');
     });
 
-    it('should return false if the visible class is absent', () => {
-        let clone: any = { className: '' };
-        expect(isCloneVisible(clone)).toBe(false);
-    });
-});
+    it('should not remove the listener if the clone is undefined', () => {
+        let elements: any = {};
 
-describe('isCloneLoaded', () => {
-    it('should return true if the loaded class is present', () => {
-        let clone: any = { className: LOADED_CLASS };
-        expect(isCloneLoaded(clone)).toBe(true);
+        removeCloneLoadedListener(config, elements, showCloneListener);
+
+        expect(removeEventListener).toHaveBeenCalledTimes(0);
     });
 
-    it('should return false if the loaded class is absent', () => {
-        let clone: any = { className: '' };
-        expect(isCloneLoaded(clone)).toBe(false);
+    it('should not remove the listener if the listener is undefined', () => {
+        let elements: any = {
+            clone: jasmine.createSpy('clone')
+        };
+
+        removeCloneLoadedListener(config, elements, undefined);
+
+        expect(removeEventListener).toHaveBeenCalledTimes(0);
+    });
+
+    it('should check if the clone has been loaded', () => {
+        let elements: any = { clone: jasmine.createSpy('clone') };
+        let hasClass: jasmine.Spy = spyOn(ClassList, 'hasClass').and.returnValue(true);
+
+        removeCloneLoadedListener(config, elements, showCloneListener);
+
+        expect(hasClass).toHaveBeenCalledWith(elements.clone, config.cloneLoadedClass);
+    });
+
+    it('should not remove the listener if the clone is already loaded', () => {
+        let elements: any = { clone: jasmine.createSpy('clone') };
+        spyOn(ClassList, 'hasClass').and.returnValue(true);
+
+        removeCloneLoadedListener(config, elements, showCloneListener);
+
+        expect(removeEventListener).toHaveBeenCalledTimes(0);
+    });
+
+    it('should remove the listener if the clone is still loading', () => {
+        let elements: any = { clone: jasmine.createSpy('clone') };
+        spyOn(ClassList, 'hasClass').and.returnValue(false);
+
+        removeCloneLoadedListener(config, elements, showCloneListener);
+
+        expect(removeEventListener).toHaveBeenCalledWith(elements.clone, 'load', showCloneListener);
     });
 });
 
 describe('replaceImageWithClone', () => {
+    let config: any;
+
+    beforeEach(() => {
+        config = {
+            cloneVisibleClass: 'clone-visible'
+        };
+    });
+
     it('should show the clone before hiding the image', () => {
         let image: any = { className: 'image' };
         let clone: any = { className: 'clone' };
@@ -193,7 +221,7 @@ describe('replaceImageWithClone', () => {
             }
         });
 
-        replaceImageWithClone(image, clone);
+        replaceImageWithClone(config, image, clone);
 
         expect(addClass).toHaveBeenCalledTimes(2);
     });
@@ -204,36 +232,44 @@ describe('replaceImageWithClone', () => {
         let original: Function = ClassList.addClass;
         let addClass: jasmine.Spy = spyOn(ClassList, 'addClass').and.callFake((element: HTMLElement, add: string) => {
             if (element === image) {
-                expect(isCloneVisible(clone)).toBe(true);
+                expect(hasClass(clone, config.cloneVisibleClass)).toBe(true);
             } else {
                 original(element, add);
             }
         });
 
-        replaceImageWithClone(image, clone);
+        replaceImageWithClone(config, image, clone);
 
         expect(addClass).toHaveBeenCalledTimes(2);
     });
 });
 
 describe('replaceCloneWithImage', () => {
+    let config: any;
+
+    beforeEach(() => {
+        config = {
+            cloneVisibleClass: 'clone-visible'
+        };
+    });
+
     it('should show the image before hiding the clone', () => {
         let image: any = { className: `image ${HIDDEN_CLASS}` };
-        let clone: any = { className: `clone ${VISIBLE_CLASS}` };
+        let clone: any = { className: `clone ${config.cloneVisibleClass}` };
         let removeClass: jasmine.Spy = spyOn(ClassList, 'removeClass').and.callFake((element: HTMLElement) => {
             if (element === image) {
-                expect(isCloneVisible(clone)).toBe(true);
+                expect(hasClass(clone, config.cloneVisibleClass)).toBe(true);
             }
         });
 
-        replaceCloneWithImage(image, clone);
+        replaceCloneWithImage(config, image, clone);
 
         expect(removeClass).toHaveBeenCalledTimes(2);
     });
 
     it('should hide the clone after showing the image', () => {
         let image: any = { className: `image ${HIDDEN_CLASS}` };
-        let clone: any = { className: `clone ${VISIBLE_CLASS}` };
+        let clone: any = { className: `clone ${config.cloneVisibleClass}` };
         let original: Function = ClassList.removeClass;
         let removeClass: jasmine.Spy = spyOn(ClassList, 'removeClass').and.callFake((element: HTMLElement, remove: string) => {
             if (element === clone) {
@@ -243,7 +279,7 @@ describe('replaceCloneWithImage', () => {
             }
         });
 
-        replaceCloneWithImage(image, clone);
+        replaceCloneWithImage(config, image, clone);
 
         expect(removeClass).toHaveBeenCalledTimes(2);
     });

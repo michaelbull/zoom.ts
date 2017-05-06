@@ -94,6 +94,7 @@ describe('useExistingElements', () => {
 });
 
 describe('setUpElements', () => {
+    let config: any;
     let overlay: any;
     let wrapper: any;
     let container: any;
@@ -101,6 +102,7 @@ describe('setUpElements', () => {
     let createContainer: jasmine.Spy;
 
     beforeEach(() => {
+        config = jasmine.createSpy('config');
         overlay = jasmine.createSpy('overlay');
         wrapper = jasmine.createSpy('wrapper');
         container = jasmine.createSpy('container');
@@ -116,7 +118,7 @@ describe('setUpElements', () => {
     it('should determine the full src of the image', () => {
         let fullSrc: jasmine.Spy = spyOn(Image, 'fullSrc').and.returnValue('example-src');
 
-        setUpElements(overlay, image);
+        setUpElements(config, overlay, image);
 
         expect(fullSrc).toHaveBeenCalledWith(wrapper, image);
     });
@@ -124,14 +126,14 @@ describe('setUpElements', () => {
     describe('overlay', () => {
         it('should be the provided overlay', () => {
             spyOn(Image, 'fullSrc').and.returnValue('example-src');
-            expect(setUpElements(overlay, image).overlay).toBe(overlay);
+            expect(setUpElements(config, overlay, image).overlay).toBe(overlay);
         });
     });
 
     describe('wrapper', () => {
         it('should be the parent element of the image', () => {
             spyOn(Image, 'fullSrc').and.returnValue('example-src');
-            expect(setUpElements(overlay, image).wrapper).toBe(wrapper);
+            expect(setUpElements(config, overlay, image).wrapper).toBe(wrapper);
         });
     });
 
@@ -139,21 +141,21 @@ describe('setUpElements', () => {
         it('should create a container', () => {
             spyOn(Image, 'fullSrc').and.returnValue('example-src');
 
-            setUpElements(overlay, image);
+            setUpElements(config, overlay, image);
 
             expect(createContainer).toHaveBeenCalled();
         });
 
         it('should be the created container', () => {
             spyOn(Image, 'fullSrc').and.returnValue('example-src');
-            expect(setUpElements(overlay, image).container).toBe(container);
+            expect(setUpElements(config, overlay, image).container).toBe(container);
         });
     });
 
     describe('image', () => {
         it('should be the provided image', () => {
             spyOn(Image, 'fullSrc').and.returnValue('example-src');
-            expect(setUpElements(overlay, image).image).toBe(image);
+            expect(setUpElements(config, overlay, image).image).toBe(image);
         });
     });
 
@@ -164,7 +166,7 @@ describe('setUpElements', () => {
             });
 
             it('should be undefined', () => {
-                expect(setUpElements(overlay, image).clone).toBeUndefined();
+                expect(setUpElements(config, overlay, image).clone).toBeUndefined();
             });
         });
 
@@ -177,16 +179,16 @@ describe('setUpElements', () => {
                 let clone: jasmine.Spy = jasmine.createSpy('clone');
                 let createClone: jasmine.Spy = spyOn(Clone, 'createClone').and.returnValue(clone);
 
-                setUpElements(overlay, image);
+                setUpElements(config, overlay, image);
 
-                expect(createClone).toHaveBeenCalledWith('different');
+                expect(createClone).toHaveBeenCalledWith(config, 'different');
             });
 
             it('should be the created clone', () => {
                 let clone: jasmine.Spy = jasmine.createSpy('clone');
                 spyOn(Clone, 'createClone').and.returnValue(clone);
 
-                expect(setUpElements(overlay, image).clone).toBe(clone);
+                expect(setUpElements(config, overlay, image).clone).toBe(clone);
             });
         });
     });

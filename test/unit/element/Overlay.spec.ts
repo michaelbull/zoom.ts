@@ -1,12 +1,12 @@
-import * as ClassList from '../../../lib/element/ClassList';
 import * as Document from '../../../lib/browser/Document';
+import * as ClassList from '../../../lib/element/ClassList';
 import * as Element from '../../../lib/element/Element';
 import {
+    addOverlay,
     CLASS,
     createOverlay,
     hideOverlay,
     isOverlayVisible,
-    addOverlay,
     VISIBLE_CLASS
 } from '../../../lib/element/Overlay';
 

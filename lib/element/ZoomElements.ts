@@ -1,3 +1,4 @@
+import { Config } from '../Config';
 import { createClone } from './Clone';
 import { createContainer } from './Container';
 import { fullSrc } from './Image';
@@ -31,7 +32,7 @@ export function useExistingElements(overlay: HTMLDivElement, image: HTMLImageEle
     };
 }
 
-export function setUpElements(overlay: HTMLDivElement, image: HTMLImageElement): ZoomElements {
+export function setUpElements(config: Config, overlay: HTMLDivElement, image: HTMLImageElement): ZoomElements {
     let container: HTMLElement = createContainer();
     let wrapper: HTMLElement = image.parentElement as HTMLElement;
 
@@ -40,7 +41,7 @@ export function setUpElements(overlay: HTMLDivElement, image: HTMLImageElement):
     let cloneRequired: boolean = src !== image.src;
 
     if (cloneRequired) {
-        clone = createClone(src);
+        clone = createClone(config, src);
     }
 
     return {

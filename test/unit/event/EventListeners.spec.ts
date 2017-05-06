@@ -1,5 +1,4 @@
 import * as Window from '../../../lib/browser/Window';
-import { Config } from '../../../lib/Config';
 import * as EventListener from '../../../lib/event/EventListener';
 import {
     fireEventListener,
@@ -106,7 +105,7 @@ describe('scrolled', () => {
 });
 
 describe('addDismissListeners', () => {
-    let config: Config;
+    let config: any;
     let container: any;
     let collapse: any;
     let listener: jasmine.Spy;
@@ -138,7 +137,7 @@ describe('addDismissListeners', () => {
         });
 
         it('should calculate the current vertical page scroll when fired', () => {
-            let scrollListener: any;
+            let scrollListener: any = undefined;
             let addEventListener: jasmine.Spy = spyOn(EventListener, 'addEventListener').and.callFake((target: any, type: string, evtListener: EventListenerOrEventListenerObject): any => {
                 if (type === 'scroll') {
                     scrollListener = evtListener;
@@ -149,6 +148,7 @@ describe('addDismissListeners', () => {
             addDismissListeners(config, container, collapse);
             fireEventListener(scrollListener, jasmine.createSpy('event') as any);
 
+            expect(scrollListener).toBeDefined();
             expect(pageScrollY).toHaveBeenCalledTimes(2);
         });
 
