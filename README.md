@@ -1,4 +1,3 @@
-<br />
 <p align="center">
   <a href="#readme"><img src="https://raw.githubusercontent.com/michaelbull/zoom.ts/master/img/logo.png" alt="zoom.ts" width="478" height="178" /></a>
 </p>
@@ -7,12 +6,13 @@
 </p>
 <p align="center">
   <a href="https://www.npmjs.com/package/zoom.ts"><img src="https://img.shields.io/npm/v/zoom.ts.svg?style=flat-square" alt="npm version" /></a>
-  <a href="https://www.npmjs.com/package/zoom.ts"><img src="https://img.shields.io/npm/dt/zoom.ts.svg?style=flat-square" alt="npm downloads" /></a>
+  <a href="https://github.com/michaelbull/zoom.ts/blob/master/LICENSE"><img src="https://img.shields.io/github/license/michaelbull/zoom.ts.svg?style=flat-square" alt="software license" /></a>
   <a href="https://travis-ci.org/michaelbull/zoom.ts"><img src="https://img.shields.io/travis/michaelbull/zoom.ts.svg?style=flat-square" alt="build status" /></a>
-  <a href="https://github.com/michaelbull/zoom.ts/blob/master/LICENSE"><img src="https://img.shields.io/github/license/michaelbull/zoom.ts.svg?style=flat-square" alt="License" /></a>
+  <a href="https://coveralls.io/github/michaelbull/zoom.ts?branch=master"><img src="https://img.shields.io/coveralls/michaelbull/zoom.ts.svg?style=flat-square" alt="coverage status"></img></a>
   <br />
+  <a href="https://www.npmjs.com/package/zoom.ts"><img src="https://img.shields.io/npm/dt/zoom.ts.svg?style=flat-square" alt="npm downloads" /></a>
   <a href="https://david-dm.org/michaelbull/zoom.ts"><img src="https://david-dm.org/michaelbull/zoom.ts/status.svg?style=flat-square" "dependencies status" /></a>
-  <a href="https://david-dm.org/michaelbull/zoom.ts?type=dev"><img src="https://david-dm.org/michaelbull/zoom.ts/dev-status.svg?style=flat-square" "devDependencies status" /></a>
+  <a href="https://david-dm.org/michaelbull/zoom.ts?type=dev"><img src="https://david-dm.org/michaelbull/zoom.ts/dev-status.svg?style=flat-square" "devDependencies Status" /></a>
 </p>
 <br />
 <p align="center">
