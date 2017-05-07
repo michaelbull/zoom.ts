@@ -27,7 +27,7 @@ export function scrolled(start: number, minAmount: number, current: () => number
     };
 }
 
-export function addDismissListeners(config: Config, container: HTMLElement, collapse: EventListener): Function {
+export function addDismissListeners(config: Config, container: HTMLElement, collapse: EventListener): () => void {
     let initialScrollY: number = pageScrollY();
     let scrollListener: EventListener = scrolled(initialScrollY, config.scrollDismissPx, pageScrollY, collapse);
 

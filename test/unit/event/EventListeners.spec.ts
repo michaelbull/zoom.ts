@@ -137,7 +137,7 @@ describe('addDismissListeners', () => {
         });
 
         it('should calculate the current vertical page scroll when fired', () => {
-            let scrollListener: any = undefined;
+            let scrollListener: any;
             let addEventListener: jasmine.Spy = spyOn(EventListener, 'addEventListener').and.callFake((target: any, type: string, evtListener: EventListenerOrEventListenerObject): any => {
                 if (type === 'scroll') {
                     scrollListener = evtListener;
@@ -155,7 +155,7 @@ describe('addDismissListeners', () => {
         it('should unregister when executing the callback', () => {
             spyOn(EventListener, 'addEventListener').and.returnValue(listener);
 
-            let callback: Function = addDismissListeners(config, container, collapse);
+            let callback: () => void = addDismissListeners(config, container, collapse);
             callback();
 
             expect(removeEventListener).toHaveBeenCalledWith(window, 'scroll', listener);
@@ -174,7 +174,7 @@ describe('addDismissListeners', () => {
         it('should unregister when executing the callback', () => {
             spyOn(EventListener, 'addEventListener').and.returnValue(listener);
 
-            let callback: Function = addDismissListeners(config, container, collapse);
+            let callback: () => void = addDismissListeners(config, container, collapse);
             callback();
 
             expect(removeEventListener).toHaveBeenCalledWith(document, 'keyup', listener);
@@ -193,7 +193,7 @@ describe('addDismissListeners', () => {
         it('should unregister when executing the callback', () => {
             spyOn(EventListener, 'addEventListener').and.returnValue(listener);
 
-            let callback: Function = addDismissListeners(config, container, collapse);
+            let callback: () => void = addDismissListeners(config, container, collapse);
             callback();
 
             expect(removeEventListener).toHaveBeenCalledWith(container, 'click', listener);

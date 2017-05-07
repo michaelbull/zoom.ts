@@ -232,7 +232,7 @@ describe('replaceImageWithClone', () => {
     it('should hide the image after showing the clone', () => {
         let image: any = { className: 'image' };
         let clone: any = { className: 'clone' };
-        let original: Function = ClassList.addClass;
+        let original: (element: HTMLElement, add: string) => void = ClassList.addClass;
         let addClass: jasmine.Spy = spyOn(ClassList, 'addClass').and.callFake((element: HTMLElement, add: string) => {
             if (element === image) {
                 expect(hasClass(clone, config.cloneVisibleClass)).toBe(true);
@@ -274,7 +274,7 @@ describe('replaceCloneWithImage', () => {
     it('should hide the clone after showing the image', () => {
         let image: any = { className: `image ${config.imageHiddenClass}` };
         let clone: any = { className: `clone ${config.cloneVisibleClass}` };
-        let original: Function = ClassList.removeClass;
+        let original: (element: HTMLElement, remove: string) => void = ClassList.removeClass;
         let removeClass: jasmine.Spy = spyOn(ClassList, 'removeClass').and.callFake((element: HTMLElement, remove: string) => {
             if (element === clone) {
                 expect(hasClass(image, config.imageHiddenClass)).toBe(false);

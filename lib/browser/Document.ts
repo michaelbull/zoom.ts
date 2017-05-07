@@ -20,7 +20,7 @@ export function rootElement(document: Document): HTMLElement {
  * @param callback The function to execute.
  * @see http://youmightnotneedjquery.com/#ready
  */
-export function ready(document: Document, callback: Function): void {
+export function ready(document: Document, callback: () => void): void {
     if (document.readyState === 'complete') {
         callback();
     } else {

@@ -14,7 +14,7 @@ export const TRANSITION_END_EVENTS: { [key: string]: string } = {
 /**
  * Ignore the transition lifecycle to perform a callback, then restore the element's original transitions.
  */
-export function ignoreTransitions(element: HTMLElement, transitionProperty: string, callback: Function): void {
+export function ignoreTransitions(element: HTMLElement, transitionProperty: string, callback: () => void): void {
     let style: any = element.style;
 
     style[transitionProperty] = 'initial';

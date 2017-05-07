@@ -87,7 +87,7 @@ describe('ready', () => {
         });
 
         it('should listen for the DOMContentLoaded event', () => {
-            let registeredListener: any = undefined;
+            let registeredListener: any;
             document.addEventListener = jasmine.createSpy('addEventListener').and.callFake((type: string, listener: EventListenerOrEventListenerObject) => {
                 registeredListener = listener;
             });
@@ -99,7 +99,7 @@ describe('ready', () => {
         });
 
         it('should execute the callback when the DOMContentLoaded event is fired', () => {
-            let registeredListener: any = undefined;
+            let registeredListener: any;
             document.addEventListener = jasmine.createSpy('addEventListener').and.callFake((type: string, listener: EventListenerOrEventListenerObject) => {
                 registeredListener = listener;
             });
