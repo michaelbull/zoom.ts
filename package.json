@@ -32,7 +32,7 @@
     "test:watch": "karma start test/karma.conf.js",
     "coveralls": "cat ./reports/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "dist": "npm run clean && cross-env NODE_ENV=production rollup --config",
-    "lint": "tslint lib/**/*.ts test/**/*.ts"
+    "lint": "tslint --fix lib/**/*.ts test/**/*.ts"
   },
   "devDependencies": {
     "@types/jasmine": "2.5.47",
