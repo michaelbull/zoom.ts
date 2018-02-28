@@ -12,16 +12,11 @@ export interface ZoomElements {
 }
 
 export function useExistingElements(overlay: HTMLDivElement, image: HTMLImageElement): ZoomElements {
-    let container: HTMLElement = image.parentElement as HTMLElement;
-    let wrapper: HTMLElement = container.parentElement as HTMLElement;
+    let container = image.parentElement as HTMLElement;
+    let wrapper = container.parentElement as HTMLElement;
 
-    let clone: HTMLImageElement | undefined;
-    let src: string = fullSrc(wrapper, image);
-    let cloneRequired: boolean = src !== image.src;
-
-    if (cloneRequired) {
-        clone = container.children.item(1) as HTMLImageElement;
-    }
+    let cloneRequired = fullSrc(wrapper, image) !== image.src;
+    let clone = cloneRequired ? container.children.item(1) as HTMLImageElement : undefined;
 
     return {
         overlay,
@@ -33,16 +28,12 @@ export function useExistingElements(overlay: HTMLDivElement, image: HTMLImageEle
 }
 
 export function setUpElements(config: Config, overlay: HTMLDivElement, image: HTMLImageElement): ZoomElements {
-    let container: HTMLElement = createDiv(config.containerClass);
-    let wrapper: HTMLElement = image.parentElement as HTMLElement;
+    let container = createDiv(config.containerClass);
+    let wrapper = image.parentElement as HTMLElement;
 
-    let clone: HTMLImageElement | undefined;
-    let src: string = fullSrc(wrapper, image);
-    let cloneRequired: boolean = src !== image.src;
-
-    if (cloneRequired) {
-        clone = createClone(config, src);
-    }
+    let src = fullSrc(wrapper, image);
+    let cloneRequired= src !== image.src;
+    let clone = cloneRequired ? createClone(config, src) : undefined;
 
     return {
         overlay,

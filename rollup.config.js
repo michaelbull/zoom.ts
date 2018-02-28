@@ -27,12 +27,14 @@ let prodEnv = (process.env.NODE_ENV === 'production');
 let devEnv = (process.env.NODE_ENV === 'development');
 
 let configuration = {
-    moduleName: 'zoom',
-    entry: 'index.ts',
-    dest: 'dist/zoom.js',
-    format: 'iife',
-    sourceMap: !prodEnv,
-    banner: '/*!' + '\n' + ' * ' + copyright.join('\n * ') + '\n' + ' */' + '\n',
+    input: 'index.ts',
+    output: {
+        file: 'dist/zoom.js',
+        format: 'iife',
+        name: 'zoom',
+        sourcemap: !prodEnv,
+        banner: '/*!' + '\n' + ' * ' + copyright.join('\n * ') + '\n' + ' */' + '\n',
+    },
     plugins: [
         typescript({
             check: prodEnv,
@@ -57,7 +59,13 @@ if (prodEnv) {
         })
     );
 } else if (devEnv) {
-    configuration.plugins.push(serve({ port: 8080 }), livereload());
+    configuration.plugins.push(
+        serve({
+            port: 8080,
+            contentBase: ''
+        }),
+        livereload()
+    );
 }
 
 export default configuration;

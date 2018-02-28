@@ -1,7 +1,5 @@
 import {
-    createDiv,
-    ready
-} from './browser/Document';
+    createDiv} from './browser/Document';
 import {
     detectFeatures,
     Features
@@ -11,9 +9,7 @@ import {
     DEFAULT_CONFIG
 } from './Config';
 import {
-    Bounds,
     boundsOf,
-    centreBounds,
     createBounds,
     resetBounds,
     setBoundsPx
@@ -53,8 +49,10 @@ import {
 } from './event/EventListener';
 import {
     addDismissListeners,
-    listenForEvent
+    listenForEvent,
+    ready
 } from './event/EventListeners';
+import { centreBounds } from './math/Centre';
 import { pixels } from './math/Unit';
 import {
     positionFrom,
@@ -74,11 +72,20 @@ export function collapsed(config: Config, elements: ZoomElements): void {
     setTimeout(() => addZoomListener(config), 1);
 }
 
-export function zoomInstant(config: Config, elements: ZoomElements, target: Vector, showCloneListener: PotentialEventListener): void {
-    let bounds: Bounds = boundsOf(elements.image);
+/**
+ * Zoom with no transition.
+ */
+export function zoomInstant(
+    config: Config,
+    elements: ZoomElements,
+    target: Vector,
+    showCloneListener: PotentialEventListener
+): void {
 
-    let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
-        let wrapperPosition: Vector = positionFrom(elements.wrapper.getBoundingClientRect());
+    let bounds = boundsOf(elements.image);
+
+    let resized = addEventListener(window, 'resize', (): void => {
+        let wrapperPosition = positionFrom(elements.wrapper.getBoundingClientRect());
         bounds = createBounds(wrapperPosition, bounds.size);
 
         setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
@@ -86,7 +93,7 @@ export function zoomInstant(config: Config, elements: ZoomElements, target: Vect
 
     let removeDismissListeners: Function;
 
-    let collapse: EventListener = (): void => {
+    let collapse = (): void => {
         removeDismissListeners();
         removeEventListener(window, 'resize', resized as EventListener);
         removeCloneLoadedListener(config, elements, showCloneListener);
@@ -106,10 +113,20 @@ export function zoomInstant(config: Config, elements: ZoomElements, target: Vect
     setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
 }
 
-export function zoomTransition(config: Config, elements: ZoomElements, target: Vector, showCloneListener: PotentialEventListener, features: Features): void {
-    let bounds: Bounds = boundsOf(elements.image);
+/**
+ * Zoom with transition.
+ */
+export function zoomTransition(
+    config: Config,
+    elements: ZoomElements,
+    target: Vector,
+    showCloneListener: PotentialEventListener,
+    features: Features
+): void {
 
-    let resized: PotentialEventListener = addEventListener(window, 'resize', (): void => {
+    let bounds = boundsOf(elements.image);
+
+    let resized = addEventListener(window, 'resize', (): void => {
         let wrapperPosition: Vector = positionFrom(elements.wrapper.getBoundingClientRect());
         bounds = createBounds(wrapperPosition, bounds.size);
 
@@ -123,7 +140,7 @@ export function zoomTransition(config: Config, elements: ZoomElements, target: V
     let expandedListener: PotentialEventListener;
     let removeDismissListeners: Function;
 
-    let collapse: EventListener = (): void => {
+    let collapse = (): void => {
         removeDismissListeners();
         removeEventListener(window, 'resize', resized as EventListener);
         removeCloneLoadedListener(config, elements, showCloneListener);
@@ -131,7 +148,7 @@ export function zoomTransition(config: Config, elements: ZoomElements, target: V
         removeClass(elements.overlay, config.overlayVisibleClass);
         addClass(elements.wrapper, config.wrapperCollapsingClass);
 
-        let collapsedListener: PotentialEventListener = listenForEvent(elements.container, features.transitionEndEvent, () => {
+        let collapsedListener = listenForEvent(elements.container, features.transitionEndEvent, () => {
             collapsed(config, elements);
         });
 
@@ -192,10 +209,10 @@ export function zoomTransition(config: Config, elements: ZoomElements, target: V
 }
 
 export function clickedZoomable(config: Config, event: MouseEvent, zoomListener: EventListener): void {
-    let image: HTMLImageElement = event.target as HTMLImageElement;
-    let parent: HTMLElement = image.parentElement as HTMLElement;
-    let previouslyZoomed: boolean = hasClass(parent, config.containerClass);
-    let wrapper: HTMLElement = previouslyZoomed ? parent.parentElement as HTMLElement : parent;
+    let image = event.target as HTMLImageElement;
+    let parent = image.parentElement as HTMLElement;
+    let previouslyZoomed = hasClass(parent, config.containerClass);
+    let wrapper = previouslyZoomed ? parent.parentElement as HTMLElement : parent;
 
     if (event.metaKey || event.ctrlKey) {
         window.open(fullSrc(wrapper, image), '_blank');
@@ -205,7 +222,7 @@ export function clickedZoomable(config: Config, event: MouseEvent, zoomListener:
         }
 
         let elements: ZoomElements;
-        let overlay: HTMLDivElement = createDiv(config.overlayClass);
+        let overlay = createDiv(config.overlayClass);
 
         if (previouslyZoomed) {
             elements = useExistingElements(overlay, image);
@@ -220,7 +237,7 @@ export function clickedZoomable(config: Config, event: MouseEvent, zoomListener:
             }
         }
 
-        let showCloneListener: PotentialEventListener;
+        let showCloneListener;
 
         if (elements.clone !== undefined) {
             if (hasClass(elements.clone, config.cloneLoadedClass)) {
@@ -230,8 +247,8 @@ export function clickedZoomable(config: Config, event: MouseEvent, zoomListener:
             }
         }
 
-        let target: Vector = targetSize(elements.wrapper);
-        let features: Features = detectFeatures();
+        let target = targetSize(elements.wrapper);
+        let features = detectFeatures();
 
         if (features.hasTransform && features.hasTransitions) {
             zoomTransition(config, elements, target, showCloneListener, features);
@@ -241,12 +258,14 @@ export function clickedZoomable(config: Config, event: MouseEvent, zoomListener:
     }
 }
 
-export function addZoomListener(config: Config): void {
-    let listener: PotentialEventListener = addEventListener(document.body, 'click', (event: MouseEvent) => {
-        if (isZoomable(config, event.target)) {
-            event.preventDefault();
-            event.stopPropagation();
-            clickedZoomable(config, event, listener as EventListener);
+export function addZoomListener(config: Config = DEFAULT_CONFIG): void {
+    let listener = addEventListener(document.body, 'click', {
+        handleEvent(event: MouseEvent): void {
+            if (event instanceof MouseEvent && isZoomable(config, event.target)) {
+                event.preventDefault();
+                event.stopPropagation();
+                clickedZoomable(config, event, listener as EventListener);
+            }
         }
     });
 }

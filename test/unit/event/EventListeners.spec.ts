@@ -13,7 +13,7 @@ import {
 } from '../../../lib/event/EventListeners';
 
 describe('escKeyPressed', () => {
-    let listener: EventListener;
+    let listener: EventListenerObject;
     let callback: jasmine.Spy;
 
     beforeEach(() => {
@@ -33,17 +33,17 @@ describe('escKeyPressed', () => {
         });
 
         it('should not prevent the default behaviour from occurring', () => {
-            listener(event);
+            listener.handleEvent(event);
             expect(event.preventDefault).toHaveBeenCalledTimes(0);
         });
 
         it('should not prevent the event from propagating further', () => {
-            listener(event);
+            listener.handleEvent(event);
             expect(event.stopPropagation).toHaveBeenCalledTimes(0);
         });
 
         it('should not execute the callback', () => {
-            listener(event);
+            listener.handleEvent(event);
             expect(callback).toHaveBeenCalledTimes(0);
         });
     });
@@ -60,17 +60,17 @@ describe('escKeyPressed', () => {
         });
 
         it('should prevent the default behaviour from occurring', () => {
-            listener(event);
+            listener.handleEvent(event);
             expect(event.preventDefault).toHaveBeenCalled();
         });
 
         it('should prevent the event from propagating further', () => {
-            listener(event);
+            listener.handleEvent(event);
             expect(event.stopPropagation).toHaveBeenCalled();
         });
 
         it('should execute the callback', () => {
-            listener(event);
+            listener.handleEvent(event);
             expect(callback).toHaveBeenCalled();
         });
     });
@@ -168,7 +168,7 @@ describe('addDismissListeners', () => {
 
             addDismissListeners(config, container, collapse);
 
-            expect(addEventListener).toHaveBeenCalledWith(document, 'keyup', jasmine.any(Function));
+            expect(addEventListener).toHaveBeenCalledWith(document, 'keyup', jasmine.any(Object));
         });
 
         it('should unregister when executing the callback', () => {

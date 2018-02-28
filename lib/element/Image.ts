@@ -13,6 +13,11 @@ export function isZoomable(config: Config, target: EventTarget): boolean {
 }
 
 export function fullSrc(wrapper: HTMLElement, image: HTMLImageElement): string {
-    let fullSrc: string | null = wrapper.getAttribute('data-src');
-    return fullSrc === null ? image.src : fullSrc;
+    let fullSrc = wrapper.getAttribute('data-src');
+
+    if (fullSrc === null) {
+        return image.src;
+    } else {
+        return fullSrc;
+    }
 }

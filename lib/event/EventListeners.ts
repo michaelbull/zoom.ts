@@ -7,19 +7,26 @@ import {
     removeEventListener
 } from './EventListener';
 
-export const ESCAPE_KEY_CODE: number = 27;
+export const ESCAPE_KEY_CODE = 27;
 
-export function escKeyPressed(listener: EventListenerOrEventListenerObject): EventListener {
-    return (event: KeyboardEvent): void => {
-        if (event.keyCode === ESCAPE_KEY_CODE) {
-            event.preventDefault();
-            event.stopPropagation();
-            fireEventListener(listener, event);
+export function escKeyPressed(listener: EventListenerOrEventListenerObject): EventListenerObject {
+    return {
+        handleEvent(event: KeyboardEvent): void {
+            if (event.keyCode === ESCAPE_KEY_CODE) {
+                event.preventDefault();
+                event.stopPropagation();
+                fireEventListener(listener, event);
+            }
         }
     };
 }
 
-export function scrolled(start: number, minAmount: number, current: () => number, listener: EventListenerOrEventListenerObject): EventListener {
+export function scrolled(
+    start: number,
+    minAmount: number,
+    current: () => number,
+    listener: EventListenerOrEventListenerObject
+): EventListener {
     return (event: Event): void => {
         if (Math.abs(start - current()) >= minAmount) {
             fireEventListener(listener, event);
@@ -27,13 +34,18 @@ export function scrolled(start: number, minAmount: number, current: () => number
     };
 }
 
-export function addDismissListeners(config: Config, container: HTMLElement, collapse: EventListener): () => void {
-    let initialScrollY: number = pageScrollY();
-    let scrollListener: EventListener = scrolled(initialScrollY, config.scrollDismissPx, pageScrollY, collapse);
+export function addDismissListeners(
+    config: Config,
+    container: HTMLElement,
+    collapse: EventListener
+): () => void {
 
-    let scrolledAway: PotentialEventListener = addEventListener(window, 'scroll', scrollListener);
-    let pressedEsc: PotentialEventListener = addEventListener(document, 'keyup', escKeyPressed(collapse));
-    let dismissed: PotentialEventListener = addEventListener(container, 'click', collapse);
+    let initialScrollY = pageScrollY();
+    let scrollListener = scrolled(initialScrollY, config.scrollDismissPx, pageScrollY, collapse);
+
+    let scrolledAway = addEventListener(window, 'scroll', scrollListener);
+    let pressedEsc = addEventListener(document, 'keyup', escKeyPressed(collapse));
+    let dismissed = addEventListener(container, 'click', collapse);
 
     return (): void => {
         removeEventListener(window, 'scroll', scrolledAway as EventListener);
@@ -42,8 +54,29 @@ export function addDismissListeners(config: Config, container: HTMLElement, coll
     };
 }
 
-export function listenForEvent(target: any, type: any, listener: EventListenerOrEventListenerObject, useCapture: boolean = false): PotentialEventListener {
-    let added: PotentialEventListener = addEventListener(target, type, (event: Event) => {
+/**
+ * Executes a callback function when a document has finished loading, or immediately if the document has already
+ * finished loading.
+ * @param document The document.
+ * @param callback The function to execute.
+ * @see http://youmightnotneedjquery.com/#ready
+ */
+export function ready(document: Document, callback: () => void): void {
+    if (document.readyState === 'complete') {
+        callback();
+    } else {
+        listenForEvent(document, 'DOMContentLoaded', () => callback());
+    }
+}
+
+export function listenForEvent(
+    target: any,
+    type: any,
+    listener: EventListenerOrEventListenerObject,
+    useCapture: boolean = false
+): PotentialEventListener {
+
+    let added = addEventListener(target, type, (event: Event) => {
         if (added !== undefined) {
             removeEventListener(target, type, added);
         }

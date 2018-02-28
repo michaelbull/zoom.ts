@@ -13,11 +13,17 @@ export function fireEventListener(listener: EventListenerOrEventListenerObject, 
     }
 }
 
-export function addEventListener(target: any, type: string, listener: EventListenerOrEventListenerObject, useCapture: boolean = false): PotentialEventListener {
+export function addEventListener(
+    target: any,
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+    useCapture: boolean = false
+): PotentialEventListener {
+
     let standard: any = target['addEventListener'];
     let fallback: any = target['attachEvent'];
 
-    let wrappedListener: EventListener = (event: Event): void => {
+    let wrappedListener = (event: Event): void => {
         fireEventListener(listener, polyfillEvent(getCurrentEvent(event)));
     };
 
@@ -26,14 +32,19 @@ export function addEventListener(target: any, type: string, listener: EventListe
         return wrappedListener;
     } else if (typeof fallback === 'function' && fallback.call(target, `on${type}`, wrappedListener)) {
         return wrappedListener;
+    } else {
+        return undefined;
     }
-
-    return undefined;
 }
 
-export function removeEventListener(target: any, type: string, listener: EventListenerOrEventListenerObject): boolean {
-    let standard: any = target['removeEventListener'];
-    let fallback: any = target['detachEvent'];
+export function removeEventListener(
+    target: any,
+    type: string,
+    listener: EventListenerOrEventListenerObject
+): boolean {
+
+    let standard = target['removeEventListener'];
+    let fallback = target['detachEvent'];
 
     if (typeof standard === 'function') {
         standard.call(target, type, listener);

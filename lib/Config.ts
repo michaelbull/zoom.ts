@@ -1,18 +1,18 @@
 export interface Config {
-    readonly scrollDismissPx: number;
-    readonly cloneClass: string;
-    readonly cloneVisibleClass: string;
-    readonly cloneLoadedClass: string;
-    readonly containerClass: string;
-    readonly imageClass: string;
-    readonly imageHiddenClass: string;
-    readonly imageActiveClass: string;
-    readonly overlayClass: string;
-    readonly overlayVisibleClass: string;
-    readonly wrapperClass: string;
-    readonly wrapperExpandingClass: string;
-    readonly wrapperExpandedClass: string;
-    readonly wrapperCollapsingClass: string;
+    scrollDismissPx: number;
+    cloneClass: string;
+    cloneVisibleClass: string;
+    cloneLoadedClass: string;
+    containerClass: string;
+    imageClass: string;
+    imageHiddenClass: string;
+    imageActiveClass: string;
+    overlayClass: string;
+    overlayVisibleClass: string;
+    wrapperClass: string;
+    wrapperExpandingClass: string;
+    wrapperExpandedClass: string;
+    wrapperCollapsingClass: string;
 }
 
 export const DEFAULT_CONFIG: Config = {

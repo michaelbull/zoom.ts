@@ -22,13 +22,13 @@ export function polyfillEvent(event: Event): Event {
     }
 
     if (event.type === 'mouseover') {
-        let mouseEvent: MouseEvent = event as MouseEvent;
+        let mouseEvent = event as MouseEvent;
 
         if (mouseEvent.relatedTarget === undefined && mouseEvent.fromElement !== undefined) {
             (mouseEvent as any).relatedTarget = mouseEvent.fromElement;
         }
     } else if (event.type === 'mouseout') {
-        let mouseEvent: MouseEvent = event as MouseEvent;
+        let mouseEvent = event as MouseEvent;
 
         if (mouseEvent.relatedTarget === undefined && mouseEvent.toElement !== undefined) {
             (mouseEvent as any).relatedTarget = mouseEvent.toElement;

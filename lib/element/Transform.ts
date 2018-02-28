@@ -1,9 +1,9 @@
 import { viewportSize } from '../browser/Document';
 import { Features } from '../browser/Features';
 import { vendorProperty } from '../browser/Vendor';
+import { centreTranslation } from '../math/Centre';
 import { pixels } from '../math/Unit';
 import {
-    centreTranslation,
     minimizeVectors,
     minimumDivisor,
     Vector
@@ -40,10 +40,10 @@ export function scaleTranslate3d(transformation: ScaleAndTranslate): string {
 }
 
 export function centreTransformation(target: Vector, bounds: Bounds): ScaleAndTranslate {
-    let viewport: Vector = viewportSize(document);
-    let cappedTarget: Vector = minimizeVectors(viewport, target);
-    let scale: number = minimumDivisor(cappedTarget, bounds.size);
-    let translation: Vector = centreTranslation(viewport, bounds, scale);
+    let viewport = viewportSize(document);
+    let cappedTarget = minimizeVectors(viewport, target);
+    let scale = minimumDivisor(cappedTarget, bounds.size);
+    let translation = centreTranslation(viewport, bounds, scale);
 
     return {
         scale,
@@ -52,18 +52,19 @@ export function centreTransformation(target: Vector, bounds: Bounds): ScaleAndTr
 }
 
 export function expandToViewport(features: Features, element: HTMLElement, target: Vector, bounds: Bounds): void {
-    let transformation: ScaleAndTranslate = centreTransformation(target, bounds);
-    let style: any = element.style;
+    let transform = centreTransformation(target, bounds);
+    let transformProperty = features.transformProperty as string;
 
+    let style: any = element.style;
     if (features.hasTransform3d) {
-        style[features.transformProperty as string] = scaleTranslate3d(transformation);
+        style[transformProperty] = scaleTranslate3d(transform);
     } else {
-        style[features.transformProperty as string] = scaleTranslate(transformation);
+        style[transformProperty] = scaleTranslate(transform);
     }
 }
 
 export function supports3dTransformations(style: CSSStyleDeclaration): boolean {
-    let perspectiveProperty: string | undefined = vendorProperty(style, 'perspective');
+    let perspectiveProperty = vendorProperty(style, 'perspective');
 
     if (perspectiveProperty !== undefined) {
         if ('WebkitPerspective' in style) {
@@ -86,21 +87,21 @@ export const TEST3D_STYLE: string = `` +
     `}`;
 
 function testWebkitTransform3d(): boolean {
-    let element: HTMLDivElement = document.createElement('div');
+    let element = document.createElement('div');
     element.id = TEST3D_ID;
 
     // remove the test element from the document flow to avoid affecting document size
     element.style.position = 'absolute';
 
-    let style: HTMLStyleElement = document.createElement('style');
+    let style = document.createElement('style');
     style.textContent = TEST3D_STYLE;
 
-    let body: HTMLElement = document.body;
+    let body = document.body;
     body.appendChild(style);
     body.appendChild(element);
 
-    let offsetWidth: number = element.offsetWidth;
-    let offsetHeight: number = element.offsetHeight;
+    let offsetWidth = element.offsetWidth;
+    let offsetHeight = element.offsetHeight;
 
     body.removeChild(style);
     body.removeChild(element);

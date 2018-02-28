@@ -1,7 +1,6 @@
 import { Vector } from '../math/Vector';
 
 export function repaint(element: HTMLElement): void {
-    // tslint:disable-next-line
     element.offsetHeight;
 }
 
@@ -13,17 +12,19 @@ export function clientSize(element: HTMLElement): Vector {
 }
 
 export function targetDimension(element: HTMLElement, dimension: string): number {
-    let attribute: string | null = element.getAttribute(`data-${dimension}`);
+    let attribute = element.getAttribute(`data-${dimension}`);
 
-    if (attribute !== null) {
-        let value: number = Number(attribute);
+    if (attribute === null) {
+        return Infinity;
+    } else {
+        let value = Number(attribute);
 
-        if (!isNaN(value)) {
+        if (isNaN(value)) {
+            return Infinity;
+        } else {
             return value;
         }
     }
-
-    return Infinity;
 }
 
 export function targetSize(element: HTMLElement): Vector {

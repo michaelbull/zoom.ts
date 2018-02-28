@@ -2,12 +2,12 @@ import {
     createDiv,
     isStandardsMode,
     QUIRKS_MODE,
-    ready,
     rootElement,
     STANDARDS_MODE,
     viewportSize
 } from '../../../lib/browser/Document';
 import { fireEventListener } from '../../../lib/event/EventListener';
+import { ready } from '../../../lib/event/EventListeners';
 
 describe('isStandardsMode', () => {
     it('should return true if compatMode is CSS1Compat', () => {

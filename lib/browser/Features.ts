@@ -14,22 +14,22 @@ export interface Features {
 
 export function detectFeatures(): Features {
     let style: CSSStyleDeclaration = document.body.style;
-    let transformProperty: string | undefined = vendorProperty(style, 'transform');
-    let transitionProperty: string | undefined = vendorProperty(style, 'transition');
+    let transformProperty = vendorProperty(style, 'transform');
+    let transitionProperty = vendorProperty(style, 'transition');
     let transitionEndEvent: string | undefined;
 
-    let hasTransform: boolean = false;
+    let hasTransform = false;
     if (transformProperty !== undefined) {
         hasTransform = true;
     }
 
-    let hasTransitions: boolean = false;
+    let hasTransitions = false;
     if (transitionProperty !== undefined) {
         transitionEndEvent = TRANSITION_END_EVENTS[transitionProperty];
         hasTransitions = transitionEndEvent !== undefined;
     }
 
-    let hasTransform3d: boolean = false;
+    let hasTransform3d = false;
     if (transformProperty !== undefined) {
         hasTransform3d = supports3dTransformations(document.body.style);
     }

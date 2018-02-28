@@ -1,9 +1,11 @@
 import { Bounds } from '../../../lib/element/Bounds';
 import {
-    addVectors,
     centrePadding,
     centrePosition,
-    centreTranslation,
+    centreTranslation
+} from '../../../lib/math/Centre';
+import {
+    addVectors,
     divideVectors,
     minimizeVectors,
     minimumDivisor,

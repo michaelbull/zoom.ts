@@ -2,12 +2,12 @@ import { STANDARDS_MODE } from '../../../lib/browser/Document';
 import {
     Bounds,
     boundsOf,
-    centreBounds,
     createBounds,
     resetBounds,
     setBounds,
     setBoundsPx
 } from '../../../lib/element/Bounds';
+import { centreBounds } from '../../../lib/math/Centre';
 import { Vector } from '../../../lib/math/Vector';
 
 describe('createBounds', () => {

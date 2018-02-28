@@ -1,4 +1,4 @@
-export const CLASS_SEPARATOR: string = ' ';
+export const CLASS_SEPARATOR = ' ';
 
 export type ClassFilter = (className: string, index: number, classList: string[]) => boolean;
 
