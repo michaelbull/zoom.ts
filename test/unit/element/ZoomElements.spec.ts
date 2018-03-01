@@ -1,10 +1,10 @@
 import * as Document from '../../../lib/browser/Document';
-import * as Clone from '../../../lib/element/Clone';
-import * as Image from '../../../lib/element/Image';
+import * as Clone from '../../../lib/dom/Clone';
+import * as Image from '../../../lib/dom/Image';
 import {
     setUpElements,
     useExistingElements
-} from '../../../lib/element/ZoomElements';
+} from '../../../lib/dom/ZoomDOM';
 
 describe('useExistingElements', () => {
     let overlay: any;

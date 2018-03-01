@@ -1,6 +1,6 @@
 import { detectFeatures } from '../../../lib/browser/Features';
 import * as Vendor from '../../../lib/browser/Vendor';
-import * as Transform from '../../../lib/element/Transform';
+import * as Transform from '../../../lib/element/style/Transform';
 
 describe('detectFeatures', () => {
     describe('transformProperty', () => {

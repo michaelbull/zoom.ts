@@ -9,8 +9,8 @@ import {
     removeCloneLoadedListener,
     replaceCloneWithImage,
     replaceImageWithClone,
-    showCloneOnceLoaded
-} from '../../../lib/element/Clone';
+    cloneLoadedListener
+} from '../../../lib/dom/Clone';
 import * as EventListener from '../../../lib/event/EventListener';
 import { fireEventListener } from '../../../lib/event/EventListener';
 
@@ -72,7 +72,7 @@ describe('createClone', () => {
     });
 });
 
-describe('showCloneOnceLoaded', () => {
+describe('cloneLoadedListener', () => {
     let config: any;
     let event: any;
     let addClass: jasmine.Spy;
@@ -91,7 +91,7 @@ describe('showCloneOnceLoaded', () => {
     it('should not show the clone if the clone is undefined', () => {
         let elements: any = {};
 
-        fireEventListener(showCloneOnceLoaded(config, elements), event);
+        fireEventListener(cloneLoadedListener(config, elements), event);
 
         expect(addClass).toHaveBeenCalledTimes(0);
     });
@@ -106,7 +106,7 @@ describe('showCloneOnceLoaded', () => {
             }
         };
 
-        fireEventListener(showCloneOnceLoaded(config, elements), event);
+        fireEventListener(cloneLoadedListener(config, elements), event);
 
         expect(addClass).toHaveBeenCalledTimes(0);
     });
@@ -121,7 +121,7 @@ describe('showCloneOnceLoaded', () => {
             }
         };
 
-        fireEventListener(showCloneOnceLoaded(config, elements), event);
+        fireEventListener(cloneLoadedListener(config, elements), event);
 
         expect(addClass).toHaveBeenCalledTimes(0);
     });
@@ -139,7 +139,7 @@ describe('showCloneOnceLoaded', () => {
             }
         };
 
-        fireEventListener(showCloneOnceLoaded(config, elements), event);
+        fireEventListener(cloneLoadedListener(config, elements), event);
 
         expect(addClass).toHaveBeenCalledWith(elements.clone, config.cloneVisibleClass);
         expect(addClass).toHaveBeenCalledWith(elements.image, config.imageHiddenClass);

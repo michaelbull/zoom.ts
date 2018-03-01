@@ -13,12 +13,6 @@
 function repaint(element) {
     element.offsetHeight;
 }
-function clientSize(element) {
-    return [
-        element.clientWidth,
-        element.clientHeight
-    ];
-}
 function targetDimension(element, dimension) {
     var attribute = element.getAttribute("data-" + dimension);
     if (attribute === null) {
@@ -34,12 +28,6 @@ function targetDimension(element, dimension) {
         }
     }
 }
-function targetSize(element) {
-    return [
-        targetDimension(element, 'width'),
-        targetDimension(element, 'height')
-    ];
-}
 function resetStyle(element, property) {
     element.style[property] = '';
 }
@@ -50,6 +38,55 @@ function hasGrandParent(element) {
     return hasParent(element) && hasParent(element.parentElement);
 }
 
+var Vector2 = /** @class */ (function () {
+    function Vector2(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+    Vector2.fromPosition = function (rect) {
+        return new Vector2(rect.left, rect.top);
+    };
+    Vector2.fromSize = function (rect) {
+        return new Vector2(rect.width, rect.height);
+    };
+    Vector2.prototype.add = function (other) {
+        return new Vector2(this.x + other.x, this.y + other.y);
+    };
+    Vector2.prototype.subtract = function (other) {
+        return new Vector2(this.x - other.x, this.y - other.y);
+    };
+    Vector2.prototype.multiply = function (scale) {
+        return new Vector2(this.x * scale, this.y * scale);
+    };
+    Vector2.prototype.divide = function (scale) {
+        return new Vector2(this.x / scale, this.y / scale);
+    };
+    Vector2.prototype.scale = function (other) {
+        return new Vector2(this.x * other.x, this.y * other.y);
+    };
+    Vector2.prototype.shrink = function (other) {
+        return new Vector2(this.x / other.x, this.y / other.y);
+    };
+    Vector2.min = function (left, right) {
+        return new Vector2(Math.min(left.x, right.x), Math.min(left.y, right.y));
+    };
+    Vector2.prototype.minDivisor = function (other) {
+        var scaled = this.shrink(other);
+        return Math.min(scaled.x, scaled.y);
+    };
+    Vector2.halfMidpoint = function (left, right) {
+        var midpoint = right.subtract(left);
+        return midpoint.divide(2);
+    };
+    Vector2.targetSizeOf = function (element) {
+        return new Vector2(targetDimension(element, 'width'), targetDimension(element, 'height'));
+    };
+    Vector2.clientSizeOf = function (element) {
+        return new Vector2(element.clientWidth, element.clientHeight);
+    };
+    return Vector2;
+}());
+
 var STANDARDS_MODE = 'CSS1Compat';
 function isStandardsMode(document) {
     return document.compatMode === STANDARDS_MODE;
@@ -58,7 +95,7 @@ function rootElement(document) {
     return isStandardsMode(document) ? document.documentElement : document.body;
 }
 function viewportSize(document) {
-    return clientSize(rootElement(document));
+    return Vector2.clientSizeOf(rootElement(document));
 }
 function createDiv(className) {
     var overlay = document.createElement('div');
@@ -90,69 +127,40 @@ function pixels(amount) {
     return amount + "px";
 }
 
-function positionFrom(rect) {
-    return [
-        rect.left,
-        rect.top
-    ];
-}
-function sizeFrom(rect) {
-    return [
-        rect.width,
-        rect.height
-    ];
-}
-function scaleVector(vector, amount) {
-    return [
-        vector[0] * amount,
-        vector[1] * amount
-    ];
-}
-function shrinkVector(vector, amount) {
-    return [
-        vector[0] / amount,
-        vector[1] / amount
-    ];
-}
-function addVectors(x, y) {
-    return [
-        x[0] + y[0],
-        x[1] + y[1]
-    ];
-}
-function subtractVectors(x, y) {
-    return [
-        x[0] - y[0],
-        x[1] - y[1]
-    ];
-}
-function divideVectors(x, y) {
-    return [
-        x[0] / y[0],
-        x[1] / y[1]
-    ];
-}
-function minimizeVectors(x, y) {
-    return [
-        Math.min(x[0], y[0]),
-        Math.min(x[1], y[1])
-    ];
-}
-function minimumDivisor(x, y) {
-    var scaled = divideVectors(x, y);
-    return Math.min(scaled[0], scaled[1]);
-}
-
-function createBounds(position, size) {
-    return {
-        position: position,
-        size: size
+var Bounds = /** @class */ (function () {
+    function Bounds(position, size) {
+        this.position = position;
+        this.size = size;
+    }
+    Bounds.of = function (element) {
+        var rect = element.getBoundingClientRect();
+        var position = Vector2.fromPosition(rect);
+        var size = Vector2.fromSize(rect);
+        return new Bounds(position, size);
     };
-}
-function boundsOf(element) {
-    var rect = element.getBoundingClientRect();
-    return createBounds(positionFrom(rect), sizeFrom(rect));
-}
+    Bounds.centreOffset = function (vector, bounds) {
+        var halfMidpoint = Vector2.halfMidpoint(bounds.size, vector);
+        return halfMidpoint.subtract(bounds.position);
+    };
+    Bounds.centreTranslation = function (outer, bounds, innerScale) {
+        var scaled = bounds.size.multiply(innerScale);
+        var centredWithinScaled = bounds.position.add(Vector2.halfMidpoint(scaled, bounds.size));
+        var centeredWithinOuter = this.centreOffset(outer, new Bounds(centredWithinScaled, scaled));
+        return centeredWithinOuter.divide(innerScale);
+    };
+    Bounds.centreOf = function (document, target, bounds) {
+        var viewport = viewportSize(document);
+        var cappedTarget = Vector2.min(viewport, target);
+        var factor = cappedTarget.minDivisor(bounds.size);
+        var scaled = bounds.size.multiply(factor);
+        var centre = this.centreOffset(viewport, new Bounds(bounds.position, scaled));
+        return new Bounds(centre, scaled);
+    };
+    Bounds.prototype.applyTo = function (style) {
+        setBounds(style, pixels(this.position.x), pixels(this.position.y), pixels(this.size.x), pixels(this.size.y));
+    };
+    return Bounds;
+}());
 function setBounds(style, x, y, width, height) {
     style.left = x;
     style.top = y;
@@ -160,50 +168,14 @@ function setBounds(style, x, y, width, height) {
     style.maxWidth = width;
     style.height = height;
 }
-function resetBounds(style) {
-    setBounds(style, '', '', '', '');
-}
-function setBoundsPx(style, bounds) {
-    var position = bounds.position;
-    var size = bounds.size;
-    setBounds(style, pixels(position[0]), pixels(position[1]), pixels(size[0]), pixels(size[1]));
-}
-
-/**
- * Calculates the padding that must be applied to an inner vector for it to appear in the centre of an outer vector.
- * @param outer The outer vector.
- * @param inner The inner vector.
- * @returns {Vector} The padding.
- */
-function centrePadding(outer, inner) {
-    return shrinkVector(subtractVectors(outer, inner), 2);
-}
-function centrePosition(outer, bounds) {
-    return subtractVectors(centrePadding(outer, bounds.size), bounds.position);
-}
-function centreTranslation(outer, bounds, innerScale) {
-    var scaled = scaleVector(bounds.size, innerScale);
-    var centredWithinScaled = addVectors(bounds.position, centrePadding(bounds.size, scaled));
-    var centeredWithinOuter = centrePosition(outer, createBounds(centredWithinScaled, scaled));
-    return shrinkVector(centeredWithinOuter, innerScale);
-}
-function centreBounds(document, target, bounds) {
-    var viewport = viewportSize(document);
-    var cappedTarget = minimizeVectors(viewport, target);
-    var factor = minimumDivisor(cappedTarget, bounds.size);
-    var scaled = scaleVector(bounds.size, factor);
-    var centre = centrePosition(viewport, createBounds(bounds.position, scaled));
-    return {
-        position: centre,
-        size: scaled
-    };
-}
 
 function translate(translation) {
-    return "translate(" + translation[0] + "px, " + translation[1] + "px)";
+    var x = translation.x, y = translation.y;
+    return "translate(" + x + "px, " + y + "px)";
 }
 function translate3d(translation) {
-    return "translate3d(" + translation[0] + "px, " + translation[1] + "px, 0)";
+    var x = translation.x, y = translation.y;
+    return "translate3d(" + x + "px, " + y + "px, 0)";
 }
 function scale(amount) {
     return "scale(" + amount + ")";
@@ -219,24 +191,13 @@ function scaleTranslate3d(transformation) {
 }
 function centreTransformation(target, bounds) {
     var viewport = viewportSize(document);
-    var cappedTarget = minimizeVectors(viewport, target);
-    var scale = minimumDivisor(cappedTarget, bounds.size);
-    var translation = centreTranslation(viewport, bounds, scale);
+    var cappedTarget = Vector2.min(viewport, target);
+    var scale = cappedTarget.minDivisor(bounds.size);
+    var translation = Bounds.centreTranslation(viewport, bounds, scale);
     return {
         scale: scale,
         translation: translation
     };
-}
-function expandToViewport(features, element, target, bounds) {
-    var transform = centreTransformation(target, bounds);
-    var transformProperty = features.transformProperty;
-    var style = element.style;
-    if (features.hasTransform3d) {
-        style[transformProperty] = scaleTranslate3d(transform);
-    }
-    else {
-        style[transformProperty] = scaleTranslate(transform);
-    }
 }
 function supports3dTransformations(style) {
     var perspectiveProperty = vendorProperty(style, 'perspective');
@@ -323,125 +284,7 @@ function detectFeatures() {
 
 var DEFAULT_CONFIG = {
     scrollDismissPx: 50,
-    cloneClass: 'zoom__clone',
-    cloneVisibleClass: 'zoom__clone--visible',
-    cloneLoadedClass: 'zoom__clone--loaded',
-    containerClass: 'zoom__container',
-    imageClass: 'zoom__element',
-    imageHiddenClass: 'zoom__element--hidden',
-    imageActiveClass: 'zoom__element--active',
-    overlayClass: 'zoom__overlay',
-    overlayVisibleClass: 'zoom__overlay--visible',
-    wrapperClass: 'zoom',
-    wrapperExpandingClass: 'zoom--expanding',
-    wrapperExpandedClass: 'zoom--expanded',
-    wrapperCollapsingClass: 'zoom--collapsing'
 };
-
-var CLASS_SEPARATOR = ' ';
-function classFilter(className, index, classList) {
-    return className.length > 0 && classList.indexOf(className) === index;
-}
-function excludeClass(excluded) {
-    return function (className, index, classList) {
-        return className !== excluded && classFilter(className, index, classList);
-    };
-}
-function hasClass(element, className) {
-    return element.className.indexOf(className) !== -1;
-}
-function addClass(element, add) {
-    element.className = element.className
-        .split(CLASS_SEPARATOR)
-        .concat(add)
-        .filter(classFilter)
-        .join(CLASS_SEPARATOR);
-}
-function removeClass(element, remove) {
-    element.className = element.className
-        .split(CLASS_SEPARATOR)
-        .filter(excludeClass(remove))
-        .join(CLASS_SEPARATOR);
-}
-
-function getCurrentEvent(event) {
-    if (event !== undefined) {
-        return event;
-    }
-    else if (window.event !== undefined) {
-        return window.event;
-    }
-    else {
-        throw new Error('No current event to handle.');
-    }
-}
-function polyfillEvent(event) {
-    if (typeof event.preventDefault !== 'function') {
-        event.preventDefault = function () {
-            event.returnValue = false;
-        };
-    }
-    if (typeof event.stopPropagation !== 'function') {
-        event.stopPropagation = function () {
-            event.cancelBubble = true;
-        };
-    }
-    if (event.type === 'mouseover') {
-        var mouseEvent = event;
-        if (mouseEvent.relatedTarget === undefined && mouseEvent.fromElement !== undefined) {
-            mouseEvent.relatedTarget = mouseEvent.fromElement;
-        }
-    }
-    else if (event.type === 'mouseout') {
-        var mouseEvent = event;
-        if (mouseEvent.relatedTarget === undefined && mouseEvent.toElement !== undefined) {
-            mouseEvent.relatedTarget = mouseEvent.toElement;
-        }
-    }
-    return event;
-}
-
-function fireEventListener(listener, event) {
-    if (typeof listener === 'function') {
-        listener(event);
-    }
-    else {
-        listener.handleEvent(event);
-    }
-}
-function addEventListener(target, type, listener, useCapture) {
-    if (useCapture === void 0) { useCapture = false; }
-    var standard = target['addEventListener'];
-    var fallback = target['attachEvent'];
-    var wrappedListener = function (event) {
-        fireEventListener(listener, polyfillEvent(getCurrentEvent(event)));
-    };
-    if (typeof standard === 'function') {
-        standard.call(target, type, wrappedListener, useCapture);
-        return wrappedListener;
-    }
-    else if (typeof fallback === 'function' && fallback.call(target, "on" + type, wrappedListener)) {
-        return wrappedListener;
-    }
-    else {
-        return undefined;
-    }
-}
-function removeEventListener(target, type, listener) {
-    var standard = target['removeEventListener'];
-    var fallback = target['detachEvent'];
-    if (typeof standard === 'function') {
-        standard.call(target, type, listener);
-        return true;
-    }
-    else if (typeof fallback === 'function') {
-        fallback.call(target, type, listener);
-        return true;
-    }
-    else {
-        return false;
-    }
-}
 
 /**
  * Calculates the number of pixels in the document have been scrolled past vertically.
@@ -459,103 +302,143 @@ function pageScrollY(context) {
 }
 
 var ESCAPE_KEY_CODE = 27;
-function escKeyPressed(listener) {
+function escKeyPressed(target, listener) {
     return {
         handleEvent: function (event) {
             if (event.keyCode === ESCAPE_KEY_CODE) {
                 event.preventDefault();
                 event.stopPropagation();
-                fireEventListener(listener, event);
+                fireEventListener(target, listener, event);
             }
         }
     };
 }
-function scrolled(start, minAmount, current, listener) {
+function scrolled(target, start, minAmount, current, listener) {
     return function (event) {
         if (Math.abs(start - current()) >= minAmount) {
-            fireEventListener(listener, event);
+            fireEventListener(target, listener, event);
         }
-    };
-}
-function addDismissListeners(config, container, collapse) {
-    var initialScrollY = pageScrollY();
-    var scrollListener = scrolled(initialScrollY, config.scrollDismissPx, pageScrollY, collapse);
-    var scrolledAway = addEventListener(window, 'scroll', scrollListener);
-    var pressedEsc = addEventListener(document, 'keyup', escKeyPressed(collapse));
-    var dismissed = addEventListener(container, 'click', collapse);
-    return function () {
-        removeEventListener(window, 'scroll', scrolledAway);
-        removeEventListener(document, 'keyup', pressedEsc);
-        removeEventListener(container, 'click', dismissed);
     };
 }
 /**
  * Executes a callback function when a document has finished loading, or immediately if the document has already
  * finished loading.
  * @param document The document.
- * @param callback The function to execute.
+ * @param listener The function to execute.
  * @see http://youmightnotneedjquery.com/#ready
  */
-function ready(document, callback) {
+function ready(document, listener) {
     if (document.readyState === 'complete') {
-        callback();
+        fireEventListener(document, listener, undefined);
     }
     else {
-        listenForEvent(document, 'DOMContentLoaded', function () { return callback(); });
+        document.addEventListener('DOMContentLoaded', listener);
     }
 }
-function listenForEvent(target, type, listener, useCapture) {
-    if (useCapture === void 0) { useCapture = false; }
-    var added = addEventListener(target, type, function (event) {
-        if (added !== undefined) {
-            removeEventListener(target, type, added);
-        }
-        fireEventListener(listener, event);
-    }, useCapture);
-    return added;
+function fireEventListener(target, listener, event) {
+    if (typeof listener === 'function') {
+        listener.call(target, event);
+    }
+    else {
+        listener.handleEvent(event);
+    }
 }
 
-function createClone(config, src) {
-    var clone = document.createElement('img');
-    clone.className = config.cloneClass;
-    clone.src = src;
-    listenForEvent(clone, 'load', function () { return addClass(clone, config.cloneLoadedClass); });
-    return clone;
-}
-function showCloneOnceLoaded(config, elements) {
-    return function () {
-        if (elements.clone !== undefined) {
-            var cloneHidden = !hasClass(elements.clone, config.cloneVisibleClass);
-            var wrapperExpanded = hasClass(elements.wrapper, config.wrapperExpandedClass);
-            if (cloneHidden && wrapperExpanded) {
-                replaceImageWithClone(config, elements.image, elements.clone);
-            }
+var Container = /** @class */ (function () {
+    function Container(element) {
+        this.element = element;
+    }
+    Container.create = function () {
+        var element = createDiv(Container.CLASS);
+        return new Container(element);
+    };
+    Container.isContainer = function (element) {
+        return element.classList.contains(Container.CLASS);
+    };
+    Container.prototype.parent = function () {
+        return this.element.parentElement;
+    };
+    Container.prototype.clone = function () {
+        return this.element.children.item(1);
+    };
+    Container.prototype.setBounds = function (bounds) {
+        bounds.applyTo(this.element.style);
+    };
+    Container.prototype.resetBounds = function () {
+        setBounds(this.element.style, '', '', '', '');
+    };
+    Container.prototype.fillViewport = function (features, target, bounds) {
+        var transform = centreTransformation(target, bounds);
+        var transformProperty = features.transformProperty;
+        var style = this.element.style;
+        if (features.hasTransform3d) {
+            style[transformProperty] = scaleTranslate3d(transform);
+        }
+        else {
+            style[transformProperty] = scaleTranslate(transform);
         }
     };
-}
-function removeCloneLoadedListener(config, elements, showCloneListener) {
-    if (elements.clone !== undefined && showCloneListener !== undefined) {
-        var cloneLoading = !hasClass(elements.clone, config.cloneLoadedClass);
-        if (cloneLoading) {
-            removeEventListener(elements.clone, 'load', showCloneListener);
-        }
-    }
-}
-function replaceImageWithClone(config, image, clone) {
-    addClass(clone, config.cloneVisibleClass);
-    addClass(image, config.imageHiddenClass);
-}
-function replaceCloneWithImage(config, image, clone) {
-    removeClass(image, config.imageHiddenClass);
-    removeClass(clone, config.cloneVisibleClass);
-}
+    Container.prototype.resetStyle = function (property) {
+        resetStyle(this.element, property);
+    };
+    Container.prototype.addDismissListeners = function (config, collapseListener) {
+        var _this = this;
+        var initialScrollY = pageScrollY();
+        var escListener = escKeyPressed(document, collapseListener);
+        var scrollListener = scrolled(window, initialScrollY, config.scrollDismissPx, pageScrollY, collapseListener);
+        window.addEventListener('scroll', scrollListener);
+        document.addEventListener('keyup', escListener);
+        this.element.addEventListener('click', collapseListener);
+        return function () {
+            window.removeEventListener('scroll', scrollListener);
+            document.removeEventListener('keyup', escListener);
+            _this.element.removeEventListener('click', collapseListener);
+        };
+    };
+    Container.CLASS = 'zoom__container';
+    return Container;
+}());
 
-function isZoomable(config, target) {
-    return target instanceof HTMLImageElement
-        && hasParent(target)
-        && hasGrandParent(target)
-        && hasClass(target, config.imageClass);
-}
+var Image = /** @class */ (function () {
+    function Image(element) {
+        this.element = element;
+    }
+    Image.isZoomableImage = function (target) {
+        return target instanceof HTMLImageElement
+            && hasParent(target)
+            && hasGrandParent(target)
+            && target.classList.contains(this.CLASS);
+    };
+    Image.prototype.bounds = function () {
+        return Bounds.of(this.element);
+    };
+    Image.prototype.hide = function () {
+        this.element.classList.add(Image.HIDDEN_CLASS);
+    };
+    Image.prototype.show = function () {
+        this.element.classList.remove(Image.HIDDEN_CLASS);
+    };
+    Image.prototype.isHidden = function () {
+        return this.element.classList.contains(Image.HIDDEN_CLASS);
+    };
+    Image.prototype.replaceClone = function (clone) {
+        this.show();
+        clone.hide();
+    };
+    Image.prototype.activate = function () {
+        this.element.classList.add(Image.ACTIVE_CLASS);
+    };
+    Image.prototype.deactivate = function () {
+        this.element.classList.remove(Image.ACTIVE_CLASS);
+    };
+    Image.prototype.height = function () {
+        return this.element.height;
+    };
+    Image.CLASS = 'zoom__element';
+    Image.HIDDEN_CLASS = 'zoom__element--hidden';
+    Image.ACTIVE_CLASS = 'zoom__element--active';
+    return Image;
+}());
 function fullSrc(wrapper, image) {
     var fullSrc = wrapper.getAttribute('data-src');
     if (fullSrc === null) {
@@ -566,187 +449,357 @@ function fullSrc(wrapper, image) {
     }
 }
 
-function addOverlay(config, overlay) {
-    document.body.appendChild(overlay);
-    repaint(overlay);
-    addClass(overlay, config.overlayVisibleClass);
-}
-
-function isWrapperTransitioning(config, wrapper) {
-    return hasClass(wrapper, config.wrapperExpandingClass) || hasClass(wrapper, config.wrapperCollapsingClass);
-}
-
-function useExistingElements(overlay, image) {
-    var container = image.parentElement;
-    var wrapper = container.parentElement;
-    var cloneRequired = fullSrc(wrapper, image) !== image.src;
-    var clone = cloneRequired ? container.children.item(1) : undefined;
-    return {
-        overlay: overlay,
-        wrapper: wrapper,
-        container: container,
-        image: image,
-        clone: clone
+var Clone = /** @class */ (function () {
+    function Clone(element) {
+        this.element = element;
+    }
+    Clone.create = function (src) {
+        var element = document.createElement('img');
+        element.className = Clone.CLASS;
+        element.src = src;
+        element.addEventListener('load', function () { return element.classList.add(Clone.LOADED_CLASS); });
+        return new Clone(element);
     };
-}
-function setUpElements(config, overlay, image) {
-    var container = createDiv(config.containerClass);
-    var wrapper = image.parentElement;
-    var src = fullSrc(wrapper, image);
-    var cloneRequired = src !== image.src;
-    var clone = cloneRequired ? createClone(config, src) : undefined;
-    return {
-        overlay: overlay,
-        wrapper: wrapper,
-        container: container,
-        image: image,
-        clone: clone
+    Clone.prototype.show = function () {
+        this.element.classList.add(Clone.VISIBLE_CLASS);
     };
-}
+    Clone.prototype.isVisible = function () {
+        return this.element.classList.contains(Clone.VISIBLE_CLASS);
+    };
+    Clone.prototype.hide = function () {
+        this.element.classList.remove(Clone.VISIBLE_CLASS);
+    };
+    Clone.prototype.isHidden = function () {
+        return !this.isVisible();
+    };
+    Clone.prototype.loaded = function () {
+        this.element.classList.add(Clone.LOADED_CLASS);
+    };
+    Clone.prototype.isLoading = function () {
+        return !this.isLoaded();
+    };
+    Clone.prototype.isLoaded = function () {
+        return this.element.classList.contains(Clone.LOADED_CLASS);
+    };
+    Clone.CLASS = 'zoom__clone';
+    Clone.VISIBLE_CLASS = 'zoom__clone--visible';
+    Clone.LOADED_CLASS = 'zoom__clone--loaded';
+    return Clone;
+}());
+
+var Overlay = /** @class */ (function () {
+    function Overlay(element) {
+        this.element = element;
+    }
+    Overlay.create = function () {
+        var element = createDiv(Overlay.CLASS);
+        return new Overlay(element);
+    };
+    Overlay.prototype.appendTo = function (node) {
+        node.appendChild(this.element);
+        repaint(this.element);
+        this.show();
+    };
+    Overlay.prototype.show = function () {
+        this.element.classList.add(Overlay.VISIBLE_CLASS);
+    };
+    Overlay.prototype.hide = function () {
+        this.element.classList.remove(Overlay.VISIBLE_CLASS);
+    };
+    Overlay.prototype.add = function () {
+        document.body.appendChild(this.element);
+    };
+    Overlay.prototype.remove = function () {
+        document.body.removeChild(this.element);
+    };
+    Overlay.CLASS = 'zoom__overlay';
+    Overlay.VISIBLE_CLASS = 'zoom__overlay--visible';
+    return Overlay;
+}());
+
+var Wrapper = /** @class */ (function () {
+    function Wrapper(element) {
+        this.element = element;
+    }
+    Wrapper.prototype.startExpanding = function () {
+        this.element.classList.add(Wrapper.EXPANDING_CLASS);
+    };
+    Wrapper.prototype.isExpanding = function () {
+        return this.element.classList.contains(Wrapper.EXPANDING_CLASS);
+    };
+    Wrapper.prototype.finishExpanding = function () {
+        this.element.classList.remove(Wrapper.EXPANDING_CLASS);
+    };
+    Wrapper.prototype.startCollapsing = function () {
+        this.element.classList.add(Wrapper.COLLAPSING_CLASS);
+    };
+    Wrapper.prototype.isCollapsing = function () {
+        return this.element.classList.contains(Wrapper.COLLAPSING_CLASS);
+    };
+    Wrapper.prototype.finishCollapsing = function () {
+        this.element.classList.remove(Wrapper.COLLAPSING_CLASS);
+        resetStyle(this.element, 'height');
+    };
+    Wrapper.prototype.isTransitioning = function () {
+        return this.isExpanding() || this.isCollapsing();
+    };
+    Wrapper.prototype.collapsed = function () {
+        this.element.classList.remove(Wrapper.EXPANDED_CLASS);
+    };
+    Wrapper.prototype.expanded = function () {
+        this.element.classList.add(Wrapper.EXPANDED_CLASS);
+    };
+    Wrapper.prototype.isExpanded = function () {
+        return this.element.classList.contains(Wrapper.EXPANDED_CLASS);
+    };
+    Wrapper.prototype.srcOf = function (image) {
+        var fullSrc = this.element.getAttribute('data-src');
+        if (fullSrc === null) {
+            return image.src;
+        }
+        else {
+            return fullSrc;
+        }
+    };
+    Wrapper.prototype.position = function () {
+        var rect = this.element.getBoundingClientRect();
+        return Vector2.fromPosition(rect);
+    };
+    Wrapper.prototype.fixHeightTo = function (image) {
+        this.element.style.height = pixels(image.height());
+    };
+    Wrapper.prototype.targetSize = function () {
+        return Vector2.targetSizeOf(this.element);
+    };
+    Wrapper.CLASS = 'zoom';
+    Wrapper.EXPANDING_CLASS = 'zoom--expanding';
+    Wrapper.EXPANDED_CLASS = 'zoom--expanded';
+    Wrapper.COLLAPSING_CLASS = 'zoom--collapsing';
+    return Wrapper;
+}());
+
+var ZoomDOM = /** @class */ (function () {
+    function ZoomDOM(overlay, wrapper, container, image, clone) {
+        this.overlay = overlay;
+        this.wrapper = wrapper;
+        this.container = container;
+        this.image = image;
+        this.clone = clone;
+    }
+    ZoomDOM.fromExisting = function (imageElement) {
+        var overlay = Overlay.create();
+        var container = new Container(imageElement.parentElement);
+        var wrapper = new Wrapper(container.parent());
+        var image = new Image(imageElement);
+        var src = wrapper.srcOf(imageElement);
+        if (src === imageElement.src) {
+            return new ZoomDOM(overlay, wrapper, container, image);
+        }
+        else {
+            return new ZoomDOM(overlay, wrapper, container, image, new Clone(container.clone()));
+        }
+    };
+    ZoomDOM.fromFresh = function (imageElement) {
+        var overlay = Overlay.create();
+        var container = Container.create();
+        var wrapper = new Wrapper(imageElement.parentElement);
+        var image = new Image(imageElement);
+        var src = wrapper.srcOf(imageElement);
+        if (src === imageElement.src) {
+            return new ZoomDOM(overlay, wrapper, container, image);
+        }
+        else {
+            return new ZoomDOM(overlay, wrapper, container, image, Clone.create(src));
+        }
+    };
+    ZoomDOM.prototype.replaceImageWithClone = function () {
+        if (this.clone !== undefined) {
+            this.clone.show();
+            this.image.hide();
+        }
+    };
+    ZoomDOM.prototype.replaceCloneWithImage = function () {
+        if (this.clone !== undefined) {
+            this.image.show();
+            this.clone.hide();
+        }
+    };
+    ZoomDOM.prototype.replaceContainerWithImage = function () {
+        this.wrapper.element.replaceChild(this.container.element, this.image.element);
+    };
+    ZoomDOM.prototype.appendImageToContainer = function () {
+        this.container.element.appendChild(this.image.element);
+    };
+    ZoomDOM.prototype.appendCloneToContainer = function () {
+        if (this.clone !== undefined) {
+            this.container.element.appendChild(this.clone.element);
+        }
+    };
+    /**
+     * Creates an {@link EventListener] that is called when the clone's 'load' event has fired. It checks to see if the
+     * clone has not yet been made visible, and ensures that we only show the clone if the image is fully expanded to
+     * avoid the image dimensions breaking mid-expansion.
+     */
+    ZoomDOM.prototype.createCloneLoadedListener = function () {
+        var _this = this;
+        return function () {
+            if (_this.clone !== undefined && _this.clone.isHidden() && _this.wrapper.isExpanded()) {
+                _this.replaceImageWithClone();
+            }
+        };
+    };
+    /**
+     * Removes the {@link #createCloneLoadedListener} attached to the 'load' event of a clone if the expansion of an
+     * image was cancelled before the 'load' event had time to finish and fire the event. As the image was collapsed we
+     * no longer care about showing it when it's loaded, and can wait for the next expansion to show the clone.
+     */
+    ZoomDOM.prototype.removeCloneLoadedListener = function (listener) {
+        if (this.clone !== undefined && listener !== undefined) {
+            if (this.clone.isLoading()) {
+                this.clone.element.removeEventListener('load', listener);
+            }
+        }
+    };
+    /**
+     * Called at the end of an expansion to check if the clone loaded before our expansion finished. If it did, and is
+     * still not visible, we can now show it to the client.
+     */
+    ZoomDOM.prototype.showCloneIfLoaded = function () {
+        if (this.clone !== undefined && this.clone.isLoaded() && this.clone.isHidden()) {
+            this.replaceImageWithClone();
+        }
+    };
+    return ZoomDOM;
+}());
 
 function collapsed(config, elements) {
-    if (elements.clone !== undefined) {
-        replaceCloneWithImage(config, elements.image, elements.clone);
-    }
-    document.body.removeChild(elements.overlay);
-    removeClass(elements.image, config.imageActiveClass);
-    removeClass(elements.wrapper, config.wrapperCollapsingClass);
-    resetStyle(elements.wrapper, 'height');
+    elements.replaceCloneWithImage();
+    elements.overlay.remove();
+    elements.image.deactivate();
+    elements.wrapper.finishCollapsing();
     setTimeout(function () { return addZoomListener(config); }, 1);
 }
 /**
  * Zoom with no transition.
  */
 function zoomInstant(config, elements, target, showCloneListener) {
-    var bounds = boundsOf(elements.image);
-    var resized = addEventListener(window, 'resize', function () {
-        var wrapperPosition = positionFrom(elements.wrapper.getBoundingClientRect());
-        bounds = createBounds(wrapperPosition, bounds.size);
-        setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
-    });
+    var bounds = elements.image.bounds();
+    var resizedListener = function () {
+        var wrapperPosition = elements.wrapper.position();
+        bounds = new Bounds(wrapperPosition, bounds.size);
+        elements.container.setBounds(Bounds.centreOf(document, target, bounds));
+    };
     var removeDismissListeners;
-    var collapse = function () {
+    var collapseListener = function () {
         removeDismissListeners();
-        removeEventListener(window, 'resize', resized);
-        removeCloneLoadedListener(config, elements, showCloneListener);
-        removeClass(elements.wrapper, config.wrapperExpandedClass);
-        resetBounds(elements.container.style);
+        window.removeEventListener('resize', resizedListener);
+        elements.removeCloneLoadedListener(showCloneListener);
+        elements.wrapper.collapsed();
+        elements.container.resetBounds();
         collapsed(config, elements);
     };
-    removeDismissListeners = addDismissListeners(config, elements.container, collapse);
-    addOverlay(config, elements.overlay);
-    addClass(elements.wrapper, config.wrapperExpandedClass);
-    elements.wrapper.style.height = pixels(elements.image.height);
-    addClass(elements.image, config.imageActiveClass);
-    setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
+    removeDismissListeners = elements.container.addDismissListeners(config, collapseListener);
+    elements.overlay.appendTo(document.body);
+    elements.wrapper.expanded();
+    elements.wrapper.fixHeightTo(elements.image);
+    elements.image.activate();
+    elements.container.setBounds(Bounds.centreOf(document, target, bounds));
+    window.addEventListener('resize', resizedListener);
 }
 /**
  * Zoom with transition.
  */
 function zoomTransition(config, elements, target, showCloneListener, features) {
-    var bounds = boundsOf(elements.image);
-    var resized = addEventListener(window, 'resize', function () {
-        var wrapperPosition = positionFrom(elements.wrapper.getBoundingClientRect());
-        bounds = createBounds(wrapperPosition, bounds.size);
-        if (isWrapperTransitioning(config, elements.wrapper)) {
-            expandToViewport(features, elements.container, target, bounds);
+    var bounds = elements.image.bounds();
+    var transitionEnd = features.transitionEndEvent;
+    var transitionProperty = features.transitionProperty;
+    var transformProperty = features.transformProperty;
+    var resizedListener = function () {
+        var wrapperPosition = elements.wrapper.position();
+        bounds = new Bounds(wrapperPosition, bounds.size);
+        if (elements.wrapper.isTransitioning()) {
+            elements.container.fillViewport(features, target, bounds);
         }
         else {
-            setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
-        }
-    });
-    var expandedListener;
-    var removeDismissListeners;
-    var collapse = function () {
-        removeDismissListeners();
-        removeEventListener(window, 'resize', resized);
-        removeCloneLoadedListener(config, elements, showCloneListener);
-        removeClass(elements.overlay, config.overlayVisibleClass);
-        addClass(elements.wrapper, config.wrapperCollapsingClass);
-        var collapsedListener = listenForEvent(elements.container, features.transitionEndEvent, function () {
-            collapsed(config, elements);
-        });
-        if (hasClass(elements.wrapper, config.wrapperExpandingClass)) {
-            if (expandedListener !== undefined) {
-                removeEventListener(elements.container, features.transitionEndEvent, expandedListener);
-            }
-            resetStyle(elements.container, features.transformProperty);
-            removeClass(elements.wrapper, config.wrapperExpandingClass);
-        }
-        else {
-            ignoreTransitions(elements.container, features.transitionProperty, function () {
-                expandToViewport(features, elements.container, target, bounds);
-            });
-            resetStyle(elements.container, features.transformProperty);
-            resetBounds(elements.container.style);
-            removeClass(elements.wrapper, config.wrapperExpandedClass);
-        }
-        if (collapsedListener === undefined) {
-            collapsed(config, elements);
+            elements.container.setBounds(Bounds.centreOf(document, target, bounds));
         }
     };
-    function expanded() {
-        if (elements.clone !== undefined && hasClass(elements.clone, config.cloneLoadedClass) && !hasClass(elements.clone, config.cloneVisibleClass)) {
-            if (showCloneListener !== undefined) {
-                removeEventListener(elements.clone, features.transitionEndEvent, showCloneListener);
-            }
-            replaceImageWithClone(config, elements.image, elements.clone);
-        }
-        removeClass(elements.wrapper, config.wrapperExpandingClass);
-        addClass(elements.wrapper, config.wrapperExpandedClass);
-        ignoreTransitions(elements.container, features.transitionProperty, function () {
-            resetStyle(elements.container, features.transformProperty);
-            setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
+    var expandedListener = function () {
+        elements.showCloneIfLoaded();
+        elements.wrapper.finishExpanding();
+        elements.wrapper.expanded();
+        ignoreTransitions(elements.container.element, transitionProperty, function () {
+            elements.container.resetStyle(transformProperty);
+            elements.container.setBounds(Bounds.centreOf(document, target, bounds));
         });
-    }
-    removeDismissListeners = addDismissListeners(config, elements.container, collapse);
-    addOverlay(config, elements.overlay);
-    addClass(elements.wrapper, config.wrapperExpandingClass);
-    elements.wrapper.style.height = pixels(elements.image.height);
-    addClass(elements.image, config.imageActiveClass);
-    expandedListener = listenForEvent(elements.container, features.transitionEndEvent, function () { return expanded(); });
-    if (expandedListener === undefined) {
-        expanded();
-    }
-    else {
-        expandToViewport(features, elements.container, target, bounds);
-    }
+        elements.container.element.removeEventListener(transitionEnd, expandedListener);
+    };
+    var removeDismissListeners;
+    var collapseListener = function () {
+        removeDismissListeners();
+        window.removeEventListener('resize', resizedListener);
+        elements.removeCloneLoadedListener(showCloneListener);
+        elements.overlay.hide();
+        elements.wrapper.startCollapsing();
+        var collapsedListener = function () {
+            collapsed(config, elements);
+            elements.container.element.removeEventListener(transitionEnd, collapsedListener);
+        };
+        elements.container.element.addEventListener(transitionEnd, collapsedListener);
+        if (elements.wrapper.isExpanding()) {
+            elements.container.element.removeEventListener(transitionEnd, expandedListener);
+            elements.container.resetStyle(transformProperty);
+            elements.wrapper.finishExpanding();
+        }
+        else {
+            ignoreTransitions(elements.container.element, transitionProperty, function () {
+                elements.container.fillViewport(features, target, bounds);
+            });
+            elements.container.resetStyle(transformProperty);
+            elements.container.resetBounds();
+            elements.wrapper.collapsed();
+        }
+    };
+    removeDismissListeners = elements.container.addDismissListeners(config, collapseListener);
+    elements.overlay.appendTo(document.body);
+    elements.wrapper.startExpanding();
+    elements.wrapper.fixHeightTo(elements.image);
+    elements.image.activate();
+    elements.container.element.addEventListener(transitionEnd, expandedListener);
+    elements.container.fillViewport(features, target, bounds);
+    window.addEventListener('resize', resizedListener);
 }
 function clickedZoomable(config, event, zoomListener) {
     var image = event.target;
     var parent = image.parentElement;
-    var previouslyZoomed = hasClass(parent, config.containerClass);
+    var previouslyZoomed = Container.isContainer(parent);
     var wrapper = previouslyZoomed ? parent.parentElement : parent;
     if (event.metaKey || event.ctrlKey) {
         window.open(fullSrc(wrapper, image), '_blank');
     }
     else {
-        if (zoomListener !== undefined) {
-            removeEventListener(document.body, 'click', zoomListener);
-        }
+        document.body.removeEventListener('click', zoomListener);
         var elements = void 0;
-        var overlay = createDiv(config.overlayClass);
         if (previouslyZoomed) {
-            elements = useExistingElements(overlay, image);
+            elements = ZoomDOM.fromExisting(image);
         }
         else {
-            elements = setUpElements(config, overlay, image);
-            elements.wrapper.replaceChild(elements.container, image);
-            elements.container.appendChild(image);
-            if (elements.clone !== undefined) {
-                elements.container.appendChild(elements.clone);
-            }
+            elements = ZoomDOM.fromFresh(image);
+            elements.replaceContainerWithImage();
+            elements.appendImageToContainer();
+            elements.appendCloneToContainer();
         }
         var showCloneListener = void 0;
         if (elements.clone !== undefined) {
-            if (hasClass(elements.clone, config.cloneLoadedClass)) {
-                replaceImageWithClone(config, image, elements.clone);
+            if (elements.clone.isLoaded()) {
+                elements.replaceImageWithClone();
             }
             else {
-                showCloneListener = addEventListener(elements.clone, 'load', showCloneOnceLoaded(config, elements));
+                showCloneListener = elements.createCloneLoadedListener();
+                elements.clone.element.addEventListener('load', showCloneListener);
             }
         }
-        var target = targetSize(elements.wrapper);
+        var target = elements.wrapper.targetSize();
         var features = detectFeatures();
         if (features.hasTransform && features.hasTransitions) {
             zoomTransition(config, elements, target, showCloneListener, features);
@@ -758,15 +811,16 @@ function clickedZoomable(config, event, zoomListener) {
 }
 function addZoomListener(config) {
     if (config === void 0) { config = DEFAULT_CONFIG; }
-    var listener = addEventListener(document.body, 'click', {
+    var listener = {
         handleEvent: function (event) {
-            if (event instanceof MouseEvent && isZoomable(config, event.target)) {
+            if (Image.isZoomableImage(event.target)) {
                 event.preventDefault();
                 event.stopPropagation();
                 clickedZoomable(config, event, listener);
             }
         }
-    });
+    };
+    document.body.addEventListener('click', listener);
 }
 function listenForZoom(config) {
     if (config === void 0) { config = DEFAULT_CONFIG; }

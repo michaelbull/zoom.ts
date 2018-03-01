@@ -1,4 +1,4 @@
-import { isWrapperTransitioning } from '../../../lib/element/Wrapper';
+import { isWrapperTransitioning } from '../../../lib/dom/Wrapper';
 
 describe('isWrapperTransitioning', () => {
     let config: any;

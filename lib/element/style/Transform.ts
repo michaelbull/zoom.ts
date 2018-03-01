@@ -1,21 +1,17 @@
-import { viewportSize } from '../browser/Document';
-import { Features } from '../browser/Features';
-import { vendorProperty } from '../browser/Vendor';
-import { centreTranslation } from '../math/Centre';
-import { pixels } from '../math/Unit';
-import {
-    minimizeVectors,
-    minimumDivisor,
-    Vector
-} from '../math/Vector';
-import { Bounds } from './Bounds';
+import { viewportSize } from '../../browser/Document';
+import { vendorProperty } from '../../browser/Vendor';
+import { Bounds } from '../../math/Bounds';
+import { pixels } from '../../math/Unit';
+import { Vector2 } from '../../math/Vector2';
 
-export function translate(translation: Vector): string {
-    return `translate(${translation[0]}px, ${translation[1]}px)`;
+export function translate(translation: Vector2): string {
+    let { x, y } = translation;
+    return `translate(${x}px, ${y}px)`;
 }
 
-export function translate3d(translation: Vector): string {
-    return `translate3d(${translation[0]}px, ${translation[1]}px, 0)`;
+export function translate3d(translation: Vector2): string {
+    let { x, y } = translation;
+    return `translate3d(${x}px, ${y}px, 0)`;
 }
 
 export function scale(amount: number): string {
@@ -28,7 +24,7 @@ export function scale3d(amount: number): string {
 
 export interface ScaleAndTranslate {
     readonly scale: number;
-    readonly translation: Vector;
+    readonly translation: Vector2;
 }
 
 export function scaleTranslate(transformation: ScaleAndTranslate): string {
@@ -39,28 +35,16 @@ export function scaleTranslate3d(transformation: ScaleAndTranslate): string {
     return `${scale3d(transformation.scale)} ${translate3d(transformation.translation)}`;
 }
 
-export function centreTransformation(target: Vector, bounds: Bounds): ScaleAndTranslate {
+export function centreTransformation(target: Vector2, bounds: Bounds): ScaleAndTranslate {
     let viewport = viewportSize(document);
-    let cappedTarget = minimizeVectors(viewport, target);
-    let scale = minimumDivisor(cappedTarget, bounds.size);
-    let translation = centreTranslation(viewport, bounds, scale);
+    let cappedTarget = Vector2.min(viewport, target);
+    let scale = cappedTarget.minDivisor(bounds.size);
+    let translation = Bounds.centreTranslation(viewport, bounds, scale);
 
     return {
         scale,
         translation
     };
-}
-
-export function expandToViewport(features: Features, element: HTMLElement, target: Vector, bounds: Bounds): void {
-    let transform = centreTransformation(target, bounds);
-    let transformProperty = features.transformProperty as string;
-
-    let style: any = element.style;
-    if (features.hasTransform3d) {
-        style[transformProperty] = scaleTranslate3d(transform);
-    } else {
-        style[transformProperty] = scaleTranslate(transform);
-    }
 }
 
 export function supports3dTransformations(style: CSSStyleDeclaration): boolean {

@@ -1,4 +1,4 @@
-export const VENDOR_PREFIXES: string[] = [
+export const VENDOR_PREFIXES = [
     'Webkit',
     'Moz',
     'ms',

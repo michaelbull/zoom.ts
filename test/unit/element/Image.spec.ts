@@ -2,7 +2,7 @@ import * as Element from '../../../lib/element/Element';
 import {
     fullSrc,
     isZoomable
-} from '../../../lib/element/Image';
+} from '../../../lib/dom/Image';
 
 describe('isZoomable', () => {
     let config: any;

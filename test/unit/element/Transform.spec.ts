@@ -3,7 +3,7 @@ import * as Vendor from '../../../lib/browser/Vendor';
 import {
     Bounds,
     createBounds
-} from '../../../lib/element/Bounds';
+} from '../../../lib/math/Bounds';
 import {
     centreTransformation,
     expandToViewport,
@@ -19,8 +19,8 @@ import {
     TEST3D_WIDTH,
     translate,
     translate3d
-} from '../../../lib/element/Transform';
-import * as Vector from '../../../lib/math/Vector';
+} from '../../../lib/element/style/Transform';
+import * as Vector from '../../../lib/math/Vector2';
 
 describe('translate', () => {
     it('should return the transformation', () => {

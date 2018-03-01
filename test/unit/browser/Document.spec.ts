@@ -7,7 +7,7 @@ import {
     viewportSize
 } from '../../../lib/browser/Document';
 import { fireEventListener } from '../../../lib/event/EventListener';
-import { ready } from '../../../lib/event/EventListeners';
+import { ready } from '../../../lib/element/EventListeners';
 
 describe('isStandardsMode', () => {
     it('should return true if compatMode is CSS1Compat', () => {

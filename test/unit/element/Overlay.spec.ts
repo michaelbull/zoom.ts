@@ -1,7 +1,7 @@
 import * as ClassList from '../../../lib/element/ClassList';
 import { addClass } from '../../../lib/element/ClassList';
 import * as Element from '../../../lib/element/Element';
-import { addOverlay } from '../../../lib/element/Overlay';
+import { addOverlay } from '../../../lib/dom/Overlay';
 
 describe('addOverlay', () => {
     let config: any;

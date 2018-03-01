@@ -3,25 +3,9 @@ $zoom-z-index: 2000 !default;
 $zoom-transition-duration: 300ms !default;
 $zoom-transition-timing-function: cubic-bezier(0.2, 0, 0.2, 1) !default;
 
-$zoom-wrapper-class: 'zoom' !default;
-$zoom-wrapper-expanding-class: 'zoom--expanding' !default;
-$zoom-wrapper-expanded-class: 'zoom--expanded' !default;
-$zoom-wrapper-collapsing-class: 'zoom--collapsing' !default;
-
-$zoom-container-class: 'zoom__container' !default;
-
-$zoom-overlay-class: 'zoom__overlay' !default;
-$zoom-overlay-visible-class: 'zoom__overlay--visible' !default;
 $zoom-overlay-z-index: 1000 !default;
 $zoom-overlay-background-color: hsl(0, 0%, 100%) !default;
 $zoom-overlay-visible-opacity: 100 !default;
-
-$zoom-image-class: 'zoom__element' !default;
-$zoom-image-hidden-class: 'zoom__element--hidden' !default;
-$zoom-image-active-class: 'zoom__element--active' !default;
-
-$zoom-clone-class: 'zoom__clone' !default;
-$zoom-clone-loaded-class: 'zoom__clone--visible' !default;
 
 @mixin zoom-hidden() {
   visibility: hidden;
@@ -35,7 +19,7 @@ $zoom-clone-loaded-class: 'zoom__clone--visible' !default;
   transition: visibility 0s linear 0s, opacity 400ms 0s;
 }
 
-.#{$zoom-wrapper-class} {
+.zoom {
   display: block;
   position: relative;
   margin: 0;
@@ -48,37 +32,37 @@ $zoom-clone-loaded-class: 'zoom__clone--visible' !default;
   cursor: -webkit-zoom-in;
 }
 
-.#{$zoom-wrapper-expanding-class},
-.#{$zoom-wrapper-expanded-class},
-.#{$zoom-wrapper-collapsing-class} {
+.zoom--expanding,
+.zoom--expanded,
+.zoom--collapsing {
   z-index: $zoom-z-index;
   cursor: pointer;
   cursor: -moz-zoom-out;
   cursor: -webkit-zoom-out;
 }
 
-.#{$zoom-container-class} {
+.zoom__container {
   position: relative;
   transition: transform $zoom-transition-duration $zoom-transition-timing-function;
   will-change: transform;
 }
 
-.#{$zoom-image-class} {
+.zoom__element {
   @include zoom-visible();
   will-change: visibility, opacity;
 
   max-width: 100%;
 }
 
-.#{$zoom-image-active-class} {
+.zoom__element--active {
   width: 100%;
 }
 
-.#{$zoom-image-hidden-class} {
+.zoom__element--hidden {
   @include zoom-hidden();
 }
 
-.#{$zoom-clone-class} {
+.zoom__clone {
   @include zoom-hidden();
   will-change: visibility, opacity;
 
@@ -91,11 +75,11 @@ $zoom-clone-loaded-class: 'zoom__clone--visible' !default;
   width: 100%;
 }
 
-.#{$zoom-clone-loaded-class} {
+.zoom__clone--visible {
   @include zoom-visible();
 }
 
-.#{$zoom-overlay-class} {
+.zoom__overlay {
   position: fixed;
   top: 0;
   right: 0;
@@ -111,7 +95,7 @@ $zoom-clone-loaded-class: 'zoom__clone--visible' !default;
   will-change: opacity, filter;
 }
 
-.#{$zoom-overlay-visible-class} {
+.zoom__overlay--visible {
   opacity: $zoom-overlay-visible-opacity / 100;
   filter: 'alpha(opacity=' + $zoom-overlay-visible-opacity + ')';
 }

@@ -1,6 +1,4 @@
 import {
-    createDiv} from './browser/Document';
-import {
     detectFeatures,
     Features
 } from './browser/Features';
@@ -8,67 +6,22 @@ import {
     Config,
     DEFAULT_CONFIG
 } from './Config';
-import {
-    boundsOf,
-    createBounds,
-    resetBounds,
-    setBoundsPx
-} from './element/Bounds';
-import {
-    addClass,
-    hasClass,
-    removeClass
-} from './element/ClassList';
-import {
-    removeCloneLoadedListener,
-    replaceCloneWithImage,
-    replaceImageWithClone,
-    showCloneOnceLoaded
-} from './element/Clone';
-import {
-    resetStyle,
-    targetSize
-} from './element/Element';
+import { Container } from './dom/Container';
 import {
     fullSrc,
-    isZoomable
-} from './element/Image';
-import { addOverlay } from './element/Overlay';
-import { expandToViewport } from './element/Transform';
-import { ignoreTransitions } from './element/Transition';
-import { isWrapperTransitioning } from './element/Wrapper';
-import {
-    setUpElements,
-    useExistingElements,
-    ZoomElements
-} from './element/ZoomElements';
-import {
-    addEventListener,
-    PotentialEventListener,
-    removeEventListener
-} from './event/EventListener';
-import {
-    addDismissListeners,
-    listenForEvent,
-    ready
-} from './event/EventListeners';
-import { centreBounds } from './math/Centre';
-import { pixels } from './math/Unit';
-import {
-    positionFrom,
-    Vector
-} from './math/Vector';
+    Image
+} from './dom/Image';
+import { ZoomDOM } from './dom/ZoomDOM';
+import { ready } from './element/EventListeners';
+import { ignoreTransitions } from './element/style/Transition';
+import { Bounds } from './math/Bounds';
+import { Vector2 } from './math/Vector2';
 
-export function collapsed(config: Config, elements: ZoomElements): void {
-    if (elements.clone !== undefined) {
-        replaceCloneWithImage(config, elements.image, elements.clone);
-    }
-
-    document.body.removeChild(elements.overlay);
-    removeClass(elements.image, config.imageActiveClass);
-    removeClass(elements.wrapper, config.wrapperCollapsingClass);
-    resetStyle(elements.wrapper, 'height');
-
+export function collapsed(config: Config, elements: ZoomDOM): void {
+    elements.replaceCloneWithImage();
+    elements.overlay.remove();
+    elements.image.deactivate();
+    elements.wrapper.finishCollapsing();
     setTimeout(() => addZoomListener(config), 1);
 }
 
@@ -77,40 +30,40 @@ export function collapsed(config: Config, elements: ZoomElements): void {
  */
 export function zoomInstant(
     config: Config,
-    elements: ZoomElements,
-    target: Vector,
-    showCloneListener: PotentialEventListener
+    elements: ZoomDOM,
+    target: Vector2,
+    showCloneListener: EventListener | undefined
 ): void {
 
-    let bounds = boundsOf(elements.image);
+    let bounds = elements.image.bounds();
 
-    let resized = addEventListener(window, 'resize', (): void => {
-        let wrapperPosition = positionFrom(elements.wrapper.getBoundingClientRect());
-        bounds = createBounds(wrapperPosition, bounds.size);
+    let resizedListener = (): void => {
+        let wrapperPosition = elements.wrapper.position();
+        bounds = new Bounds(wrapperPosition, bounds.size);
 
-        setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
-    });
+        elements.container.setBounds(Bounds.centreOf(document, target, bounds));
+    };
 
-    let removeDismissListeners: Function;
+    let removeDismissListeners: () => void;
 
-    let collapse = (): void => {
+    let collapseListener = (): void => {
         removeDismissListeners();
-        removeEventListener(window, 'resize', resized as EventListener);
-        removeCloneLoadedListener(config, elements, showCloneListener);
+        window.removeEventListener('resize', resizedListener);
+        elements.removeCloneLoadedListener(showCloneListener);
 
-        removeClass(elements.wrapper, config.wrapperExpandedClass);
-        resetBounds(elements.container.style);
+        elements.wrapper.collapsed();
+        elements.container.resetBounds();
         collapsed(config, elements);
     };
 
-    removeDismissListeners = addDismissListeners(config, elements.container, collapse);
+    removeDismissListeners = elements.container.addDismissListeners(config, collapseListener);
 
-    addOverlay(config, elements.overlay);
-    addClass(elements.wrapper, config.wrapperExpandedClass);
-    elements.wrapper.style.height = pixels(elements.image.height);
-    addClass(elements.image, config.imageActiveClass);
-
-    setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
+    elements.overlay.appendTo(document.body);
+    elements.wrapper.expanded();
+    elements.wrapper.fixHeightTo(elements.image);
+    elements.image.activate();
+    elements.container.setBounds(Bounds.centreOf(document, target, bounds));
+    window.addEventListener('resize', resizedListener);
 }
 
 /**
@@ -118,136 +71,115 @@ export function zoomInstant(
  */
 export function zoomTransition(
     config: Config,
-    elements: ZoomElements,
-    target: Vector,
-    showCloneListener: PotentialEventListener,
+    elements: ZoomDOM,
+    target: Vector2,
+    showCloneListener: EventListener | undefined,
     features: Features
 ): void {
+    let bounds = elements.image.bounds();
+    let transitionEnd = features.transitionEndEvent as string;
+    let transitionProperty = features.transitionProperty as string;
+    let transformProperty = features.transformProperty as string;
 
-    let bounds = boundsOf(elements.image);
+    let resizedListener = (): void => {
+        let wrapperPosition = elements.wrapper.position();
+        bounds = new Bounds(wrapperPosition, bounds.size);
 
-    let resized = addEventListener(window, 'resize', (): void => {
-        let wrapperPosition: Vector = positionFrom(elements.wrapper.getBoundingClientRect());
-        bounds = createBounds(wrapperPosition, bounds.size);
-
-        if (isWrapperTransitioning(config, elements.wrapper)) {
-            expandToViewport(features, elements.container, target, bounds);
+        if (elements.wrapper.isTransitioning()) {
+            elements.container.fillViewport(features, target, bounds);
         } else {
-            setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
-        }
-    });
-
-    let expandedListener: PotentialEventListener;
-    let removeDismissListeners: Function;
-
-    let collapse = (): void => {
-        removeDismissListeners();
-        removeEventListener(window, 'resize', resized as EventListener);
-        removeCloneLoadedListener(config, elements, showCloneListener);
-
-        removeClass(elements.overlay, config.overlayVisibleClass);
-        addClass(elements.wrapper, config.wrapperCollapsingClass);
-
-        let collapsedListener = listenForEvent(elements.container, features.transitionEndEvent, () => {
-            collapsed(config, elements);
-        });
-
-        if (hasClass(elements.wrapper, config.wrapperExpandingClass)) {
-            if (expandedListener !== undefined) {
-                removeEventListener(elements.container, features.transitionEndEvent as string, expandedListener);
-            }
-
-            resetStyle(elements.container, features.transformProperty as string);
-            removeClass(elements.wrapper, config.wrapperExpandingClass);
-        } else {
-            ignoreTransitions(elements.container, features.transitionProperty as string, () => {
-                expandToViewport(features, elements.container, target, bounds);
-            });
-
-            resetStyle(elements.container, features.transformProperty as string);
-            resetBounds(elements.container.style);
-            removeClass(elements.wrapper, config.wrapperExpandedClass);
-        }
-
-        if (collapsedListener === undefined) {
-            collapsed(config, elements);
+            elements.container.setBounds(Bounds.centreOf(document, target, bounds));
         }
     };
 
-    function expanded(): void {
-        if (elements.clone !== undefined && hasClass(elements.clone, config.cloneLoadedClass) && !hasClass(elements.clone, config.cloneVisibleClass)) {
-            if (showCloneListener !== undefined) {
-                removeEventListener(elements.clone, features.transitionEndEvent as string, showCloneListener);
-            }
+    let expandedListener = (): void => {
+        elements.showCloneIfLoaded();
+        elements.wrapper.finishExpanding();
+        elements.wrapper.expanded();
 
-            replaceImageWithClone(config, elements.image, elements.clone);
-        }
-
-        removeClass(elements.wrapper, config.wrapperExpandingClass);
-        addClass(elements.wrapper, config.wrapperExpandedClass);
-
-        ignoreTransitions(elements.container, features.transitionProperty as string, () => {
-            resetStyle(elements.container, features.transformProperty as string);
-            setBoundsPx(elements.container.style, centreBounds(document, target, bounds));
+        ignoreTransitions(elements.container.element, transitionProperty, () => {
+            elements.container.resetStyle(transformProperty);
+            elements.container.setBounds(Bounds.centreOf(document, target, bounds));
         });
-    }
 
-    removeDismissListeners = addDismissListeners(config, elements.container, collapse);
+        elements.container.element.removeEventListener(transitionEnd, expandedListener);
+    };
 
-    addOverlay(config, elements.overlay);
-    addClass(elements.wrapper, config.wrapperExpandingClass);
-    elements.wrapper.style.height = pixels(elements.image.height);
-    addClass(elements.image, config.imageActiveClass);
+    let removeDismissListeners: () => void;
 
-    expandedListener = listenForEvent(elements.container, features.transitionEndEvent as string, () => expanded());
+    let collapseListener = (): void => {
+        removeDismissListeners();
+        window.removeEventListener('resize', resizedListener);
+        elements.removeCloneLoadedListener(showCloneListener);
 
-    if (expandedListener === undefined) {
-        expanded();
-    } else {
-        expandToViewport(features, elements.container, target, bounds);
-    }
+        elements.overlay.hide();
+        elements.wrapper.startCollapsing();
+
+        let collapsedListener = (): void => {
+            collapsed(config, elements);
+            elements.container.element.removeEventListener(transitionEnd, collapsedListener);
+        };
+        elements.container.element.addEventListener(transitionEnd, collapsedListener);
+
+        if (elements.wrapper.isExpanding()) {
+            elements.container.element.removeEventListener(transitionEnd, expandedListener);
+            elements.container.resetStyle(transformProperty);
+            elements.wrapper.finishExpanding();
+        } else {
+            ignoreTransitions(elements.container.element, transitionProperty, () => {
+                elements.container.fillViewport(features, target, bounds);
+            });
+
+            elements.container.resetStyle(transformProperty);
+            elements.container.resetBounds();
+            elements.wrapper.collapsed();
+        }
+    };
+
+    removeDismissListeners = elements.container.addDismissListeners(config, collapseListener);
+
+    elements.overlay.appendTo(document.body);
+    elements.wrapper.startExpanding();
+    elements.wrapper.fixHeightTo(elements.image);
+    elements.image.activate();
+    elements.container.element.addEventListener(transitionEnd, expandedListener);
+    elements.container.fillViewport(features, target, bounds);
+    window.addEventListener('resize', resizedListener);
 }
 
-export function clickedZoomable(config: Config, event: MouseEvent, zoomListener: EventListener): void {
+export function clickedZoomable(config: Config, event: MouseEvent, zoomListener: EventListenerObject): void {
     let image = event.target as HTMLImageElement;
     let parent = image.parentElement as HTMLElement;
-    let previouslyZoomed = hasClass(parent, config.containerClass);
+    let previouslyZoomed = Container.isContainer(parent);
     let wrapper = previouslyZoomed ? parent.parentElement as HTMLElement : parent;
 
     if (event.metaKey || event.ctrlKey) {
         window.open(fullSrc(wrapper, image), '_blank');
     } else {
-        if (zoomListener !== undefined) {
-            removeEventListener(document.body, 'click', zoomListener);
-        }
+        document.body.removeEventListener('click', zoomListener);
 
-        let elements: ZoomElements;
-        let overlay = createDiv(config.overlayClass);
-
+        let elements: ZoomDOM;
         if (previouslyZoomed) {
-            elements = useExistingElements(overlay, image);
+            elements = ZoomDOM.fromExisting(image);
         } else {
-            elements = setUpElements(config, overlay, image);
-
-            elements.wrapper.replaceChild(elements.container, image);
-            elements.container.appendChild(image);
-
-            if (elements.clone !== undefined) {
-                elements.container.appendChild(elements.clone);
-            }
+            elements = ZoomDOM.fromFresh(image);
+            elements.replaceContainerWithImage();
+            elements.appendImageToContainer();
+            elements.appendCloneToContainer();
         }
 
-        let showCloneListener;
+        let showCloneListener: EventListener | undefined;
 
         if (elements.clone !== undefined) {
-            if (hasClass(elements.clone, config.cloneLoadedClass)) {
-                replaceImageWithClone(config, image, elements.clone);
+            if (elements.clone.isLoaded()) {
+                elements.replaceImageWithClone();
             } else {
-                showCloneListener = addEventListener(elements.clone, 'load', showCloneOnceLoaded(config, elements));
+                showCloneListener = elements.createCloneLoadedListener();
+                elements.clone.element.addEventListener('load', showCloneListener);
             }
         }
 
-        let target = targetSize(elements.wrapper);
+        let target = elements.wrapper.targetSize();
         let features = detectFeatures();
 
         if (features.hasTransform && features.hasTransitions) {
@@ -259,15 +191,17 @@ export function clickedZoomable(config: Config, event: MouseEvent, zoomListener:
 }
 
 export function addZoomListener(config: Config = DEFAULT_CONFIG): void {
-    let listener = addEventListener(document.body, 'click', {
+    let listener: EventListenerObject = {
         handleEvent(event: MouseEvent): void {
-            if (event instanceof MouseEvent && isZoomable(config, event.target)) {
+            if (Image.isZoomableImage(event.target)) {
                 event.preventDefault();
                 event.stopPropagation();
-                clickedZoomable(config, event, listener as EventListener);
+                clickedZoomable(config, event, listener);
             }
         }
-    });
+    };
+
+    document.body.addEventListener('click', listener);
 }
 
 export function listenForZoom(config: Config = DEFAULT_CONFIG): void {

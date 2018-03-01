@@ -1,14 +1,5 @@
-import { Vector } from '../math/Vector';
-
 export function repaint(element: HTMLElement): void {
     element.offsetHeight;
-}
-
-export function clientSize(element: HTMLElement): Vector {
-    return [
-        element.clientWidth,
-        element.clientHeight
-    ];
 }
 
 export function targetDimension(element: HTMLElement, dimension: string): number {
@@ -25,13 +16,6 @@ export function targetDimension(element: HTMLElement, dimension: string): number
             return value;
         }
     }
-}
-
-export function targetSize(element: HTMLElement): Vector {
-    return [
-        targetDimension(element, 'width'),
-        targetDimension(element, 'height')
-    ];
 }
 
 export function resetStyle(element: HTMLElement, property: string): void {

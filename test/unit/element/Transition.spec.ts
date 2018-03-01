@@ -1,5 +1,5 @@
 import * as Element from '../../../lib/element/Element';
-import { ignoreTransitions } from '../../../lib/element/Transition';
+import { ignoreTransitions } from '../../../lib/element/style/Transition';
 
 describe('ignoreTransitions', () => {
     it('should set the transition property to initial before calling the callback', () => {

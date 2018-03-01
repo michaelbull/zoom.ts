@@ -1,11 +1,11 @@
-import { supports3dTransformations } from '../element/Transform';
-import { TRANSITION_END_EVENTS } from '../element/Transition';
+import { supports3dTransformations } from '../element/style/Transform';
+import { TRANSITION_END_EVENTS } from '../element/style/Transition';
 import { vendorProperty } from './Vendor';
 
 export interface Features {
-    readonly transformProperty: string | undefined;
-    readonly transitionProperty: string | undefined;
-    readonly transitionEndEvent: string | undefined;
+    readonly transformProperty?: string;
+    readonly transitionProperty?: string;
+    readonly transitionEndEvent?: string;
 
     readonly hasTransform: boolean;
     readonly hasTransform3d: boolean;

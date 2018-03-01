@@ -1,5 +1,4 @@
-import { clientSize } from '../element/Element';
-import { Vector } from '../math/Vector';
+import { Vector2 } from '../math/Vector2';
 
 export const QUIRKS_MODE = 'BackCompat';
 export const STANDARDS_MODE = 'CSS1Compat';
@@ -12,8 +11,8 @@ export function rootElement(document: Document): HTMLElement {
     return isStandardsMode(document) ? document.documentElement : document.body;
 }
 
-export function viewportSize(document: Document): Vector {
-    return clientSize(rootElement(document));
+export function viewportSize(document: Document): Vector2 {
+    return Vector2.clientSizeOf(rootElement(document));
 }
 
 export function createDiv(className: string): HTMLDivElement {

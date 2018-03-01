@@ -1,4 +1,4 @@
-import { Bounds } from '../../../lib/element/Bounds';
+import { Bounds } from '../../../lib/math/Bounds';
 import {
     centrePadding,
     centrePosition,
@@ -9,33 +9,33 @@ import {
     divideVectors,
     minimizeVectors,
     minimumDivisor,
-    positionFrom,
+    positionOf,
     scaleVector,
     shrinkVector,
-    sizeFrom,
+    sizeOf,
     subtractVectors,
-    Vector
-} from '../../../lib/math/Vector';
+    Vector2
+} from '../../../lib/math/Vector2';
 
-describe('positionFrom', () => {
+describe('positionOf', () => {
     it('should return a vector', () => {
         let rect: any = {
             left: 100,
             top: 50
         };
 
-        expect(positionFrom(rect)).toEqual([100, 50]);
+        expect(positionOf(rect)).toEqual([100, 50]);
     });
 });
 
-describe('sizeFrom', () => {
+describe('sizeOf', () => {
     it('should return a vector', () => {
         let rect: any = {
             width: 200,
             height: 300
         };
 
-        expect(sizeFrom(rect)).toEqual([200, 300]);
+        expect(sizeOf(rect)).toEqual([200, 300]);
     });
 });
 
@@ -87,15 +87,15 @@ describe('minimumDivisor', () => {
 
 describe('centrePadding', () => {
     it('should return the correct amount of padding', () => {
-        let outer: Vector = [500, 400];
-        let inner: Vector = [480, 350];
+        let outer: Vector2 = [500, 400];
+        let inner: Vector2 = [480, 350];
         expect(centrePadding(outer, inner)).toEqual([10, 25]);
     });
 });
 
 describe('centrePosition', () => {
     it('should return the correct position', () => {
-        let outer: Vector = [1920, 1080];
+        let outer: Vector2 = [1920, 1080];
         let bounds: Bounds = {
             position: [300, 200],
             size: [500, 500]
@@ -107,7 +107,7 @@ describe('centrePosition', () => {
 
 describe('centreTranslation', () => {
     it('should return the correct translation', () => {
-        let outer: Vector = [3800, 1900];
+        let outer: Vector2 = [3800, 1900];
         let bounds: Bounds = {
             position: [250, 250],
             size: [1000, 1000]

@@ -6,9 +6,9 @@ import {
     resetBounds,
     setBounds,
     setBoundsPx
-} from '../../../lib/element/Bounds';
+} from '../../../lib/math/Bounds';
 import { centreBounds } from '../../../lib/math/Centre';
-import { Vector } from '../../../lib/math/Vector';
+import { Vector2 } from '../../../lib/math/Vector2';
 
 describe('createBounds', () => {
     it('should construct a Bounds object', () => {
@@ -158,7 +158,7 @@ describe('setBoundsPx', () => {
     });
 });
 
-describe('centreBounds', () => {
+describe('centreOf', () => {
     let actual: Bounds;
 
     beforeAll(() => {
@@ -170,7 +170,7 @@ describe('centreBounds', () => {
             }
         };
 
-        let target: Vector = [1200, 800];
+        let target: Vector2 = [1200, 800];
 
         let bounds: Bounds = {
             position: [300, 50],
