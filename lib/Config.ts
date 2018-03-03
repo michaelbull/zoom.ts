@@ -3,5 +3,5 @@ export interface Config {
 }
 
 export const DEFAULT_CONFIG: Config = {
-    scrollDismissPx: 50,
+    scrollDismissPx: 50
 };

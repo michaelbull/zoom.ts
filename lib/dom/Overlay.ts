@@ -1,4 +1,3 @@
-import { createDiv } from '../browser/Document';
 import { repaint } from '../element/Element';
 
 export class Overlay {
@@ -6,7 +5,8 @@ export class Overlay {
     static readonly VISIBLE_CLASS = 'zoom__overlay--visible';
 
     static create(): Overlay {
-        let element = createDiv(Overlay.CLASS);
+        let element = document.createElement('div');
+        element.className = Overlay.CLASS;
         return new Overlay(element);
     }
 
@@ -22,19 +22,15 @@ export class Overlay {
         this.show();
     }
 
+    removeFrom(node: Node): void {
+        node.removeChild(this.element);
+    }
+
     show(): void {
         this.element.classList.add(Overlay.VISIBLE_CLASS);
     }
 
     hide() {
         this.element.classList.remove(Overlay.VISIBLE_CLASS);
-    }
-
-    add(): void {
-        document.body.appendChild(this.element);
-    }
-
-    remove(): void {
-        document.body.removeChild(this.element);
     }
 }

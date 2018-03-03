@@ -1,3 +1,4 @@
+import { pixels } from '../math/Unit';
 import { Clone } from './Clone';
 import { Container } from './Container';
 import { Image } from './Image';
@@ -5,7 +6,7 @@ import { Overlay } from './Overlay';
 import { Wrapper } from './Wrapper';
 
 export class ZoomDOM {
-    static fromExisting(imageElement: HTMLImageElement): ZoomDOM {
+    static useExisting(imageElement: HTMLImageElement): ZoomDOM {
         let overlay = Overlay.create();
         let container = new Container(imageElement.parentElement as HTMLElement);
         let wrapper = new Wrapper(container.parent());
@@ -19,7 +20,7 @@ export class ZoomDOM {
         }
     }
 
-    static fromFresh(imageElement: HTMLImageElement): ZoomDOM {
+    static setup(imageElement: HTMLImageElement): ZoomDOM {
         let overlay = Overlay.create();
         let container = Container.create();
         let wrapper = new Wrapper(imageElement.parentElement as HTMLElement);
@@ -73,6 +74,10 @@ export class ZoomDOM {
         if (this.clone !== undefined) {
             this.container.element.appendChild(this.clone.element);
         }
+    }
+
+    fixWrapperHeight(): void {
+        this.wrapper.element.style.height = pixels(this.image.element.height);
     }
 
     /**

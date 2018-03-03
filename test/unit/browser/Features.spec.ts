@@ -1,8 +1,8 @@
-import { detectFeatures } from '../../../lib/browser/Features';
+import { detectFeaturesOf } from '../../../lib/browser/Features';
 import * as Vendor from '../../../lib/browser/Vendor';
-import * as Transform from '../../../lib/element/style/Transform';
+import * as Transform from '../../../lib/element/Transform';
 
-describe('detectFeatures', () => {
+describe('detectFeaturesOf', () => {
     describe('transformProperty', () => {
         it('should be the transform vendor property', () => {
             spyOn(Vendor, 'vendorProperty').and.callFake((style: CSSStyleDeclaration, property: string): string | undefined => {
@@ -11,7 +11,7 @@ describe('detectFeatures', () => {
                 }
             });
 
-            expect(detectFeatures().transformProperty).toBe('WebkitTransform');
+            expect(detectFeaturesOf().transformProperty).toBe('WebkitTransform');
         });
     });
 
@@ -23,7 +23,7 @@ describe('detectFeatures', () => {
                 }
             });
 
-            expect(detectFeatures().transitionProperty).toBe('MozTransition');
+            expect(detectFeaturesOf().transitionProperty).toBe('MozTransition');
         });
     });
 
@@ -35,7 +35,7 @@ describe('detectFeatures', () => {
                 }
             });
 
-            expect(detectFeatures().transitionProperty).toBe('MozTransition');
+            expect(detectFeaturesOf().transitionProperty).toBe('MozTransition');
         });
     });
 
@@ -47,7 +47,7 @@ describe('detectFeatures', () => {
                 }
             });
 
-            expect(detectFeatures().transitionEndEvent).toBe('MSTransitionEnd');
+            expect(detectFeaturesOf().transitionEndEvent).toBe('MSTransitionEnd');
         });
 
         it('should be undefined if the transition vendor property is undefined', () => {
@@ -57,14 +57,14 @@ describe('detectFeatures', () => {
                 }
             });
 
-            expect(detectFeatures().transitionEndEvent).toBeUndefined();
+            expect(detectFeaturesOf().transitionEndEvent).toBeUndefined();
         });
     });
 
     describe('hasTransform', () => {
         it('should be false if the transform vendor property is undefined', () => {
             spyOn(Vendor, 'vendorProperty').and.returnValue(undefined);
-            expect(detectFeatures().hasTransform).toBe(false);
+            expect(detectFeaturesOf().hasTransform).toBe(false);
         });
 
         it('should be true if the transform vendor property is defined', () => {
@@ -74,14 +74,14 @@ describe('detectFeatures', () => {
                 }
             });
 
-            expect(detectFeatures().hasTransform).toBe(true);
+            expect(detectFeaturesOf().hasTransform).toBe(true);
         });
     });
 
     describe('hasTransform3d', () => {
         it('should be false if the transform vendor property is undefined', () => {
             spyOn(Vendor, 'vendorProperty').and.returnValue(undefined);
-            expect(detectFeatures().hasTransform3d).toBe(false);
+            expect(detectFeaturesOf().hasTransform3d).toBe(false);
         });
 
         it('should be false if the transform vendor property is defined and supports3dTransformations returns false', () => {
@@ -92,7 +92,7 @@ describe('detectFeatures', () => {
             });
             spyOn(Transform, 'supports3dTransformations').and.returnValue(false);
 
-            expect(detectFeatures().hasTransform3d).toBe(false);
+            expect(detectFeaturesOf().hasTransform3d).toBe(false);
         });
 
         it('should be true if the transform vendor property is defined and supports3dTransformations returns true', () => {
@@ -103,7 +103,7 @@ describe('detectFeatures', () => {
             });
             spyOn(Transform, 'supports3dTransformations').and.returnValue(true);
 
-            expect(detectFeatures().hasTransform3d).toBe(true);
+            expect(detectFeaturesOf().hasTransform3d).toBe(true);
         });
     });
 
@@ -115,7 +115,7 @@ describe('detectFeatures', () => {
                 }
             });
 
-            expect(detectFeatures().hasTransitions).toBe(false);
+            expect(detectFeaturesOf().hasTransitions).toBe(false);
         });
 
         it('should be false if the transition vendor property has no corresponding end event', () => {
@@ -125,7 +125,7 @@ describe('detectFeatures', () => {
                 }
             });
 
-            expect(detectFeatures().hasTransitions).toBe(false);
+            expect(detectFeaturesOf().hasTransitions).toBe(false);
         });
 
         it('should be true if there is a corresponding end event to the transition vendor property', () => {
@@ -135,7 +135,7 @@ describe('detectFeatures', () => {
                 }
             });
 
-            expect(detectFeatures().hasTransitions).toBe(true);
+            expect(detectFeaturesOf().hasTransitions).toBe(true);
         });
     });
 });

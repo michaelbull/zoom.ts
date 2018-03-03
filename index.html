@@ -8,18 +8,140 @@
 
     <link rel="shortcut icon" href="img/favicon.ico">
     <link rel="stylesheet" href="dist/zoom.css">
-    <script type="text/javascript" src="dist/zoom.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|PT+Serif:400,400i" rel="stylesheet">
 
+    <script type="text/javascript" src="dist/zoom.js"></script>
+    <script>
+      window.zoom.listen();
+    </script>
+
     <style>
+      html {
+        -ms-text-size-adjust: 100%;
+        -webkit-text-size-adjust: 100%;
+      }
+
       body {
         margin: 0;
         padding-bottom: 8rem;
+
+        font-family: 'Open Sans', sans-serif;
+        font-size: 20px;
+        line-height: 1.4;
+        color: rgba(0, 0, 0, 0.84);
+
+        mix-blend-mode: exclusion; /* prevents the body text from antialiasing with non-greyscale colours */
+
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        -moz-font-feature-settings: "liga" on;
+      }
+
+      h1, h2 {
+        margin: 0;
+        font-weight: 600;
+      }
+
+      h1 {
+        margin-top: 39px;
+        margin-left: -2.63px;
+
+        padding-top: 5px;
+
+        font-size: 34px;
+        line-height: 1.28;
+        letter-spacing: -0.015em;
+      }
+
+      h2 {
+        margin-top: 39px;
+        margin-left: -1.63px;
+
+        font-size: 21px;
+        line-height: 1.51;
+        letter-spacing: -0.012em;
+      }
+
+      h1:first-child,
+      h2:first-child {
+        margin-top: 0;
+      }
+
+      p {
+        margin-top: 38px;
+        margin-bottom: 0;
+
         font-family: 'PT Serif', serif;
-        font-size: 1.25rem;
+        font-size: 20px;
         line-height: 1.659;
-        letter-spacing: 0.0125em;
-        color: rgba(0, 0, 0, 0.8);
+      }
+
+      h1 + p {
+        margin-top: 10px;
+      }
+
+      h2 + p {
+        margin-top: 6px;
+      }
+
+      p + h2 {
+        margin-top: 30px;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 50%, rgba(0, 0, 0, 0) 50%);
+        background-repeat: repeat-x;
+        background-size: 2px 0.1em;
+        background-position: 0 1.25em;
+      }
+
+      figure {
+        margin: 52px auto 5px;
+        padding: 5px 0;
+        max-width: 1000px;
+        text-align: center;
+      }
+
+      figcaption {
+        margin: 10px auto 0;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 15px;
+        line-height: 1.49;
+        color: rgba(0, 0, 0, 0.68);
+      }
+
+      hr {
+        -webkit-box-sizing: content-box;
+        box-sizing: content-box;
+        height: 0;
+
+        display: block;
+        border: 0;
+        text-align: center;
+        overflow: visible;
+
+        margin-top: 52px;
+        margin-bottom: 42px;
+      }
+
+      hr::before {
+        display: inline-block;
+
+        position: relative;
+        top: -30px;
+
+        margin-left: 18px;
+
+        content: '...';
+        font-weight: 400;
+        font-size: 26px;
+        line-height: 1.62;
+        letter-spacing: 0.69em;
+
+        color: rgba(0,0,0,.68);
       }
 
       .logo {
@@ -33,84 +155,18 @@
 
       .column {
         box-sizing: border-box;
-        margin: 0 auto;
+
+        margin: 52px auto 0;
+
         padding-left: 20px;
         padding-right: 20px;
+
         width: 100%;
         max-width: 740px;
       }
 
-      p {
+      .column:first-of-type {
         margin-top: 0;
-        margin-bottom: 2rem;
-        max-width: 700px;
-      }
-
-      h1, h2 {
-        margin-top: 1.75em;
-        margin-bottom: 0.35em;
-
-        max-width: 700px;
-        font-family: 'Open Sans', sans-serif;
-        font-weight: 700;
-        line-height: 1.04;
-      }
-
-      h1 {
-        margin-left: -2.5px;
-        font-size: 2.25rem;
-        letter-spacing: -0.05em;
-      }
-
-      h2 {
-        margin-left: -1.5px;
-        font-size: 1.3125rem;
-        letter-spacing: -0.022em;
-      }
-
-      a {
-        color: inherit;
-        text-decoration: none;
-        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 50%, rgba(0, 0, 0, 0) 50%);
-        background-repeat: repeat-x;
-        background-size: 2px 0.1em;
-        background-position: 0 1.25em;
-      }
-
-      figure {
-        margin: 3.25rem auto;
-        max-width: 1000px;
-        text-align: center;
-      }
-
-      figcaption a {
-        font-family: 'Open Sans', sans-serif;
-        font-size: 0.75rem;
-        color: rgba(0, 0, 0, 0.6);
-      }
-
-      hr {
-        display: block;
-        box-sizing: content-box;
-        margin-top: 60px;
-        margin-bottom: 34px;
-        border: 0;
-        height: 0;
-        text-align: center;
-      }
-
-      hr::before {
-        display: inline-block;
-        position: relative;
-        top: -30px;
-        margin-left: 0.6em;
-
-        font-family: 'Open Sans', sans-serif;
-        font-weight: 400;
-        font-size: 1.25rem;
-        letter-spacing: 0.875em;
-        color: rgba(0, 0, 0, 0.6);
-        content: '...';
       }
 
       .pull-left, .pull-right {
@@ -128,27 +184,50 @@
       }
 
       @media (max-width: 767px) {
-        body {
-          font-size: 1.125rem;
-          line-height: 1.5;
-          letter-spacing: 0;
+        h1 {
+          margin-top: 31px;
+          margin-left: -2.130px;
+
+          font-size: 28px;
+          line-height: 1.26;
+        }
+
+        h2 {
+          margin-top: 31px;
+          margin-left: -1.5px;
+
+          font-size: 20px;
+          line-height: 1.46;
+        }
+
+        p {
+          margin-top: 30px;
+
+          font-size: 17px;
+          line-height: 1.67;
+        }
+
+        p + h2 {
+          margin-top: 22px;
         }
 
         figure {
+          margin-top: 44px;
           margin-left: 0;
           margin-right: 0;
           max-width: none;
         }
 
-        h1 {
-          font-size: 1.75rem;
-          margin-left: -2px;
-          letter-spacing: -0.028em;
+        hr {
+          margin-top: 44px;
+          margin-bottom: 34px;
+
+          font-size: 24px;
+          line-height: 1.4;
         }
 
-        h2 {
-          margin-left: -1.38px;
-          font-size: 1.25rem;
+        .column {
+          margin-top: 44px;
         }
       }
 
@@ -169,7 +248,7 @@
 
       <div class="column">
         <h1>Image zoom</h1>
-        <p><strong>zoom.ts</strong> is a a lightweight TypeScript library for image zooming, as seen on <a href="https://medium.design/image-zoom-on-medium-24d146fc0c20" target="_blank">Medium</a>. It easily plugs into your application and starts listening to zoom events as soon as the DOM is ready. The library accounts for just 5kB of bandwidth once gzipped and requires no third-party libraries.</p>
+        <p><strong>zoom.ts</strong> is a lightweight TypeScript library for image zooming, as seen on <a href="https://medium.design/image-zoom-on-medium-24d146fc0c20" target="_blank">Medium</a>. It easily plugs into your application and starts listening to zoom events as soon as the DOM is ready.</p>
 
         <h2>Click to zoom</h2>
         <p>A click will start a seamless animation into an immersive, full-screen view. Holding either the <kbd>⌘</kbd> or <kbd>Ctrl</kbd> key will open the image in a new tab when clicked.</p>

@@ -18,14 +18,24 @@ export function targetDimension(element: HTMLElement, dimension: string): number
     }
 }
 
-export function resetStyle(element: HTMLElement, property: string): void {
-    (element.style as any)[property] = '';
+export function resetStyle(style: CSSStyleDeclaration, property: string): void {
+    (style as any)[property] = '';
 }
 
-export function hasParent(element: HTMLElement): boolean {
-    return element.parentElement !== null;
+export function setBounds(style: CSSStyleDeclaration, x: string, y: string, width: string, height: string): void {
+    style.left = x;
+    style.top = y;
+    style.width = width;
+    style.maxWidth = width;
+    style.height = height;
 }
 
-export function hasGrandParent(element: HTMLElement): boolean {
-    return hasParent(element) && hasParent(element.parentElement as HTMLElement);
+export function parsePadding(style: CSSStyleDeclaration, direction: string): number {
+    let parsed = parseFloat(style.getPropertyValue(`padding-${direction}`));
+
+    if (isNaN(parsed)) {
+        return 0;
+    } else {
+        return parsed;
+    }
 }

@@ -7,8 +7,11 @@
  */
 
 (function(l, i, v, e) { v = l.createElement(i); v.async = 1; v.src = '//' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; e = l.getElementsByTagName(i)[0]; e.parentNode.insertBefore(v, e)})(document, 'script');
-(function () {
-'use strict';
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(factory((global.zoom = {})));
+}(this, (function (exports) { 'use strict';
 
 function repaint(element) {
     element.offsetHeight;
@@ -28,14 +31,24 @@ function targetDimension(element, dimension) {
         }
     }
 }
-function resetStyle(element, property) {
-    element.style[property] = '';
+function resetStyle(style, property) {
+    style[property] = '';
 }
-function hasParent(element) {
-    return element.parentElement !== null;
+function setBounds(style, x, y, width, height) {
+    style.left = x;
+    style.top = y;
+    style.width = width;
+    style.maxWidth = width;
+    style.height = height;
 }
-function hasGrandParent(element) {
-    return hasParent(element) && hasParent(element.parentElement);
+function parsePadding(style, direction) {
+    var parsed = parseFloat(style.getPropertyValue("padding-" + direction));
+    if (isNaN(parsed)) {
+        return 0;
+    }
+    else {
+        return parsed;
+    }
 }
 
 var Vector2 = /** @class */ (function () {
@@ -67,12 +80,12 @@ var Vector2 = /** @class */ (function () {
     Vector2.prototype.shrink = function (other) {
         return new Vector2(this.x / other.x, this.y / other.y);
     };
-    Vector2.min = function (left, right) {
-        return new Vector2(Math.min(left.x, right.x), Math.min(left.y, right.y));
-    };
     Vector2.prototype.minDivisor = function (other) {
         var scaled = this.shrink(other);
         return Math.min(scaled.x, scaled.y);
+    };
+    Vector2.min = function (left, right) {
+        return new Vector2(Math.min(left.x, right.x), Math.min(left.y, right.y));
     };
     Vector2.halfMidpoint = function (left, right) {
         var midpoint = right.subtract(left);
@@ -97,10 +110,24 @@ function rootElement(document) {
 function viewportSize(document) {
     return Vector2.clientSizeOf(rootElement(document));
 }
-function createDiv(className) {
-    var overlay = document.createElement('div');
-    overlay.className = className;
-    return overlay;
+/**
+ * Executes a callback function when a document has finished loading, or immediately if the document has already
+ * finished loading.
+ * @param document The document.
+ * @param callback The function to execute.
+ * @see http://youmightnotneedjquery.com/#ready
+ */
+function ready(document, callback) {
+    if (document.readyState === 'complete') {
+        callback.call(document);
+    }
+    else {
+        var listener_1 = function () {
+            document.removeEventListener('DOMContentLoaded', listener_1);
+            callback.call(document);
+        };
+        document.addEventListener('DOMContentLoaded', listener_1);
+    }
 }
 
 var VENDOR_PREFIXES = [
@@ -127,48 +154,6 @@ function pixels(amount) {
     return amount + "px";
 }
 
-var Bounds = /** @class */ (function () {
-    function Bounds(position, size) {
-        this.position = position;
-        this.size = size;
-    }
-    Bounds.of = function (element) {
-        var rect = element.getBoundingClientRect();
-        var position = Vector2.fromPosition(rect);
-        var size = Vector2.fromSize(rect);
-        return new Bounds(position, size);
-    };
-    Bounds.centreOffset = function (vector, bounds) {
-        var halfMidpoint = Vector2.halfMidpoint(bounds.size, vector);
-        return halfMidpoint.subtract(bounds.position);
-    };
-    Bounds.centreTranslation = function (outer, bounds, innerScale) {
-        var scaled = bounds.size.multiply(innerScale);
-        var centredWithinScaled = bounds.position.add(Vector2.halfMidpoint(scaled, bounds.size));
-        var centeredWithinOuter = this.centreOffset(outer, new Bounds(centredWithinScaled, scaled));
-        return centeredWithinOuter.divide(innerScale);
-    };
-    Bounds.centreOf = function (document, target, bounds) {
-        var viewport = viewportSize(document);
-        var cappedTarget = Vector2.min(viewport, target);
-        var factor = cappedTarget.minDivisor(bounds.size);
-        var scaled = bounds.size.multiply(factor);
-        var centre = this.centreOffset(viewport, new Bounds(bounds.position, scaled));
-        return new Bounds(centre, scaled);
-    };
-    Bounds.prototype.applyTo = function (style) {
-        setBounds(style, pixels(this.position.x), pixels(this.position.y), pixels(this.size.x), pixels(this.size.y));
-    };
-    return Bounds;
-}());
-function setBounds(style, x, y, width, height) {
-    style.left = x;
-    style.top = y;
-    style.width = width;
-    style.maxWidth = width;
-    style.height = height;
-}
-
 function translate(translation) {
     var x = translation.x, y = translation.y;
     return "translate(" + x + "px, " + y + "px)";
@@ -182,22 +167,6 @@ function scale(amount) {
 }
 function scale3d(amount) {
     return "scale3d(" + amount + ", " + amount + ", 1)";
-}
-function scaleTranslate(transformation) {
-    return scale(transformation.scale) + " " + translate(transformation.translation);
-}
-function scaleTranslate3d(transformation) {
-    return scale3d(transformation.scale) + " " + translate3d(transformation.translation);
-}
-function centreTransformation(target, bounds) {
-    var viewport = viewportSize(document);
-    var cappedTarget = Vector2.min(viewport, target);
-    var scale = cappedTarget.minDivisor(bounds.size);
-    var translation = Bounds.centreTranslation(viewport, bounds, scale);
-    return {
-        scale: scale,
-        translation: translation
-    };
 }
 function supports3dTransformations(style) {
     var perspectiveProperty = vendorProperty(style, 'perspective');
@@ -251,109 +220,108 @@ function ignoreTransitions(element, transitionProperty, callback) {
     style[transitionProperty] = 'initial';
     callback();
     repaint(element);
-    resetStyle(element, transitionProperty);
+    resetStyle(style, transitionProperty);
 }
 
-function detectFeatures() {
-    var style = document.body.style;
-    var transformProperty = vendorProperty(style, 'transform');
-    var transitionProperty = vendorProperty(style, 'transition');
-    var transitionEndEvent;
-    var hasTransform = false;
-    if (transformProperty !== undefined) {
-        hasTransform = true;
+var Features = /** @class */ (function () {
+    function Features(hasTransform, hasTransform3d, hasTransitions, transformProperty, transitionProperty, transitionEndEvent) {
+        this.hasTransform = hasTransform;
+        this.hasTransform3d = hasTransform3d;
+        this.hasTransitions = hasTransitions;
+        this.transformProperty = transformProperty;
+        this.transitionProperty = transitionProperty;
+        this.transitionEndEvent = transitionEndEvent;
     }
-    var hasTransitions = false;
-    if (transitionProperty !== undefined) {
-        transitionEndEvent = TRANSITION_END_EVENTS[transitionProperty];
-        hasTransitions = transitionEndEvent !== undefined;
-    }
-    var hasTransform3d = false;
-    if (transformProperty !== undefined) {
-        hasTransform3d = supports3dTransformations(document.body.style);
-    }
-    return {
-        transformProperty: transformProperty,
-        transitionProperty: transitionProperty,
-        transitionEndEvent: transitionEndEvent,
-        hasTransform: hasTransform,
-        hasTransform3d: hasTransform3d,
-        hasTransitions: hasTransitions
+    Features.of = function (style) {
+        var transformProperty = vendorProperty(style, 'transform');
+        var transitionProperty = vendorProperty(style, 'transition');
+        var transitionEndEvent;
+        var hasTransform = false;
+        if (transformProperty !== undefined) {
+            hasTransform = true;
+        }
+        var hasTransitions = false;
+        if (transitionProperty !== undefined) {
+            transitionEndEvent = TRANSITION_END_EVENTS[transitionProperty];
+            hasTransitions = transitionEndEvent !== undefined;
+        }
+        var hasTransform3d = false;
+        if (transformProperty !== undefined) {
+            hasTransform3d = supports3dTransformations(document.body.style);
+        }
+        return new Features(hasTransform, hasTransform3d, hasTransitions, transformProperty, transitionProperty, transitionEndEvent);
     };
-}
+    return Features;
+}());
 
 var DEFAULT_CONFIG = {
-    scrollDismissPx: 50,
+    scrollDismissPx: 50
 };
 
-/**
- * Calculates the number of pixels in the document have been scrolled past vertically.
- * @returns {number} The number of pixels in the document have been scrolled past vertically.
- * @see https://developer.mozilla.org/en-US/docs/Web/API/Window/scrollY#Notes
- */
-function pageScrollY(context) {
-    if (context === void 0) { context = window; }
-    if (context.pageYOffset === undefined) {
-        return rootElement(context.document).scrollTop;
+var Bounds = /** @class */ (function () {
+    function Bounds(position, size) {
+        this.position = position;
+        this.size = size;
     }
-    else {
-        return context.pageYOffset;
-    }
-}
+    Bounds.of = function (element) {
+        var rect = element.getBoundingClientRect();
+        var position = Vector2.fromPosition(rect);
+        var size = Vector2.fromSize(rect);
+        return new Bounds(position, size);
+    };
+    Bounds.centreOffset = function (vector, bounds) {
+        var halfMidpoint = Vector2.halfMidpoint(bounds.size, vector);
+        return halfMidpoint.subtract(bounds.position);
+    };
+    Bounds.centreTranslation = function (outer, bounds, innerScale) {
+        var scaled = bounds.size.multiply(innerScale);
+        var centredWithinScaled = bounds.position.add(Vector2.halfMidpoint(scaled, bounds.size));
+        var centeredWithinOuter = this.centreOffset(outer, new Bounds(centredWithinScaled, scaled));
+        return centeredWithinOuter.divide(innerScale);
+    };
+    Bounds.centreOf = function (document, target, bounds) {
+        var viewport = viewportSize(document);
+        var cappedTarget = Vector2.min(viewport, target);
+        var factor = cappedTarget.minDivisor(bounds.size);
+        var scaled = bounds.size.multiply(factor);
+        var centre = this.centreOffset(viewport, new Bounds(bounds.position, scaled));
+        return new Bounds(centre, scaled);
+    };
+    Bounds.prototype.applyTo = function (style) {
+        setBounds(style, pixels(this.position.x), pixels(this.position.y), pixels(this.size.x), pixels(this.size.y));
+    };
+    return Bounds;
+}());
 
-var ESCAPE_KEY_CODE = 27;
-function escKeyPressed(target, listener) {
-    return {
-        handleEvent: function (event) {
-            if (event.keyCode === ESCAPE_KEY_CODE) {
-                event.preventDefault();
-                event.stopPropagation();
-                fireEventListener(target, listener, event);
-            }
-        }
+var ScaleAndTranslate = /** @class */ (function () {
+    function ScaleAndTranslate(scale$$1, translation) {
+        this.scale = scale$$1;
+        this.translation = translation;
+    }
+    ScaleAndTranslate.centreOf = function (target, bounds) {
+        var viewport = viewportSize(document);
+        var cappedTarget = Vector2.min(viewport, target);
+        var scale$$1 = cappedTarget.minDivisor(bounds.size);
+        var translation = Bounds.centreTranslation(viewport, bounds, scale$$1);
+        return new ScaleAndTranslate(scale$$1, translation);
     };
-}
-function scrolled(target, start, minAmount, current, listener) {
-    return function (event) {
-        if (Math.abs(start - current()) >= minAmount) {
-            fireEventListener(target, listener, event);
-        }
+    ScaleAndTranslate.prototype.toString2d = function () {
+        return scale(this.scale) + " " + translate(this.translation);
     };
-}
-/**
- * Executes a callback function when a document has finished loading, or immediately if the document has already
- * finished loading.
- * @param document The document.
- * @param listener The function to execute.
- * @see http://youmightnotneedjquery.com/#ready
- */
-function ready(document, listener) {
-    if (document.readyState === 'complete') {
-        fireEventListener(document, listener, undefined);
-    }
-    else {
-        document.addEventListener('DOMContentLoaded', listener);
-    }
-}
-function fireEventListener(target, listener, event) {
-    if (typeof listener === 'function') {
-        listener.call(target, event);
-    }
-    else {
-        listener.handleEvent(event);
-    }
-}
+    ScaleAndTranslate.prototype.toString3d = function () {
+        return scale3d(this.scale) + " " + translate3d(this.translation);
+    };
+    return ScaleAndTranslate;
+}());
 
 var Container = /** @class */ (function () {
     function Container(element) {
         this.element = element;
     }
     Container.create = function () {
-        var element = createDiv(Container.CLASS);
+        var element = document.createElement('div');
+        element.className = Container.CLASS;
         return new Container(element);
-    };
-    Container.isContainer = function (element) {
-        return element.classList.contains(Container.CLASS);
     };
     Container.prototype.parent = function () {
         return this.element.parentElement;
@@ -368,32 +336,18 @@ var Container = /** @class */ (function () {
         setBounds(this.element.style, '', '', '', '');
     };
     Container.prototype.fillViewport = function (features, target, bounds) {
-        var transform = centreTransformation(target, bounds);
+        var transform = ScaleAndTranslate.centreOf(target, bounds);
         var transformProperty = features.transformProperty;
         var style = this.element.style;
         if (features.hasTransform3d) {
-            style[transformProperty] = scaleTranslate3d(transform);
+            style[transformProperty] = transform.toString3d();
         }
         else {
-            style[transformProperty] = scaleTranslate(transform);
+            style[transformProperty] = transform.toString2d();
         }
     };
     Container.prototype.resetStyle = function (property) {
-        resetStyle(this.element, property);
-    };
-    Container.prototype.addDismissListeners = function (config, collapseListener) {
-        var _this = this;
-        var initialScrollY = pageScrollY();
-        var escListener = escKeyPressed(document, collapseListener);
-        var scrollListener = scrolled(window, initialScrollY, config.scrollDismissPx, pageScrollY, collapseListener);
-        window.addEventListener('scroll', scrollListener);
-        document.addEventListener('keyup', escListener);
-        this.element.addEventListener('click', collapseListener);
-        return function () {
-            window.removeEventListener('scroll', scrollListener);
-            document.removeEventListener('keyup', escListener);
-            _this.element.removeEventListener('click', collapseListener);
-        };
+        resetStyle(this.element.style, property);
     };
     Container.CLASS = 'zoom__container';
     return Container;
@@ -403,12 +357,6 @@ var Image = /** @class */ (function () {
     function Image(element) {
         this.element = element;
     }
-    Image.isZoomableImage = function (target) {
-        return target instanceof HTMLImageElement
-            && hasParent(target)
-            && hasGrandParent(target)
-            && target.classList.contains(this.CLASS);
-    };
     Image.prototype.bounds = function () {
         return Bounds.of(this.element);
     };
@@ -421,18 +369,11 @@ var Image = /** @class */ (function () {
     Image.prototype.isHidden = function () {
         return this.element.classList.contains(Image.HIDDEN_CLASS);
     };
-    Image.prototype.replaceClone = function (clone) {
-        this.show();
-        clone.hide();
-    };
     Image.prototype.activate = function () {
         this.element.classList.add(Image.ACTIVE_CLASS);
     };
     Image.prototype.deactivate = function () {
         this.element.classList.remove(Image.ACTIVE_CLASS);
-    };
-    Image.prototype.height = function () {
-        return this.element.height;
     };
     Image.CLASS = 'zoom__element';
     Image.HIDDEN_CLASS = 'zoom__element--hidden';
@@ -448,6 +389,69 @@ function fullSrc(wrapper, image) {
         return fullSrc;
     }
 }
+
+var Wrapper = /** @class */ (function () {
+    function Wrapper(element) {
+        this.element = element;
+    }
+    Wrapper.prototype.startExpanding = function () {
+        this.element.classList.add(Wrapper.EXPANDING_CLASS);
+    };
+    Wrapper.prototype.isExpanding = function () {
+        return this.element.classList.contains(Wrapper.EXPANDING_CLASS);
+    };
+    Wrapper.prototype.finishExpanding = function () {
+        this.element.classList.remove(Wrapper.EXPANDING_CLASS);
+    };
+    Wrapper.prototype.startCollapsing = function () {
+        this.element.classList.add(Wrapper.COLLAPSING_CLASS);
+    };
+    Wrapper.prototype.isCollapsing = function () {
+        return this.element.classList.contains(Wrapper.COLLAPSING_CLASS);
+    };
+    Wrapper.prototype.finishCollapsing = function () {
+        this.element.classList.remove(Wrapper.COLLAPSING_CLASS);
+        resetStyle(this.element.style, 'height');
+    };
+    Wrapper.prototype.isTransitioning = function () {
+        return this.isExpanding() || this.isCollapsing();
+    };
+    Wrapper.prototype.collapsed = function () {
+        this.element.classList.remove(Wrapper.EXPANDED_CLASS);
+    };
+    Wrapper.prototype.expanded = function () {
+        this.element.classList.add(Wrapper.EXPANDED_CLASS);
+    };
+    Wrapper.prototype.isExpanded = function () {
+        return this.element.classList.contains(Wrapper.EXPANDED_CLASS);
+    };
+    Wrapper.prototype.srcOf = function (image) {
+        var fullSrc = this.element.getAttribute('data-src');
+        if (fullSrc === null) {
+            return image.src;
+        }
+        else {
+            return fullSrc;
+        }
+    };
+    Wrapper.prototype.position = function () {
+        var rect = this.element.getBoundingClientRect();
+        var style = getComputedStyle(this.element);
+        // if the wrapper has an explicit padding in the normal page flow,
+        // we must disregard it when calculating the wrapper's true position
+        var paddingTop = parsePadding(style, 'top');
+        var paddingLeft = parsePadding(style, 'left');
+        return new Vector2(rect.left + paddingLeft, rect.top + paddingTop);
+    };
+    Wrapper.prototype.targetSize = function () {
+        return Vector2.targetSizeOf(this.element);
+    };
+    Wrapper.CLASS = 'zoom';
+    Wrapper.EXPANDING_CLASS = 'zoom--expanding';
+    Wrapper.EXPANDED_CLASS = 'zoom--expanded';
+    Wrapper.COLLAPSING_CLASS = 'zoom--collapsing';
+    return Wrapper;
+}());
 
 var Clone = /** @class */ (function () {
     function Clone(element) {
@@ -492,7 +496,8 @@ var Overlay = /** @class */ (function () {
         this.element = element;
     }
     Overlay.create = function () {
-        var element = createDiv(Overlay.CLASS);
+        var element = document.createElement('div');
+        element.className = Overlay.CLASS;
         return new Overlay(element);
     };
     Overlay.prototype.appendTo = function (node) {
@@ -500,82 +505,18 @@ var Overlay = /** @class */ (function () {
         repaint(this.element);
         this.show();
     };
+    Overlay.prototype.removeFrom = function (node) {
+        node.removeChild(this.element);
+    };
     Overlay.prototype.show = function () {
         this.element.classList.add(Overlay.VISIBLE_CLASS);
     };
     Overlay.prototype.hide = function () {
         this.element.classList.remove(Overlay.VISIBLE_CLASS);
     };
-    Overlay.prototype.add = function () {
-        document.body.appendChild(this.element);
-    };
-    Overlay.prototype.remove = function () {
-        document.body.removeChild(this.element);
-    };
     Overlay.CLASS = 'zoom__overlay';
     Overlay.VISIBLE_CLASS = 'zoom__overlay--visible';
     return Overlay;
-}());
-
-var Wrapper = /** @class */ (function () {
-    function Wrapper(element) {
-        this.element = element;
-    }
-    Wrapper.prototype.startExpanding = function () {
-        this.element.classList.add(Wrapper.EXPANDING_CLASS);
-    };
-    Wrapper.prototype.isExpanding = function () {
-        return this.element.classList.contains(Wrapper.EXPANDING_CLASS);
-    };
-    Wrapper.prototype.finishExpanding = function () {
-        this.element.classList.remove(Wrapper.EXPANDING_CLASS);
-    };
-    Wrapper.prototype.startCollapsing = function () {
-        this.element.classList.add(Wrapper.COLLAPSING_CLASS);
-    };
-    Wrapper.prototype.isCollapsing = function () {
-        return this.element.classList.contains(Wrapper.COLLAPSING_CLASS);
-    };
-    Wrapper.prototype.finishCollapsing = function () {
-        this.element.classList.remove(Wrapper.COLLAPSING_CLASS);
-        resetStyle(this.element, 'height');
-    };
-    Wrapper.prototype.isTransitioning = function () {
-        return this.isExpanding() || this.isCollapsing();
-    };
-    Wrapper.prototype.collapsed = function () {
-        this.element.classList.remove(Wrapper.EXPANDED_CLASS);
-    };
-    Wrapper.prototype.expanded = function () {
-        this.element.classList.add(Wrapper.EXPANDED_CLASS);
-    };
-    Wrapper.prototype.isExpanded = function () {
-        return this.element.classList.contains(Wrapper.EXPANDED_CLASS);
-    };
-    Wrapper.prototype.srcOf = function (image) {
-        var fullSrc = this.element.getAttribute('data-src');
-        if (fullSrc === null) {
-            return image.src;
-        }
-        else {
-            return fullSrc;
-        }
-    };
-    Wrapper.prototype.position = function () {
-        var rect = this.element.getBoundingClientRect();
-        return Vector2.fromPosition(rect);
-    };
-    Wrapper.prototype.fixHeightTo = function (image) {
-        this.element.style.height = pixels(image.height());
-    };
-    Wrapper.prototype.targetSize = function () {
-        return Vector2.targetSizeOf(this.element);
-    };
-    Wrapper.CLASS = 'zoom';
-    Wrapper.EXPANDING_CLASS = 'zoom--expanding';
-    Wrapper.EXPANDED_CLASS = 'zoom--expanded';
-    Wrapper.COLLAPSING_CLASS = 'zoom--collapsing';
-    return Wrapper;
 }());
 
 var ZoomDOM = /** @class */ (function () {
@@ -586,7 +527,7 @@ var ZoomDOM = /** @class */ (function () {
         this.image = image;
         this.clone = clone;
     }
-    ZoomDOM.fromExisting = function (imageElement) {
+    ZoomDOM.useExisting = function (imageElement) {
         var overlay = Overlay.create();
         var container = new Container(imageElement.parentElement);
         var wrapper = new Wrapper(container.parent());
@@ -599,7 +540,7 @@ var ZoomDOM = /** @class */ (function () {
             return new ZoomDOM(overlay, wrapper, container, image, new Clone(container.clone()));
         }
     };
-    ZoomDOM.fromFresh = function (imageElement) {
+    ZoomDOM.setup = function (imageElement) {
         var overlay = Overlay.create();
         var container = Container.create();
         var wrapper = new Wrapper(imageElement.parentElement);
@@ -634,6 +575,9 @@ var ZoomDOM = /** @class */ (function () {
         if (this.clone !== undefined) {
             this.container.element.appendChild(this.clone.element);
         }
+    };
+    ZoomDOM.prototype.fixWrapperHeight = function () {
+        this.wrapper.element.style.height = pixels(this.image.element.height);
     };
     /**
      * Creates an {@link EventListener] that is called when the clone's 'load' event has fired. It checks to see if the
@@ -672,162 +616,285 @@ var ZoomDOM = /** @class */ (function () {
     return ZoomDOM;
 }());
 
-function collapsed(config, elements) {
-    elements.replaceCloneWithImage();
-    elements.overlay.remove();
-    elements.image.deactivate();
-    elements.wrapper.finishCollapsing();
-    setTimeout(function () { return addZoomListener(config); }, 1);
-}
 /**
- * Zoom with no transition.
+ * Calculates the number of pixels in the document have been scrolled past vertically.
+ * @returns {number} The number of pixels in the document have been scrolled past vertically.
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Window/scrollY#Notes
  */
-function zoomInstant(config, elements, target, showCloneListener) {
-    var bounds = elements.image.bounds();
-    var resizedListener = function () {
-        var wrapperPosition = elements.wrapper.position();
-        bounds = new Bounds(wrapperPosition, bounds.size);
-        elements.container.setBounds(Bounds.centreOf(document, target, bounds));
-    };
-    var removeDismissListeners;
-    var collapseListener = function () {
-        removeDismissListeners();
-        window.removeEventListener('resize', resizedListener);
-        elements.removeCloneLoadedListener(showCloneListener);
-        elements.wrapper.collapsed();
-        elements.container.resetBounds();
-        collapsed(config, elements);
-    };
-    removeDismissListeners = elements.container.addDismissListeners(config, collapseListener);
-    elements.overlay.appendTo(document.body);
-    elements.wrapper.expanded();
-    elements.wrapper.fixHeightTo(elements.image);
-    elements.image.activate();
-    elements.container.setBounds(Bounds.centreOf(document, target, bounds));
-    window.addEventListener('resize', resizedListener);
-}
-/**
- * Zoom with transition.
- */
-function zoomTransition(config, elements, target, showCloneListener, features) {
-    var bounds = elements.image.bounds();
-    var transitionEnd = features.transitionEndEvent;
-    var transitionProperty = features.transitionProperty;
-    var transformProperty = features.transformProperty;
-    var resizedListener = function () {
-        var wrapperPosition = elements.wrapper.position();
-        bounds = new Bounds(wrapperPosition, bounds.size);
-        if (elements.wrapper.isTransitioning()) {
-            elements.container.fillViewport(features, target, bounds);
-        }
-        else {
-            elements.container.setBounds(Bounds.centreOf(document, target, bounds));
-        }
-    };
-    var expandedListener = function () {
-        elements.showCloneIfLoaded();
-        elements.wrapper.finishExpanding();
-        elements.wrapper.expanded();
-        ignoreTransitions(elements.container.element, transitionProperty, function () {
-            elements.container.resetStyle(transformProperty);
-            elements.container.setBounds(Bounds.centreOf(document, target, bounds));
-        });
-        elements.container.element.removeEventListener(transitionEnd, expandedListener);
-    };
-    var removeDismissListeners;
-    var collapseListener = function () {
-        removeDismissListeners();
-        window.removeEventListener('resize', resizedListener);
-        elements.removeCloneLoadedListener(showCloneListener);
-        elements.overlay.hide();
-        elements.wrapper.startCollapsing();
-        var collapsedListener = function () {
-            collapsed(config, elements);
-            elements.container.element.removeEventListener(transitionEnd, collapsedListener);
-        };
-        elements.container.element.addEventListener(transitionEnd, collapsedListener);
-        if (elements.wrapper.isExpanding()) {
-            elements.container.element.removeEventListener(transitionEnd, expandedListener);
-            elements.container.resetStyle(transformProperty);
-            elements.wrapper.finishExpanding();
-        }
-        else {
-            ignoreTransitions(elements.container.element, transitionProperty, function () {
-                elements.container.fillViewport(features, target, bounds);
-            });
-            elements.container.resetStyle(transformProperty);
-            elements.container.resetBounds();
-            elements.wrapper.collapsed();
-        }
-    };
-    removeDismissListeners = elements.container.addDismissListeners(config, collapseListener);
-    elements.overlay.appendTo(document.body);
-    elements.wrapper.startExpanding();
-    elements.wrapper.fixHeightTo(elements.image);
-    elements.image.activate();
-    elements.container.element.addEventListener(transitionEnd, expandedListener);
-    elements.container.fillViewport(features, target, bounds);
-    window.addEventListener('resize', resizedListener);
-}
-function clickedZoomable(config, event, zoomListener) {
-    var image = event.target;
-    var parent = image.parentElement;
-    var previouslyZoomed = Container.isContainer(parent);
-    var wrapper = previouslyZoomed ? parent.parentElement : parent;
-    if (event.metaKey || event.ctrlKey) {
-        window.open(fullSrc(wrapper, image), '_blank');
+function pageScrollY(context) {
+    if (context === void 0) { context = window; }
+    if (context.pageYOffset === undefined) {
+        return rootElement(context.document).scrollTop;
     }
     else {
-        document.body.removeEventListener('click', zoomListener);
-        var elements = void 0;
-        if (previouslyZoomed) {
-            elements = ZoomDOM.fromExisting(image);
-        }
-        else {
-            elements = ZoomDOM.fromFresh(image);
-            elements.replaceContainerWithImage();
-            elements.appendImageToContainer();
-            elements.appendCloneToContainer();
-        }
-        var showCloneListener = void 0;
-        if (elements.clone !== undefined) {
-            if (elements.clone.isLoaded()) {
-                elements.replaceImageWithClone();
-            }
-            else {
-                showCloneListener = elements.createCloneLoadedListener();
-                elements.clone.element.addEventListener('load', showCloneListener);
-            }
-        }
-        var target = elements.wrapper.targetSize();
-        var features = detectFeatures();
-        if (features.hasTransform && features.hasTransitions) {
-            zoomTransition(config, elements, target, showCloneListener, features);
-        }
-        else {
-            zoomInstant(config, elements, target, showCloneListener);
-        }
+        return context.pageYOffset;
     }
 }
-function addZoomListener(config) {
-    if (config === void 0) { config = DEFAULT_CONFIG; }
-    var listener = {
-        handleEvent: function (event) {
-            if (Image.isZoomableImage(event.target)) {
-                event.preventDefault();
-                event.stopPropagation();
-                clickedZoomable(config, event, listener);
+
+function fireEventListener(target, listener, event) {
+    if (typeof listener === 'function') {
+        listener.call(target, event);
+    }
+    else {
+        listener.handleEvent(event);
+    }
+}
+
+var ESCAPE_KEY_CODE = 27;
+/**
+ * An {@link EventListenerObject} that handles {@link KeyboardEvent}s with a {@link KeyboardEvent#keyCode} equal to
+ * {@link ESCAPE_KEY_CODE}.
+ */
+var EscKeyListener = /** @class */ (function () {
+    function EscKeyListener(target, delegate) {
+        this.target = target;
+        this.delegate = delegate;
+    }
+    EscKeyListener.prototype.handleEvent = function (evt) {
+        if (evt.keyCode === ESCAPE_KEY_CODE) {
+            evt.preventDefault();
+            evt.stopPropagation();
+            fireEventListener(this.target, this.delegate, evt);
+        }
+    };
+    return EscKeyListener;
+}());
+
+/**
+ * An {@link EventListenerObject} that handles {@link Event}s when the page has been scrolled vertically a certain
+ * {@link ScrollListener#distance} in pixels from a {@link ScrollListener#start} position.
+ */
+var ScrollListener = /** @class */ (function () {
+    function ScrollListener(target, start, distance, delegate) {
+        this.target = target;
+        this.start = start;
+        this.distance = distance;
+        this.delegate = delegate;
+    }
+    ScrollListener.prototype.handleEvent = function (evt) {
+        var delta = Math.abs(this.start - pageScrollY());
+        if (delta > this.distance) {
+            fireEventListener(this.target, this.delegate, evt);
+        }
+    };
+    return ScrollListener;
+}());
+
+var DismissListeners = /** @class */ (function () {
+    function DismissListeners(delegateListener, scrollListener, escKeyListener) {
+        this.delegateListener = delegateListener;
+        this.scrollListener = scrollListener;
+        this.escKeyListener = escKeyListener;
+    }
+    DismissListeners.create = function (scrollDismissPx, delegateListener) {
+        var scrollListener = new ScrollListener(document, pageScrollY(), scrollDismissPx, delegateListener);
+        var escKeyListener = new EscKeyListener(document, delegateListener);
+        return new DismissListeners(delegateListener, scrollListener, escKeyListener);
+    };
+    DismissListeners.prototype.addTo = function (context, container) {
+        container.addEventListener('click', this.delegateListener);
+        context.addEventListener('scroll', this.scrollListener);
+        context.document.addEventListener('keyup', this.escKeyListener);
+    };
+    DismissListeners.prototype.removeFrom = function (context, container) {
+        container.removeEventListener('click', this.delegateListener);
+        context.removeEventListener('scroll', this.scrollListener);
+        context.document.removeEventListener('keyup', this.escKeyListener);
+    };
+    return DismissListeners;
+}());
+
+var ZoomResizedListener = /** @class */ (function () {
+    function ZoomResizedListener(dom, features, targetSize) {
+        this.dom = dom;
+        this.features = features;
+        this.targetSize = targetSize;
+        this._bounds = dom.image.bounds();
+    }
+    ZoomResizedListener.prototype.handleEvent = function (evt) {
+        var wrapper = this.dom.wrapper;
+        var container = this.dom.container;
+        this._bounds = new Bounds(wrapper.position(), this._bounds.size);
+        if (wrapper.isTransitioning()) {
+            container.fillViewport(this.features, this.targetSize, this._bounds);
+        }
+        else {
+            container.setBounds(Bounds.centreOf(document, this.targetSize, this._bounds));
+        }
+    };
+    Object.defineProperty(ZoomResizedListener.prototype, "bounds", {
+        get: function () {
+            return this._bounds;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return ZoomResizedListener;
+}());
+
+var ZoomListener = /** @class */ (function () {
+    function ZoomListener(config, features) {
+        this.config = config;
+        this.features = features;
+    }
+    ZoomListener.prototype.handleEvent = function (evt) {
+        var image = evt.target;
+        if (!(image instanceof HTMLImageElement) || !image.classList.contains(Image.CLASS)) {
+            return;
+        }
+        var parent = image.parentElement;
+        if (!(parent instanceof HTMLElement)) {
+            return;
+        }
+        var wrapper;
+        var previouslyZoomed;
+        if (parent.classList.contains(Wrapper.CLASS)) {
+            previouslyZoomed = false;
+            wrapper = parent;
+        }
+        else if (parent.classList.contains(Container.CLASS)) {
+            previouslyZoomed = true;
+            var grandparent = parent.parentElement;
+            if (grandparent instanceof HTMLElement && grandparent.classList.contains(Wrapper.CLASS)) {
+                wrapper = grandparent;
+            }
+            else {
+                return;
+            }
+        }
+        else {
+            return;
+        }
+        evt.preventDefault();
+        evt.stopPropagation();
+        if (evt.metaKey || evt.ctrlKey) {
+            window.open(fullSrc(wrapper, image), '_blank');
+        }
+        else {
+            document.body.removeEventListener('click', this);
+            var dom = void 0;
+            if (previouslyZoomed) {
+                dom = ZoomDOM.useExisting(image);
+            }
+            else {
+                dom = ZoomDOM.setup(image);
+                dom.replaceContainerWithImage();
+                dom.appendImageToContainer();
+                dom.appendCloneToContainer();
+            }
+            var showCloneListener = void 0;
+            if (dom.clone !== undefined) {
+                if (dom.clone.isLoaded()) {
+                    dom.replaceImageWithClone();
+                }
+                else {
+                    showCloneListener = dom.createCloneLoadedListener();
+                    dom.clone.element.addEventListener('load', showCloneListener);
+                }
+            }
+            var targetSize = dom.wrapper.targetSize();
+            if (this.features.hasTransform && this.features.hasTransitions) {
+                this.zoomTransition(dom, targetSize, showCloneListener);
+            }
+            else {
+                this.zoomInstant(dom, targetSize, showCloneListener);
             }
         }
     };
-    document.body.addEventListener('click', listener);
-}
-function listenForZoom(config) {
-    if (config === void 0) { config = DEFAULT_CONFIG; }
-    ready(document, function () { return addZoomListener(config); });
-}
-
-listenForZoom();
-
+    ZoomListener.prototype.zoomInstant = function (dom, targetSize, showCloneListener) {
+        var _this = this;
+        var resizedListener = new ZoomResizedListener(dom, this.features, targetSize);
+        var dismissListeners = DismissListeners.create(this.config.scrollDismissPx, function () {
+            dismissListeners.removeFrom(window, dom.container.element);
+            window.removeEventListener('resize', resizedListener);
+            dom.removeCloneLoadedListener(showCloneListener);
+            dom.wrapper.collapsed();
+            dom.container.resetBounds();
+            _this.collapsed(dom);
+        });
+        dom.overlay.appendTo(document.body);
+        dom.wrapper.expanded();
+        dom.fixWrapperHeight();
+        dom.image.activate();
+        dom.container.setBounds(Bounds.centreOf(document, targetSize, resizedListener.bounds));
+        window.addEventListener('resize', resizedListener);
+        dismissListeners.addTo(window, dom.container.element);
+    };
+    ZoomListener.prototype.zoomTransition = function (dom, targetSize, showCloneListener) {
+        var _this = this;
+        var transitionEnd = this.features.transitionEndEvent;
+        var transitionProperty = this.features.transitionProperty;
+        var transformProperty = this.features.transformProperty;
+        var resizedListener = new ZoomResizedListener(dom, this.features, targetSize);
+        var expandedListener = function () {
+            dom.showCloneIfLoaded();
+            dom.wrapper.finishExpanding();
+            dom.wrapper.expanded();
+            ignoreTransitions(dom.container.element, transitionProperty, function () {
+                dom.container.resetStyle(transformProperty);
+                dom.container.setBounds(Bounds.centreOf(document, targetSize, resizedListener.bounds));
+            });
+            dom.container.element.removeEventListener(transitionEnd, expandedListener);
+        };
+        var dismissListeners = DismissListeners.create(this.config.scrollDismissPx, function () {
+            dismissListeners.removeFrom(window, dom.container.element);
+            window.removeEventListener('resize', resizedListener);
+            dom.removeCloneLoadedListener(showCloneListener);
+            dom.overlay.hide();
+            dom.wrapper.startCollapsing();
+            var collapsedListener = function () {
+                _this.collapsed(dom);
+                dom.container.element.removeEventListener(transitionEnd, collapsedListener);
+            };
+            dom.container.element.addEventListener(transitionEnd, collapsedListener);
+            if (dom.wrapper.isExpanding()) {
+                dom.container.element.removeEventListener(transitionEnd, expandedListener);
+                dom.container.resetStyle(transformProperty);
+                dom.wrapper.finishExpanding();
+            }
+            else {
+                ignoreTransitions(dom.container.element, transitionProperty, function () {
+                    dom.container.fillViewport(_this.features, targetSize, resizedListener.bounds);
+                });
+                dom.container.resetStyle(transformProperty);
+                dom.container.resetBounds();
+                dom.wrapper.collapsed();
+            }
+        });
+        dom.overlay.appendTo(document.body);
+        dom.wrapper.startExpanding();
+        dom.fixWrapperHeight();
+        dom.image.activate();
+        dom.container.element.addEventListener(transitionEnd, expandedListener);
+        dom.container.fillViewport(this.features, targetSize, resizedListener.bounds);
+        dismissListeners.addTo(window, dom.container.element);
+        window.addEventListener('resize', resizedListener);
+    };
+    ZoomListener.prototype.collapsed = function (dom) {
+        var _this = this;
+        dom.replaceCloneWithImage();
+        dom.overlay.removeFrom(document.body);
+        dom.image.deactivate();
+        dom.wrapper.finishCollapsing();
+        setTimeout(function () {
+            document.body.addEventListener('click', _this);
+        }, 1);
+    };
+    return ZoomListener;
 }());
+
+function listen(config) {
+    if (config === void 0) { config = DEFAULT_CONFIG; }
+    ready(document, function () {
+        var features = Features.of(document.body.style);
+        var listener = new ZoomListener(config, features);
+        document.body.addEventListener('click', listener);
+    });
+}
+
+exports.listen = listen;
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+})));
 //# sourceMappingURL=zoom.js.map

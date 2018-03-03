@@ -1,4 +1,5 @@
 import { viewportSize } from '../browser/Document';
+import { setBounds } from '../element/Element';
 import { pixels } from './Unit';
 import { Vector2 } from './Vector2';
 
@@ -44,12 +45,4 @@ export class Bounds {
     applyTo(style: CSSStyleDeclaration): void {
         setBounds(style, pixels(this.position.x), pixels(this.position.y), pixels(this.size.x), pixels(this.size.y));
     }
-}
-
-export function setBounds(style: CSSStyleDeclaration, x: string, y: string, width: string, height: string): void {
-    style.left = x;
-    style.top = y;
-    style.width = width;
-    style.maxWidth = width;
-    style.height = height;
 }

@@ -1,11 +1,8 @@
-import { pixels } from '../math/Unit';
-import { Vector2 } from '../math/Vector2';
-import { Container } from './Container';
 import {
-    resetStyle,
-    targetDimension
+    parsePadding,
+    resetStyle
 } from '../element/Element';
-import { Image } from './Image';
+import { Vector2 } from '../math/Vector2';
 
 export class Wrapper {
     static readonly CLASS = 'zoom';
@@ -41,7 +38,7 @@ export class Wrapper {
 
     finishCollapsing(): void {
         this.element.classList.remove(Wrapper.COLLAPSING_CLASS);
-        resetStyle(this.element, 'height');
+        resetStyle(this.element.style, 'height');
     }
 
     isTransitioning(): boolean {
@@ -72,11 +69,14 @@ export class Wrapper {
 
     position(): Vector2 {
         let rect = this.element.getBoundingClientRect();
-        return Vector2.fromPosition(rect);
-    }
+        let style = getComputedStyle(this.element);
 
-    fixHeightTo(image: Image): void {
-        this.element.style.height = pixels(image.height());
+        // if the wrapper has an explicit padding in the normal page flow,
+        // we must disregard it when calculating the wrapper's true position
+        let paddingTop = parsePadding(style, 'top');
+        let paddingLeft = parsePadding(style, 'left');
+
+        return new Vector2(rect.left + paddingLeft, rect.top + paddingTop);
     }
 
     targetSize(): Vector2 {

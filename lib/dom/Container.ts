@@ -1,33 +1,19 @@
-import { createDiv } from '../browser/Document';
 import { Features } from '../browser/Features';
-import { pageScrollY } from '../browser/Window';
-import { Config } from '../Config';
-import { resetStyle } from '../element/Element';
 import {
-    escKeyPressed,
-    scrolled
-} from '../element/EventListeners';
-import {
-    centreTransformation,
-    scaleTranslate,
-    scaleTranslate3d
-} from '../element/style/Transform';
-import {
-    Bounds,
+    resetStyle,
     setBounds
-} from '../math/Bounds';
+} from '../element/Element';
+import { ScaleAndTranslate } from '../element/ScaleAndTranslate';
+import { Bounds } from '../math/Bounds';
 import { Vector2 } from '../math/Vector2';
 
 export class Container {
     static readonly CLASS = 'zoom__container';
 
     static create(): Container {
-        let element = createDiv(Container.CLASS);
+        let element = document.createElement('div');
+        element.className = Container.CLASS;
         return new Container(element);
-    }
-
-    static isContainer(element: HTMLElement): boolean {
-        return element.classList.contains(Container.CLASS);
     }
 
     readonly element: HTMLElement;
@@ -53,35 +39,18 @@ export class Container {
     }
 
     fillViewport(features: Features, target: Vector2, bounds: Bounds): void {
-        let transform = centreTransformation(target, bounds);
+        let transform = ScaleAndTranslate.centreOf(target, bounds);
         let transformProperty = features.transformProperty as string;
 
         let style: any = this.element.style;
         if (features.hasTransform3d) {
-            style[transformProperty] = scaleTranslate3d(transform);
+            style[transformProperty] = transform.toString3d();
         } else {
-            style[transformProperty] = scaleTranslate(transform);
+            style[transformProperty] = transform.toString2d();
         }
     }
 
     resetStyle(property: string): void {
-        resetStyle(this.element, property);
-    }
-
-    addDismissListeners(config: Config, collapseListener: EventListener): () => void {
-        let initialScrollY = pageScrollY();
-
-        let escListener = escKeyPressed(document, collapseListener);
-        let scrollListener = scrolled(window, initialScrollY, config.scrollDismissPx, pageScrollY, collapseListener);
-
-        window.addEventListener('scroll', scrollListener);
-        document.addEventListener('keyup', escListener);
-        this.element.addEventListener('click', collapseListener);
-
-        return (): void => {
-            window.removeEventListener('scroll', scrollListener);
-            document.removeEventListener('keyup', escListener);
-            this.element.removeEventListener('click', collapseListener);
-        };
+        resetStyle(this.element.style, property);
     }
 }

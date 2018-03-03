@@ -41,13 +41,13 @@ export class Vector2 {
         return new Vector2(this.x / other.x, this.y / other.y);
     }
 
-    static min(left: Vector2, right: Vector2): Vector2 {
-        return new Vector2(Math.min(left.x, right.x), Math.min(left.y, right.y));
-    }
-
     minDivisor(other: Vector2): number {
         let scaled = this.shrink(other);
         return Math.min(scaled.x, scaled.y);
+    }
+
+    static min(left: Vector2, right: Vector2): Vector2 {
+        return new Vector2(Math.min(left.x, right.x), Math.min(left.y, right.y));
     }
 
     static halfMidpoint(left: Vector2, right: Vector2): Vector2 {

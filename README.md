@@ -5,6 +5,9 @@
   A lightweight TypeScript library for image zooming, as seen on <a href="https://medium.design/image-zoom-on-medium-24d146fc0c20">Medium</a>.
 </p>
 <p align="center">
+  <a href="https://michaelbull.github.io/zoom.ts" rel="nofollow">Demo</a>
+</p>
+<p align="center">
   <a href="https://www.npmjs.com/package/zoom.ts"><img src="https://img.shields.io/npm/v/zoom.ts.svg?style=flat-square" alt="npm version" /></a>
   <a href="https://github.com/michaelbull/zoom.ts/blob/master/LICENSE"><img src="https://img.shields.io/github/license/michaelbull/zoom.ts.svg?style=flat-square" alt="software license" /></a>
   <a href="https://travis-ci.org/michaelbull/zoom.ts"><img src="https://img.shields.io/travis/michaelbull/zoom.ts.svg?style=flat-square" alt="build status" /></a>
@@ -26,8 +29,7 @@
 A running demonstration can be found [here][demo].
 
 `zoom.ts` easily plugs into your application and starts listening to zoom events
-as soon as the DOM is ready. The library accounts for just 5kB of bandwidth once
-gzipped and requires no third-party libraries.
+as soon as the DOM is ready.
 
 Holding either the <kbd>⌘</kbd> or <kbd>Ctrl</kbd> key will open the image in a
 new tab when clicked. Zoomed images can be dismissed either by clicking the
@@ -118,19 +120,6 @@ Bug reports and pull requests are welcome on [GitHub][github].
 This project is available under the terms of the ISC license. See the
 [`LICENSE`][license] file for the copyright information and licensing terms.
 
-[logo]: /img/logo.png
-[medium]: https://medium.design/image-zoom-on-medium-24d146fc0c20
-[build-status-badge]: https://img.shields.io/travis/michaelbull/zoom.ts.svg?style=flat-square
-[build-status]: https://travis-ci.org/michaelbull/zoom.ts
-[license-badge]: https://img.shields.io/github/license/michaelbull/zoom.ts.svg?style=flat-square
-[license]: https://github.com/michaelbull/zoom.ts/blob/master/LICENSE
-[npm-badge]: https://img.shields.io/npm/v/zoom.ts.svg?style=flat-square
-[npm]: https://www.npmjs.com/package/zoom.ts
-[downloads-badge]: https://img.shields.io/npm/dt/zoom.ts.svg?style=flat-square
-[downloads]: https://www.npmjs.com/package/zoom.ts
-[devDependencies-badge]: https://david-dm.org/michaelbull/zoom.ts/dev-status.svg?style=flat-square
-[devDependencies]: https://david-dm.org/michaelbull/zoom.ts?type=dev
-[demo]: https://michaelbull.github.io/zoom.ts
 [npm]: https://www.npmjs.com/
 [dist]: https://github.com/michaelbull/zoom.ts/blob/master/dist/zoom.js
 [stylesheet]: https://github.com/michaelbull/zoom.ts/blob/master/style.scss

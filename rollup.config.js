@@ -4,7 +4,7 @@ import livereload from 'rollup-plugin-livereload';
 import sass from 'rollup-plugin-sass';
 import serve from 'rollup-plugin-serve';
 import typescript from 'rollup-plugin-typescript2';
-import closure from 'rollup-plugin-closure-compiler-js';
+import uglify from 'rollup-plugin-uglify';
 
 let copyright = [
     'zoom.ts v' + require('./package.json').version,
@@ -27,13 +27,13 @@ let prodEnv = (process.env.NODE_ENV === 'production');
 let devEnv = (process.env.NODE_ENV === 'development');
 
 let configuration = {
-    input: 'index.ts',
+    input: 'lib/Zoom.ts',
     output: {
         file: 'dist/zoom.js',
-        format: 'iife',
+        format: 'umd',
         name: 'zoom',
         sourcemap: !prodEnv,
-        banner: '/*!' + '\n' + ' * ' + copyright.join('\n * ') + '\n' + ' */' + '\n',
+        banner: '/*!' + '\n' + ' * ' + copyright.join('\n * ') + '\n' + ' */' + '\n'
     },
     plugins: [
         typescript({
@@ -51,13 +51,7 @@ let configuration = {
 };
 
 if (prodEnv) {
-    configuration.plugins.push(
-        closure({
-            languageOut: 'ECMASCRIPT5_STRICT',
-            compilationLevel: 'ADVANCED',
-            warningLevel: 'QUIET'
-        })
-    );
+    configuration.plugins.push(uglify());
 } else if (devEnv) {
     configuration.plugins.push(
         serve({
