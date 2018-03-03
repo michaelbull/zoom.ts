@@ -10,7 +10,7 @@
     "zooming",
     "medium"
   ],
-  "homepage": "https://www.michael-bull.com/projects/zoom.ts",
+  "homepage": "https://github.com/michaelbull/zoom.ts",
   "bugs": {
     "url": "https://github.com/michaelbull/zoom.ts/issues"
   },
@@ -19,7 +19,12 @@
     "name": "Michael Bull",
     "url": "https://www.michael-bull.com"
   },
-  "main": "dist/zoom.js",
+  "files": [
+    "dist",
+    "style.scss"
+  ],
+  "main": "dist/commonjs/zoom.js",
+  "typings": "dist/commonjs/zoom.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/michaelbull/zoom.ts"
@@ -27,14 +32,19 @@
   "scripts": {
     "clean": "rimraf dist",
     "prestart": "npm run clean",
-    "start": "cross-env NODE_ENV=development rollup --config --watch",
-    "prebuild": "npm run clean",
-    "build": "rollup --config",
-    "predist": "npm run clean",
+    "start": "rollup --config --watch",
     "dist": "cross-env NODE_ENV=production rollup --config",
     "test": "karma start test/karma.conf.js --singleRun",
     "test:watch": "karma start test/karma.conf.js",
-    "coveralls": "cat ./reports/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+    "coveralls": "cat ./reports/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "build:amd": "tsc --outDir dist/amd --module amd",
+    "build:commonjs": "tsc --outDir dist/commonjs --module commonjs",
+    "build:es2015": "tsc --outDir dist/es2015 --module es2015 --target es2015",
+    "build:native-modules": "tsc --outDir dist/native-modules --module es2015",
+    "build:system": "tsc --outDir dist/system --module system",
+    "prebuild": "npm run clean",
+    "build": "npm-run-all --parallel build:* dist",
+    "prepublish": "npm run build"
   },
   "devDependencies": {
     "@types/jasmine": "2.8.6",
@@ -48,6 +58,7 @@
     "karma-spec-reporter": "0.0.32",
     "karma-typescript": "3.0.12",
     "node-sass": "4.7.2",
+    "npm-run-all": "4.1.2",
     "rimraf": "2.6.2",
     "rollup": "0.56.3",
     "rollup-plugin-livereload": "0.6.0",

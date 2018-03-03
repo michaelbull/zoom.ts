@@ -1,4 +1,4 @@
-import { fireEventListener } from './EventListener';
+import { fireEventListener } from './event-listener';
 
 const ESCAPE_KEY_CODE = 27;
 

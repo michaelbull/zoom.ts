@@ -1,4 +1,4 @@
-import { rootElement } from './Document';
+import { rootElement } from './document';
 
 /**
  * Calculates the number of pixels in the document have been scrolled past vertically.

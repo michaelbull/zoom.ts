@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "strict": true,
+    "declaration": true,
     "types": [
       "jasmine"
     ]
@@ -9,6 +10,7 @@
   "exclude": [
     "node_modules",
     "dist",
-    "webpack.config.js"
+    "webpack.config.js",
+    "test"
   ]
 }

@@ -1,11 +1,11 @@
-import { Features } from '../browser/Features';
+import { Features } from '../browser/features';
 import {
     resetStyle,
     setBounds
-} from '../element/Element';
-import { ScaleAndTranslate } from '../element/ScaleAndTranslate';
-import { Bounds } from '../math/Bounds';
-import { Vector2 } from '../math/Vector2';
+} from '../element/elements';
+import { ScaleAndTranslate } from '../element/scale-and-translate';
+import { Bounds } from '../math/bounds';
+import { Vector2 } from '../math/vector2';
 
 export class Container {
     static readonly CLASS = 'zoom__container';

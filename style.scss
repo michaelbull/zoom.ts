@@ -47,18 +47,18 @@ $zoom-overlay-visible-opacity: 100 !default;
   will-change: transform;
 }
 
-.zoom__element {
+.zoom__image {
   @include zoom-visible();
   will-change: visibility, opacity;
 
   max-width: 100%;
 }
 
-.zoom__element--active {
+.zoom__image--active {
   width: 100%;
 }
 
-.zoom__element--hidden {
+.zoom__image--hidden {
   @include zoom-hidden();
 }
 
@@ -97,5 +97,5 @@ $zoom-overlay-visible-opacity: 100 !default;
 
 .zoom__overlay--visible {
   opacity: $zoom-overlay-visible-opacity / 100;
-  filter: 'alpha(opacity=' + $zoom-overlay-visible-opacity + ')';
+  filter: 'alpha(opacity=#{$zoom-overlay-visible-opacity})';
 }

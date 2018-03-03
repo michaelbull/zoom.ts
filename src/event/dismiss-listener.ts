@@ -1,6 +1,6 @@
-import { pageScrollY } from '../browser/Window';
-import { EscKeyListener } from './EscKeyListener';
-import { ScrollListener } from './ScrollListener';
+import { pageScrollY } from '../browser/window';
+import { EscKeyListener } from './esc-key-listener';
+import { ScrollListener } from './scroll-listener';
 
 export class DismissListeners {
     static create(scrollDismissPx: number, delegateListener: EventListener): DismissListeners {

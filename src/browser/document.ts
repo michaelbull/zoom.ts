@@ -1,4 +1,4 @@
-import { Vector2 } from '../math/Vector2';
+import { Vector2 } from '../math/vector2';
 
 export const QUIRKS_MODE = 'BackCompat';
 export const STANDARDS_MODE = 'CSS1Compat';
@@ -23,14 +23,14 @@ export function viewportSize(document: Document): Vector2 {
  * @see http://youmightnotneedjquery.com/#ready
  */
 export function ready(document: Document, callback: () => void): void {
-    if (document.readyState === 'complete') {
-        callback.call(document);
-    } else {
+    if (document.readyState === 'loading') {
         let listener = (): void => {
             document.removeEventListener('DOMContentLoaded', listener);
             callback.call(document);
         };
 
         document.addEventListener('DOMContentLoaded', listener);
+    } else {
+        callback.call(document);
     }
 }

@@ -1,6 +1,6 @@
-import { supports3dTransformations } from '../element/Transform';
-import { TRANSITION_END_EVENTS } from '../element/Transition';
-import { vendorProperty } from './Vendor';
+import { supports3dTransformations } from '../element/transform';
+import { TRANSITION_END_EVENTS } from '../element/transition';
+import { vendorProperty } from './vendor';
 
 export class Features {
     static of(style: CSSStyleDeclaration): Features {

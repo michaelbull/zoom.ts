@@ -24,22 +24,25 @@ let postcssPlugins = [
 ];
 
 let prodEnv = (process.env.NODE_ENV === 'production');
-let devEnv = (process.env.NODE_ENV === 'development');
 
 let configuration = {
-    input: 'lib/Zoom.ts',
+    input: 'src/index.ts',
     output: {
         file: 'dist/zoom.js',
         format: 'umd',
         name: 'zoom',
-        sourcemap: !prodEnv,
         banner: '/*!' + '\n' + ' * ' + copyright.join('\n * ') + '\n' + ' */' + '\n'
     },
     plugins: [
         typescript({
             check: prodEnv,
             clean: true,
-            abortOnError: false
+            abortOnError: false,
+            tsconfigOverride: {
+                compilerOptions: {
+                    declaration: false
+                }
+            }
         }),
         sass({
             output: 'dist/zoom.css',
@@ -52,7 +55,9 @@ let configuration = {
 
 if (prodEnv) {
     configuration.plugins.push(uglify());
-} else if (devEnv) {
+} else {
+    configuration.output.sourcemap = true;
+
     configuration.plugins.push(
         serve({
             port: 8080,

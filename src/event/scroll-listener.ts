@@ -1,5 +1,5 @@
-import { pageScrollY } from '../browser/Window';
-import { fireEventListener } from './EventListener';
+import { pageScrollY } from '../browser/window';
+import { fireEventListener } from './event-listener';
 
 /**
  * An {@link EventListenerObject} that handles {@link Event}s when the page has been scrolled vertically a certain

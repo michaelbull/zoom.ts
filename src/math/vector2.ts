@@ -1,4 +1,4 @@
-import { targetDimension } from '../element/Element';
+import { targetDimension } from '../element/elements';
 
 export class Vector2 {
     static fromPosition(rect: ClientRect): Vector2 {

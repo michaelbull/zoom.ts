@@ -1,8 +1,8 @@
 import {
     parsePadding,
     resetStyle
-} from '../element/Element';
-import { Vector2 } from '../math/Vector2';
+} from '../element/elements';
+import { Vector2 } from '../math/vector2';
 
 export class Wrapper {
     static readonly CLASS = 'zoom';
@@ -57,11 +57,11 @@ export class Wrapper {
         return this.element.classList.contains(Wrapper.EXPANDED_CLASS);
     }
 
-    srcOf(image: HTMLImageElement): string {
+    srcOf(element: HTMLImageElement): string {
         let fullSrc = this.element.getAttribute('data-src');
 
         if (fullSrc === null) {
-            return image.src;
+            return element.src;
         } else {
             return fullSrc;
         }

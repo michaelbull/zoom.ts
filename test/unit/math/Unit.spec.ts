@@ -1,4 +1,4 @@
-import { pixels } from '../../../lib/math/Unit';
+import { pixels } from '../../../src';
 
 describe('pixels', () => {
     it('should return the value in pixel units', () => {

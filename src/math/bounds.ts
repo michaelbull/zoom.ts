@@ -1,7 +1,7 @@
-import { viewportSize } from '../browser/Document';
-import { setBounds } from '../element/Element';
-import { pixels } from './Unit';
-import { Vector2 } from './Vector2';
+import { viewportSize } from '../browser/document';
+import { setBounds } from '../element/elements';
+import { pixels } from './unit';
+import { Vector2 } from './vector2';
 
 export class Bounds {
     static of(element: HTMLElement): Bounds {

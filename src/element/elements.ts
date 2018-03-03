@@ -31,7 +31,8 @@ export function setBounds(style: CSSStyleDeclaration, x: string, y: string, widt
 }
 
 export function parsePadding(style: CSSStyleDeclaration, direction: string): number {
-    let parsed = parseFloat(style.getPropertyValue(`padding-${direction}`));
+    let padding = style.getPropertyValue(`padding-${direction}`);
+    let parsed = parseFloat(padding);
 
     if (isNaN(parsed)) {
         return 0;

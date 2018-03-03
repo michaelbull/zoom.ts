@@ -1,6 +1,6 @@
-import { vendorProperty } from '../browser/Vendor';
-import { pixels } from '../math/Unit';
-import { Vector2 } from '../math/Vector2';
+import { vendorProperty } from '../browser/vendor';
+import { pixels } from '../math/unit';
+import { Vector2 } from '../math/vector2';
 
 export function translate(translation: Vector2): string {
     let { x, y } = translation;

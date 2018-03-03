@@ -1,33 +1,33 @@
-import { pixels } from '../math/Unit';
-import { Clone } from './Clone';
-import { Container } from './Container';
-import { Image } from './Image';
-import { Overlay } from './Overlay';
-import { Wrapper } from './Wrapper';
+import { pixels } from '../math/unit';
+import { Clone } from './clone';
+import { Container } from './container';
+import { Image } from './image';
+import { Overlay } from './overlay';
+import { Wrapper } from './wrapper';
 
 export class ZoomDOM {
-    static useExisting(imageElement: HTMLImageElement): ZoomDOM {
+    static useExisting(element: HTMLImageElement): ZoomDOM {
         let overlay = Overlay.create();
-        let container = new Container(imageElement.parentElement as HTMLElement);
+        let container = new Container(element.parentElement as HTMLElement);
         let wrapper = new Wrapper(container.parent());
-        let image = new Image(imageElement);
-        let src = wrapper.srcOf(imageElement);
+        let image = new Image(element);
+        let src = wrapper.srcOf(element);
 
-        if (src === imageElement.src) {
+        if (src === element.src) {
             return new ZoomDOM(overlay, wrapper, container, image);
         } else {
             return new ZoomDOM(overlay, wrapper, container, image, new Clone(container.clone()));
         }
     }
 
-    static setup(imageElement: HTMLImageElement): ZoomDOM {
+    static setup(element: HTMLImageElement): ZoomDOM {
         let overlay = Overlay.create();
         let container = Container.create();
-        let wrapper = new Wrapper(imageElement.parentElement as HTMLElement);
-        let image = new Image(imageElement);
-        let src = wrapper.srcOf(imageElement);
+        let wrapper = new Wrapper(element.parentElement as HTMLElement);
+        let image = new Image(element);
+        let src = wrapper.srcOf(element);
 
-        if (src === imageElement.src) {
+        if (src === element.src) {
             return new ZoomDOM(overlay, wrapper, container, image);
         } else {
             return new ZoomDOM(overlay, wrapper, container, image, Clone.create(src));

@@ -1,12 +1,12 @@
-import { viewportSize } from '../browser/Document';
-import { Bounds } from '../math/Bounds';
-import { Vector2 } from '../math/Vector2';
+import { viewportSize } from '../browser/document';
+import { Bounds } from '../math/bounds';
+import { Vector2 } from '../math/vector2';
 import {
     scale,
     scale3d,
     translate,
     translate3d
-} from './Transform';
+} from './transform';
 
 export class ScaleAndTranslate {
     static centreOf(target: Vector2, bounds: Bounds): ScaleAndTranslate {

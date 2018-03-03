@@ -1,9 +1,9 @@
-import { Bounds } from '../math/Bounds';
+import { Bounds } from '../math/bounds';
 
 export class Image {
-    static readonly CLASS = 'zoom__element';
-    static readonly HIDDEN_CLASS = 'zoom__element--hidden';
-    static readonly ACTIVE_CLASS = 'zoom__element--active';
+    static readonly CLASS = 'zoom__image';
+    static readonly HIDDEN_CLASS = 'zoom__image--hidden';
+    static readonly ACTIVE_CLASS = 'zoom__image--active';
 
     readonly element: HTMLImageElement;
 

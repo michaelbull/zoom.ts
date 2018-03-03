@@ -1,25 +1,30 @@
-import { Features } from '../browser/Features';
-import { Config } from '../Config';
-import { Container } from '../dom/Container';
+import { Features } from '../browser/features';
+import {
+    Config,
+    DEFAULT_CONFIG
+} from '../config';
+import { Container } from '../dom/container';
 import {
     fullSrc,
     Image
-} from '../dom/Image';
-import { Wrapper } from '../dom/Wrapper';
-import { ZoomDOM } from '../dom/ZoomDOM';
-import { ignoreTransitions } from '../element/Transition';
-import { Bounds } from '../math/Bounds';
-import { Vector2 } from '../math/Vector2';
-import { DismissListeners } from './DismissListeners';
-import { ZoomResizedListener } from './ResizedListener';
+} from '../dom/image';
+import { Wrapper } from '../dom/wrapper';
+import { ZoomDOM } from '../dom/zoom-dom';
+import { ignoreTransitions } from '../element/transition';
+import { Bounds } from '../math/bounds';
+import { Vector2 } from '../math/vector2';
+import { DismissListeners } from './dismiss-listener';
+import { ZoomResizedListener } from './resized-listener';
 
 export class ZoomListener implements EventListenerObject {
-    private readonly config: Config;
-    private readonly features: Features;
+    private target: any;
+    private features: Features;
+    private config: Config;
 
-    constructor(config: Config, features: Features) {
-        this.config = config;
+    constructor(target: any, features: Features, config: Config = DEFAULT_CONFIG) {
+        this.target = target;
         this.features = features;
+        this.config = config;
     }
 
     handleEvent(evt: MouseEvent): void {
@@ -58,7 +63,7 @@ export class ZoomListener implements EventListenerObject {
         if (evt.metaKey || evt.ctrlKey) {
             window.open(fullSrc(wrapper, image), '_blank');
         } else {
-            document.body.removeEventListener('click', this);
+            this.target.removeEventListener('click', this);
 
             let dom: ZoomDOM;
             if (previouslyZoomed) {
@@ -181,7 +186,7 @@ export class ZoomListener implements EventListenerObject {
         dom.wrapper.finishCollapsing();
 
         setTimeout(() => {
-            document.body.addEventListener('click', this);
+            this.target.addEventListener('click', this);
         }, 1);
     }
 }
