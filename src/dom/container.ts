@@ -34,6 +34,10 @@ export class Container {
         setBounds(this.element.style, '', '', '', '');
     }
 
+    resetStyle(property: string): void {
+        resetStyle(this.element.style, property);
+    }
+
     fillViewport(features: Features, target: Vector2, bounds: Bounds): void {
         let transform = ScaleAndTranslate.centreOf(target, bounds);
         let transformProperty = features.transformProperty as string;
@@ -44,9 +48,5 @@ export class Container {
         } else {
             style[transformProperty] = transform.toString2d();
         }
-    }
-
-    resetStyle(property: string): void {
-        resetStyle(this.element.style, property);
     }
 }

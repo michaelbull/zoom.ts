@@ -8,7 +8,7 @@ import uglify from 'rollup-plugin-uglify';
 
 let copyright = [
     'zoom.ts v' + require('./package.json').version,
-    'https://www.michael-bull.com/projects/zoom.ts',
+    'https://github.com/michaelbull/zoom.ts',
     '',
     'Copyright (c) 2018 Michael Bull (https://www.michael-bull.com)',
     '@license ISC'
