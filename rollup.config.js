@@ -10,7 +10,7 @@ let copyright = [
     'zoom.ts v' + require('./package.json').version,
     'https://www.michael-bull.com/projects/zoom.ts',
     '',
-    'Copyright (c) 2017 Michael Bull (https://www.michael-bull.com)',
+    'Copyright (c) 2018 Michael Bull (https://www.michael-bull.com)',
     '@license ISC'
 ];
 
