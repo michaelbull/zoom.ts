@@ -19,26 +19,29 @@ $zoom-overlay-visible-opacity: 100 !default;
   transition: visibility 0s linear 0s, opacity 400ms 0s;
 }
 
-.zoom {
-  display: block;
-  position: relative;
-  margin: 0;
-  width: 100%;
-  line-height: 0;
-  text-align: center;
-
+@mixin zoom-in-cursor() {
   cursor: pointer;
   cursor: -moz-zoom-in;
   cursor: -webkit-zoom-in;
+}
+
+@mixin zoom-out-cursor() {
+  cursor: pointer;
+  cursor: -moz-zoom-out;
+  cursor: -webkit-zoom-out;
+}
+
+.zoom {
+  display: block;
+  position: relative;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .zoom--expanding,
 .zoom--expanded,
 .zoom--collapsing {
   z-index: $zoom-z-index;
-  cursor: pointer;
-  cursor: -moz-zoom-out;
-  cursor: -webkit-zoom-out;
 }
 
 .zoom__container {
@@ -48,13 +51,17 @@ $zoom-overlay-visible-opacity: 100 !default;
 }
 
 .zoom__image {
+  @include zoom-in-cursor();
   @include zoom-visible();
-  will-change: visibility, opacity;
 
+  display: block;
   max-width: 100%;
+  will-change: visibility, opacity;
 }
 
 .zoom__image--active {
+  @include zoom-out-cursor();
+
   width: 100%;
 }
 
@@ -63,8 +70,8 @@ $zoom-overlay-visible-opacity: 100 !default;
 }
 
 .zoom__clone {
+  @include zoom-in-cursor();
   @include zoom-hidden();
-  will-change: visibility, opacity;
 
   position: absolute;
   top: 0;
@@ -73,9 +80,11 @@ $zoom-overlay-visible-opacity: 100 !default;
   left: 0;
 
   width: 100%;
+  will-change: visibility, opacity;
 }
 
 .zoom__clone--visible {
+  @include zoom-out-cursor();
   @include zoom-visible();
 }
 

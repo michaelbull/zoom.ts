@@ -4,12 +4,10 @@ import {
     DEFAULT_CONFIG
 } from '../config';
 import { Container } from '../dom/container';
-import {
-    fullSrc,
-    Image
-} from '../dom/image';
+import { Image } from '../dom/image';
 import { Wrapper } from '../dom/wrapper';
 import { ZoomDOM } from '../dom/zoom-dom';
+import { fullSrc } from '../element/element';
 import { ignoreTransitions } from '../element/transition';
 import { Bounds } from '../math/bounds';
 import { Vector2 } from '../math/vector2';
@@ -38,39 +36,31 @@ export class ZoomListener implements EventListenerObject {
             return;
         }
 
-        let wrapper: HTMLElement;
-        let previouslyZoomed: boolean;
-
-        if (parent.classList.contains(Wrapper.CLASS)) {
-            previouslyZoomed = false;
-            wrapper = parent;
-        } else if (parent.classList.contains(Container.CLASS)) {
-            previouslyZoomed = true;
-
-            let grandparent = parent.parentElement;
-            if (grandparent instanceof HTMLElement && grandparent.classList.contains(Wrapper.CLASS)) {
-                wrapper = grandparent;
-            } else {
-                return;
-            }
-        } else {
+        let grandparent = parent.parentElement;
+        if (!(grandparent instanceof HTMLElement)) {
             return;
         }
 
         evt.preventDefault();
         evt.stopPropagation();
 
+        let previouslyZoomed = false;
+        if (parent.classList.contains(Container.CLASS) && grandparent.classList.contains(Wrapper.CLASS)) {
+            previouslyZoomed = true;
+        }
+
         if (evt.metaKey || evt.ctrlKey) {
-            window.open(fullSrc(wrapper, image), '_blank');
+            window.open(fullSrc(image), '_blank');
         } else {
             this.target.removeEventListener('click', this);
 
             let dom: ZoomDOM;
             if (previouslyZoomed) {
-                dom = ZoomDOM.useExisting(image);
+                dom = ZoomDOM.useExisting(image, parent, grandparent);
             } else {
-                dom = ZoomDOM.setup(image);
-                dom.replaceContainerWithImage();
+                dom = ZoomDOM.create(image);
+                dom.appendContainerToWrapper();
+                dom.replaceImageWithWrapper();
                 dom.appendImageToContainer();
                 dom.appendCloneToContainer();
             }
@@ -86,7 +76,7 @@ export class ZoomListener implements EventListenerObject {
                 }
             }
 
-            let targetSize = dom.wrapper.targetSize();
+            let targetSize = dom.image.targetSize();
 
             if (this.features.hasTransform && this.features.hasTransitions) {
                 this.zoomTransition(dom, targetSize, showCloneListener);
@@ -113,6 +103,7 @@ export class ZoomListener implements EventListenerObject {
         dom.wrapper.expanded();
         dom.fixWrapperHeight();
         dom.image.activate();
+        dom.image.clearFixedSizes();
         dom.container.setBounds(Bounds.centreOf(document, targetSize, resizedListener.bounds));
 
         window.addEventListener('resize', resizedListener);
@@ -172,6 +163,7 @@ export class ZoomListener implements EventListenerObject {
         dom.wrapper.startExpanding();
         dom.fixWrapperHeight();
         dom.image.activate();
+        dom.image.clearFixedSizes();
         dom.container.element.addEventListener(transitionEnd, expandedListener);
         dom.container.fillViewport(this.features, targetSize, resizedListener.bounds);
 

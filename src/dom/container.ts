@@ -22,10 +22,6 @@ export class Container {
         this.element = element;
     }
 
-    parent(): HTMLElement {
-        return this.element.parentElement as HTMLElement;
-    }
-
     clone(): HTMLImageElement {
         return this.element.children.item(1) as HTMLImageElement;
     }

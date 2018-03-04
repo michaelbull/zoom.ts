@@ -1,4 +1,5 @@
 import { Bounds } from '../math/bounds';
+import { Vector2 } from '../math/vector2';
 
 export class Image {
     static readonly CLASS = 'zoom__image';
@@ -34,14 +35,13 @@ export class Image {
     deactivate(): void {
         this.element.classList.remove(Image.ACTIVE_CLASS);
     }
-}
 
-export function fullSrc(wrapper: HTMLElement, image: HTMLImageElement): string {
-    let fullSrc = wrapper.getAttribute('data-src');
+    targetSize(): Vector2 {
+        return Vector2.fromTargetSize(this.element);
+    }
 
-    if (fullSrc === null) {
-        return image.src;
-    } else {
-        return fullSrc;
+    clearFixedSizes(): void {
+        this.element.removeAttribute('width');
+        this.element.removeAttribute('height');
     }
 }

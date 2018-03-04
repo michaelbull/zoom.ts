@@ -1,3 +1,4 @@
+import { fullSrc } from '../element/element';
 import { pixels } from '../math/unit';
 import { Clone } from './clone';
 import { Container } from './container';
@@ -6,12 +7,12 @@ import { Overlay } from './overlay';
 import { Wrapper } from './wrapper';
 
 export class ZoomDOM {
-    static useExisting(element: HTMLImageElement): ZoomDOM {
+    static useExisting(element: HTMLImageElement, parent: HTMLElement, grandparent: HTMLElement): ZoomDOM {
         let overlay = Overlay.create();
-        let container = new Container(element.parentElement as HTMLElement);
-        let wrapper = new Wrapper(container.parent());
+        let container = new Container(parent);
+        let wrapper = new Wrapper(grandparent);
         let image = new Image(element);
-        let src = wrapper.srcOf(element);
+        let src = fullSrc(element);
 
         if (src === element.src) {
             return new ZoomDOM(overlay, wrapper, container, image);
@@ -20,12 +21,12 @@ export class ZoomDOM {
         }
     }
 
-    static setup(element: HTMLImageElement): ZoomDOM {
+    static create(element: HTMLImageElement): ZoomDOM {
         let overlay = Overlay.create();
         let container = Container.create();
-        let wrapper = new Wrapper(element.parentElement as HTMLElement);
+        let wrapper = Wrapper.create();
         let image = new Image(element);
-        let src = wrapper.srcOf(element);
+        let src = fullSrc(element);
 
         if (src === element.src) {
             return new ZoomDOM(overlay, wrapper, container, image);
@@ -48,6 +49,25 @@ export class ZoomDOM {
         this.clone = clone;
     }
 
+    appendContainerToWrapper(): void {
+        this.wrapper.element.appendChild(this.container.element);
+    }
+
+    replaceImageWithWrapper(): void {
+        let parent = this.image.element.parentElement as HTMLElement;
+        parent.replaceChild(this.wrapper.element, this.image.element);
+    }
+
+    appendImageToContainer(): void {
+        this.container.element.appendChild(this.image.element);
+    }
+
+    appendCloneToContainer(): void {
+        if (this.clone !== undefined) {
+            this.container.element.appendChild(this.clone.element);
+        }
+    }
+
     replaceImageWithClone(): void {
         if (this.clone !== undefined) {
             this.clone.show();
@@ -59,20 +79,6 @@ export class ZoomDOM {
         if (this.clone !== undefined) {
             this.image.show();
             this.clone.hide();
-        }
-    }
-
-    replaceContainerWithImage(): void {
-        this.wrapper.element.replaceChild(this.container.element, this.image.element);
-    }
-
-    appendImageToContainer(): void {
-        this.container.element.appendChild(this.image.element);
-    }
-
-    appendCloneToContainer(): void {
-        if (this.clone !== undefined) {
-            this.container.element.appendChild(this.clone.element);
         }
     }
 

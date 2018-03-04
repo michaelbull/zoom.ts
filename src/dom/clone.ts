@@ -1,3 +1,5 @@
+import { CloneLoadedListener } from '../event/clone-loaded-listener';
+
 export class Clone {
     static readonly CLASS = 'zoom__clone';
     static readonly VISIBLE_CLASS = 'zoom__clone--visible';
@@ -7,7 +9,7 @@ export class Clone {
         let element = document.createElement('img');
         element.className = Clone.CLASS;
         element.src = src;
-        element.addEventListener('load', () => element.classList.add(Clone.LOADED_CLASS));
+        element.addEventListener('load', new CloneLoadedListener(element));
         return new Clone(element);
     }
 
@@ -21,12 +23,12 @@ export class Clone {
         this.element.classList.add(Clone.VISIBLE_CLASS);
     }
 
-    isVisible(): boolean {
-        return this.element.classList.contains(Clone.VISIBLE_CLASS);
-    }
-
     hide(): void {
         this.element.classList.remove(Clone.VISIBLE_CLASS);
+    }
+
+    isVisible(): boolean {
+        return this.element.classList.contains(Clone.VISIBLE_CLASS);
     }
 
     isHidden(): boolean {
@@ -37,11 +39,11 @@ export class Clone {
         this.element.classList.add(Clone.LOADED_CLASS);
     }
 
-    isLoading(): boolean {
-        return !this.isLoaded();
-    }
-
     isLoaded(): boolean {
         return this.element.classList.contains(Clone.LOADED_CLASS);
+    }
+
+    isLoading(): boolean {
+        return !this.isLoaded();
     }
 }

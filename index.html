@@ -112,6 +112,24 @@
         color: rgba(0, 0, 0, 0.68);
       }
 
+      pre, code, kbd {
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+      }
+
+      kbd {
+        display: inline-block;
+        padding: 3px 8px;
+        font-size: 20px;
+        line-height: 1;
+        color: #444d56;
+        vertical-align: middle;
+        background-color: #fafbfc;
+        border: solid 1px #c6cbd1;
+        border-bottom-color: #959da5;
+        border-radius: 3px;
+        box-shadow: inset 0 -1px 0 #959da5;
+      }
+
       hr {
         -webkit-box-sizing: content-box;
         box-sizing: content-box;
@@ -144,16 +162,22 @@
       }
 
       .logo {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+
         display: block;
         margin: 5rem auto 8rem;
-        padding: 0 2rem;
+
+        padding-left: 20px;
+        padding-right: 20px;
+
         max-width: 100%;
         text-align: center;
-        box-sizing: border-box;
       }
 
       .column {
         box-sizing: border-box;
+        -webkit-box-sizing: border-box;
 
         margin: 52px auto 0;
 
@@ -170,6 +194,8 @@
 
       .pull-left, .pull-right {
         max-width: 55%;
+        margin-top: 0;
+        margin-bottom: 0;
         padding-top: 10px;
         padding-bottom: 10px;
       }
@@ -184,6 +210,51 @@
         float: right;
         margin-left: 30px;
         margin-right: -150px;
+      }
+
+      .image-grid {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+
+        margin: 52px auto 0;
+        padding-left: 10px;
+
+        width: 100%;
+        max-width: 1000px;
+      }
+
+      .image-grid::before,
+      .image-grid::after {
+        display: table;
+        content: "";
+      }
+
+      .image-grid::after {
+        clear: both;
+      }
+
+      .image-grid > figure {
+        margin-top: 0;
+        margin-bottom: 0;
+
+        clear: none;
+        float: left;
+        padding: 5px;
+      }
+
+      .image-grid > figure:first-child {
+        margin-left: -10px;
+        padding-left: 0;
+      }
+
+      .image-grid > figure:last-child {
+        padding-right: 0;
+      }
+
+      .image-grid figcaption {
+        position: relative;
+        width: 200%;
+        left: calc(-100% - 10px);
       }
 
       @media (max-width: 767px) {
@@ -247,20 +318,26 @@
 
   <body>
     <main>
-      <img class="logo" src="assets/logo.png" alt="zoom.ts">
+      <div class="logo">
+        <img src="assets/logo.png" alt="zoom.ts" width="478" height="178">
+      </div>
 
       <div class="column">
         <h1>Image zoom</h1>
-        <p><strong>zoom.ts</strong> is a lightweight TypeScript library for image zooming, as seen on <a href="https://medium.design/image-zoom-on-medium" target="_blank">Medium</a>. It easily plugs into your application and starts listening to zoom events as soon as the DOM is ready.</p>
+        <p><strong>zoom.ts</strong> is a lightweight TypeScript library for image zooming, as seen on <a href="https://medium.design/image-zoom-on-medium-24d146fc0c20" target="_blank">Medium</a>.</p>
 
         <h2>Click to zoom</h2>
         <p>A click will start a seamless animation into an immersive, full-screen view. Holding either the <kbd>⌘</kbd> or <kbd>Ctrl</kbd> key will open the image in a new tab when clicked.</p>
       </div>
 
       <figure>
-        <div class="zoom" data-width="2896" data-height="1931" data-src="assets/beach-full.jpeg">
-          <img class="zoom__image" src="assets/beach.jpeg">
-        </div>
+        <img
+          class="zoom__image"
+          src="assets/beach.jpeg"
+          data-width="2896"
+          data-height="1931"
+          data-src="assets/beach-full.jpeg"
+        />
         <figcaption>
           <a href="http://medium.com/@nick" target="_blank">@nick</a>
         </figcaption>
@@ -275,9 +352,13 @@
       </div>
 
       <figure>
-        <div class="zoom" data-width="2048" data-height="1366" data-src="assets/tower-full.jpeg">
-          <img class="zoom__image" src="assets/tower.jpeg">
-        </div>
+        <img
+          class="zoom__image"
+          src="assets/tower.jpeg"
+          data-width="2048"
+          data-height="1366"
+          data-src="assets/tower-full.jpeg"
+        />
         <figcaption>
           <a href="https://medium.com/@dpup" target="_blank">@dpup</a>
         </figcaption>
@@ -289,36 +370,72 @@
 
         <hr />
 
-        <figure class="zoom pull-right" data-width="3500" data-height="2333" data-src="assets/forest-full.jpg">
-          <img class="zoom__image" src="assets/forest.jpg">
+        <figure class="pull-right">
+          <img
+            class="zoom__image"
+            src="assets/forest.jpg"
+            data-width="3500"
+            data-height="2333"
+            data-src="assets/forest-full.jpg"
+          />
         </figure>
 
-        <p>Image’s come a variety of sizes, as such <strong>zoom.ts</strong> adapts to wherever you place your image on the page and repositions the image if the browser is resized whilst an image is expanded.</p>
+        <p>Images come a variety of sizes, as such <strong>zoom.ts</strong> adapts to wherever you place your image on the page and repositions the image if the browser is resized whilst an image is expanded.</p>
         <p>You may wish to justify your image to align it with the flow of text, avoiding the thematic break that typical block spaced images produce. The zooming experience doesn’t change for these cases.</p>
 
         <hr />
 
-        <figure class="zoom pull-left" data-width="960" data-height="1931">
-          <img class="zoom__image" src="assets/city.jpg">
+        <figure class="pull-left">
+          <img
+            class="zoom__image"
+            src="assets/city.jpg"
+            data-width="960"
+            data-height="1931"
+          />
         </figure>
 
         <p>Even small images can be zoomed. If the image doesn’t expand to fill the entire browser viewport, it will float above your content in the centre of the page.</p>
         <p>The image to the left doesn’t have a separate image specified as the full-source, thus won’t create a separate network request upon expansion.</p>
       </div>
 
-      <br />
-      <br />
+      <hr />
+
+      <div class="image-grid">
+        <figure style="width: 50%;">
+          <img
+            class="zoom__image"
+            src="https://cdn-images-1.medium.com/max/1200/1*bw4OIAMH2YD4aDQKIpfpxw.jpeg"
+            data-width="3662"
+            data-height="2744"
+            data-src="https://cdn-images-1.medium.com/max/1600/1*bw4OIAMH2YD4aDQKIpfpxw.jpeg"
+          />
+        </figure>
+        <figure style="width: 50%;">
+          <img
+            class="zoom__image"
+            src="https://cdn-images-1.medium.com/max/1200/1*O-3DGXcVtkS_5s0UX8CjGQ.jpeg"
+            data-width="3662"
+            data-height="2744"
+            data-src="https://cdn-images-1.medium.com/max/1600/1*O-3DGXcVtkS_5s0UX8CjGQ.jpeg"
+          />
+          <figcaption>Left: I accompanied two ladies as they shopped for ingredients for a veal gumbo recipe. Right: Research team members talk to a woman as she she is shopping for groceries.</figcaption>
+        </figure>
+      </div>
+
+      <hr />
 
       <figure>
-        <div class="zoom" data-width="1800" data-height="794" data-src="assets/illustration-full.jpeg">
-          <img class="zoom__image" src="assets/illustration.jpeg">
-        </div>
+        <img
+          class="zoom__image"
+          src="assets/illustration.jpeg"
+          data-width="1800"
+          data-height="794"
+          data-src="assets/illustration-full.jpeg"
+        />
         <figcaption>
           <a href="http://miko-studio.tumblr.com/" target="_blank">Miko Maciaszek</a>
         </figcaption>
       </figure>
-
-      <br />
 
       <div class="column">
         <h2>License</h2>
@@ -326,7 +443,7 @@
 
         <hr />
 
-        <p><em>Contribute to <strong>zoom.ts</strong> on <a href="https://github.com/michaelbull/zoom.ts" target="_blank">GitHub</a>. Full credits to <a href="https://medium.design/@b" target="_blank">Brad Birdsall</a> for the <a href="https://medium.design/image-zoom-on-medium" target="_blank">original version</a> of this article.</em></p>
+        <p><em>Contribute to <strong>zoom.ts</strong> on <a href="https://github.com/michaelbull/zoom.ts" target="_blank">GitHub</a>. Full credits to <a href="https://medium.design/@b" target="_blank">Brad Birdsall</a> for the <a href="https://medium.design/image-zoom-on-medium-24d146fc0c20" target="_blank">original version</a> of this article.</em></p>
       </div>
     </main>
   </body>

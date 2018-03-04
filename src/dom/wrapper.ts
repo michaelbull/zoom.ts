@@ -10,6 +10,12 @@ export class Wrapper {
     static readonly EXPANDED_CLASS = 'zoom--expanded';
     static readonly COLLAPSING_CLASS = 'zoom--collapsing';
 
+    static create(): Wrapper {
+        let element = document.createElement('div');
+        element.className = Wrapper.CLASS;
+        return new Wrapper(element);
+    }
+
     readonly element: HTMLElement;
 
     constructor(element: HTMLElement) {
@@ -57,16 +63,6 @@ export class Wrapper {
         return this.element.classList.contains(Wrapper.EXPANDED_CLASS);
     }
 
-    srcOf(element: HTMLImageElement): string {
-        let fullSrc = this.element.getAttribute('data-src');
-
-        if (fullSrc === null) {
-            return element.src;
-        } else {
-            return fullSrc;
-        }
-    }
-
     position(): Vector2 {
         let rect = this.element.getBoundingClientRect();
         let style = getComputedStyle(this.element);
@@ -77,9 +73,5 @@ export class Wrapper {
         let paddingLeft = parsePadding(style, 'left');
 
         return new Vector2(rect.left + paddingLeft, rect.top + paddingTop);
-    }
-
-    targetSize(): Vector2 {
-        return Vector2.fromTargetSize(this.element);
     }
 }
