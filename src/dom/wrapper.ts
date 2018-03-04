@@ -1,7 +1,7 @@
 import {
     parsePadding,
     resetStyle
-} from '../element/elements';
+} from '../element/style';
 import { Vector2 } from '../math/vector2';
 
 export class Wrapper {
@@ -80,6 +80,6 @@ export class Wrapper {
     }
 
     targetSize(): Vector2 {
-        return Vector2.targetSizeOf(this.element);
+        return Vector2.fromTargetSize(this.element);
     }
 }

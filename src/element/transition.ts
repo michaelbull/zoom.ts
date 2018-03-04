@@ -1,7 +1,5 @@
-import {
-    repaint,
-    resetStyle
-} from './elements';
+import { repaint } from './element';
+import { resetStyle } from './style';
 
 export const TRANSITION_END_EVENTS: { [key: string]: string } = {
     'WebkitTransition': 'webkitTransitionEnd',

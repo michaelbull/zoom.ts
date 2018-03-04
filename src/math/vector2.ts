@@ -1,4 +1,4 @@
-import { targetDimension } from '../element/elements';
+import { targetDimension } from '../element/element';
 
 export class Vector2 {
     static fromPosition(rect: ClientRect): Vector2 {
@@ -55,11 +55,11 @@ export class Vector2 {
         return midpoint.divide(2);
     }
 
-    static targetSizeOf(element: HTMLElement): Vector2 {
+    static fromTargetSize(element: HTMLElement): Vector2 {
         return new Vector2(targetDimension(element, 'width'), targetDimension(element, 'height'));
     }
 
-    static clientSizeOf(element: HTMLElement): Vector2 {
+    static fromClientSize(element: HTMLElement): Vector2 {
         return new Vector2(element.clientWidth, element.clientHeight);
     }
 }

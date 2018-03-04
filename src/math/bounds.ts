@@ -1,5 +1,5 @@
 import { viewportSize } from '../browser/document';
-import { setBounds } from '../element/elements';
+import { setBounds } from '../element/style';
 import { pixels } from './unit';
 import { Vector2 } from './vector2';
 

@@ -29,7 +29,7 @@ export * from './dom/image';
 export * from './dom/overlay';
 export * from './dom/wrapper';
 export * from './dom/zoom-dom';
-export * from './element/elements';
+export * from './element/element';
 export * from './element/scale-and-translate';
 export * from './element/transform';
 export * from './element/transition';

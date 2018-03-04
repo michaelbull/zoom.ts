@@ -12,7 +12,7 @@ export function rootElement(document: Document): HTMLElement {
 }
 
 export function viewportSize(document: Document): Vector2 {
-    return Vector2.clientSizeOf(rootElement(document));
+    return Vector2.fromClientSize(rootElement(document));
 }
 
 /**
