@@ -4,17 +4,33 @@ import {
     Config,
     DEFAULT_CONFIG
 } from './config';
-import { ZoomListener } from './event/zoom-listener';
+import { ZoomDOM } from './dom/zoom-dom';
+import { ClickZoomableListener } from './event/click-zoomable-listener';
+import { ZoomInstance } from './instance/zoom-instance';
+import { ZoomInstant } from './instance/zoom-instant';
+import { ZoomTransition } from './instance/zoom-transition';
 
 /**
- * Adds a {@link ZoomListener} for click events on the {@link Document#body}.
+ * Adds a {@link ClickZoomableListener} for click events on the {@link Document#body}.
  */
 export function listen(config: Config = DEFAULT_CONFIG): void {
-    ready(document, () => {
+    ready(() => {
         let body = document.body;
         let features = Features.of(body.style);
-        let listener = new ZoomListener(body, features, config);
-        body.addEventListener('click', listener);
+
+        let startZoom = (dom: ZoomDOM) => {
+            let instance: ZoomInstance;
+
+            if (features.hasTransform && features.hasTransitions) {
+                instance = new ZoomTransition(features, config, dom);
+            } else {
+                instance = new ZoomInstant(features, config, dom);
+            }
+
+            instance.expand();
+        };
+
+        body.addEventListener('click', new ClickZoomableListener(startZoom));
     });
 }
 
@@ -31,14 +47,21 @@ export * from './dom/wrapper';
 export * from './dom/zoom-dom';
 export * from './element/element';
 export * from './element/scale-and-translate';
+export * from './element/style';
 export * from './element/transform';
 export * from './element/transition';
-export * from './event/dismiss-listener';
+export * from './event/add-class-listener';
+export * from './event/click-zoomable-listener';
+export * from './event/collapse-listener';
 export * from './event/esc-key-listener';
-export * from './event/event-listener';
-export * from './event/resized-listener';
+export * from './event/expand-listener';
+export * from './event/resize-listener';
 export * from './event/scroll-listener';
-export * from './event/zoom-listener';
+export * from './event/show-clone-listener';
+export * from './event/util';
+export * from './instance/zoom-instance';
+export * from './instance/zoom-instant';
+export * from './instance/zoom-transition';
 export * from './math/bounds';
 export * from './math/unit';
 export * from './math/vector2';

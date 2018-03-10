@@ -7,7 +7,7 @@ import { rootElement } from './document';
  */
 export function pageScrollY(context: Window = window): number {
     if (context.pageYOffset === undefined) { // <IE9
-        return rootElement(context.document).scrollTop;
+        return rootElement().scrollTop;
     } else {
         return context.pageYOffset;
     }

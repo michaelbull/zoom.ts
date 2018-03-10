@@ -86,30 +86,11 @@ export class ZoomDOM {
         this.wrapper.element.style.height = pixels(this.image.element.height);
     }
 
-    /**
-     * Creates an {@link EventListener] that is called when the clone's 'load' event has fired. It checks to see if the
-     * clone has not yet been made visible, and ensures that we only show the clone if the image is fully expanded to
-     * avoid the image dimensions breaking mid-expansion.
-     */
-    createCloneLoadedListener(): EventListener {
-        return (): void => {
-            if (this.clone !== undefined && this.clone.isHidden() && this.wrapper.isExpanded()) {
-                this.replaceImageWithClone();
-            }
-        };
-    }
-
-    /**
-     * Removes the {@link #createCloneLoadedListener} attached to the 'load' event of a clone if the expansion of an
-     * image was cancelled before the 'load' event had time to finish and fire the event. As the image was collapsed we
-     * no longer care about showing it when it's loaded, and can wait for the next expansion to show the clone.
-     */
-    removeCloneLoadedListener(listener: EventListener | undefined): void {
-        if (this.clone !== undefined && listener !== undefined) {
-            if (this.clone.isLoading()) {
-                this.clone.element.removeEventListener('load', listener);
-            }
-        }
+    collapsed(): void {
+        this.replaceCloneWithImage();
+        this.overlay.removeFrom(document.body);
+        this.image.deactivate();
+        this.wrapper.finishCollapsing();
     }
 
     /**

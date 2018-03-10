@@ -1,4 +1,4 @@
-import { fireEventListener } from './event-listener';
+import { fireEventListener } from './util';
 
 const ESCAPE_KEY_CODE = 27;
 
@@ -7,19 +7,15 @@ const ESCAPE_KEY_CODE = 27;
  * {@link ESCAPE_KEY_CODE}.
  */
 export class EscKeyListener implements EventListenerObject {
-    private readonly target: any;
     private readonly delegate: EventListenerOrEventListenerObject;
 
-    constructor(target: any, delegate: EventListenerOrEventListenerObject) {
-        this.target = target;
+    constructor(delegate: EventListenerOrEventListenerObject) {
         this.delegate = delegate;
     }
 
     handleEvent(evt: KeyboardEvent): void {
         if (evt.keyCode === ESCAPE_KEY_CODE) {
-            evt.preventDefault();
-            evt.stopPropagation();
-            fireEventListener(this.target, this.delegate, evt);
+            fireEventListener(document, this.delegate, evt);
         }
     }
 }

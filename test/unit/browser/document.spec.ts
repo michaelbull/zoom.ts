@@ -95,7 +95,7 @@ describe('ready', () => {
             document.addEventListener = jasmine.createSpy('addEventListener');
             let callback: jasmine.Spy = jasmine.createSpy('callback');
 
-            ready(document, callback);
+            ready(callback, document);
 
             expect(callback).toHaveBeenCalledTimes(0);
         });
@@ -107,7 +107,7 @@ describe('ready', () => {
             };
             document.addEventListener = jasmine.createSpy('addEventListener').and.callFake(fake);
 
-            ready(document, jasmine.createSpy('callback'));
+            ready(jasmine.createSpy('callback'), document);
 
             expect(registeredListener).toBeDefined();
             expect(document.addEventListener).toHaveBeenCalledWith('DOMContentLoaded', registeredListener);
@@ -123,7 +123,7 @@ describe('ready', () => {
             let callback = jasmine.createSpy('callback');
             let event: any = jasmine.createSpy('event');
 
-            ready(document, callback);
+            ready(callback, document);
             fireEventListener(document, registeredListener, event);
 
             expect(registeredListener).toBeDefined();
@@ -145,7 +145,7 @@ describe('ready', () => {
             document.addEventListener = jasmine.createSpy('addEventListener');
             let callback = jasmine.createSpy('callback');
 
-            ready(document, callback);
+            ready(callback, document);
 
             expect(callback).toHaveBeenCalled();
             expect(document.addEventListener).toHaveBeenCalledTimes(0);

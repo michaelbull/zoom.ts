@@ -10,7 +10,7 @@ import {
 
 export class ScaleAndTranslate {
     static centreOf(target: Vector2, bounds: Bounds): ScaleAndTranslate {
-        let viewport = viewportSize(document);
+        let viewport = viewportSize();
         let cappedTarget = Vector2.min(viewport, target);
         let scale = cappedTarget.minDivisor(bounds.size);
         let translation = Bounds.centreTranslation(viewport, bounds, scale);

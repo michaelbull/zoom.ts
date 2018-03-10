@@ -41,7 +41,14 @@ export class Features {
     readonly transitionProperty?: string;
     readonly transitionEndEvent?: string;
 
-    constructor(hasTransform: boolean, hasTransform3d: boolean, hasTransitions: boolean, transformProperty?: string, transitionProperty?: string, transitionEndEvent?: string) {
+    constructor(
+        hasTransform: boolean,
+        hasTransform3d: boolean,
+        hasTransitions: boolean,
+        transformProperty?: string,
+        transitionProperty?: string,
+        transitionEndEvent?: string
+    ) {
         this.hasTransform = hasTransform;
         this.hasTransform3d = hasTransform3d;
         this.hasTransitions = hasTransitions;

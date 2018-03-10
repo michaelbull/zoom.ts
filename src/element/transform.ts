@@ -4,12 +4,12 @@ import { Vector2 } from '../math/vector2';
 
 export function translate(translation: Vector2): string {
     let { x, y } = translation;
-    return `translate(${x}px, ${y}px)`;
+    return `translate(${pixels(x)}, ${pixels(y)})`;
 }
 
 export function translate3d(translation: Vector2): string {
     let { x, y } = translation;
-    return `translate3d(${x}px, ${y}px, 0)`;
+    return `translate3d(${pixels(x)}, ${pixels(y)}, 0)`;
 }
 
 export function scale(amount: number): string {

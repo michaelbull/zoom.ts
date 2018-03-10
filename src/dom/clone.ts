@@ -1,4 +1,4 @@
-import { CloneLoadedListener } from '../event/clone-loaded-listener';
+import { AddClassListener } from '../event/add-class-listener';
 
 export class Clone {
     static readonly CLASS = 'zoom__clone';
@@ -9,7 +9,7 @@ export class Clone {
         let element = document.createElement('img');
         element.className = Clone.CLASS;
         element.src = src;
-        element.addEventListener('load', new CloneLoadedListener(element));
+        element.addEventListener('load', new AddClassListener(element, 'load', Clone.LOADED_CLASS));
         return new Clone(element);
     }
 

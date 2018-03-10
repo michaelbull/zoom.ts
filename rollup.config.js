@@ -28,7 +28,7 @@ let prodEnv = (process.env.NODE_ENV === 'production');
 let configuration = {
     input: 'src/index.ts',
     output: {
-        file: 'dist/zoom.js',
+        file: 'dist/zoom.min.js',
         format: 'umd',
         name: 'zoom',
         banner: '/*!' + '\n' + ' * ' + copyright.join('\n * ') + '\n' + ' */' + '\n'
@@ -40,12 +40,13 @@ let configuration = {
             abortOnError: false,
             tsconfigOverride: {
                 compilerOptions: {
+                    sourceMap: true,
                     declaration: false
                 }
             }
         }),
         sass({
-            output: 'dist/zoom.css',
+            output: 'dist/zoom.min.css',
             processor: css => postcss(postcssPlugins)
                 .process(css)
                 .then(result => result.css)

@@ -3,7 +3,7 @@ import { ZoomDOM } from '../dom/zoom-dom';
 import { Bounds } from '../math/bounds';
 import { Vector2 } from '../math/vector2';
 
-export class ZoomResizedListener implements EventListenerObject {
+export class ResizeListener implements EventListenerObject {
     private readonly dom: ZoomDOM;
     private readonly features: Features;
     private readonly targetSize: Vector2;

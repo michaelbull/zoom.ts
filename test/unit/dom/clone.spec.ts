@@ -1,5 +1,5 @@
 import { Clone } from '../../../src';
-import { CloneLoadedListener } from '../../../src/event/clone-loaded-listener';
+import { AddClassListener } from '../../../src/event/add-class-listener';
 
 describe('Clone', () => {
     describe('create', () => {
@@ -32,7 +32,7 @@ describe('Clone', () => {
         });
 
         it('should add the load event listener', () => {
-            expect(clone.element.addEventListener).toHaveBeenCalledWith('load', jasmine.any(CloneLoadedListener));
+            expect(clone.element.addEventListener).toHaveBeenCalledWith('load', jasmine.any(AddClassListener));
         });
     });
 
