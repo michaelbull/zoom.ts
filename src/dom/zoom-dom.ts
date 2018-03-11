@@ -9,8 +9,8 @@ import { Wrapper } from './wrapper';
 export class ZoomDOM {
     static useExisting(element: HTMLImageElement, parent: HTMLElement, grandparent: HTMLElement): ZoomDOM {
         let overlay = Overlay.create();
-        let container = new Container(parent);
         let wrapper = new Wrapper(grandparent);
+        let container = new Container(parent);
         let image = new Image(element);
         let src = fullSrc(element);
 
@@ -23,8 +23,8 @@ export class ZoomDOM {
 
     static create(element: HTMLImageElement): ZoomDOM {
         let overlay = Overlay.create();
-        let container = Container.create();
         let wrapper = Wrapper.create();
+        let container = Container.create();
         let image = new Image(element);
         let src = fullSrc(element);
 
