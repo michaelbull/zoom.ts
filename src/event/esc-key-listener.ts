@@ -1,6 +1,6 @@
 import { fireEventListener } from './util';
 
-const ESCAPE_KEY_CODE = 27;
+export const ESCAPE_KEY_CODE = 27;
 
 /**
  * An {@link EventListenerObject} that handles {@link KeyboardEvent}s with a {@link KeyboardEvent#keyCode} equal to
