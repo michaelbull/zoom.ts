@@ -107,7 +107,7 @@ export class ZoomInstance {
 
         this.dom.container.resetBounds();
         this.dom.wrapper.collapsed();
-        this.dom.collapsed();
+        this.dom.collapse();
     }
 
     private collapseInstantlyListener = (event: Event): void => {

@@ -11,6 +11,6 @@ export class CollapseListener implements EventListenerObject {
 
     handleEvent(evt: Event): void {
         this.dom.container.element.removeEventListener(this.eventType, this);
-        this.dom.collapsed();
+        this.dom.collapse();
     }
 }

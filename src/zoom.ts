@@ -9,7 +9,7 @@ import { ClickZoomableListener } from './event/click-zoomable-listener';
 import { ZoomInstance } from './zoom-instance';
 
 /**
- * Adds a {@link ClickZoomableListener} for click events on the {@link Document#body}.
+ * Adds a {@link ClickZoomableListener} for <code>click</code> events on the {@link Document#body}.
  */
 export function listen(config: Config = DEFAULT_CONFIG): void {
     ready(() => {
