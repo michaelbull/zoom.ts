@@ -6,13 +6,16 @@ import serve from 'rollup-plugin-serve';
 import typescript from 'rollup-plugin-typescript2';
 import uglify from 'rollup-plugin-uglify';
 
-let copyright = [
-    'zoom.ts v' + require('./package.json').version,
-    'https://github.com/michaelbull/zoom.ts',
-    '',
-    'Copyright (c) 2018 Michael Bull (https://www.michael-bull.com)',
-    '@license ISC'
-];
+let pkg = require('./package.json');
+let year = new Date().getFullYear();
+
+let copyright = `
+/*!
+ * zoom.ts v${pkg.version} (${pkg.homepage})
+ * Copyright (c) 2016-${year} ${pkg.author.name} (${pkg.author.url})
+ * @license ISC (https://github.com/michaelbull/zoom.ts/blob/master/LICENSE)
+ */
+`;
 
 let postcssPlugins = [
     cssnano({
@@ -31,7 +34,7 @@ let configuration = {
         file: 'dist/zoom.min.js',
         format: 'umd',
         name: 'zoom',
-        banner: '/*!' + '\n' + ' * ' + copyright.join('\n * ') + '\n' + ' */' + '\n'
+        banner: copyright
     },
     plugins: [
         typescript({
@@ -59,7 +62,17 @@ let configuration = {
 };
 
 if (prodEnv) {
-    configuration.plugins.push(uglify());
+    configuration.plugins.push(uglify({
+        output: {
+            comments: (node, comment) => {
+                if (comment.type === 'comment2') { // multiline comment
+                    return /@preserve|@license|@cc_on/i.test(comment.value);
+                } else {
+                    return false;
+                }
+            }
+        }
+    }));
 } else {
     configuration.output.sourcemap = true;
 

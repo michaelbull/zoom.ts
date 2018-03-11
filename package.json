@@ -20,11 +20,14 @@
     "url": "https://www.michael-bull.com"
   },
   "files": [
+    "src",
     "dist",
     "style.scss"
   ],
   "main": "dist/commonjs/zoom.js",
   "types": "dist/commonjs/zoom.d.ts",
+  "style": "dist/zoom.min.css",
+  "sass": "style.scss",
   "repository": {
     "type": "git",
     "url": "https://github.com/michaelbull/zoom.ts"
