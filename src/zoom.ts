@@ -25,8 +25,6 @@ export function listen(config: Config = DEFAULT_CONFIG): void {
     });
 }
 
-export * from './config';
-export * from './zoom-instance';
 export * from './browser/document';
 export * from './browser/features';
 export * from './browser/vendor';
@@ -54,3 +52,5 @@ export * from './event/util';
 export * from './math/bounds';
 export * from './math/unit';
 export * from './math/vector2';
+export * from './config';
+export * from './zoom-instance';
