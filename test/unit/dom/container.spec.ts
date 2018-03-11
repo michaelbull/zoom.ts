@@ -1,10 +1,8 @@
-import {
-    Bounds,
-    Container,
-    ScaleAndTranslate,
-    Vector2
-} from '../../../src/zoom';
+import { Container } from '../../../src/dom/container';
+import { ScaleAndTranslate } from '../../../src/element/scale-and-translate';
 import * as style from '../../../src/element/style';
+import { Bounds } from '../../../src/math/bounds';
+import { Vector2 } from '../../../src/math/vector2';
 
 describe('Container', () => {
     describe('create', () => {

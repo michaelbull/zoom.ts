@@ -1,3 +1,4 @@
+import * as vendor from '../../../src/browser/vendor';
 import {
     scale,
     scale3d,
@@ -7,10 +8,9 @@ import {
     TEST3D_STYLE,
     TEST3D_WIDTH,
     translate,
-    translate3d,
-    Vector2
-} from '../../../src/zoom';
-import * as vendor from '../../../src/browser/vendor';
+    translate3d
+} from '../../../src/element/transform';
+import { Vector2 } from '../../../src/math/vector2';
 
 describe('translate', () => {
     it('should return the transformation', () => {

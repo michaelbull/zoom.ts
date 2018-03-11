@@ -1,5 +1,5 @@
-import { pageScrollY } from '../../../src/zoom';
 import * as document from '../../../src/browser/document';
+import { pageScrollY } from '../../../src/browser/window';
 
 describe('pageScrollY', () => {
     it('should use window.pageYOffset if present', () => {

@@ -1,5 +1,5 @@
+import { Overlay } from '../../../src/dom/overlay';
 import * as element from '../../../src/element/element';
-import { Overlay } from '../../../src/zoom';
 
 describe('Overlay', () => {
     describe('create', () => {

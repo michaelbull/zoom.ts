@@ -1,4 +1,4 @@
-import { AddClassListener } from '../../../src/zoom';
+import { AddClassListener } from '../../../src/event/add-class-listener';
 
 describe('AddClassListener', () => {
     let listener: AddClassListener;

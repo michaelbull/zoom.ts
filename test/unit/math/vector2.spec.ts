@@ -1,5 +1,5 @@
-import { Vector2 } from '../../../src/zoom';
 import * as element from '../../../src/element/element';
+import { Vector2 } from '../../../src/math/vector2';
 
 describe('Vector2', () => {
     describe('fromPosition', () => {

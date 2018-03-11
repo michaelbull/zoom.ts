@@ -1,9 +1,7 @@
-import {
-    Bounds,
-    ScaleAndTranslate,
-    Vector2
-} from '../../../src/zoom';
 import * as document from '../../../src/browser/document';
+import { ScaleAndTranslate } from '../../../src/element/scale-and-translate';
+import { Bounds } from '../../../src/math/bounds';
+import { Vector2 } from '../../../src/math/vector2';
 
 describe('ScaleAndTranslate', () => {
     describe('toString2d', () => {

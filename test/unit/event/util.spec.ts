@@ -1,7 +1,7 @@
 import {
     fireEventListener,
     removeEventListener
-} from '../../../src/zoom';
+} from '../../../src/event/util';
 
 describe('fireEventListener', () => {
     it('should call the listener if the listener is an EventListener', () => {

@@ -1,8 +1,8 @@
-import * as util from '../../../src/event/util';
 import {
     ESCAPE_KEY_CODE,
     EscKeyListener
-} from '../../../src/zoom';
+} from '../../../src/event/esc-key-listener';
+import * as util from '../../../src/event/util';
 
 describe('EscKeyListener', () => {
     let listener: EscKeyListener;

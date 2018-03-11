@@ -1,8 +1,6 @@
-import {
-    Bounds,
-    Image,
-    Vector2
-} from '../../../src/zoom';
+import { Image } from '../../../src/dom/image';
+import { Bounds } from '../../../src/math/bounds';
+import { Vector2 } from '../../../src/math/vector2';
 
 describe('Image', () => {
     describe('bounds', () => {

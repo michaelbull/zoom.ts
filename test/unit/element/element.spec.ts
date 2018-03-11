@@ -1,7 +1,7 @@
 import {
     fullSrc,
     targetDimension
-} from '../../../src/zoom';
+} from '../../../src/element/element';
 
 describe('targetDimension', () => {
     it('should return Infinity if the attribute is null', () => {

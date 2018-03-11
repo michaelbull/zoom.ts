@@ -1,8 +1,6 @@
+import { Clone } from '../../../src/dom/clone';
+import { ZoomDOM } from '../../../src/dom/zoom-dom';
 import * as element from '../../../src/element/element';
-import {
-    Clone,
-    ZoomDOM
-} from '../../../src/zoom';
 
 describe('ZoomDOM', () => {
     describe('useExisting', () => {
@@ -452,11 +450,11 @@ describe('ZoomDOM', () => {
                 dom = new ZoomDOM(overlay, wrapper, container, image, clone);
                 replaceImageWithClone = spyOn(dom, 'replaceImageWithClone');
 
-                dom.showCloneIfLoaded()
+                dom.showCloneIfLoaded();
             });
 
             it('should replace the image with the clone', () => {
-                expect(replaceImageWithClone).toHaveBeenCalled()
+                expect(replaceImageWithClone).toHaveBeenCalled();
             });
         });
 
@@ -477,11 +475,11 @@ describe('ZoomDOM', () => {
                 dom = new ZoomDOM(overlay, wrapper, container, image, clone);
                 replaceImageWithClone = spyOn(dom, 'replaceImageWithClone');
 
-                dom.showCloneIfLoaded()
+                dom.showCloneIfLoaded();
             });
 
             it('should not replace the image with the clone', () => {
-                expect(replaceImageWithClone).toHaveBeenCalledTimes(0)
+                expect(replaceImageWithClone).toHaveBeenCalledTimes(0);
             });
         });
 
@@ -502,11 +500,11 @@ describe('ZoomDOM', () => {
                 dom = new ZoomDOM(overlay, wrapper, container, image, clone);
                 replaceImageWithClone = spyOn(dom, 'replaceImageWithClone');
 
-                dom.showCloneIfLoaded()
+                dom.showCloneIfLoaded();
             });
 
             it('should not replace the image with the clone', () => {
-                expect(replaceImageWithClone).toHaveBeenCalledTimes(0)
+                expect(replaceImageWithClone).toHaveBeenCalledTimes(0);
             });
         });
 
@@ -527,11 +525,11 @@ describe('ZoomDOM', () => {
                 dom = new ZoomDOM(overlay, wrapper, container, image, clone);
                 replaceImageWithClone = spyOn(dom, 'replaceImageWithClone');
 
-                dom.showCloneIfLoaded()
+                dom.showCloneIfLoaded();
             });
 
             it('should not replace the image with the clone', () => {
-                expect(replaceImageWithClone).toHaveBeenCalledTimes(0)
+                expect(replaceImageWithClone).toHaveBeenCalledTimes(0);
             });
         });
     });

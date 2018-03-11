@@ -1,8 +1,6 @@
-import {
-    Bounds,
-    STANDARDS_MODE,
-    Vector2
-} from '../../../src/zoom';
+import { STANDARDS_MODE } from '../../../src/browser/document';
+import { Bounds } from '../../../src/math/bounds';
+import { Vector2 } from '../../../src/math/vector2';
 
 describe('Bounds', () => {
     describe('of', () => {

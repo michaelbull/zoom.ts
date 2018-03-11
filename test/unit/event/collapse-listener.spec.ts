@@ -1,4 +1,4 @@
-import { CollapseListener } from '../../../src/zoom';
+import { CollapseListener } from '../../../src/event/collapse-listener';
 
 describe('CollapseListener', () => {
     let listener: CollapseListener;

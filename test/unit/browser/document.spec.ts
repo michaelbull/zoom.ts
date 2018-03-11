@@ -1,13 +1,13 @@
 import {
-    fireEventListener,
     isStandardsMode,
     QUIRKS_MODE,
     ready,
     rootElement,
     STANDARDS_MODE,
-    Vector2,
     viewportSize
-} from '../../../src/zoom';
+} from '../../../src/browser/document';
+import { fireEventListener } from '../../../src/event/util';
+import { Vector2 } from '../../../src/math/vector2';
 
 describe('isStandardsMode', () => {
     it('should return true if compatMode is CSS1Compat', () => {

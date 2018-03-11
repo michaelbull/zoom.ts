@@ -1,8 +1,6 @@
+import { Wrapper } from '../../../src/dom/wrapper';
 import * as style from '../../../src/element/style';
-import {
-    Vector2,
-    Wrapper
-} from '../../../src/zoom';
+import { Vector2 } from '../../../src/math/vector2';
 
 describe('Wrapper', () => {
     describe('create', () => {

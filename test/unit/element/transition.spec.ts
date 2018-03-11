@@ -1,6 +1,6 @@
-import { ignoreTransitions } from '../../../src/zoom';
 import * as element from '../../../src/element/element';
 import * as style from '../../../src/element/style';
+import { ignoreTransitions } from '../../../src/element/transition';
 
 describe('ignoreTransitions', () => {
     it('should set the transition property to initial before calling the callback', () => {

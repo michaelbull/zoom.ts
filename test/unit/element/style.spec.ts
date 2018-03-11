@@ -2,7 +2,7 @@ import {
     parsePadding,
     resetStyle,
     setBounds
-} from '../../../src/zoom';
+} from '../../../src/element/style';
 
 describe('setBounds', () => {
     let style: any;
@@ -57,27 +57,27 @@ describe('parsePadding', () => {
         let style: any = {
             getPropertyValue: (propertyName: string) => {
                 if (propertyName === 'padding-left') {
-                    return '50px'
+                    return '50px';
                 } else {
-                    fail()
+                    fail();
                 }
             }
         };
 
-        expect(parsePadding(style, 'left')).toBe(50)
+        expect(parsePadding(style, 'left')).toBe(50);
     });
 
     it('should return 0 if the parsed value is NaN', () => {
         let style: any = {
             getPropertyValue: (propertyName: string) => {
                 if (propertyName === 'padding-right') {
-                    return 'this is not a number'
+                    return 'this is not a number';
                 } else {
-                    fail()
+                    fail();
                 }
             }
         };
 
-        expect(parsePadding(style, 'right')).toBe(0)
+        expect(parsePadding(style, 'right')).toBe(0);
     });
 });
