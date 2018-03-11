@@ -26,7 +26,7 @@ export class Overlay {
         node.removeChild(this.element);
     }
 
-    show(): void {
+    private show(): void {
         this.element.classList.add(Overlay.VISIBLE_CLASS);
     }
 
