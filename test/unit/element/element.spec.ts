@@ -1,4 +1,7 @@
-import { targetDimension } from '../../../src/zoom';
+import {
+    fullSrc,
+    targetDimension
+} from '../../../src/zoom';
 
 describe('targetDimension', () => {
     it('should return Infinity if the attribute is null', () => {
@@ -23,5 +26,37 @@ describe('targetDimension', () => {
         };
 
         expect(targetDimension(element, '')).toBe(503);
+    });
+});
+
+describe('fullSrc', () => {
+    it('should return the value of the data-src attribute if non-null', () => {
+        let image: any = {
+            src: 'example-src',
+            getAttribute: (name: string) => {
+                if (name === 'data-src') {
+                    return 'example-full-src';
+                } else {
+                    fail();
+                }
+            }
+        };
+
+        expect(fullSrc(image)).toEqual('example-full-src');
+    });
+
+    it('should return the value of the src attribute if the data-src is null', () => {
+        let image: any = {
+            src: 'example-src',
+            getAttribute: (name: string) => {
+                if (name === 'data-src') {
+                    return null;
+                } else {
+                    fail();
+                }
+            }
+        };
+
+        expect(fullSrc(image)).toEqual('example-src');
     });
 });
