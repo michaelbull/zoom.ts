@@ -13,7 +13,7 @@ let copyright = `
 /*!
  * zoom.ts v${pkg.version} (${pkg.homepage})
  * Copyright (c) 2016-${year} ${pkg.author.name} (${pkg.author.url})
- * @license ISC (https://github.com/michaelbull/zoom.ts/blob/master/LICENSE)
+ * @license ${pkg.license} (https://github.com/michaelbull/zoom.ts/blob/master/LICENSE)
  */
 `;
 
