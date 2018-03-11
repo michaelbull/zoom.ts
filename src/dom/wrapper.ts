@@ -26,20 +26,16 @@ export class Wrapper {
         this.element.classList.add(Wrapper.EXPANDING_CLASS);
     }
 
-    isExpanding(): boolean {
-        return this.element.classList.contains(Wrapper.EXPANDING_CLASS);
-    }
-
     finishExpanding(): void {
         this.element.classList.remove(Wrapper.EXPANDING_CLASS);
     }
 
-    startCollapsing() {
-        this.element.classList.add(Wrapper.COLLAPSING_CLASS);
+    isExpanding(): boolean {
+        return this.element.classList.contains(Wrapper.EXPANDING_CLASS);
     }
 
-    isCollapsing(): boolean {
-        return this.element.classList.contains(Wrapper.COLLAPSING_CLASS);
+    startCollapsing() {
+        this.element.classList.add(Wrapper.COLLAPSING_CLASS);
     }
 
     finishCollapsing(): void {
@@ -47,16 +43,20 @@ export class Wrapper {
         resetStyle(this.element.style, 'height');
     }
 
+    isCollapsing(): boolean {
+        return this.element.classList.contains(Wrapper.COLLAPSING_CLASS);
+    }
+
     isTransitioning(): boolean {
         return this.isExpanding() || this.isCollapsing();
     }
 
-    collapsed(): void {
-        this.element.classList.remove(Wrapper.EXPANDED_CLASS);
-    }
-
     expanded(): void {
         this.element.classList.add(Wrapper.EXPANDED_CLASS);
+    }
+
+    collapsed(): void {
+        this.element.classList.remove(Wrapper.EXPANDED_CLASS);
     }
 
     isExpanded(): boolean {
@@ -65,7 +65,7 @@ export class Wrapper {
 
     position(): Vector2 {
         let rect = this.element.getBoundingClientRect();
-        let style = getComputedStyle(this.element);
+        let style = window.getComputedStyle(this.element);
 
         // if the wrapper has an explicit padding in the normal page flow,
         // we must disregard it when calculating the wrapper's true position
