@@ -1,4 +1,4 @@
-import { pixels } from '../../../src';
+import { pixels } from '../../../src/zoom';
 
 describe('pixels', () => {
     it('should return the value in pixel units', () => {

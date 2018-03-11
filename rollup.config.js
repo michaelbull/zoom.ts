@@ -26,7 +26,7 @@ let postcssPlugins = [
 let prodEnv = (process.env.NODE_ENV === 'production');
 
 let configuration = {
-    input: 'src/index.ts',
+    input: 'index.ts',
     output: {
         file: 'dist/zoom.min.js',
         format: 'umd',
@@ -42,7 +42,11 @@ let configuration = {
                 compilerOptions: {
                     sourceMap: true,
                     declaration: false
-                }
+                },
+                include: [
+                    'src',
+                    'index.ts'
+                ]
             }
         }),
         sass({

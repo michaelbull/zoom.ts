@@ -1,4 +1,4 @@
-import { targetDimension } from '../../../src';
+import { targetDimension } from '../../../src/zoom';
 
 describe('targetDimension', () => {
     it('should return Infinity if the attribute is null', () => {

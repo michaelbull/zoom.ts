@@ -2,7 +2,7 @@ import {
     Bounds,
     STANDARDS_MODE,
     Vector2
-} from '../../../src';
+} from '../../../src/zoom';
 
 describe('Bounds', () => {
     describe('of', () => {

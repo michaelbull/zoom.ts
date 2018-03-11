@@ -1,4 +1,4 @@
-import { pageScrollY } from '../../../src';
+import { pageScrollY } from '../../../src/zoom';
 import * as document from '../../../src/browser/document';
 
 describe('pageScrollY', () => {

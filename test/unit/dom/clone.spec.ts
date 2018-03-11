@@ -1,4 +1,4 @@
-import { Clone } from '../../../src';
+import { Clone } from '../../../src/zoom';
 import { AddClassListener } from '../../../src/event/add-class-listener';
 
 describe('Clone', () => {

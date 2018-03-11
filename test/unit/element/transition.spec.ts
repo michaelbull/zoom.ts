@@ -1,4 +1,4 @@
-import { ignoreTransitions } from '../../../src';
+import { ignoreTransitions } from '../../../src/zoom';
 import * as element from '../../../src/element/element';
 import * as style from '../../../src/element/style';
 

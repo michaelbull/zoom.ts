@@ -2,7 +2,7 @@ import {
     VENDOR_PREFIXES,
     vendorProperties,
     vendorProperty
-} from '../../../src';
+} from '../../../src/zoom';
 
 describe('vendorProperties', () => {
     it('should contain the property itself', () => {

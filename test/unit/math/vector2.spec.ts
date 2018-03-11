@@ -1,4 +1,4 @@
-import { Vector2 } from '../../../src';
+import { Vector2 } from '../../../src/zoom';
 import * as element from '../../../src/element/element';
 
 describe('Vector2', () => {

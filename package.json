@@ -24,7 +24,7 @@
     "style.scss"
   ],
   "main": "dist/commonjs/zoom.js",
-  "typings": "dist/commonjs/zoom.d.ts",
+  "types": "dist/commonjs/zoom.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/michaelbull/zoom.ts"

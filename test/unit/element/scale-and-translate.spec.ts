@@ -2,7 +2,7 @@ import {
     Bounds,
     ScaleAndTranslate,
     Vector2
-} from '../../../src';
+} from '../../../src/zoom';
 import * as document from '../../../src/browser/document';
 
 describe('ScaleAndTranslate', () => {

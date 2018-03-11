@@ -1,4 +1,4 @@
-import { Features } from '../../../src';
+import { Features } from '../../../src/zoom';
 import * as vendor from '../../../src/browser/vendor';
 import * as transform from '../../../src/element/transform';
 

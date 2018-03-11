@@ -9,7 +9,7 @@ import {
     translate,
     translate3d,
     Vector2
-} from '../../../src';
+} from '../../../src/zoom';
 import * as vendor from '../../../src/browser/vendor';
 
 describe('translate', () => {

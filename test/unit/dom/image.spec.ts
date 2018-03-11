@@ -2,7 +2,7 @@ import {
     Bounds,
     Image,
     Vector2
-} from '../../../src';
+} from '../../../src/zoom';
 
 describe('Image', () => {
     describe('bounds', () => {

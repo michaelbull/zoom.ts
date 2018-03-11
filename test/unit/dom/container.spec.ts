@@ -3,7 +3,7 @@ import {
     Container,
     ScaleAndTranslate,
     Vector2
-} from '../../../src';
+} from '../../../src/zoom';
 import * as style from '../../../src/element/style';
 
 describe('Container', () => {

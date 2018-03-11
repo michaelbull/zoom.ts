@@ -6,9 +6,7 @@ import {
 } from './config';
 import { ZoomDOM } from './dom/zoom-dom';
 import { ClickZoomableListener } from './event/click-zoomable-listener';
-import { ZoomInstance } from './instance/zoom-instance';
-import { ZoomInstant } from './instance/zoom-instant';
-import { ZoomTransition } from './instance/zoom-transition';
+import { ZoomInstance } from './zoom-instance';
 
 /**
  * Adds a {@link ClickZoomableListener} for click events on the {@link Document#body}.
@@ -19,14 +17,7 @@ export function listen(config: Config = DEFAULT_CONFIG): void {
         let features = Features.of(body.style);
 
         let startZoom = (dom: ZoomDOM) => {
-            let instance: ZoomInstance;
-
-            if (features.hasTransform && features.hasTransitions) {
-                instance = new ZoomTransition(features, config, dom);
-            } else {
-                instance = new ZoomInstant(features, config, dom);
-            }
-
+            let instance = new ZoomInstance(dom, features, config);
             instance.expand();
         };
 
@@ -35,6 +26,7 @@ export function listen(config: Config = DEFAULT_CONFIG): void {
 }
 
 export * from './config';
+export * from './zoom-instance';
 export * from './browser/document';
 export * from './browser/features';
 export * from './browser/vendor';
@@ -59,9 +51,6 @@ export * from './event/resize-listener';
 export * from './event/scroll-listener';
 export * from './event/show-clone-listener';
 export * from './event/util';
-export * from './instance/zoom-instance';
-export * from './instance/zoom-instant';
-export * from './instance/zoom-transition';
 export * from './math/bounds';
 export * from './math/unit';
 export * from './math/vector2';

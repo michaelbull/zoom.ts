@@ -7,7 +7,7 @@ import {
     STANDARDS_MODE,
     Vector2,
     viewportSize
-} from '../../../src';
+} from '../../../src/zoom';
 
 describe('isStandardsMode', () => {
     it('should return true if compatMode is CSS1Compat', () => {
