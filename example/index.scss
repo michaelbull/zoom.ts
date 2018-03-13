@@ -21,8 +21,6 @@ body {
   line-height: 1.4;
   color: rgba(0, 0, 0, 0.84);
 
-  mix-blend-mode: exclusion; // prevents the body text from antialiasing with non-greyscale colours
-
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
