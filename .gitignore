@@ -27,9 +27,4 @@ npm-debug.log*
 reports/
 
 # Distribution
-dist/*.map
-dist/amd/
-dist/commonjs/
-dist/es2015/
-dist/native-modules/
-dist/system/
+dist/

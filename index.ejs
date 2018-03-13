@@ -7,11 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="shortcut icon" href="assets/favicon.ico">
-    <link rel="stylesheet" href="dist/zoom.min.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|PT+Serif:400,400i" rel="stylesheet">
-
-    <script type="text/javascript" src="dist/zoom.min.js"></script>
-    <script>window.zoom.listen();</script>
 
     <style>
       html {
@@ -324,7 +320,7 @@
   <body>
     <main>
       <div class="logo">
-        <img src="assets/logo.png" alt="zoom.ts" width="478" height="178">
+        <img src="<%= require('./assets/logo.png') %>" alt="zoom.ts" width="478" height="178">
       </div>
 
       <div class="column">
@@ -338,10 +334,10 @@
       <figure>
         <img
           class="zoom__image"
-          src="assets/beach.jpeg"
+          src="<%= require('./assets/beach.jpeg') %>"
           data-width="2896"
           data-height="1931"
-          data-src="assets/beach-full.jpeg"
+          data-src="<%= require('./assets/beach-full.jpeg') %>"
         />
         <figcaption>
           <a href="http://medium.com/@nick" target="_blank">@nick</a>
@@ -359,10 +355,10 @@
       <figure>
         <img
           class="zoom__image"
-          src="assets/tower.jpeg"
+          src="<%= require('./assets/tower.jpeg') %>"
           data-width="2048"
           data-height="1366"
-          data-src="assets/tower-full.jpeg"
+          data-src="<%= require('./assets/tower-full.jpeg') %>"
         />
         <figcaption>
           <a href="https://medium.com/@dpup" target="_blank">@dpup</a>
@@ -378,10 +374,10 @@
         <figure class="pull-right">
           <img
             class="zoom__image"
-            src="assets/forest.jpg"
+            src="<%= require('./assets/forest.jpg') %>"
             data-width="3500"
             data-height="2333"
-            data-src="assets/forest-full.jpg"
+            data-src="<%= require('./assets/forest-full.jpg') %>"
           />
         </figure>
 
@@ -393,7 +389,7 @@
         <figure class="pull-left">
           <img
             class="zoom__image"
-            src="assets/city.jpg"
+            src="<%= require('./assets/city.jpg') %>"
             data-width="960"
             data-height="1931"
           />
@@ -432,10 +428,10 @@
       <figure>
         <img
           class="zoom__image"
-          src="assets/illustration.jpeg"
+          src="<%= require('./assets/illustration.jpeg') %>"
           data-width="1800"
           data-height="794"
-          data-src="assets/illustration-full.jpeg"
+          data-src="<%= require('./assets/illustration-full.jpeg') %>"
         />
         <figcaption>
           <a href="http://miko-studio.tumblr.com/" target="_blank">Miko Maciaszek</a>
@@ -451,5 +447,9 @@
         <p><em>Contribute to <strong>zoom.ts</strong> on <a href="https://github.com/michaelbull/zoom.ts" target="_blank">GitHub</a>. Full credits to <a href="https://medium.design/@b" target="_blank">Brad Birdsall</a> for the <a href="https://medium.design/image-zoom-on-medium-24d146fc0c20" target="_blank">original version</a> of this article.</em></p>
       </div>
     </main>
+
+    <script>
+      window.zoom.listen();
+    </script>
   </body>
 </html>
