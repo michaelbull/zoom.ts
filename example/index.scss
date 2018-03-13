@@ -1,3 +1,7 @@
+$page-width: 1000px;
+$content-width: 700px;
+$page-gutter: 20px;
+
 html {
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
@@ -17,7 +21,7 @@ body {
   line-height: 1.4;
   color: rgba(0, 0, 0, 0.84);
 
-  mix-blend-mode: exclusion; /* prevents the body text from antialiasing with non-greyscale colours */
+  mix-blend-mode: exclusion; // prevents the body text from antialiasing with non-greyscale colours
 
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -91,14 +95,27 @@ a {
 }
 
 figure {
-  margin: 52px auto 5px;
+  margin: {
+    top: 52px;
+    right: auto;
+    left: auto;
+    bottom: 5px;
+  }
+
   padding: 5px 0;
-  max-width: 1000px;
+
+  max-width: $page-width;
   text-align: center;
 }
 
 figcaption {
-  margin: 10px auto 0;
+  margin: {
+    top: 10px;
+    right: auto;
+    left: auto;
+    bottom: 0;
+  }
+
   font-family: 'Open Sans', sans-serif;
   font-size: 15px;
   line-height: 1.49;
@@ -164,9 +181,7 @@ hr {
 
   display: block;
   margin: 5rem auto 8rem;
-
-  padding-left: 20px;
-  padding-right: 20px;
+  padding: 0 $page-gutter;
 
   max-width: 100%;
   text-align: center;
@@ -182,11 +197,10 @@ hr {
     bottom: 0;
   }
 
-  padding-left: 20px;
-  padding-right: 20px;
+  padding: 0 $page-gutter;
 
   width: 100%;
-  max-width: 740px;
+  max-width: $content-width + (2 * $page-gutter);
 
   &:first-of-type {
     margin-top: 0;
@@ -214,14 +228,19 @@ hr {
   margin-right: -150px;
 }
 
-.image-grid {
+.image-row {
   box-sizing: border-box;
-
-  margin: 52px auto 0;
-  padding-left: 10px;
-
   width: 100%;
-  max-width: 1000px;
+  max-width: $page-width;
+
+  margin: 0 auto;
+
+  padding: {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 10px;
+  }
 
   &::before,
   &::after {
@@ -233,28 +252,26 @@ hr {
     clear: both;
   }
 
-  > figure {
-    margin-top: 0;
-    margin-bottom: 0;
+  + figcaption {
+    margin-top: 5px;
+  }
+}
 
-    clear: none;
-    float: left;
-    padding: 5px;
+.image-row__column {
+  margin-top: 0;
+  margin-bottom: 0;
 
-    &:first-child {
-      margin-left: -10px;
-      padding-left: 0;
-    }
+  clear: none;
+  float: left;
+  padding: 5px;
 
-    &:last-child {
-      padding-right: 0;
-    }
+  &:first-of-type {
+    margin-left: -10px;
+    padding-left: 0;
   }
 
-  figcaption {
-    position: relative;
-    width: 200%;
-    left: calc(-100% - 10px);
+  &:last-of-type {
+    padding-right: 0;
   }
 }
 
@@ -306,8 +323,9 @@ hr {
   }
 }
 
-@media (max-width: 999px) {
-  .pull-left, .pull-right {
+@media (max-width: $page-width - 1px) {
+  .pull-left,
+  .pull-right {
     float: none;
     margin: 3.25rem 0;
     max-width: none;
