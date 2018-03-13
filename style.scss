@@ -7,30 +7,6 @@ $zoom-overlay-z-index: 1000 !default;
 $zoom-overlay-background-color: hsl(0, 0%, 100%) !default;
 $zoom-overlay-visible-opacity: 100 !default;
 
-@mixin zoom-hidden() {
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility 0s linear 500ms, opacity 100ms 400ms;
-}
-
-@mixin zoom-visible() {
-  visibility: visible;
-  opacity: 1;
-  transition: visibility 0s linear 0s, opacity 400ms 0s;
-}
-
-@mixin zoom-in-cursor() {
-  cursor: pointer;
-  cursor: -moz-zoom-in;
-  cursor: -webkit-zoom-in;
-}
-
-@mixin zoom-out-cursor() {
-  cursor: pointer;
-  cursor: -moz-zoom-out;
-  cursor: -webkit-zoom-out;
-}
-
 .zoom {
   display: block;
   position: relative;
@@ -44,35 +20,59 @@ $zoom-overlay-visible-opacity: 100 !default;
   z-index: $zoom-z-index;
 }
 
+.zoom__container,
+.zoom__image,
+.zoom__clone {
+  display: block;
+  margin: auto;
+  box-sizing: border-box;
+}
+
 .zoom__container {
   position: relative;
   transition: transform $zoom-transition-duration $zoom-transition-timing-function;
   will-change: transform;
 }
 
-.zoom__image {
-  @include zoom-in-cursor();
-  @include zoom-visible();
+.zoom__image,
+.zoom__clone {
+  cursor: pointer;
+  cursor: -moz-zoom-in;
+  cursor: -webkit-zoom-in;
 
-  display: block;
+  backface-visibility: hidden;
+}
+
+.zoom__image--active,
+.zoom__clone--visible {
+  cursor: pointer;
+  cursor: -moz-zoom-out;
+  cursor: -webkit-zoom-out;
+}
+
+.zoom__image--hidden,
+.zoom__clone {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s linear 500ms, opacity 100ms 400ms;
+}
+
+.zoom__image,
+.zoom__clone--visible {
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 0s linear 0s, opacity 400ms 0s;
+}
+
+.zoom__image {
   max-width: 100%;
-  will-change: visibility, opacity;
 }
 
 .zoom__image--active {
-  @include zoom-out-cursor();
-
   width: 100%;
 }
 
-.zoom__image--hidden {
-  @include zoom-hidden();
-}
-
 .zoom__clone {
-  @include zoom-in-cursor();
-  @include zoom-hidden();
-
   position: absolute;
   top: 0;
   right: 0;
@@ -80,12 +80,6 @@ $zoom-overlay-visible-opacity: 100 !default;
   left: 0;
 
   width: 100%;
-  will-change: visibility, opacity;
-}
-
-.zoom__clone--visible {
-  @include zoom-out-cursor();
-  @include zoom-visible();
 }
 
 .zoom__overlay {
