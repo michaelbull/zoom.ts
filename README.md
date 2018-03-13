@@ -118,7 +118,7 @@ This project is available under the terms of the ISC license. See the
 [listen]: https://github.com/michaelbull/zoom.ts/blob/master/src/zoom.ts#L15
 [ready]: https://github.com/michaelbull/zoom.ts/blob/master/src/browser/document.ts#L25
 [features]: https://github.com/michaelbull/zoom.ts/blob/master/src/browser/features.ts#L5
-[zoom-listener]: https://github.com/michaelbull/zoom.ts/blob/master/src/event/zoom-listener.ts#L7
+[zoom-listener]: https://github.com/michaelbull/zoom.ts/blob/master/src/event/zoom-listener.ts#L11
 [zoom-instance]: https://github.com/michaelbull/zoom.ts/blob/master/src/zoom-instance.ts#L18
-[destroy]: https://github.com/michaelbull/zoom.ts/blob/master/src/zoom-instance.ts#L64
+[destroy]: https://github.com/michaelbull/zoom.ts/blob/master/src/zoom-instance.ts#L73
 [github]: https://github.com/michaelbull/zoom.ts
