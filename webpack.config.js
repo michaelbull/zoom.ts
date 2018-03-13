@@ -12,6 +12,7 @@ Copyright (c) 2016-${year} ${pkg.author.name} (${pkg.author.url})
 
 let srcDir = path.resolve(__dirname, 'src');
 let distDir = path.resolve(__dirname, 'dist');
+let exampleDir = path.resolve(__dirname, 'example');
 
 module.exports = (env = {}, args = {}) => {
     let styleRules = [
@@ -22,12 +23,13 @@ module.exports = (env = {}, args = {}) => {
 
     let config = {
         entry: {
-            zoom: path.resolve(srcDir, 'zoom.ts')
+            zoom: path.resolve(srcDir, 'zoom.ts'),
+            example: path.resolve(exampleDir, 'index.js')
         },
 
         output: {
             path: distDir,
-            library: 'zoom',
+            library: '[name]',
             libraryTarget: 'umd',
             umdNamedDefine: true,
             filename: '[name].js'
@@ -62,17 +64,13 @@ module.exports = (env = {}, args = {}) => {
             extensions: [
                 '.js',
                 '.ts'
-            ],
-            modules: [
-                'node_modules',
-                srcDir
             ]
         },
 
         plugins: [
             new BannerPlugin(copyright),
             new HtmlWebpackPlugin({
-                template: 'index.ejs',
+                template: path.resolve(exampleDir, 'index.ejs'),
                 inject: 'head'
             })
         ],
@@ -82,10 +80,14 @@ module.exports = (env = {}, args = {}) => {
         }
     };
 
-    if (args.mode === 'production') {
-        config.plugins.push(new ExtractTextPlugin('[name].css'))
-    } else {
-        config.devtool = 'source-map';
+    switch (args.mode) {
+        case 'production':
+            config.plugins.push(new ExtractTextPlugin('[name].css'));
+            break;
+
+        case 'development':
+            config.devtool = 'source-map';
+            break;
     }
 
     return config;

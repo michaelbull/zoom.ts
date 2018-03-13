@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>zoom.ts</title>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="shortcut icon" href="../assets/favicon.ico">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|PT+Serif:400,400i" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <main>
+      <div class="logo">
+        <img src="<%= require('../assets/logo.png') %>" alt="zoom.ts" width="478" height="178">
+      </div>
+
+      <div class="column">
+        <h1>Image zoom</h1>
+        <p><strong>zoom.ts</strong> is a lightweight TypeScript library for image zooming, as seen on <a href="https://medium.design/image-zoom-on-medium-24d146fc0c20" target="_blank">Medium</a>.</p>
+
+        <h2>Click to zoom</h2>
+        <p>A click will start a seamless animation into an immersive, full-screen view. Holding either the <kbd>⌘</kbd> or <kbd>Ctrl</kbd> key will open the image in a new tab when clicked.</p>
+      </div>
+
+      <figure>
+        <img
+          class="zoom__image"
+          src="<%= require('../assets/beach.jpeg') %>"
+          data-width="2896"
+          data-height="1931"
+          data-src="<%= require('../assets/beach-full.jpeg') %>"
+        />
+        <figcaption>
+          <a href="http://medium.com/@nick" target="_blank">@nick</a>
+        </figcaption>
+      </figure>
+
+      <div class="column">
+        <h2>Don’t lose your place</h2>
+        <p>Your progress through a story is important. When you interact with images we maintain your scroll position and make it apparent that your state has not changed. We simultaneously fade out the content and zoom the image for a smooth visual experience.</p>
+
+        <h2>Take me home</h2>
+        <p>You can press <kbd>Esc</kbd> or click anywhere on the image to exit the zoomed state, or, more interestingly, just scroll away as if you were continuing past the image. Give it a try:</p>
+      </div>
+
+      <figure>
+        <img
+          class="zoom__image"
+          src="<%= require('../assets/tower.jpeg') %>"
+          data-width="2048"
+          data-height="1366"
+          data-src="<%= require('../assets/tower-full.jpeg') %>"
+        />
+        <figcaption>
+          <a href="https://medium.com/@dpup" target="_blank">@dpup</a>
+        </figcaption>
+      </figure>
+
+      <div class="column">
+        <h2>Ready when you are</h2>
+        <p>Another significant detail is the lack of loading indicators — we’re always ready to zoom. We prepare all images to zoom right after the content has loaded. If the full-size image isn’t loaded, we transition the original image and replace it when the detailed image is ready. We don’t allow your connection speed to affect the animation, creating an ultra-snappy interaction. More often than not, the images are swapped before the transition comes to an end.</p>
+
+        <hr />
+
+        <figure class="pull-right">
+          <img
+            class="zoom__image"
+            src="<%= require('../assets/forest.jpg') %>"
+            data-width="3500"
+            data-height="2333"
+            data-src="<%= require('../assets/forest-full.jpg') %>"
+          />
+        </figure>
+
+        <p>Images come a variety of sizes, as such <strong>zoom.ts</strong> adapts to wherever you place your image on the page and repositions the image if the browser is resized whilst an image is expanded.</p>
+        <p>You may wish to justify your image to align it with the flow of text, avoiding the thematic break that typical block spaced images produce. The zooming experience doesn’t change for these cases.</p>
+
+        <hr />
+
+        <figure class="pull-left">
+          <img
+            class="zoom__image"
+            src="<%= require('../assets/city.jpg') %>"
+            data-width="960"
+            data-height="1931"
+          />
+        </figure>
+
+        <p>Even small images can be zoomed. If the image doesn’t expand to fill the entire browser viewport, it will float above your content in the centre of the page.</p>
+        <p>The image to the left doesn’t have a separate image specified as the full-source, thus won’t create a separate network request upon expansion.</p>
+      </div>
+
+      <hr />
+
+      <div class="image-grid">
+        <figure style="width: 50%;">
+          <img
+            class="zoom__image"
+            src="https://cdn-images-1.medium.com/max/1200/1*bw4OIAMH2YD4aDQKIpfpxw.jpeg"
+            data-width="3662"
+            data-height="2744"
+            data-src="https://cdn-images-1.medium.com/max/1600/1*bw4OIAMH2YD4aDQKIpfpxw.jpeg"
+          />
+        </figure>
+        <figure style="width: 50%;">
+          <img
+            class="zoom__image"
+            src="https://cdn-images-1.medium.com/max/1200/1*O-3DGXcVtkS_5s0UX8CjGQ.jpeg"
+            data-width="3662"
+            data-height="2744"
+            data-src="https://cdn-images-1.medium.com/max/1600/1*O-3DGXcVtkS_5s0UX8CjGQ.jpeg"
+          />
+          <figcaption>Left: I accompanied two ladies as they shopped for ingredients for a veal gumbo recipe. Right: Research team members talk to a woman as she she is shopping for groceries.</figcaption>
+        </figure>
+      </div>
+
+      <hr />
+
+      <figure>
+        <img
+          class="zoom__image"
+          src="<%= require('../assets/illustration.jpeg') %>"
+          data-width="1800"
+          data-height="794"
+          data-src="<%= require('../assets/illustration-full.jpeg') %>"
+        />
+        <figcaption>
+          <a href="http://miko-studio.tumblr.com/" target="_blank">Miko Maciaszek</a>
+        </figcaption>
+      </figure>
+
+      <div class="column">
+        <h2>License</h2>
+        <p><strong>zoom.ts</strong> is available under the terms of the ISC license. See the <a href="https://github.com/michaelbull/zoom.ts/blob/master/LICENSE" target="_blank">license file</a> for copyright information and licensing terms.</p>
+
+        <hr />
+
+        <p><em>Contribute to <strong>zoom.ts</strong> on <a href="https://github.com/michaelbull/zoom.ts" target="_blank">GitHub</a>. Full credits to <a href="https://medium.design/@b" target="_blank">Brad Birdsall</a> for the <a href="https://medium.design/image-zoom-on-medium-24d146fc0c20" target="_blank">original version</a> of this article.</em></p>
+      </div>
+    </main>
+  </body>
+</html>

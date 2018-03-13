@@ -12,7 +12,6 @@ import { ExpandListener } from './event/expand-listener';
 import { ResizeListener } from './event/resize-listener';
 import { ScrollListener } from './event/scroll-listener';
 import { ShowCloneListener } from './event/show-clone-listener';
-import { removeEventListener } from './event/util';
 import { Bounds } from './math/bounds';
 import { Vector2 } from './math/vector2';
 
@@ -70,28 +69,39 @@ export class ZoomInstance {
         }
     }
 
+    private addDismissListeners(): void {
+        this.dom.container.element.addEventListener('click', this.dismissListener);
+        window.addEventListener('resize', this.resizeListener);
+        window.addEventListener('scroll', this.scrollListener);
+        document.addEventListener('keyup', this.escKeyListener);
+    }
+
     private removeEventListeners(): void {
-        removeEventListener(this.dom.container.element, 'click', this.dismissListener);
-        removeEventListener(window, 'resize', this.resizeListener);
-        removeEventListener(window, 'scroll', this.scrollListener);
-        removeEventListener(document, 'keyup', this.escKeyListener);
+        let container = this.dom.container.element;
+
+        container.removeEventListener('click', this.dismissListener);
+        window.removeEventListener('resize', this.resizeListener);
+        window.removeEventListener('scroll', this.scrollListener);
+        document.removeEventListener('keyup', this.escKeyListener);
 
         if (this.dom.clone !== undefined && this.showCloneListener !== undefined) {
             this.dom.clone.element.removeEventListener('load', this.showCloneListener);
         }
 
-        if (this.transition) {
-            let transitionEnd = this.features.transitionEndEvent as string;
-            removeEventListener(this.dom.container.element, transitionEnd, this.expandListener);
-            removeEventListener(this.dom.container.element, transitionEnd, this.collapseListener);
+        let transitionEnd = this.features.transitionEndEvent;
+        if (transitionEnd !== undefined) {
+            if (this.expandListener !== undefined) {
+                container.removeEventListener(transitionEnd, this.expandListener);
+            }
+
+            if (this.collapseListener !== undefined) {
+                container.removeEventListener(transitionEnd, this.collapseListener);
+            }
         }
     }
 
     private expandInstantly(): void {
-        this.dom.container.element.addEventListener('click', this.dismissListener);
-        window.addEventListener('resize', this.resizeListener);
-        window.addEventListener('scroll', this.scrollListener);
-        document.addEventListener('keyup', this.escKeyListener);
+        this.addDismissListeners();
 
         this.dom.overlay.appendTo(document.body);
         this.dom.showCloneIfLoaded();
@@ -117,14 +127,10 @@ export class ZoomInstance {
     };
 
     private expandTransition(): void {
+        this.addDismissListeners();
+
         let transitionEnd = this.features.transitionEndEvent as string;
-
         this.expandListener = new ExpandListener(this.dom, this.features, this.targetSize, this.resizeListener);
-
-        this.dom.container.element.addEventListener('click', this.dismissListener);
-        window.addEventListener('resize', this.resizeListener);
-        window.addEventListener('scroll', this.scrollListener);
-        document.addEventListener('keyup', this.escKeyListener);
         this.dom.container.element.addEventListener(transitionEnd, this.expandListener);
 
         this.dom.overlay.appendTo(document.body);

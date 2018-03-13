@@ -1,3 +1,4 @@
+import '../style.scss';
 import { ready } from './browser/document';
 import { Features } from './browser/features';
 import {
@@ -7,7 +8,6 @@ import {
 import { ZoomDOM } from './dom/zoom-dom';
 import { ClickZoomableListener } from './event/click-zoomable-listener';
 import { ZoomInstance } from './zoom-instance';
-import '../style.scss';
 
 /**
  * Adds a {@link ClickZoomableListener} for <code>click</code> events on the {@link Document#body}.

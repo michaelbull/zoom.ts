@@ -9,11 +9,3 @@ export function fireEventListener(
         listener.handleEvent(evt);
     }
 }
-
-export function removeEventListener(
-    target: EventTarget,
-    type: string,
-    listener?: EventListenerOrEventListenerObject
-) {
-    target.removeEventListener(type, listener);
-}
