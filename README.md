@@ -53,11 +53,12 @@ event listener to the `document.body` when the page is [`ready`][ready].
   </head>
 
   <body>
-    <img class="zoom__image"
-         src="assets/tower-1000.jpeg"
-         data-width="2048"
-         data-height="1366"
-         data-src="assets/tower-2000.jpeg"
+    <img
+      class="zoom__image"
+      src="assets/tower-1000.jpeg"
+      data-width="2048"
+      data-height="1366"
+      data-src="assets/tower-2000.jpeg"
     />
   </body>
 </html>
