@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="#readme"><img src="https://raw.githubusercontent.com/michaelbull/zoom.ts/master/img/logo.png" alt="zoom.ts" width="478" height="178" /></a>
+  <a href="#readme"><img src="https://raw.githubusercontent.com/michaelbull/zoom.ts/master/assets/logo.png" alt="zoom.ts" width="478" height="178" /></a>
 </p>
 <p align="center">
   A lightweight TypeScript library for image zooming, as seen on <a href="https://medium.design/image-zoom-on-medium-24d146fc0c20">Medium</a>.
@@ -17,7 +17,7 @@
 </p>
 <br />
 <p align="center">
-  <a href="https://michaelbull.github.io/zoom.ts"><img src="https://github.com/michaelbull/zoom.ts/raw/master/img/example.gif" alt="example" width="888" height="595" /></a>
+  <a href="https://michaelbull.github.io/zoom.ts"><img src="https://github.com/michaelbull/zoom.ts/raw/master/assets/example.gif" alt="example" width="888" height="595" /></a>
 </p>
 <br />
 <br />
