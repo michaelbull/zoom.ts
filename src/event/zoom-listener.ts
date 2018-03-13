@@ -4,7 +4,11 @@ import { Wrapper } from '../dom/wrapper';
 import { ZoomDOM } from '../dom/zoom-dom';
 import { fullSrc } from '../element/element';
 
-export class ClickZoomableListener implements EventListenerObject {
+/**
+ * An {@link EventListenerObject} that will invoke a {@link callback} when the
+ * {@link MouseEvent#target} is a {@link HTMLImageElement} to be zoomed.
+ */
+export class ZoomListener implements EventListenerObject {
     private readonly callback: (dom: ZoomDOM) => void;
 
     constructor(callback: (dom: ZoomDOM) => void) {

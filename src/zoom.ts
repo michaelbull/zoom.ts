@@ -6,11 +6,11 @@ import {
     DEFAULT_CONFIG
 } from './config';
 import { ZoomDOM } from './dom/zoom-dom';
-import { ClickZoomableListener } from './event/click-zoomable-listener';
+import { ZoomListener } from './event/zoom-listener';
 import { ZoomInstance } from './zoom-instance';
 
 /**
- * Adds a {@link ClickZoomableListener} for <code>click</code> events on the {@link Document#body}.
+ * Adds a {@link ZoomListener} for <code>click</code> events on the {@link Document#body}.
  */
 export function listen(config: Config = DEFAULT_CONFIG): void {
     ready(() => {
@@ -22,7 +22,7 @@ export function listen(config: Config = DEFAULT_CONFIG): void {
             instance.expand();
         };
 
-        body.addEventListener('click', new ClickZoomableListener(startZoom));
+        body.addEventListener('click', new ZoomListener(startZoom));
     });
 }
 
@@ -42,7 +42,6 @@ export * from './element/style';
 export * from './element/transform';
 export * from './element/transition';
 export * from './event/add-class-listener';
-export * from './event/click-zoomable-listener';
 export * from './event/collapse-listener';
 export * from './event/esc-key-listener';
 export * from './event/expand-listener';
@@ -50,6 +49,7 @@ export * from './event/resize-listener';
 export * from './event/scroll-listener';
 export * from './event/show-clone-listener';
 export * from './event/util';
+export * from './event/zoom-listener';
 export * from './math/bounds';
 export * from './math/unit';
 export * from './math/vector2';

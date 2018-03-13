@@ -122,6 +122,11 @@ figcaption {
   color: rgba(0, 0, 0, 0.68);
 }
 
+img {
+  max-width: 100%;
+  height: auto;
+}
+
 pre,
 code,
 kbd {

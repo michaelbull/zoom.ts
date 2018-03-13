@@ -15,6 +15,9 @@ import { ShowCloneListener } from './event/show-clone-listener';
 import { Bounds } from './math/bounds';
 import { Vector2 } from './math/vector2';
 
+/**
+ * Represents an instance of a zoomed image.
+ */
 export class ZoomInstance {
     private readonly dom: ZoomDOM;
     private readonly features: Features;
@@ -22,7 +25,6 @@ export class ZoomInstance {
 
     private readonly transition: boolean;
     private readonly targetSize: Vector2;
-    private readonly dismissListener: EventListener;
     private readonly resizeListener: ResizeListener;
     private readonly scrollListener: ScrollListener;
     private readonly escKeyListener: EscKeyListener;
@@ -38,7 +40,6 @@ export class ZoomInstance {
 
         this.transition = features.hasTransform && features.hasTransitions;
         this.targetSize = this.dom.image.targetSize();
-        this.dismissListener = this.transition ? this.collapseTransitionListener : this.collapseInstantlyListener;
         this.resizeListener = new ResizeListener(this.dom, this.features, this.targetSize);
         this.scrollListener = new ScrollListener(pageScrollY(), this.config.scrollDismissPx, this.dismissListener);
         this.escKeyListener = new EscKeyListener(this.dismissListener);
@@ -61,11 +62,19 @@ export class ZoomInstance {
         }
     }
 
-    destroy(): void {
-        this.removeEventListeners();
+    collapse(): void {
+        if (this.transition) {
+            this.collapseTransition();
+        } else {
+            this.collapseInstantly();
+        }
+    }
 
+    destroy(): void {
         if (this.dom.wrapper.isTransitioning() || this.dom.wrapper.isExpanded()) {
             this.collapseInstantly();
+        } else {
+            this.removeEventListeners();
         }
     }
 
@@ -112,20 +121,6 @@ export class ZoomInstance {
         this.dom.container.setBounds(Bounds.centreOf(document, this.targetSize, this.resizeListener.bounds));
     }
 
-    private collapseInstantly(): void {
-        this.removeEventListeners();
-
-        this.dom.container.resetBounds();
-        this.dom.wrapper.collapsed();
-        this.dom.collapse();
-    }
-
-    private collapseInstantlyListener = (event: Event): void => {
-        event.preventDefault();
-        event.stopPropagation();
-        this.collapseInstantly();
-    };
-
     private expandTransition(): void {
         this.addDismissListeners();
 
@@ -141,15 +136,20 @@ export class ZoomInstance {
         this.dom.container.fillViewport(this.features, this.targetSize, this.resizeListener.bounds);
     }
 
-    private collapseTransitionListener = (event: Event) => {
+    private collapseInstantly(): void {
+        this.removeEventListeners();
+
+        this.dom.container.resetBounds();
+        this.dom.wrapper.collapsed();
+        this.dom.collapse();
+    }
+
+    private collapseTransition(): void {
+        this.removeEventListeners();
+
         let transitionEnd = this.features.transitionEndEvent as string;
         let transitionProperty = this.features.transitionProperty as string;
         let transformProperty = this.features.transformProperty as string;
-
-        event.preventDefault();
-        event.stopPropagation();
-
-        this.removeEventListeners();
 
         this.dom.overlay.hide();
         this.dom.wrapper.startCollapsing();
@@ -171,5 +171,11 @@ export class ZoomInstance {
             this.dom.container.resetBounds();
             this.dom.wrapper.collapsed();
         }
+    }
+
+    private dismissListener = (event: Event): void => {
+        event.preventDefault();
+        event.stopPropagation();
+        this.collapse();
     };
 }
