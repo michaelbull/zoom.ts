@@ -54,7 +54,7 @@ module.exports = (env = {}, args = {}) => {
                     }) : ['style-loader', ...styleRules]
                 },
                 {
-                    test: /\.(png|jpg|jpeg|gif|pdf)$/,
+                    test: /\.(png|jpg|jpeg|gif|ico)$/,
                     use: 'file-loader?name=assets/[name]-[hash].[ext]'
                 }
             ]
