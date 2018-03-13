@@ -112,7 +112,7 @@ This project is available under the terms of the ISC license. See the
 [`LICENSE`](LICENSE) file for the copyright information and licensing terms.
 
 [npm]: https://www.npmjs.com/
-[example]: https://github.com/michaelbull/zoom.ts/tree/master/dist
+[example]: https://github.com/michaelbull/zoom.ts/tree/master/example
 [demo]: https://michaelbull.github.io/zoom.ts 
 [umd]: https://github.com/umdjs/umd
 [listen]: https://github.com/michaelbull/zoom.ts/blob/master/src/zoom.ts#L15
