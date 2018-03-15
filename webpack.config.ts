@@ -14,7 +14,7 @@ let srcDir = path.resolve(__dirname, 'src');
 let distDir = path.resolve(__dirname, 'dist');
 let exampleDir = path.resolve(__dirname, 'example');
 
-export default (env: any, args: any): webpack.Configuration => {
+function configure(env: any, args: any): webpack.Configuration {
     let styleLoaders: webpack.Loader[] = [
         { loader: 'css-loader?sourceMap&importLoaders=1' },
         { loader: 'postcss-loader?sourceMap' },
@@ -86,4 +86,6 @@ export default (env: any, args: any): webpack.Configuration => {
     }
 
     return config;
-};
+}
+
+export default configure;
