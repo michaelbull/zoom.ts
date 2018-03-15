@@ -3,16 +3,16 @@ import * as HtmlWebpackPlugin from 'html-webpack-plugin';
 import * as path from 'path';
 import * as webpack from 'webpack';
 
-const pkg = require('./package.json');
-const year = new Date().getFullYear();
+let pkg = require('./package.json');
+let year = new Date().getFullYear();
 
-const copyright = `zoom.ts v${pkg.version} (${pkg.homepage})
+let copyright = `zoom.ts v${pkg.version} (${pkg.homepage})
 Copyright (c) 2016-${year} ${pkg.author.name} (${pkg.author.url})
 @license ${pkg.license} (https://github.com/michaelbull/zoom.ts/blob/master/LICENSE)`;
 
-const srcDir = path.resolve(__dirname, 'src');
-const distDir = path.resolve(__dirname, 'dist');
-const exampleDir = path.resolve(__dirname, 'example');
+let srcDir = path.resolve(__dirname, 'src');
+let distDir = path.resolve(__dirname, 'dist');
+let exampleDir = path.resolve(__dirname, 'example');
 
 export default (env: any, args: any): webpack.Configuration => {
     let styleLoaders: webpack.Loader[] = [
