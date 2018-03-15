@@ -76,12 +76,12 @@ function configure(env: any, args: any): webpack.Configuration {
     };
 
     switch (args.mode) {
-        case 'production':
-            config.plugins!.push(new ExtractTextPlugin('[name].css'));
-            break;
-
         case 'development':
             config.devtool = 'inline-source-map';
+            break;
+
+        case 'production':
+            config.plugins!.push(new ExtractTextPlugin('[name].css'));
             break;
     }
 
