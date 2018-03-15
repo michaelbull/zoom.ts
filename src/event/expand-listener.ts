@@ -7,33 +7,27 @@ import { ResizeListener } from './resize-listener';
 
 export class ExpandListener implements EventListenerObject {
     private readonly dom: ZoomDOM;
+    private readonly features: Features;
     private readonly targetSize: Vector2;
     private readonly resizedListener: ResizeListener;
 
-    private transitionEnd: string;
-    private transitionProperty: string;
-    private transformProperty: string;
-
     constructor(dom: ZoomDOM, features: Features, targetSize: Vector2, resizedListener: ResizeListener) {
         this.dom = dom;
+        this.features = features;
         this.targetSize = targetSize;
         this.resizedListener = resizedListener;
-
-        this.transitionEnd = features.transitionEndEvent as string;
-        this.transitionProperty = features.transitionProperty as string;
-        this.transformProperty = features.transformProperty as string;
     }
 
     handleEvent(evt: Event): void {
-        this.dom.container.element.removeEventListener(this.transitionEnd, this);
+        let container = this.dom.container;
+        container.element.removeEventListener(this.features.transitionEndEvent!, this);
 
         this.dom.showCloneIfLoaded();
         this.dom.wrapper.finishExpanding();
         this.dom.wrapper.expanded();
 
-        let container = this.dom.container;
-        ignoreTransitions(container.element, this.transitionProperty, () => {
-            container.resetStyle(this.transformProperty);
+        ignoreTransitions(container.element, this.features.transitionProperty!, () => {
+            container.resetStyle(this.features.transformProperty!);
             container.setBounds(Bounds.centreOf(document, this.targetSize, this.resizedListener.bounds));
         });
     }

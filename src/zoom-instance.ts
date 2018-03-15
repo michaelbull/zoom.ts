@@ -124,9 +124,8 @@ export class ZoomInstance {
     private expandTransition(): void {
         this.addDismissListeners();
 
-        let transitionEnd = this.features.transitionEndEvent as string;
         this.expandListener = new ExpandListener(this.dom, this.features, this.targetSize, this.resizeListener);
-        this.dom.container.element.addEventListener(transitionEnd, this.expandListener);
+        this.dom.container.element.addEventListener(this.features.transitionEndEvent!, this.expandListener);
 
         this.dom.overlay.appendTo(document.body);
         this.dom.wrapper.startExpanding();
@@ -148,28 +147,22 @@ export class ZoomInstance {
     private collapseTransition(): void {
         this.removeEventListeners();
 
-        let transitionEnd = this.features.transitionEndEvent as string;
-        let transitionProperty = this.features.transitionProperty as string;
-        let transformProperty = this.features.transformProperty as string;
-
         this.dom.overlay.hide();
         this.dom.wrapper.startCollapsing();
         this.dom.replaceCloneWithImage();
 
-        this.collapseListener = new CollapseListener(transitionEnd, this.dom);
-        this.dom.container.element.addEventListener(transitionEnd, this.collapseListener);
+        this.collapseListener = new CollapseListener(this.features.transitionEndEvent!, this.dom);
+        this.dom.container.element.addEventListener(this.features.transitionEndEvent!, this.collapseListener);
 
         if (this.dom.wrapper.isExpanding()) {
-            this.dom.container.resetStyle(transformProperty);
+            this.dom.container.resetStyle(this.features.transformProperty!);
             this.dom.wrapper.finishExpanding();
         } else {
-            ignoreTransitions(this.dom.container.element, transitionProperty, () => {
-                if (this.resizeListener !== undefined) {
-                    this.dom.container.fillViewport(this.features, this.targetSize, this.resizeListener.bounds);
-                }
+            ignoreTransitions(this.dom.container.element, this.features.transitionProperty!, () => {
+                this.dom.container.fillViewport(this.features, this.targetSize, this.resizeListener.bounds);
             });
 
-            this.dom.container.resetStyle(transformProperty);
+            this.dom.container.resetStyle(this.features.transformProperty!);
             this.dom.container.resetBounds();
             this.dom.wrapper.collapsed();
         }

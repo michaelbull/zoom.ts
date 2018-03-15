@@ -131,8 +131,7 @@ describe('ZoomDOM', () => {
                 });
 
                 it('should wrap the second child of the container', () => {
-                    let clone = dom.clone as Clone;
-                    expect(clone.element).toBe(containerSecondChild);
+                    expect(dom.clone!.element).toBe(containerSecondChild);
                 });
             });
         });

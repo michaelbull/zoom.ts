@@ -1,27 +1,27 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const { BannerPlugin } = require('webpack');
+import * as ExtractTextPlugin from 'extract-text-webpack-plugin';
+import * as HtmlWebpackPlugin from 'html-webpack-plugin';
+import * as path from 'path';
+import * as webpack from 'webpack';
 
-let pkg = require('./package.json');
-let year = new Date().getFullYear();
+const pkg = require('./package.json');
+const year = new Date().getFullYear();
 
-let copyright = `zoom.ts v${pkg.version} (${pkg.homepage})
+const copyright = `zoom.ts v${pkg.version} (${pkg.homepage})
 Copyright (c) 2016-${year} ${pkg.author.name} (${pkg.author.url})
 @license ${pkg.license} (https://github.com/michaelbull/zoom.ts/blob/master/LICENSE)`;
 
-let srcDir = path.resolve(__dirname, 'src');
-let distDir = path.resolve(__dirname, 'dist');
-let exampleDir = path.resolve(__dirname, 'example');
+const srcDir = path.resolve(__dirname, 'src');
+const distDir = path.resolve(__dirname, 'dist');
+const exampleDir = path.resolve(__dirname, 'example');
 
-module.exports = (env = {}, args = {}) => {
-    let styleRules = [
+export default (env: any, args: any): webpack.Configuration => {
+    let styleLoaders: webpack.Loader[] = [
         { loader: 'css-loader?sourceMap&importLoaders=1' },
         { loader: 'postcss-loader?sourceMap' },
         { loader: 'sass-loader?sourceMap' }
     ];
 
-    let config = {
+    let config: webpack.Configuration = {
         entry: {
             zoom: path.resolve(srcDir, 'zoom.ts'),
             example: path.resolve(exampleDir, 'index.js')
@@ -39,19 +39,14 @@ module.exports = (env = {}, args = {}) => {
             rules: [
                 {
                     test: /\.ts$/,
-                    loader: 'ts-loader',
-                    options: {
-                        compilerOptions: {
-                            sourceMap: args.mode === 'development'
-                        }
-                    }
+                    loader: 'ts-loader'
                 },
                 {
                     test: /\.scss$/,
                     use: (args.mode === 'production') ? ExtractTextPlugin.extract({
                         fallback: 'style-loader',
-                        use: styleRules
-                    }) : ['style-loader', ...styleRules]
+                        use: styleLoaders
+                    }) : ['style-loader', ...styleLoaders]
                 },
                 {
                     test: /\.(png|jpg|jpeg|gif|ico)$/,
@@ -68,7 +63,7 @@ module.exports = (env = {}, args = {}) => {
         },
 
         plugins: [
-            new BannerPlugin(copyright),
+            new webpack.BannerPlugin(copyright),
             new HtmlWebpackPlugin({
                 template: path.resolve(exampleDir, 'index.ejs'),
                 inject: 'head'
@@ -82,11 +77,11 @@ module.exports = (env = {}, args = {}) => {
 
     switch (args.mode) {
         case 'production':
-            config.plugins.push(new ExtractTextPlugin('[name].css'));
+            config.plugins!.push(new ExtractTextPlugin('[name].css'));
             break;
 
         case 'development':
-            config.devtool = 'source-map';
+            config.devtool = 'inline-source-map';
             break;
     }
 

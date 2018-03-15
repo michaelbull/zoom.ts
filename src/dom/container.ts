@@ -40,7 +40,7 @@ export class Container {
 
     fillViewport(features: Features, target: Vector2, bounds: Bounds): void {
         let transform = ScaleAndTranslate.centreOf(target, bounds);
-        let transformProperty = features.transformProperty as string;
+        let transformProperty = features.transformProperty!;
 
         let style: any = this.element.style;
         if (features.hasTransform3d) {
