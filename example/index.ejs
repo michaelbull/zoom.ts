@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="shortcut icon" href="<%= require('../assets/favicon.ico') %>">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|PT+Serif:400,400i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700|PT+Serif:400,400i" rel="stylesheet">
 
   </head>
 
@@ -28,14 +28,12 @@
       <figure>
         <img
           class="zoom__image"
-          src="<%= require('../assets/seagulls-1000.jpeg') %>"
-          data-width="2896"
-          data-height="1931"
-          data-src="<%= require('../assets/seagulls-2000.jpeg') %>"
+          src="<%= require('../assets/cliffs-near-manorbier-1000.jpeg') %>"
+          data-width="2000"
+          data-height="1333"
+          data-src="<%= require('../assets/cliffs-near-manorbier-2000.jpeg') %>"
         />
-        <figcaption>
-          <a href="https://medium.com/@nick" target="_blank">@nick</a>
-        </figcaption>
+        <figcaption>Cliffs near Manorbier</figcaption>
       </figure>
 
       <div class="column">
@@ -49,43 +47,77 @@
       <figure>
         <img
           class="zoom__image"
-          src="<%= require('../assets/tower-1000.jpeg') %>"
-          data-width="2048"
-          data-height="1366"
-          data-src="<%= require('../assets/tower-2000.jpeg') %>"
+          src="<%= require('../assets/tresaith-waterfall-1000.jpeg') %>"
+          data-width="2000"
+          data-height="1333"
+          data-src="<%= require('../assets/tresaith-waterfall-2000.jpeg') %>"
         />
-        <figcaption>
-          <a href="https://medium.com/@dpup" target="_blank">@dpup</a>
-        </figcaption>
+        <figcaption>Tresaith Waterfall</figcaption>
       </figure>
 
       <div class="column">
         <h2>Ready when you are</h2>
         <p>Another significant detail is the lack of loading indicators — we’re always ready to zoom. We prepare all images to zoom right after the content has loaded. If the full-size image isn’t loaded, we transition the original image and replace it when the detailed image is ready. We don’t allow your connection speed to affect the animation, creating an ultra-snappy interaction. More often than not, the images are swapped before the transition comes to an end.</p>
+      </div>
 
-        <hr />
+      <figure>
+        <div class="image-triple">
+          <div class="image-cell" style="width: 33.333%;">
+            <img
+              class="zoom__image"
+              src="<%= require('../assets/new-quay-1-400.jpeg') %>"
+              data-width="2000"
+              data-height="1333"
+              data-src="<%= require('../assets/new-quay-1-2000.jpeg') %>"
+            />
+          </div>
 
+          <div class="image-cell" style="width: 33.333%;">
+            <img
+              class="zoom__image"
+              src="<%= require('../assets/new-quay-3-400.jpeg') %>"
+              data-width="2000"
+              data-height="1333"
+              data-src="<%= require('../assets/new-quay-3-2000.jpeg') %>"
+            />
+          </div>
+
+          <div class="image-cell" style="width: 33.333%;">
+            <img
+              class="zoom__image"
+              src="<%= require('../assets/seagull-400.jpeg') %>"
+              data-width="2000"
+              data-height="1333"
+              data-src="<%= require('../assets/seagull-2000.jpeg') %>"
+            />
+          </div>
+        </div>
+
+        <figcaption>New Quay</figcaption>
+      </figure>
+
+      <div class="column">
         <figure class="pull-right">
           <img
             class="zoom__image"
-            src="<%= require('../assets/forest-960.jpeg') %>"
-            data-width="3500"
-            data-height="2333"
-            data-src="<%= require('../assets/forest-3500.jpeg') %>"
+            src="<%= require('../assets/aberporth-800.jpeg') %>"
+            data-width="4816"
+            data-height="3211"
+            data-src="<%= require('../assets/aberporth-2000.jpeg') %>"
           />
         </figure>
 
         <p>Images come a variety of sizes, as such <strong>zoom.ts</strong> adapts to wherever you place your image on the page and repositions the image if the browser is resized whilst an image is expanded.</p>
         <p>You may wish to justify your image to align it with the flow of text, avoiding the thematic break that typical block spaced images produce. The zooming experience doesn’t change for these cases.</p>
+      </div>
 
-        <hr />
-
+      <div class="column">
         <figure class="pull-left">
           <img
             class="zoom__image"
-            src="<%= require('../assets/city-960.jpeg') %>"
-            data-width="960"
-            data-height="1931"
+            src="<%= require('../assets/new-quay-4-800.jpeg') %>"
+            data-width="800"
+            data-height="533"
           />
         </figure>
 
@@ -96,101 +128,69 @@
       <hr />
 
       <figure>
-        <div class="image-row">
-          <div class="image-row__column" style="width: 50%;">
+        <div class="image-double">
+          <div class="image-cell" style="width: 69.22%;">
             <img
               class="zoom__image"
-              src="<%= require('../assets/dock-600.jpeg') %>"
-              data-width="4032"
-              data-height="3024"
-              data-src="<%= require('../assets/dock-1600.jpeg') %>"
+              src="<%= require('../assets/carew-castle-800.jpeg') %>"
+              data-width="2000"
+              data-height="1333"
+              data-src="<%= require('../assets/carew-castle-2000.jpeg') %>"
             />
           </div>
-
-          <div class="image-row__column" style="width: 50%;">
+          <div class="image-cell" style="width: 30.78%;">
             <img
               class="zoom__image"
-              src="<%= require('../assets/beach-600.jpeg') %>"
-              data-width="4032"
-              data-height="3024"
-              data-src="<%= require('../assets/beach-1600.jpeg') %>"
-            />
-          </div>
-        </div>
-
-        <figcaption>
-          <a href="https://medium.com/fragmented-moments/photoessay-moments-in-hong-kong-5c2776cf8678" target="_blank">
-            Photoessay: Moments in Hong Kong – Fragmented moments
-          </a>
-        </figcaption>
-      </figure>
-
-      <hr />
-
-      <figure>
-        <div class="image-row">
-          <div class="image-row__column" style="width: 63.994%;">
-            <img
-              class="zoom__image"
-              src="<%= require('../assets/market-800.jpeg') %>"
-              data-width="4032"
-              data-height="3024"
-              data-src="<%= require('../assets/market-2000.jpeg') %>"
-            />
-          </div>
-          <div class="image-row__column" style="width: 36.006%;">
-            <img
-              class="zoom__image"
-              src="<%= require('../assets/panda-400.jpeg') %>"
-              data-width="3024"
-              data-height="4032"
-              data-src="<%= require('../assets/panda-1000.jpeg') %>"
+              src="<%= require('../assets/st-carannog-400.jpeg') %>"
+              data-width="1000"
+              data-height="1500"
+              data-src="<%= require('../assets/st-carannog-1000.jpeg') %>"
             />
           </div>
         </div>
 
-        <div class="image-row">
-          <div class="image-row__column" style="width: 42.863%;">
+        <div class="image-double">
+          <div class="image-cell" style="width: 39.984%;">
             <img
               class="zoom__image"
-              src="<%= require('../assets/toast-600.jpeg') %>"
-              data-width="1536"
-              data-height="1536"
-              data-src="<%= require('../assets/toast-1200.jpeg') %>"
+              src="<%= require('../assets/sunflower-400.jpeg') %>"
+              data-width="1200"
+              data-height="1200"
+              data-src="<%= require('../assets/sunflower-1200.jpeg') %>"
             />
           </div>
-          <div class="image-row__column" style="width: 57.137%;">
+          <div class="image-cell" style="width: 60.016%;">
             <img
               class="zoom__image"
-              src="<%= require('../assets/sandwich-600.jpeg') %>"
-              data-width="1536"
-              data-height="1152"
-              data-src="<%= require('../assets/sandwich-1600.jpeg') %>"
-            />
-          </div>
-        </div>
-
-        <div class="image-row">
-          <div class="image-row__column">
-            <img
-              class="zoom__image"
-              src="<%= require('../assets/harbor-1000.jpeg') %>"
-              data-width="3819"
-              data-height="2864"
-              data-src="<%= require('../assets/harbor-1600.jpeg') %>"
+              src="<%= require('../assets/tenby-600.jpeg') %>"
+              data-width="2000"
+              data-height="1333"
+              data-src="<%= require('../assets/tenby-2000.jpeg') %>"
             />
           </div>
         </div>
 
-        <figcaption>
-          <a href="https://medium.com/@wynlim" target="_blank">@wynlim</a>
-        </figcaption>
+        <div class="image-double">
+          <div class="image-cell">
+            <img
+              class="zoom__image"
+              src="<%= require('../assets/pembroke-castle-1000.jpeg') %>"
+              data-width="2000"
+              data-height="1333"
+              data-src="<%= require('../assets/pembroke-castle-2000.jpeg') %>"
+            />
+          </div>
+        </div>
       </figure>
 
       <hr />
 
       <div class="column column--credits">
-        <p><em>Full credits to <a href="https://medium.design/@b" target="_blank">Brad Birdsall</a> for the <a href="https://medium.design/image-zoom-on-medium-24d146fc0c20" target="_blank">original version</a> of this article.</em></p>
+        <p>
+          Full credits to <a href="https://medium.design/@b" target="_blank">Brad Birdsall</a> for the <a href="https://medium.design/image-zoom-on-medium-24d146fc0c20" target="_blank">original version</a> of this article
+          <br />
+          Special thanks to <a href="https://www.grahamedgecombe.com/photos" target="_blank">Graham Edgecombe</a> for the photographs
+        </p>
       </div>
     </main>
   </body>

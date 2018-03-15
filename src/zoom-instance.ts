@@ -139,6 +139,7 @@ export class ZoomInstance {
     private collapseInstantly(): void {
         this.removeEventListeners();
 
+        this.dom.replaceCloneWithImage();
         this.dom.container.resetBounds();
         this.dom.wrapper.collapsed();
         this.dom.collapse();
@@ -153,6 +154,7 @@ export class ZoomInstance {
 
         this.dom.overlay.hide();
         this.dom.wrapper.startCollapsing();
+        this.dom.replaceCloneWithImage();
 
         this.collapseListener = new CollapseListener(transitionEnd, this.dom);
         this.dom.container.element.addEventListener(transitionEnd, this.collapseListener);

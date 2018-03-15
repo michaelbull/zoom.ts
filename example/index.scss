@@ -2,6 +2,47 @@ $page-width: 1000px;
 $content-width: 700px;
 $page-gutter: 20px;
 
+$serif-font-family: (
+  'PT Serif',
+  Georgia,
+  Cambria,
+  'Times New Roman',
+  Times,
+  serif
+);
+
+$system-font-family: (
+  'Open Sans',
+  -apple-system,
+  BlinkMacSystemFont,
+  'Segoe UI',
+  Roboto,
+  Oxygen,
+  Ubuntu,
+  Cantarell,
+  'Helvetica Neue',
+  sans-serif
+);
+
+$sans-serif-font-family: (
+  'Open Sans',
+  'Lucida Grande',
+  'Lucida Sans Unicode',
+  'Lucida Sans',
+  Geneva,
+  Arial,
+  sans-serif
+);
+
+$monospace-font-family: (
+  'SFMono-Regular',
+  Consolas,
+  'Liberation Mono',
+  Menlo,
+  Courier,
+  monospace
+);
+
 html {
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
@@ -16,7 +57,7 @@ body {
   margin: 0;
   padding-bottom: 8rem;
 
-  font-family: 'Open Sans', sans-serif;
+  font-family: $system-font-family;
   font-size: 20px;
   line-height: 1.4;
   color: rgba(0, 0, 0, 0.84);
@@ -30,7 +71,7 @@ body {
 h1,
 h2 {
   margin: 0;
-  font-weight: 600;
+  font-weight: 700;
 
   &:first-child {
     margin-top: 0;
@@ -61,7 +102,7 @@ p {
   margin-top: 38px;
   margin-bottom: 0;
 
-  font-family: 'PT Serif', serif;
+  font-family: $serif-font-family;
   font-size: 20px;
   line-height: 1.659;
 
@@ -114,8 +155,9 @@ figcaption {
     bottom: 0;
   }
 
-  font-family: 'Open Sans', sans-serif;
-  font-size: 15px;
+  font-family: $sans-serif-font-family;
+  font-size: 14px;
+  font-weight: 600;
   line-height: 1.49;
   color: rgba(0, 0, 0, 0.68);
 }
@@ -129,14 +171,14 @@ img {
 pre,
 code,
 kbd {
-  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+  font-family: $monospace-font-family;
 }
 
 kbd {
   display: inline-block;
   padding: 3px 8px;
 
-  font-size: 20px;
+  font-size: 1rem;
   line-height: 1;
   vertical-align: middle;
 
@@ -184,7 +226,7 @@ hr {
   box-sizing: border-box;
 
   display: block;
-  margin: 5rem auto 8rem;
+  margin: 8rem auto;
   padding: 0 $page-gutter;
 
   max-width: 100%;
@@ -213,6 +255,7 @@ hr {
 
 .column--credits {
   text-align: center;
+  font-style: italic;
 }
 
 .pull-left,
@@ -236,19 +279,14 @@ hr {
   margin-right: -150px;
 }
 
-.image-row {
+.image-double,
+.image-triple {
   box-sizing: border-box;
   width: 100%;
   max-width: $page-width;
 
   margin: 0 auto;
-
-  padding: {
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 10px;
-  }
+  padding: 0;
 
   &::before,
   &::after {
@@ -263,24 +301,39 @@ hr {
   + figcaption {
     margin-top: 5px;
   }
+
+  > :first-of-type {
+    padding-left: 0;
+  }
+
+  > :last-of-type {
+    padding-right: 0;
+  }
 }
 
-.image-row__column {
+.image-double {
+  padding-left: 10px;
+
+  > :first-of-type {
+    margin-left: -10px;
+  }
+}
+
+.image-triple {
+  padding-left: 20px;
+
+  > :first-of-type {
+    margin-left: -20px;
+  }
+}
+
+.image-cell {
   margin-top: 0;
   margin-bottom: 0;
 
   clear: none;
   float: left;
   padding: 5px;
-
-  &:first-of-type {
-    margin-left: -10px;
-    padding-left: 0;
-  }
-
-  &:last-of-type {
-    padding-right: 0;
-  }
 }
 
 @media (max-width: 767px) {

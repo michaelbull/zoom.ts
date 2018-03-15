@@ -87,7 +87,6 @@ export class ZoomDOM {
     }
 
     collapse(): void {
-        this.replaceCloneWithImage();
         this.overlay.removeFrom(document.body);
         this.image.deactivate();
         this.wrapper.finishCollapsing();
