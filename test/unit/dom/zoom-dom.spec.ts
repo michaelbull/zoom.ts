@@ -401,7 +401,6 @@ describe('ZoomDOM', () => {
         let overlay: any;
         let wrapper: any;
         let image: any;
-        let replaceCloneWithImage: jasmine.Spy;
 
         beforeEach(() => {
             overlay = { removeFrom: jasmine.createSpy('removeFrom') };
@@ -410,13 +409,8 @@ describe('ZoomDOM', () => {
             image = { deactivate: jasmine.createSpy('deactivate') };
 
             let dom = new ZoomDOM(overlay, wrapper, container, image);
-            replaceCloneWithImage = spyOn(dom, 'replaceCloneWithImage');
 
             dom.collapse();
-        });
-
-        it('should replace the clone with the original image', () => {
-            expect(replaceCloneWithImage).toHaveBeenCalled();
         });
 
         it('should remove the overlay', () => {
