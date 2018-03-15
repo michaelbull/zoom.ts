@@ -2,8 +2,8 @@
   "compilerOptions": {
     "target": "es5",
     "strict": true,
-    "declaration": true,
     "sourceMap": true,
+    "declaration": true,
     "declarationDir": "",
     "lib": [
       "es6",
