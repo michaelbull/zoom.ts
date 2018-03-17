@@ -65,8 +65,10 @@ function configure(env: any, args: any): webpack.Configuration {
         plugins: [
             new webpack.BannerPlugin(copyright),
             new HtmlWebpackPlugin({
-                template: path.resolve(exampleDir, 'index.ejs'),
-                inject: 'head'
+                inject: 'head',
+                hash: true,
+                template: 'example/index.ejs',
+                favicon: 'assets/favicon.ico'
             })
         ],
 
