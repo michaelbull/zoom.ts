@@ -16,9 +16,9 @@ let exampleDir = path.resolve(__dirname, 'example');
 
 function configure(env: any, args: any): webpack.Configuration {
     let styleLoaders: webpack.Loader[] = [
-        { loader: 'css-loader?sourceMap&importLoaders=1' },
-        { loader: 'postcss-loader?sourceMap' },
-        { loader: 'sass-loader?sourceMap' }
+        'css-loader?sourceMap&importLoaders=1',
+        'postcss-loader?sourceMap',
+        'sass-loader?sourceMap'
     ];
 
     let config: webpack.Configuration = {
