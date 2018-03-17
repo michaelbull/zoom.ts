@@ -28,7 +28,6 @@ export class ZoomListener implements EventListenerObject {
                 let grandparent = image.parentElement.parentElement;
 
                 let dom: ZoomDOM;
-
                 if (parent.classList.contains(Container.CLASS) && grandparent.classList.contains(Wrapper.CLASS)) {
                     dom = ZoomDOM.useExisting(image, parent, grandparent);
                 } else {
@@ -39,9 +38,11 @@ export class ZoomListener implements EventListenerObject {
                     dom.appendCloneToContainer();
                 }
 
-                evt.preventDefault();
-                evt.stopPropagation();
-                this.callback(dom);
+                if (!dom.wrapper.isTransitioning() && !dom.wrapper.isExpanded()) {
+                    evt.preventDefault();
+                    evt.stopPropagation();
+                    this.callback(dom);
+                }
             }
         }
     }

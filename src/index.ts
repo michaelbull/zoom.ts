@@ -17,12 +17,10 @@ export function listen(config: Config = DEFAULT_CONFIG): void {
         let body = document.body;
         let features = Features.of(body.style);
 
-        let startZoom = (dom: ZoomDOM) => {
+        body.addEventListener('click', new ZoomListener((dom: ZoomDOM) => {
             let zoom = new Zoom(dom, features, config);
             zoom.expand();
-        };
-
-        body.addEventListener('click', new ZoomListener(startZoom));
+        }));
     });
 }
 

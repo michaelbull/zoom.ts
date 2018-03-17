@@ -45,6 +45,14 @@ export class Zoom {
         this.escKeyListener = new EscKeyListener(this.collapseStartListener);
     }
 
+    toggle(): void {
+        if (this.dom.wrapper.isExpanding() || this.dom.wrapper.isExpanded()) {
+            this.collapse();
+        } else if (!this.dom.wrapper.isCollapsing()) {
+            this.expand();
+        }
+    }
+
     expand(): void {
         if (!this.dom.wrapper.isTransitioning() && !this.dom.wrapper.isExpanded()) {
             this.showClone();
@@ -58,13 +66,15 @@ export class Zoom {
     }
 
     collapse(): void {
-        this.removeEventListeners();
+        if (!this.dom.wrapper.isCollapsing()) {
+            if (this.dom.wrapper.isExpanding() || this.dom.wrapper.isExpanded()) {
+                this.removeEventListeners();
 
-        if (this.dom.wrapper.isTransitioning() || this.dom.wrapper.isExpanded()) {
-            if (this.transition) {
-                this.collapseTransition();
-            } else {
-                this.collapseInstantly();
+                if (this.transition) {
+                    this.collapseTransition();
+                } else {
+                    this.collapseInstantly();
+                }
             }
         }
     }
