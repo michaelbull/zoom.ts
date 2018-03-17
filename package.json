@@ -24,8 +24,8 @@
     "dist",
     "style.scss"
   ],
-  "main": "dist/zoom.js",
-  "types": "dist/zoom.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "style": "dist/zoom.css",
   "sass": "style.scss",
   "repository": {
@@ -70,7 +70,7 @@
     "rimraf": "2.6.2",
     "sass-loader": "6.0.7",
     "style-loader": "0.20.3",
-    "ts-loader": "4.0.1",
+    "ts-loader": "4.1.0",
     "ts-node": "5.0.1",
     "typescript": "2.7.2",
     "webpack": "4.1.1",

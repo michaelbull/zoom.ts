@@ -55,7 +55,7 @@ export class Wrapper {
         this.element.classList.add(Wrapper.EXPANDED_CLASS);
     }
 
-    collapsed(): void {
+    collapse(): void {
         this.element.classList.remove(Wrapper.EXPANDED_CLASS);
     }
 

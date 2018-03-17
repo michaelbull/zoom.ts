@@ -1,7 +1,7 @@
-import { CollapseListener } from '../../../src/event/collapse-listener';
+import { CollapseEndListener } from '../../../src/event/collapse-end-listener';
 
-describe('CollapseListener', () => {
-    let listener: CollapseListener;
+describe('CollapseEndListener', () => {
+    let listener: CollapseEndListener;
     let dom: any;
     let eventType: string = 'example-event';
 
@@ -12,10 +12,10 @@ describe('CollapseListener', () => {
                     removeEventListener: jasmine.createSpy('removeEventListener')
                 }
             },
-            collapse: jasmine.createSpy('collapse')
+            collapsed: jasmine.createSpy('collapsed')
         };
 
-        listener = new CollapseListener(eventType, dom);
+        listener = new CollapseEndListener(eventType, dom);
     });
 
     describe('handleEvent', () => {
@@ -28,8 +28,8 @@ describe('CollapseListener', () => {
             expect(dom.container.element.removeEventListener).toHaveBeenCalledWith(eventType, listener);
         });
 
-        it('should collapse the dom', () => {
-            expect(dom.collapse).toHaveBeenCalled();
+        it('should notify the dom that it has been collapsed', () => {
+            expect(dom.collapsed).toHaveBeenCalled();
         });
     });
 });

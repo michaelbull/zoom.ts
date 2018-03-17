@@ -23,7 +23,7 @@ function configure(env: any, args: any): webpack.Configuration {
 
     let config: webpack.Configuration = {
         entry: {
-            zoom: path.resolve(srcDir, 'zoom.ts'),
+            zoom: path.resolve(srcDir, 'index.ts'),
             example: path.resolve(exampleDir, 'index.js')
         },
 

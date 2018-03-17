@@ -1,4 +1,3 @@
-import { Clone } from '../../../src/dom/clone';
 import { ZoomDOM } from '../../../src/dom/zoom-dom';
 import * as element from '../../../src/element/element';
 
@@ -396,7 +395,7 @@ describe('ZoomDOM', () => {
         });
     });
 
-    describe('collapse', () => {
+    describe('collapsed', () => {
         let overlay: any;
         let wrapper: any;
         let image: any;
@@ -409,7 +408,7 @@ describe('ZoomDOM', () => {
 
             let dom = new ZoomDOM(overlay, wrapper, container, image);
 
-            dom.collapse();
+            dom.collapsed();
         });
 
         it('should remove the overlay', () => {

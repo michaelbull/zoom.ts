@@ -71,34 +71,29 @@ To integrate `zoom.ts` into a web application, follow the steps outlined below:
 1. Detect and store the [`Features`][features] of the `document.body.style`
 2. Locate the element you wish to make zoomable
 3. Register a [`ZoomListener`][zoom-listener] on the target image
-4. In the listener's callback, create and store a [`ZoomInstance`][zoom-instance]
-5. Call `expand` on the `ZoomInstance` to begin the zoom
-6. If the user navigates to a different page in the application, call [`destroy`][destroy] on the `ZoomInstance`
+4. In the listener's callback, create and store a [`Zoom`][zoom] instance
+5. Call `expand` on the `Zoom` instance to begin zooming the image
+6. If the user navigates to a different page in the application, call [`destroy`][destroy] on the `Zoom` instance
 
 The snippet below demonstrates finding the first element with the `zoom__image`
 class and adding a `ZoomListener` to any `click` events it fires. When fired,
-the event listener will instantiate a `ZoomInstance` and store it as a variable
-named `instance`, then immediately expand the image. After 5 seconds have
-passed, the `instance` will be forcefully removed via the call to `destroy`.
+the event listener will create a `Zoom` instance and store it as a variable
+named `zoom`, then immediately expand the image. After 5 seconds have passed,
+the `zoom` will be forcefully removed via the call to `destroy`.
 
 ```javascript
-import {
-    Features,
-    ZoomDOM,
-    ZoomInstance,
-    ZoomListener
-} from 'zoom.ts';
+import { Features, Zoom, ZoomDOM, ZoomListener } from 'zoom.ts';
 
 let features = Features.of(document.body.style); // (1)
 let image = document.querySelector('.zoom__image'); // (2)
 
 image.addEventListener('click', new ZoomListener((dom) => { // (3)
-    let instance = new ZoomInstance(dom, features); // (4)
+    let zoom = new Zoom(dom, features); // (4)
     
-    instance.expand(); // (5)
+    zoom.expand(); // (5)
     
     setTimeout(() => {
-        instance.destroy(); // (6)
+        zoom.destroy(); // (6)
     }, 5000);
 }));
 ```
@@ -116,10 +111,10 @@ This project is available under the terms of the ISC license. See the
 [example]: https://github.com/michaelbull/zoom.ts/tree/master/example
 [demo]: https://michaelbull.github.io/zoom.ts 
 [umd]: https://github.com/umdjs/umd
-[listen]: https://github.com/michaelbull/zoom.ts/blob/master/src/zoom.ts#L15
+[listen]: https://github.com/michaelbull/zoom.ts/blob/master/src/index.ts#L15
 [ready]: https://github.com/michaelbull/zoom.ts/blob/master/src/browser/document.ts#L25
 [features]: https://github.com/michaelbull/zoom.ts/blob/master/src/browser/features.ts#L5
 [zoom-listener]: https://github.com/michaelbull/zoom.ts/blob/master/src/event/zoom-listener.ts#L11
-[zoom-instance]: https://github.com/michaelbull/zoom.ts/blob/master/src/zoom-instance.ts#L18
-[destroy]: https://github.com/michaelbull/zoom.ts/blob/master/src/zoom-instance.ts#L73
+[zoom]: https://github.com/michaelbull/zoom.ts/blob/master/src/zoom.ts#L19
+[destroy]: https://github.com/michaelbull/zoom.ts/blob/master/src/zoom.ts#L72
 [github]: https://github.com/michaelbull/zoom.ts

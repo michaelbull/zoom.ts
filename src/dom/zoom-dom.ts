@@ -86,7 +86,7 @@ export class ZoomDOM {
         this.wrapper.element.style.height = pixels(this.image.element.height);
     }
 
-    collapse(): void {
+    collapsed(): void {
         this.overlay.removeFrom(document.body);
         this.image.deactivate();
         this.wrapper.finishCollapsing();

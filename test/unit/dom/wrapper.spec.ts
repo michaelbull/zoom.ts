@@ -222,7 +222,7 @@ describe('Wrapper', () => {
             };
 
             let wrapper = new Wrapper(element);
-            wrapper.collapsed();
+            wrapper.collapse();
 
             expect(wrapper.element.classList.remove).toHaveBeenCalledWith(Wrapper.EXPANDED_CLASS);
         });

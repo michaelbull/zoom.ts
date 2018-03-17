@@ -5,7 +5,7 @@ import { Bounds } from '../math/bounds';
 import { Vector2 } from '../math/vector2';
 import { ResizeListener } from './resize-listener';
 
-export class ExpandListener implements EventListenerObject {
+export class ExpandEndListener implements EventListenerObject {
     private readonly dom: ZoomDOM;
     private readonly features: Features;
     private readonly targetSize: Vector2;
