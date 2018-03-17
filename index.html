@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>zoom.ts</title>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700|PT+Serif:400,400i" rel="stylesheet">
+
+  <link rel="shortcut icon" href="favicon.ico"><link href="zoom.css?d033596eaf6fde4536a0" rel="stylesheet"><link href="example.css?d033596eaf6fde4536a0" rel="stylesheet"><script type="text/javascript" src="zoom.js?d033596eaf6fde4536a0"></script><script type="text/javascript" src="example.js?d033596eaf6fde4536a0"></script></head>
+
+  <body>
+    <main>
+      <div class="logo">
+        <img src="assets/logo-5db3f6a3d653e537deac0ae28e454a9f.png" alt="zoom.ts" width="478" height="178">
+      </div>
+
+      <div class="column">
+        <h1>Image zoom</h1>
+        <p><strong>zoom.ts</strong> is a lightweight TypeScript library for image zooming, as seen on <a href="https://medium.design/image-zoom-on-medium-24d146fc0c20" target="_blank">Medium</a>. It is available on <a href="https://github.com/michaelbull/zoom.ts" target="_blank">GitHub</a> and <a href="https://www.npmjs.com/package/zoom.ts" target="_blank">npm</a> under the terms of the <a href="https://github.com/michaelbull/zoom.ts/blob/master/LICENSE" target="_blank">ISC license</a>.</p>
+
+        <h2>Click to zoom</h2>
+        <p>A click will start a seamless animation into an immersive, full-screen view. Holding either the <kbd>⌘</kbd> or <kbd>Ctrl</kbd> key will open the image in a new tab when clicked.</p>
+      </div>
+
+      <figure>
+        <img
+          class="zoom__image"
+          src="assets/cliffs-near-manorbier-1000-078ccdd268260b9d55d41ebcc1a83c08.jpeg"
+          data-width="2000"
+          data-height="1333"
+          data-src="assets/cliffs-near-manorbier-2000-1c94bf79e051c726aecd316efbc899d9.jpeg"
+        />
+        <figcaption>Cliffs near Manorbier</figcaption>
+      </figure>
+
+      <div class="column">
+        <h2>Don’t lose your place</h2>
+        <p>Your progress through a story is important. When you interact with images we maintain your scroll position and make it apparent that your state has not changed. We simultaneously fade out the content and zoom the image for a smooth visual experience.</p>
+
+        <h2>Take me home</h2>
+        <p>You can press <kbd>Esc</kbd> or click anywhere on the image to exit the zoomed state, or, more interestingly, just scroll away as if you were continuing past the image. Give it a try:</p>
+      </div>
+
+      <figure>
+        <img
+          class="zoom__image"
+          src="assets/tresaith-waterfall-1000-00f92ad1b209ef1959c589fd1ada5563.jpeg"
+          data-width="2000"
+          data-height="1333"
+          data-src="assets/tresaith-waterfall-2000-2f5b098780c093678403aae491a6ab8d.jpeg"
+        />
+        <figcaption>Tresaith Waterfall</figcaption>
+      </figure>
+
+      <div class="column">
+        <h2>Ready when you are</h2>
+        <p>Another significant detail is the lack of loading indicators — we’re always ready to zoom. We prepare all images to zoom right after the content has loaded. If the full-size image isn’t loaded, we transition the original image and replace it when the detailed image is ready. We don’t allow your connection speed to affect the animation, creating an ultra-snappy interaction. More often than not, the images are swapped before the transition comes to an end.</p>
+      </div>
+
+      <figure>
+        <div class="image-triple">
+          <div class="image-cell" style="width: 33.333%;">
+            <img
+              class="zoom__image"
+              src="assets/new-quay-1-400-f80ba68cdf6c137e598bf31fa593f7a2.jpeg"
+              data-width="2000"
+              data-height="1333"
+              data-src="assets/new-quay-1-2000-eb8d8ab682ce60a0088a1ccaba46874b.jpeg"
+            />
+          </div>
+
+          <div class="image-cell" style="width: 33.333%;">
+            <img
+              class="zoom__image"
+              src="assets/new-quay-3-400-00848b49f10541d8c822c1fa69d08bab.jpeg"
+              data-width="2000"
+              data-height="1333"
+              data-src="assets/new-quay-3-2000-a558be8f7e42a269a599d5460e824221.jpeg"
+            />
+          </div>
+
+          <div class="image-cell" style="width: 33.333%;">
+            <img
+              class="zoom__image"
+              src="assets/seagull-400-e412589bf96fa262d230efbbbdbc8a53.jpeg"
+              data-width="2000"
+              data-height="1333"
+              data-src="assets/seagull-2000-29e3cecd2ddd8351b59cae928369f109.jpeg"
+            />
+          </div>
+        </div>
+
+        <figcaption>New Quay</figcaption>
+      </figure>
+
+      <div class="column">
+        <figure class="pull-right">
+          <img
+            class="zoom__image"
+            src="assets/aberporth-800-45cebcb38157a7d0333e233bfaae07ae.jpeg"
+            data-width="4816"
+            data-height="3211"
+            data-src="assets/aberporth-2000-3b7d1d4ef0be1921f0cd1cd06aef1807.jpeg"
+          />
+        </figure>
+
+        <p>Images come a variety of sizes, as such <strong>zoom.ts</strong> adapts to wherever you place your image on the page and repositions the image if the browser is resized whilst an image is expanded.</p>
+        <p>You may wish to justify your image to align it with the flow of text, avoiding the thematic break that typical block spaced images produce. The zooming experience doesn’t change for these cases.</p>
+      </div>
+
+      <div class="column">
+        <figure class="pull-left">
+          <img
+            class="zoom__image"
+            src="assets/new-quay-4-800-b97aeacc2846189c4c53fdc5567c758a.jpeg"
+            data-width="800"
+            data-height="533"
+          />
+        </figure>
+
+        <p>Even small images can be zoomed. If the image doesn’t expand to fill the entire browser viewport, it will float above your content in the centre of the page.</p>
+        <p>The image to the left doesn’t have a separate image specified as the full-source, thus won’t create a separate network request upon expansion.</p>
+      </div>
+
+      <hr />
+
+      <figure>
+        <div class="image-double">
+          <div class="image-cell" style="width: 69.22%;">
+            <img
+              class="zoom__image"
+              src="assets/carew-castle-800-69d0ca08dc832f6ecea3f185ef6ae809.jpeg"
+              data-width="2000"
+              data-height="1333"
+              data-src="assets/carew-castle-2000-8f9b207c2e462412f83aaf041025fac6.jpeg"
+            />
+          </div>
+          <div class="image-cell" style="width: 30.78%;">
+            <img
+              class="zoom__image"
+              src="assets/st-carannog-400-e178f21936a2ff960e60b3bf678dc459.jpeg"
+              data-width="1000"
+              data-height="1500"
+              data-src="assets/st-carannog-1000-e618fdd3d099c793bb309e4c9c700a18.jpeg"
+            />
+          </div>
+        </div>
+
+        <div class="image-double">
+          <div class="image-cell" style="width: 39.984%;">
+            <img
+              class="zoom__image"
+              src="assets/sunflower-400-cabfc0d128dc105063010da5dfbce207.jpeg"
+              data-width="1200"
+              data-height="1200"
+              data-src="assets/sunflower-1200-28771df94e9f77514ef2512e983320ca.jpeg"
+            />
+          </div>
+          <div class="image-cell" style="width: 60.016%;">
+            <img
+              class="zoom__image"
+              src="assets/tenby-600-fa89239560399dbe812be2d22aff4e14.jpeg"
+              data-width="2000"
+              data-height="1333"
+              data-src="assets/tenby-2000-7dd32bf643fd4ecee64d58c3b1b3f68f.jpeg"
+            />
+          </div>
+        </div>
+
+        <div class="image-double">
+          <div class="image-cell">
+            <img
+              class="zoom__image"
+              src="assets/pembroke-castle-1000-ff7fe96ef1e5f12ab9b5176dadc2ed43.jpeg"
+              data-width="2000"
+              data-height="1333"
+              data-src="assets/pembroke-castle-2000-7aeebefe500dd9d6a19ed52698247cba.jpeg"
+            />
+          </div>
+        </div>
+      </figure>
+
+      <hr />
+
+      <div class="column column--credits">
+        <p>
+          Full credit to <a href="https://medium.design/@b" target="_blank">Brad Birdsall</a> for the <a href="https://medium.design/image-zoom-on-medium-24d146fc0c20" target="_blank">original version</a> of this article
+          <br />
+          Special thanks to <a href="https://www.grahamedgecombe.com/photos" target="_blank">Graham Edgecombe</a> for the photographs
+        </p>
+      </div>
+    </main>
+  </body>
+</html>

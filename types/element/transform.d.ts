@@ -1,0 +1,10 @@
+import { Vector2 } from '../math/vector2';
+export declare function translate(translation: Vector2): string;
+export declare function translate3d(translation: Vector2): string;
+export declare function scale(amount: number): string;
+export declare function scale3d(amount: number): string;
+export declare function supports3dTransformations(style: CSSStyleDeclaration): boolean;
+export declare const TEST3D_ID = "test3d";
+export declare const TEST3D_WIDTH = 4;
+export declare const TEST3D_HEIGHT = 8;
+export declare const TEST3D_STYLE: string;
