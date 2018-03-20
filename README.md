@@ -87,7 +87,7 @@ import { Features, Zoom, ZoomDOM, ZoomListener } from 'zoom.ts';
 let features = Features.of(document.body.style); // (1)
 let image = document.querySelector('.zoom__image'); // (2)
 
-image.addEventListener('click', new ZoomListener((dom) => { // (3)
+image.addEventListener('click', new ZoomListener(dom => { // (3)
     let zoom = new Zoom(dom, features); // (4)
     
     zoom.expand(); // (5)

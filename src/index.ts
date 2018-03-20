@@ -5,7 +5,6 @@ import {
     Config,
     DEFAULT_CONFIG
 } from './config';
-import { ZoomDOM } from './dom/zoom-dom';
 import { ZoomListener } from './event/zoom-listener';
 import { Zoom } from './zoom';
 
@@ -17,7 +16,7 @@ export function listen(config: Config = DEFAULT_CONFIG): void {
         let body = document.body;
         let features = Features.of(body.style);
 
-        body.addEventListener('click', new ZoomListener((dom: ZoomDOM) => {
+        body.addEventListener('click', new ZoomListener(dom => {
             let zoom = new Zoom(dom, features, config);
             zoom.expand();
         }));

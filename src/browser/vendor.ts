@@ -7,7 +7,7 @@ export const VENDOR_PREFIXES = [
 
 export function vendorProperties(property: string): string[] {
     let suffix = `${property.charAt(0).toUpperCase()}${property.substr(1)}`;
-    let vendorProperties = VENDOR_PREFIXES.map((prefix: string) => `${prefix}${suffix}`);
+    let vendorProperties = VENDOR_PREFIXES.map(prefix => `${prefix}${suffix}`);
     return [property].concat(vendorProperties);
 }
 
