@@ -1,7 +1,7 @@
-import * as ExtractTextPlugin from 'extract-text-webpack-plugin';
-import * as HtmlWebpackPlugin from 'html-webpack-plugin';
-import * as path from 'path';
-import * as webpack from 'webpack';
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 let pkg = require('./package.json');
 let year = new Date().getFullYear();
@@ -14,14 +14,33 @@ let srcDir = path.resolve(__dirname, 'src');
 let distDir = path.resolve(__dirname, 'dist');
 let exampleDir = path.resolve(__dirname, 'example');
 
-function configure(env: any, args: any): webpack.Configuration {
-    let styleLoaders: webpack.Loader[] = [
-        'css-loader?sourceMap&importLoaders=1',
-        'postcss-loader?sourceMap',
-        'sass-loader?sourceMap'
+function configure(env, args) {
+    let mode = args.mode;
+    let production = mode === 'production';
+
+    let styleLoaders = [
+        {
+            loader: 'css-loader',
+            options: {
+                sourceMap: true,
+                importLoaders: 1
+            }
+        },
+        {
+            loader: 'postcss-loader',
+            options: {
+                sourceMap: true
+            }
+        },
+        {
+            loader: 'sass-loader',
+            options: {
+                sourceMap: true
+            }
+        }
     ];
 
-    let config: webpack.Configuration = {
+    let config = {
         entry: {
             zoom: path.resolve(srcDir, 'index.ts'),
             example: path.resolve(exampleDir, 'index.js')
@@ -43,10 +62,10 @@ function configure(env: any, args: any): webpack.Configuration {
                 },
                 {
                     test: /\.scss$/,
-                    use: (args.mode === 'production') ? ExtractTextPlugin.extract({
-                        fallback: 'style-loader',
-                        use: styleLoaders
-                    }) : ['style-loader', ...styleLoaders]
+                    use: [
+                        production ? MiniCssExtractPlugin.loader : 'style-loader',
+                        ...styleLoaders
+                    ]
                 },
                 {
                     test: /\.(png|jpg|jpeg|gif|ico)$/,
@@ -83,11 +102,14 @@ function configure(env: any, args: any): webpack.Configuration {
             break;
 
         case 'production':
-            config.plugins!.push(new ExtractTextPlugin('[name].css'));
+            config.plugins.push(new MiniCssExtractPlugin({
+                filename: '[name].css',
+                chunkFilename: '[name].css'
+            }));
             break;
     }
 
     return config;
 }
 
-export default configure;
+module.exports = configure;

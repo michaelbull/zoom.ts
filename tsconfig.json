@@ -4,7 +4,7 @@
     "strict": true,
     "sourceMap": true,
     "declaration": true,
-    "declarationDir": "types",
+    "declarationDir": "dist/types",
     "lib": [
       "es6",
       "dom"
@@ -15,6 +15,6 @@
     "dist",
     "example",
     "test",
-    "webpack.config.ts"
+    "webpack.config.js"
   ]
 }

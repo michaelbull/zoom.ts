@@ -2,6 +2,16 @@
   "name": "zoom.ts",
   "version": "8.0.0",
   "description": "A lightweight TypeScript library for image zooming, as seen on Medium.",
+  "homepage": "https://github.com/michaelbull/zoom.ts#readme",
+  "license": "ISC",
+  "main": "dist/zoom.js",
+  "types": "dist/types/index.d.ts",
+  "style": "dist/zoom.css",
+  "sass": "style.scss",
+  "author": {
+    "name": "Michael Bull",
+    "url": "https://www.michael-bull.com"
+  },
   "keywords": [
     "zoom.ts",
     "zoom.js",
@@ -10,28 +20,18 @@
     "zooming",
     "medium"
   ],
-  "homepage": "https://github.com/michaelbull/zoom.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/michaelbull/zoom.ts"
+  },
   "bugs": {
     "url": "https://github.com/michaelbull/zoom.ts/issues"
-  },
-  "license": "ISC",
-  "author": {
-    "name": "Michael Bull",
-    "url": "https://www.michael-bull.com"
   },
   "files": [
     "src",
     "dist",
     "style.scss"
   ],
-  "main": "dist/zoom.js",
-  "types": "dist/types/index.d.ts",
-  "style": "dist/zoom.css",
-  "sass": "style.scss",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/michaelbull/zoom.ts"
-  },
   "scripts": {
     "clean": "rimraf dist",
     "start": "webpack-dev-server --mode=development --inline --hot",
@@ -46,35 +46,31 @@
     "prepublishOnly": "npm-run-all test build"
   },
   "devDependencies": {
-    "@types/extract-text-webpack-plugin": "3.0.2",
-    "@types/html-webpack-plugin": "2.30.3",
-    "@types/jasmine": "2.8.6",
-    "@types/webpack": "4.1.1",
-    "coveralls": "3.0.0",
-    "css-loader": "0.28.11",
-    "cssnano": "4.0.0-rc.2",
-    "cssnano-preset-advanced": "4.0.0-rc.2",
-    "extract-text-webpack-plugin": "4.0.0-beta.0",
-    "file-loader": "1.1.11",
-    "html-webpack-plugin": "3.0.6",
-    "jasmine-core": "3.1.0",
-    "karma": "2.0.0",
-    "karma-chrome-launcher": "2.2.0",
-    "karma-jasmine": "1.1.1",
+    "@types/jasmine": "3.6.3",
+    "coveralls": "3.1.0",
+    "css-loader": "5.0.1",
+    "cssnano": "4.1.10",
+    "cssnano-preset-advanced": "4.0.7",
+    "file-loader": "6.2.0",
+    "html-webpack-plugin": "4.5.1",
+    "jasmine-core": "3.6.0",
+    "karma": "6.0.3",
+    "karma-chrome-launcher": "3.1.0",
+    "karma-jasmine": "4.0.1",
     "karma-spec-reporter": "0.0.32",
-    "karma-typescript": "3.0.12",
-    "node-sass": "4.7.2",
-    "npm-run-all": "4.1.2",
-    "postcss-loader": "2.1.1",
+    "karma-typescript": "5.2.0",
+    "mini-css-extract-plugin": "1.3.5",
+    "npm-run-all": "4.1.5",
+    "postcss-loader": "4.2.0",
     "push-dir": "0.4.1",
-    "rimraf": "2.6.2",
-    "sass-loader": "6.0.7",
-    "style-loader": "0.20.3",
-    "ts-loader": "4.1.0",
-    "ts-node": "5.0.1",
-    "typescript": "2.7.2",
-    "webpack": "4.1.1",
-    "webpack-cli": "2.0.12",
-    "webpack-dev-server": "3.1.1"
+    "rimraf": "3.0.2",
+    "sass": "1.32.5",
+    "sass-loader": "10.1.1",
+    "style-loader": "2.0.0",
+    "ts-loader": "8.0.14",
+    "typescript": "4.1.3",
+    "webpack": "4.44.1",
+    "webpack-cli": "3.3.12",
+    "webpack-dev-server": "3.11.0"
   }
 }

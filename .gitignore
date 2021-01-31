@@ -15,9 +15,6 @@
 *.ipr
 *.iws
 
-# Travis CI
-!.travis.yml
-
 # npm
 !.npm*
 node_modules/
