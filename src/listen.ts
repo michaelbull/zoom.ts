@@ -1,13 +1,11 @@
 import {
-    detectFeatures,
-    ready
-} from './browser';
-import {
     Config,
     DEFAULT_CONFIG
-} from './config';
+} from './Config';
+import { ready } from './dom/document';
 import { ZoomListener } from './event';
-import { Zoom } from './zoom';
+import { detectFeatures } from './style';
+import { Zoom } from './Zoom';
 
 /**
  * Adds a {@link ZoomListener} for <code>click</code> events on the{@link Document#body}.

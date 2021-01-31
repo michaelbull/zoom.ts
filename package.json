@@ -39,6 +39,7 @@
     "build": "webpack --mode=production",
     "predeploy": "npm run build",
     "deploy": "push-dir --dir=dist --branch=gh-pages",
+    "pretest": "rimraf reports/coverage",
     "test": "jest --config=test/jest.config.js --coverage",
     "test:watch": "jest --config=test/jest.config.js --watch",
     "prepublishOnly": "npm-run-all test build"

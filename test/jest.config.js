@@ -11,6 +11,6 @@ module.exports = {
         '<rootDir>/src/**',
         '!<rootDir>/src/**/index.ts'
     ],
-    coverageReporters: ['lcov', 'html'],
+    coverageReporters: ['html'],
     coverageDirectory: '<rootDir>/reports/coverage'
 };

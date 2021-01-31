@@ -1,5 +1,5 @@
 import '../style.scss';
 
-export * from './config';
+export * from './Config';
 export * from './listen';
-export * from './zoom';
+export * from './Zoom';
