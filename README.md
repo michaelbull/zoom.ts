@@ -10,10 +10,9 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/zoom.ts"><img src="https://img.shields.io/npm/v/zoom.ts.svg?style=flat-square" alt="npm version" /></a>
   <a href="https://www.npmjs.com/package/zoom.ts"><img src="https://img.shields.io/npm/dt/zoom.ts.svg?style=flat-square" alt="npm downloads" /></a>
-  <a href="https://github.com/michaelbull/zoom.ts/blob/master/LICENSE"><img src="https://img.shields.io/github/license/michaelbull/zoom.ts.svg?style=flat-square" alt="software license" /></a>
   <br />
+  <a href="https://github.com/michaelbull/zoom.ts/blob/master/LICENSE"><img src="https://img.shields.io/github/license/michaelbull/zoom.ts.svg?style=flat-square" alt="software license" /></a>
   <a href="https://travis-ci.org/michaelbull/zoom.ts"><img src="https://img.shields.io/travis/michaelbull/zoom.ts.svg?style=flat-square" alt="build status" /></a>
-  <a href="https://coveralls.io/github/michaelbull/zoom.ts?branch=master"><img src="https://img.shields.io/coveralls/michaelbull/zoom.ts.svg?style=flat-square" alt="coverage status" /></a>
 </p>
 <br />
 <p align="center">
@@ -33,14 +32,14 @@ npm install --save zoom.ts
 ## Usage
 
 The [example directory][example] contains the code used to [demonstrate][demo]
-an application with `zoom.ts` installed. 
+an application with `zoom.ts` installed.
 
 ### Static Site
 
 To integrate `zoom.ts` into a static site, import the [UMD][umd] module and
 interface with the library via the global `window.zoom`. The snippet below
 demonstrates linking the bundle (`dist/zoom.js`) and the stylesheet
-(`dist/zoom.css`). It then calls the [`listen`][listen] function to add an 
+(`dist/zoom.css`). It then calls the [`listen`][listen] function to add an
 event listener to the `document.body` when the page is [`ready`][ready].
 
 ```html
@@ -89,9 +88,9 @@ let image = document.querySelector('.zoom__image'); // (2)
 
 image.addEventListener('click', new ZoomListener(dom => { // (3)
     let zoom = new Zoom(dom, features); // (4)
-    
+
     zoom.expand(); // (5)
-    
+
     setTimeout(() => {
         zoom.destroy(); // (6)
     }, 5000);
@@ -109,7 +108,7 @@ This project is available under the terms of the ISC license. See the
 
 [npm]: https://www.npmjs.com/
 [example]: https://github.com/michaelbull/zoom.ts/tree/master/example
-[demo]: https://michaelbull.github.io/zoom.ts 
+[demo]: https://michaelbull.github.io/zoom.ts
 [umd]: https://github.com/umdjs/umd
 [listen]: https://github.com/michaelbull/zoom.ts/blob/master/src/index.ts#L15
 [ready]: https://github.com/michaelbull/zoom.ts/blob/master/src/browser/document.ts#L25

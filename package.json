@@ -41,12 +41,10 @@
     "deploy": "push-dir --dir=dist --branch=gh-pages",
     "test": "jest --config=test/jest.config.js --coverage",
     "test:watch": "jest --config=test/jest.config.js --watch",
-    "coveralls": "cat ./reports/coverage/lcov.info | coveralls",
     "prepublishOnly": "npm-run-all test build"
   },
   "devDependencies": {
     "@types/jest": "26.0.20",
-    "coveralls": "3.1.0",
     "css-loader": "5.0.1",
     "cssnano": "4.1.10",
     "cssnano-preset-advanced": "4.0.7",

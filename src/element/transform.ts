@@ -50,7 +50,7 @@ export const TEST3D_HEIGHT = 8;
 export const TEST3D_STYLE = `` +
     `#${TEST3D_ID}{margin:0;padding:0;border:0;width:0;height:0}` +
     `@media (transform-3d),(-webkit-transform-3d){` +
-    `#${TEST3D_ID}{width:${pixels(TEST3D_WIDTH)};height:${pixels(TEST3D_HEIGHT)}}` +
+    `#${TEST3D_ID}{width:4px};height:8px}}` +
     `}`;
 
 function testWebkitTransform3d(): boolean {
