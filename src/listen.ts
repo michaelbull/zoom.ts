@@ -1,5 +1,5 @@
 import {
-    Features,
+    detectFeatures,
     ready
 } from './browser';
 import {
@@ -15,7 +15,7 @@ import { Zoom } from './zoom';
 export function listen(config: Config = DEFAULT_CONFIG): void {
     ready(() => {
         let body = document.body;
-        let features = Features.of(body.style);
+        let features = detectFeatures(body.style);
 
         body.addEventListener('click', new ZoomListener(dom => {
             let zoom = new Zoom(dom, features, config);

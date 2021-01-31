@@ -81,9 +81,14 @@ named `zoom`, then immediately expand the image. After 5 seconds have passed,
 the `zoom` will be forcefully removed via the call to `destroy`.
 
 ```javascript
-import { Features, Zoom, ZoomDOM, ZoomListener } from 'zoom.ts';
+import {
+    detectFeatures,
+    Zoom,
+    ZoomDOM,
+    ZoomListener
+} from 'zoom.ts';
 
-let features = Features.of(document.body.style); // (1)
+let features = detectFeatures(document.body.style); // (1)
 let image = document.querySelector('.zoom__image'); // (2)
 
 image.addEventListener('click', new ZoomListener(dom => { // (3)
