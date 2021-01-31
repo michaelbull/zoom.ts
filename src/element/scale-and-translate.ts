@@ -1,6 +1,8 @@
-import { viewportSize } from '../browser/document';
-import { Bounds } from '../math/bounds';
-import { Vector2 } from '../math/vector2';
+import { viewportSize } from '../browser';
+import {
+    Bounds,
+    Vector2
+} from '../math';
 import {
     scale,
     scale3d,

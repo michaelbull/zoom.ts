@@ -1,9 +1,24 @@
-import * as element from '../../../src/element/element';
-import { Vector2 } from '../../../src/math/vector2';
+import { Vector2 } from '../../../src/math';
+
+let div: any = jest.fn();
+
+jest.mock('../../../src/element/element', () => ({
+    targetDimension: jest.fn((element: HTMLElement, dimension: string) => {
+        if (element === div) {
+            if (dimension === 'width') {
+                return 500;
+            } else if (dimension === 'height') {
+                return 200;
+            }
+        }
+
+        throw Error();
+    })
+}));
 
 describe('Vector2', () => {
     describe('fromPosition', () => {
-        it('should return a vector', () => {
+        it('returns a vector', () => {
             let rect: any = {
                 left: 100,
                 top: 50
@@ -17,7 +32,7 @@ describe('Vector2', () => {
     });
 
     describe('fromSize', () => {
-        it('should return a vector', () => {
+        it('returns a vector', () => {
             let rect: any = {
                 width: 200,
                 height: 300
@@ -31,7 +46,7 @@ describe('Vector2', () => {
     });
 
     describe('add', () => {
-        it('should add each dimension', () => {
+        it('adds each dimension', () => {
             let expected = new Vector2(45, 80);
             let actual = new Vector2(10, 20).add(new Vector2(35, 60));
 
@@ -40,7 +55,7 @@ describe('Vector2', () => {
     });
 
     describe('subtract', () => {
-        it('should subtract each dimension', () => {
+        it('subtracts each dimension', () => {
             let expected = new Vector2(70, 15);
             let actual = new Vector2(100, 20).subtract(new Vector2(30, 5));
 
@@ -49,7 +64,7 @@ describe('Vector2', () => {
     });
 
     describe('multiply', () => {
-        it('should multiply each dimension by a scale', function () {
+        it('multiplies each dimension by a scale', function () {
             let expected = new Vector2(416, 104);
             let actual = new Vector2(8, 2).multiply(52);
 
@@ -58,7 +73,7 @@ describe('Vector2', () => {
     });
 
     describe('scale', () => {
-        it('should multiply each dimension', () => {
+        it('multiplies each dimension', () => {
             let expected = new Vector2(500, 700);
             let actual = new Vector2(50, 100).scale(new Vector2(10, 7));
 
@@ -67,7 +82,7 @@ describe('Vector2', () => {
     });
 
     describe('divide', () => {
-        it('should divide each dimension', () => {
+        it('divides each dimension', () => {
             let expected = new Vector2(6, 5);
             let actual = new Vector2(30, 25).divide(5);
 
@@ -76,7 +91,7 @@ describe('Vector2', () => {
     });
 
     describe('shrink', () => {
-        it('should divide each dimension', () => {
+        it('divides each dimension', () => {
             let expected = new Vector2(10, 5);
             let actual = new Vector2(20, 30).shrink(new Vector2(2, 6));
 
@@ -85,14 +100,14 @@ describe('Vector2', () => {
     });
 
     describe('minDivisor', () => {
-        it('should return the horizontal division if smaller than the vertical', () => {
+        it('returns the horizontal division if smaller than the vertical', () => {
             let expected = 3;
             let actual = new Vector2(900, 500).minDivisor(new Vector2(300, 50));
 
             expect(actual).toEqual(expected);
         });
 
-        it('should return the vertical division if smaller than the horizontal', () => {
+        it('returns the vertical division if smaller than the horizontal', () => {
             let expected = 12;
             let actual = new Vector2(1000, 600).minDivisor(new Vector2(10, 50));
 
@@ -101,7 +116,7 @@ describe('Vector2', () => {
     });
 
     describe('min', () => {
-        it('should return a vector containing the minimum dimensions from the input vectors', () => {
+        it('returns a vector containing the minimum dimensions from the input vectors', () => {
             let expected = new Vector2(20, 10);
             let actual = Vector2.min(new Vector2(30, 10), new Vector2(20, 30));
 
@@ -110,7 +125,7 @@ describe('Vector2', () => {
     });
 
     describe('halfMidpoint', () => {
-        it('should return the correct position', function () {
+        it('returns the correct position', function () {
             let expected = new Vector2(10, 25);
 
             let left = new Vector2(480, 350);
@@ -122,20 +137,7 @@ describe('Vector2', () => {
     });
 
     describe('fromTargetSize', () => {
-        it('should return a vector of the element\'s data-width and data-height attributes', function () {
-            let div: any = jasmine.createSpy('div');
-            spyOn(element, 'targetDimension').and.callFake((element: HTMLElement, dimension: string) => {
-                if (element === div) {
-                    if (dimension === 'width') {
-                        return 500;
-                    } else if (dimension === 'height') {
-                        return 200;
-                    } else {
-                        fail();
-                    }
-                }
-            });
-
+        it('returns a vector of the element\'s data-width and data-height attributes', function () {
             let expected = new Vector2(500, 200);
             let actual = Vector2.fromTargetSize(div);
 
@@ -144,7 +146,7 @@ describe('Vector2', () => {
     });
 
     describe('fromClientSize', () => {
-        it('should return a vector of the element\'s clientWidth and clientHeight', function () {
+        it('returns a vector of the element\'s clientWidth and clientHeight', function () {
             let element: any = {
                 clientWidth: 500,
                 clientHeight: 800

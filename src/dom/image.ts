@@ -1,5 +1,7 @@
-import { Bounds } from '../math/bounds';
-import { Vector2 } from '../math/vector2';
+import {
+    Bounds,
+    Vector2
+} from '../math';
 
 export class Image {
     static readonly CLASS = 'zoom__image';

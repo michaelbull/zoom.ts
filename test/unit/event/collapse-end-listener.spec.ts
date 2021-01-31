@@ -1,4 +1,4 @@
-import { CollapseEndListener } from '../../../src/event/collapse-end-listener';
+import { CollapseEndListener } from '../../../src/event';
 
 describe('CollapseEndListener', () => {
     let listener: CollapseEndListener;
@@ -9,10 +9,10 @@ describe('CollapseEndListener', () => {
         dom = {
             container: {
                 element: {
-                    removeEventListener: jasmine.createSpy('removeEventListener')
+                    removeEventListener: jest.fn()
                 }
             },
-            collapsed: jasmine.createSpy('collapsed')
+            collapsed: jest.fn()
         };
 
         listener = new CollapseEndListener(eventType, dom);
@@ -20,15 +20,15 @@ describe('CollapseEndListener', () => {
 
     describe('handleEvent', () => {
         beforeEach(() => {
-            let event: any = jasmine.createSpy('spy');
+            let event: any = jest.fn();
             listener.handleEvent(event);
         });
 
-        it('should remove this event listener from the container element', () => {
+        it('removes this event listener from the container element', () => {
             expect(dom.container.element.removeEventListener).toHaveBeenCalledWith(eventType, listener);
         });
 
-        it('should notify the dom that it has been collapsed', () => {
+        it('does notify the dom that it has been collapsed', () => {
             expect(dom.collapsed).toHaveBeenCalled();
         });
     });

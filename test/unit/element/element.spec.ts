@@ -1,10 +1,10 @@
 import {
     fullSrc,
     targetDimension
-} from '../../../src/element/element';
+} from '../../../src/element';
 
 describe('targetDimension', () => {
-    it('should return Infinity if the attribute is null', () => {
+    it('returns Infinity if the attribute is null', () => {
         let element: any = {
             getAttribute: () => null
         };
@@ -12,7 +12,7 @@ describe('targetDimension', () => {
         expect(targetDimension(element, '')).toBe(Infinity);
     });
 
-    it('should return Infinity if the attribute is NaN', () => {
+    it('returns Infinity if the attribute is NaN', () => {
         let element: any = {
             getAttribute: () => 'not a number'
         };
@@ -20,7 +20,7 @@ describe('targetDimension', () => {
         expect(targetDimension(element, '')).toBe(Infinity);
     });
 
-    it('should return the numeric value if the attribute is a number', () => {
+    it('returns the numeric value if the attribute is a number', () => {
         let element: any = {
             getAttribute: () => '503'
         };
@@ -30,7 +30,7 @@ describe('targetDimension', () => {
 });
 
 describe('fullSrc', () => {
-    it('should return the value of the data-src attribute if non-null', () => {
+    it('returns the value of the data-src attribute if non-null', () => {
         let image: any = {
             src: 'example-src',
             getAttribute: (name: string) => {
@@ -45,7 +45,7 @@ describe('fullSrc', () => {
         expect(fullSrc(image)).toEqual('example-full-src');
     });
 
-    it('should return the value of the src attribute if the data-src is null', () => {
+    it('returns the value of the src attribute if the data-src is null', () => {
         let image: any = {
             src: 'example-src',
             getAttribute: (name: string) => {

@@ -1,4 +1,4 @@
-import { AddClassListener } from '../event/add-class-listener';
+import { AddClassListener } from '../event';
 
 export class Clone {
     static readonly CLASS = 'zoom__clone';

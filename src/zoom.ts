@@ -1,20 +1,26 @@
-import { Features } from './browser/features';
-import { pageScrollY } from './browser/window';
+import {
+    Features,
+    pageScrollY
+} from './browser';
 import {
     Config,
     DEFAULT_CONFIG
 } from './config';
-import { ZoomDOM } from './dom/zoom-dom';
-import { ignoreTransitions } from './element/transition';
-import { CollapseEndListener } from './event/collapse-end-listener';
-import { CollapseStartListener } from './event/collapse-start-listener';
-import { EscKeyListener } from './event/esc-key-listener';
-import { ExpandEndListener } from './event/expand-end-listener';
-import { ResizeListener } from './event/resize-listener';
-import { ScrollListener } from './event/scroll-listener';
-import { ShowCloneListener } from './event/show-clone-listener';
-import { Bounds } from './math/bounds';
-import { Vector2 } from './math/vector2';
+import { ZoomDOM } from './dom';
+import { ignoreTransitions } from './element';
+import {
+    CollapseEndListener,
+    CollapseStartListener,
+    EscKeyListener,
+    ExpandEndListener,
+    ResizeListener,
+    ScrollListener,
+    ShowCloneListener
+} from './event';
+import {
+    Bounds,
+    Vector2
+} from './math';
 
 export class Zoom {
     private readonly dom: ZoomDOM;

@@ -1,14 +1,24 @@
-import { vendorProperty } from '../browser/vendor';
-import { pixels } from '../math/unit';
-import { Vector2 } from '../math/vector2';
+import { vendorProperty } from '../browser';
+import {
+    pixels,
+    Vector2
+} from '../math';
 
 export function translate(translation: Vector2): string {
-    let { x, y } = translation;
+    let {
+        x,
+        y
+    } = translation;
+
     return `translate(${pixels(x)}, ${pixels(y)})`;
 }
 
 export function translate3d(translation: Vector2): string {
-    let { x, y } = translation;
+    let {
+        x,
+        y
+    } = translation;
+
     return `translate3d(${pixels(x)}, ${pixels(y)}, 0)`;
 }
 

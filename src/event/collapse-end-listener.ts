@@ -1,4 +1,4 @@
-import { ZoomDOM } from '../dom/zoom-dom';
+import { ZoomDOM } from '../dom';
 
 export class CollapseEndListener implements EventListenerObject {
     private eventType: string;

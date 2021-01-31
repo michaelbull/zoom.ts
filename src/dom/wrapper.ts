@@ -1,8 +1,8 @@
 import {
     parsePadding,
     resetStyle
-} from '../element/style';
-import { Vector2 } from '../math/vector2';
+} from '../element';
+import { Vector2 } from '../math';
 
 export class Wrapper {
     static readonly CLASS = 'zoom';

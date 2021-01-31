@@ -1,10 +1,12 @@
-import { STANDARDS_MODE } from '../../../src/browser/document';
-import { Bounds } from '../../../src/math/bounds';
-import { Vector2 } from '../../../src/math/vector2';
+import { STANDARDS_MODE } from '../../../src/browser';
+import {
+    Bounds,
+    Vector2
+} from '../../../src/math';
 
 describe('Bounds', () => {
     describe('of', () => {
-        it('should construct a Bounds object using the position and size of the rect', () => {
+        it('constructs a Bounds object using the position and size of the rect', () => {
             let rect: ClientRect = {
                 top: 300,
                 right: 5,
@@ -15,7 +17,7 @@ describe('Bounds', () => {
             };
 
             let element: any = {
-                getBoundingClientRect: jasmine.createSpy('getBoundingClientRect').and.returnValue(rect)
+                getBoundingClientRect: jest.fn(() => rect)
             };
 
             let actual = Bounds.of(element);
@@ -26,7 +28,7 @@ describe('Bounds', () => {
     });
 
     describe('centreOffset', () => {
-        it('should return the correct position', () => {
+        it('returns the correct position', () => {
             let outer = new Vector2(1920, 1080);
             let bounds = new Bounds(new Vector2(300, 200), new Vector2(500, 500));
 
@@ -38,7 +40,7 @@ describe('Bounds', () => {
     });
 
     describe('centreTranslation', () => {
-        it('should return the correct translation', () => {
+        it('returns the correct translation', () => {
             let outer = new Vector2(3800, 1900);
             let bounds = new Bounds(new Vector2(250, 250), new Vector2(1000, 1000));
             let scale = 2;
@@ -51,7 +53,7 @@ describe('Bounds', () => {
     });
 
     describe('centreOf', () => {
-        it('should return the centered bounds', function () {
+        it('returns the centered bounds', function () {
             let document: any = {
                 compatMode: STANDARDS_MODE,
                 documentElement: {
@@ -88,23 +90,23 @@ describe('Bounds', () => {
             bounds.applyTo(style);
         });
 
-        it('should set the left property', () => {
+        it('sets the left property', () => {
             expect(style.left).toBe('20px');
         });
 
-        it('should set the top property', () => {
+        it('sets the top property', () => {
             expect(style.top).toBe('170px');
         });
 
-        it('should set the width property', () => {
+        it('sets the width property', () => {
             expect(style.width).toBe('95px');
         });
 
-        it('should set the max-width property', () => {
+        it('sets the max-width property', () => {
             expect(style.maxWidth).toBe('95px');
         });
 
-        it('should set the height property', () => {
+        it('sets the height property', () => {
             expect(style.height).toBe('240px');
         });
     });

@@ -1,8 +1,10 @@
-import { Container } from '../dom/container';
-import { Image } from '../dom/image';
-import { Wrapper } from '../dom/wrapper';
-import { ZoomDOM } from '../dom/zoom-dom';
-import { fullSrc } from '../element/element';
+import {
+    Container,
+    Image,
+    Wrapper,
+    ZoomDOM
+} from '../dom';
+import { fullSrc } from '../element';
 
 /**
  * An {@link EventListenerObject} that will invoke a {@link callback} when the

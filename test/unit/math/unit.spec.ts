@@ -1,7 +1,7 @@
-import { pixels } from '../../../src/math/unit';
+import { pixels } from '../../../src/math';
 
 describe('pixels', () => {
-    it('should return the value in pixel units', () => {
+    it('returns the value in pixel units', () => {
         expect(pixels(500)).toBe('500px');
     });
 });

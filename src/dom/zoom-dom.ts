@@ -1,5 +1,5 @@
-import { fullSrc } from '../element/element';
-import { pixels } from '../math/unit';
+import { fullSrc } from '../element';
+import { pixels } from '../math';
 import { Clone } from './clone';
 import { Container } from './container';
 import { Image } from './image';

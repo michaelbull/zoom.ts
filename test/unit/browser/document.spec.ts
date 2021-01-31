@@ -5,12 +5,12 @@ import {
     rootElement,
     STANDARDS_MODE,
     viewportSize
-} from '../../../src/browser/document';
-import { fireEventListener } from '../../../src/event/util';
-import { Vector2 } from '../../../src/math/vector2';
+} from '../../../src/browser';
+import { fireEventListener } from '../../../src/event';
+import { Vector2 } from '../../../src/math';
 
 describe('isStandardsMode', () => {
-    it('should return true if compatMode is CSS1Compat', () => {
+    it('returns true if compatMode is CSS1Compat', () => {
         let document: any = {
             compatMode: STANDARDS_MODE
         };
@@ -18,7 +18,7 @@ describe('isStandardsMode', () => {
         expect(isStandardsMode(document)).toBe(true);
     });
 
-    it('should return false if compatMode is not CSS1Compat', () => {
+    it('returns false if compatMode is not CSS1Compat', () => {
         let document: any = {
             compatMode: QUIRKS_MODE
         };
@@ -28,19 +28,19 @@ describe('isStandardsMode', () => {
 });
 
 describe('rootElement', () => {
-    it('should return documentElement if in standards mode', () => {
+    it('returns documentElement if in standards mode', () => {
         let document: any = {
             compatMode: STANDARDS_MODE,
-            documentElement: jasmine.createSpy('documentElement')
+            documentElement: jest.fn()
         };
 
         expect(rootElement(document)).toBe(document.documentElement);
     });
 
-    it('should return body if not in standards mode', () => {
+    it('returns body if not in standards mode', () => {
         let document: any = {
             compatMode: QUIRKS_MODE,
-            body: jasmine.createSpy('body')
+            body: jest.fn()
         };
 
         expect(rootElement(document)).toBe(document.body);
@@ -48,7 +48,7 @@ describe('rootElement', () => {
 });
 
 describe('viewportSize', () => {
-    it('should return the dimensions of document.documentElement if in standards mode', () => {
+    it('returns the dimensions of document.documentElement if in standards mode', () => {
         let document: any = {
             compatMode: STANDARDS_MODE,
             documentElement: {
@@ -64,7 +64,7 @@ describe('viewportSize', () => {
         expect(viewportSize(document)).toEqual(new Vector2(300, 400));
     });
 
-    it('should return the dimensions of document.body if not in standards mode', () => {
+    it('returns the dimensions of document.body if not in standards mode', () => {
         let document: any = {
             compatMode: QUIRKS_MODE,
             documentElement: {
@@ -91,37 +91,36 @@ describe('ready', () => {
             };
         });
 
-        it('should not call the callback', () => {
-            document.addEventListener = jasmine.createSpy('addEventListener');
-            let callback: jasmine.Spy = jasmine.createSpy('callback');
+        it('does not call the callback', () => {
+            document.addEventListener = jest.fn();
+            let callback = jest.fn();
 
             ready(callback, document);
 
             expect(callback).toHaveBeenCalledTimes(0);
         });
 
-        it('should listen for the DOMContentLoaded event', () => {
+        it('listens for the DOMContentLoaded event', () => {
             let registeredListener: any;
-            let fake = (type: string, listener: EventListenerOrEventListenerObject) => {
-                registeredListener = listener;
-            };
-            document.addEventListener = jasmine.createSpy('addEventListener').and.callFake(fake);
 
-            ready(jasmine.createSpy('callback'), document);
+            document.addEventListener = jest.fn((type: string, listener: EventListenerOrEventListenerObject) => {
+                registeredListener = listener;
+            });
+
+            ready(jest.fn(), document);
 
             expect(registeredListener).toBeDefined();
             expect(document.addEventListener).toHaveBeenCalledWith('DOMContentLoaded', registeredListener);
         });
 
-        it('should execute the callback when the DOMContentLoaded event is fired', () => {
+        it('executes the callback when the DOMContentLoaded event is fired', () => {
             let registeredListener: any;
-            let fake = (type: string, listener: EventListenerOrEventListenerObject) => {
+            document.addEventListener = jest.fn((type: string, listener: EventListenerOrEventListenerObject) => {
                 registeredListener = listener;
-            };
-            document.addEventListener = jasmine.createSpy('addEventListener').and.callFake(fake);
-            document.removeEventListener = jasmine.createSpy('removeEventListener');
-            let callback = jasmine.createSpy('callback');
-            let event: any = jasmine.createSpy('event');
+            });
+            document.removeEventListener = jest.fn();
+            let callback = jest.fn();
+            let event: any = jest.fn();
 
             ready(callback, document);
             fireEventListener(document, registeredListener, event);
@@ -141,9 +140,9 @@ describe('ready', () => {
             };
         });
 
-        it('should execute the callback immediately if document.readyState is complete', () => {
-            document.addEventListener = jasmine.createSpy('addEventListener');
-            let callback = jasmine.createSpy('callback');
+        it('executes the callback immediately if document.readyState is complete', () => {
+            document.addEventListener = jest.fn();
+            let callback = jest.fn();
 
             ready(callback, document);
 

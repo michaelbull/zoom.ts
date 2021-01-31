@@ -1,4 +1,4 @@
-import { pageScrollY } from '../browser/window';
+import { pageScrollY } from '../browser';
 import { fireEventListener } from './util';
 
 /**

@@ -1,4 +1,4 @@
-import { ZoomDOM } from '../dom/zoom-dom';
+import { ZoomDOM } from '../dom';
 
 /**
  * An {@link EventListenerObject} that is called when the clone's 'load' event has fired. It checks to see if the clone

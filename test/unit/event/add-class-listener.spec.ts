@@ -1,4 +1,4 @@
-import { AddClassListener } from '../../../src/event/add-class-listener';
+import { AddClassListener } from '../../../src/event';
 
 describe('AddClassListener', () => {
     let listener: AddClassListener;
@@ -9,9 +9,9 @@ describe('AddClassListener', () => {
 
     beforeEach(() => {
         element = {
-            removeEventListener: jasmine.createSpy('removeEventListener'),
+            removeEventListener: jest.fn(),
             classList: {
-                add: jasmine.createSpy('add')
+                add: jest.fn()
             }
         };
 
@@ -20,15 +20,15 @@ describe('AddClassListener', () => {
 
     describe('handleEvent', () => {
         beforeEach(() => {
-            let event: any = jasmine.createSpy('event');
+            let event: any = jest.fn();
             listener.handleEvent(event);
         });
 
-        it('should remove itself from the element', () => {
+        it('removes itself from the element', () => {
             expect(element.removeEventListener).toHaveBeenCalledWith(eventType, listener);
         });
 
-        it('should add the token to the class lit', () => {
+        it('adds the token to the class lit', () => {
             expect(element.classList.add).toHaveBeenCalledWith(token);
         });
     });

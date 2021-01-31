@@ -1,7 +1,9 @@
-import { Features } from '../browser/features';
-import { ZoomDOM } from '../dom/zoom-dom';
-import { Bounds } from '../math/bounds';
-import { Vector2 } from '../math/vector2';
+import { Features } from '../browser';
+import { ZoomDOM } from '../dom';
+import {
+    Bounds,
+    Vector2
+} from '../math';
 
 export class ResizeListener implements EventListenerObject {
     private readonly dom: ZoomDOM;

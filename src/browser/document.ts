@@ -1,4 +1,4 @@
-import { Vector2 } from '../math/vector2';
+import { Vector2 } from '../math';
 
 export const QUIRKS_MODE = 'BackCompat';
 export const STANDARDS_MODE = 'CSS1Compat';

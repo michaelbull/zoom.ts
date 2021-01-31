@@ -1,4 +1,4 @@
-import { repaint } from '../element/element';
+import { repaint } from '../element';
 
 export class Overlay {
     static readonly CLASS = 'zoom__overlay';

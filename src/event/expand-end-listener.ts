@@ -1,8 +1,10 @@
-import { Features } from '../browser/features';
-import { ZoomDOM } from '../dom/zoom-dom';
-import { ignoreTransitions } from '../element/transition';
-import { Bounds } from '../math/bounds';
-import { Vector2 } from '../math/vector2';
+import { Features } from '../browser';
+import { ZoomDOM } from '../dom';
+import { ignoreTransitions } from '../element';
+import {
+    Bounds,
+    Vector2
+} from '../math';
 import { ResizeListener } from './resize-listener';
 
 export class ExpandEndListener implements EventListenerObject {
