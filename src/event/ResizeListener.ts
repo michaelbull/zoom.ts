@@ -1,6 +1,5 @@
 import { ZoomDOM } from '../dom';
 import { centreOf } from '../dom/document';
-import { boundsOf } from '../dom/element';
 import {
     Bounds,
     Vector2
@@ -18,7 +17,7 @@ export class ResizeListener implements EventListenerObject {
         this.dom = dom;
         this.features = features;
         this.targetSize = targetSize;
-        this._bounds = boundsOf(dom.image.element);
+        this._bounds = dom.image.bounds();
     }
 
     handleEvent(evt: Event): void {

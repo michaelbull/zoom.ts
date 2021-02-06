@@ -1,10 +1,17 @@
 import { ImageConfig } from '../config';
-import { Vector2 } from '../math';
-import { fullSrc } from './element';
+import {
+    Bounds,
+    pixels,
+    Vector2
+} from '../math';
+import {
+    boundsOf,
+    fullSrc
+} from './element';
 import { targetSize } from './element/targetSize';
 
 export class Image {
-    readonly element: HTMLImageElement;
+    private readonly element: HTMLImageElement;
     private readonly config: ImageConfig;
 
     constructor(element: HTMLImageElement, config: ImageConfig) {
@@ -44,5 +51,22 @@ export class Image {
 
     fullSrc(): string {
         return fullSrc(this.element, this.config.attributeNames.src);
+    }
+
+    height(): string {
+        return pixels(this.element.height);
+    }
+
+    replaceWith(node: Node): void {
+        let parent = this.element.parentElement as HTMLElement;
+        parent.replaceChild(node, this.element);
+    }
+
+    bounds(): Bounds {
+        return boundsOf(this.element);
+    }
+
+    appendTo<T extends Node>(parent: T): void {
+        parent.appendChild(this.element);
     }
 }

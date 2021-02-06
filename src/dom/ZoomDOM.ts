@@ -1,5 +1,4 @@
 import { Config } from '../config';
-import { pixels } from '../math';
 import { Features } from '../style';
 import { Clone } from './Clone';
 import { Container } from './Container';
@@ -48,12 +47,11 @@ export class ZoomDOM {
     }
 
     replaceImageWithWrapper(): void {
-        let parent = this.image.element.parentElement as HTMLElement;
-        parent.replaceChild(this.wrapper.element, this.image.element);
+        this.image.replaceWith(this.wrapper.element);
     }
 
     appendImageToContainer(): void {
-        this.container.element.appendChild(this.image.element);
+        this.image.appendTo(this.container.element);
     }
 
     appendCloneToContainer(): void {
@@ -75,7 +73,7 @@ export class ZoomDOM {
     }
 
     fixWrapperHeight(): void {
-        this.wrapper.element.style.height = pixels(this.image.element.height);
+        this.wrapper.element.style.height = this.image.height();
     }
 
     collapsed(): void {
