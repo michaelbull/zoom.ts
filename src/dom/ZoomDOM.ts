@@ -1,5 +1,6 @@
 import { Config } from '../config';
 import { pixels } from '../math';
+import { Features } from '../style';
 import { Clone } from './Clone';
 import { Container } from './Container';
 import { Image } from './Image';
@@ -7,20 +8,20 @@ import { Overlay } from './Overlay';
 import { Wrapper } from './Wrapper';
 
 export class ZoomDOM {
-    static useExisting(element: HTMLImageElement, config: Config, parent: HTMLElement, grandparent: HTMLElement): ZoomDOM {
+    static useExisting(element: HTMLImageElement, config: Config, features: Features, parent: HTMLElement, grandparent: HTMLElement): ZoomDOM {
         let overlay = Overlay.create(config.overlay);
         let wrapper = new Wrapper(grandparent, config.wrapper);
-        let container = new Container(parent);
+        let container = new Container(parent, features);
         let image = new Image(element, config.image);
         let requiresClone = image.fullSrc() !== element.src;
         let clone = requiresClone ? new Clone(container.clone(), config.clone) : undefined;
         return new ZoomDOM(overlay, wrapper, container, image, clone);
     }
 
-    static create(element: HTMLImageElement, config: Config): ZoomDOM {
+    static create(element: HTMLImageElement, config: Config, features: Features): ZoomDOM {
         let overlay = Overlay.create(config.overlay);
         let wrapper = Wrapper.create(config.wrapper);
-        let container = Container.create(config.container);
+        let container = Container.create(config.container, features);
         let image = new Image(element, config.image);
         let fullSrc = image.fullSrc();
         let requiresClone = fullSrc !== element.src;

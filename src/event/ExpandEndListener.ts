@@ -1,6 +1,4 @@
 import { ZoomDOM } from '../dom';
-import { centreOf } from '../dom/document';
-import { ignoreTransitions } from '../dom/element';
 import { Vector2 } from '../math';
 import { Features } from '../style';
 import { ResizeListener } from './ResizeListener';
@@ -19,16 +17,10 @@ export class ExpandEndListener implements EventListenerObject {
     }
 
     handleEvent(evt: Event): void {
-        let container = this.dom.container;
-        container.element.removeEventListener(this.features.transitionEndEvent!, this);
-
+        this.dom.container.removeTransitionEndListener(this);
         this.dom.showCloneIfLoaded();
         this.dom.wrapper.finishExpanding();
         this.dom.wrapper.expanded();
-
-        ignoreTransitions(container.element, this.features.transitionProperty!, () => {
-            container.resetStyle(this.features.transformProperty!);
-            container.setBounds(centreOf(document, this.targetSize, this.resizedListener.bounds));
-        });
+        this.dom.container.expanded(this.targetSize, this.resizedListener.bounds);
     }
 }

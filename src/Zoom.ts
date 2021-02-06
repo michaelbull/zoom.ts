@@ -4,7 +4,6 @@ import {
 } from './config';
 import { ZoomDOM } from './dom';
 import { centreOf } from './dom/document';
-import { ignoreTransitions } from './dom/element';
 import { pageScrollY } from './dom/window';
 import {
     CollapseEndListener,
@@ -105,16 +104,14 @@ export class Zoom {
     }
 
     private addDismissListeners(): void {
-        this.dom.container.element.addEventListener('click', this.collapseStartListener);
+        this.dom.container.addClickListener(this.collapseStartListener);
         window.addEventListener('resize', this.resizeListener);
         window.addEventListener('scroll', this.scrollListener);
         document.addEventListener('keyup', this.escKeyListener);
     }
 
     private removeEventListeners(): void {
-        let container = this.dom.container.element;
-
-        container.removeEventListener('click', this.collapseStartListener);
+        this.dom.container.removeClickListener(this.collapseStartListener);
         window.removeEventListener('resize', this.resizeListener);
         window.removeEventListener('scroll', this.scrollListener);
         document.removeEventListener('keyup', this.escKeyListener);
@@ -123,15 +120,12 @@ export class Zoom {
             this.dom.clone.removeLoadListener(this.showCloneListener);
         }
 
-        let transitionEnd = this.features.transitionEndEvent;
-        if (transitionEnd !== undefined) {
-            if (this.expandEndListener !== undefined) {
-                container.removeEventListener(transitionEnd, this.expandEndListener);
-            }
+        if (this.expandEndListener !== undefined) {
+            this.dom.container.removeTransitionEndListener(this.expandEndListener);
+        }
 
-            if (this.collapseEndListener !== undefined) {
-                container.removeEventListener(transitionEnd, this.collapseEndListener);
-            }
+        if (this.collapseEndListener !== undefined) {
+            this.dom.container.removeTransitionEndListener(this.collapseEndListener);
         }
     }
 
@@ -151,7 +145,7 @@ export class Zoom {
         this.addDismissListeners();
 
         this.expandEndListener = new ExpandEndListener(this.dom, this.features, this.targetSize, this.resizeListener);
-        this.dom.container.element.addEventListener(this.features.transitionEndEvent!, this.expandEndListener);
+        this.dom.container.addTransitionEndListener(this.expandEndListener);
 
         this.dom.overlay.appendTo(document.body);
         this.dom.wrapper.startExpanding();
@@ -173,17 +167,14 @@ export class Zoom {
         this.dom.wrapper.startCollapsing();
         this.dom.replaceCloneWithImage();
 
-        this.collapseEndListener = new CollapseEndListener(this.features.transitionEndEvent!, this.dom);
-        this.dom.container.element.addEventListener(this.features.transitionEndEvent!, this.collapseEndListener);
+        this.collapseEndListener = new CollapseEndListener(this.dom);
+        this.dom.container.addTransitionEndListener(this.collapseEndListener);
 
         if (this.dom.wrapper.isExpanding()) {
             this.dom.container.resetStyle(this.features.transformProperty!);
             this.dom.wrapper.finishExpanding();
         } else {
-            ignoreTransitions(this.dom.container.element, this.features.transitionProperty!, () => {
-                this.dom.container.fillViewport(this.features, this.targetSize, this.resizeListener.bounds);
-            });
-
+            this.dom.container.fill(this.targetSize, this.resizeListener.bounds);
             this.dom.container.resetStyle(this.features.transformProperty!);
             this.dom.container.resetBounds();
             this.dom.wrapper.collapse();

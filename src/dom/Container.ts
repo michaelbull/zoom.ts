@@ -12,18 +12,22 @@ import {
     transform3d,
     transformToCentre
 } from '../style';
+import { centreOf } from './document';
+import { ignoreTransitions } from './element';
 
 export class Container {
-    static create(config: ContainerConfig): Container {
+    static create(config: ContainerConfig, features: Features): Container {
         let element = document.createElement('div');
         element.className = config.classNames.base;
-        return new Container(element);
+        return new Container(element, features);
     }
 
     readonly element: HTMLElement;
+    private readonly features: Features;
 
-    constructor(element: HTMLElement) {
+    constructor(element: HTMLElement, features: Features) {
         this.element = element;
+        this.features = features;
     }
 
     clone(): HTMLImageElement {
@@ -52,5 +56,52 @@ export class Container {
         } else {
             style[transformProperty] = transform(transformation);
         }
+    }
+
+    addClickListener(listener: EventListenerOrEventListenerObject): void {
+        this.element.addEventListener('click', listener);
+    }
+
+    removeClickListener(listener: EventListenerOrEventListenerObject): void {
+        this.element.removeEventListener('click', listener);
+    }
+
+    addTransitionEndListener(listener: EventListenerOrEventListenerObject): void {
+        let event = this.features.transitionEndEvent;
+
+        if (event !== undefined) {
+            this.element.addEventListener(event, listener);
+        }
+    }
+
+    removeTransitionEndListener(listener: EventListenerOrEventListenerObject): void {
+        let event = this.features.transitionEndEvent;
+
+        if (event !== undefined) {
+            this.element.removeEventListener(event, listener);
+        }
+    }
+
+    fill(target: Vector2, bounds: Bounds): void {
+        let transitionProperty = this.features.transitionProperty;
+        if (transitionProperty === undefined) {
+            return;
+        }
+
+        ignoreTransitions(this.element, transitionProperty, () => {
+            this.fillViewport(this.features, target, bounds);
+        });
+    }
+
+    expanded(target: Vector2, bounds: Bounds): void {
+        let transitionProperty = this.features.transitionProperty;
+        if (transitionProperty === undefined) {
+            return;
+        }
+
+        ignoreTransitions(this.element, transitionProperty, () => {
+            this.resetStyle(this.features.transformProperty!);
+            this.setBounds(centreOf(document, target, bounds));
+        });
     }
 }
