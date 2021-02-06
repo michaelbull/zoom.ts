@@ -16,8 +16,8 @@ export class Overlay {
         this.config = config;
     }
 
-    appendTo(node: Node): void {
-        node.appendChild(this.element);
+    appendTo<T extends Node>(parent: T): void {
+        parent.appendChild(this.element);
         repaint(this.element);
         this.show();
     }

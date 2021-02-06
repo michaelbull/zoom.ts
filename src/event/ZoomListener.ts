@@ -46,7 +46,8 @@ export class ZoomListener implements EventListenerObject {
                     dom.appendCloneToContainer();
                 }
 
-                if (!dom.wrapper.isTransitioning() && !dom.wrapper.isExpanded()) {
+                let collapsed = !dom.wrapper.isTransitioning() && !dom.wrapper.isExpanded();
+                if (collapsed) {
                     evt.preventDefault();
                     evt.stopPropagation();
                     this.callback(dom);

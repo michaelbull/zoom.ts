@@ -67,15 +67,17 @@ export class Zoom {
     }
 
     collapse(): void {
-        if (!this.dom.wrapper.isCollapsing()) {
-            if (this.dom.wrapper.isExpanding() || this.dom.wrapper.isExpanded()) {
-                this.removeEventListeners();
+        if (this.dom.wrapper.isCollapsing()) {
+            return;
+        }
 
-                if (this.transition) {
-                    this.collapseTransition();
-                } else {
-                    this.collapseInstantly();
-                }
+        if (this.dom.wrapper.isExpanding() || this.dom.wrapper.isExpanded()) {
+            this.removeEventListeners();
+
+            if (this.transition) {
+                this.collapseTransition();
+            } else {
+                this.collapseInstantly();
             }
         }
     }
@@ -93,13 +95,15 @@ export class Zoom {
      * <code>load</load> event is fired.
      */
     private showClone() {
-        if (this.dom.clone !== undefined) {
-            if (this.dom.clone.isLoaded()) {
-                this.dom.replaceImageWithClone();
-            } else if (this.showCloneListener === undefined) {
-                this.showCloneListener = new ShowCloneListener(this.dom);
-                this.dom.clone.addLoadListener(this.showCloneListener);
-            }
+        if (this.dom.clone === undefined) {
+            return;
+        }
+
+        if (this.dom.clone.isLoaded()) {
+            this.dom.replaceImageWithClone();
+        } else if (this.showCloneListener === undefined) {
+            this.showCloneListener = new ShowCloneListener(this.dom);
+            this.dom.clone.addLoadListener(this.showCloneListener);
         }
     }
 

@@ -43,19 +43,21 @@ export class ZoomDOM {
     }
 
     appendContainerToWrapper(): void {
-        this.wrapper.element.appendChild(this.container.element);
+        this.wrapper.appendContainer(this.container);
     }
 
     replaceImageWithWrapper(): void {
-        this.image.replaceWith(this.wrapper.element);
+        this.wrapper.replaceImage(this.image);
     }
 
     appendImageToContainer(): void {
-        this.image.appendTo(this.container.element);
+        this.container.appendImage(this.image);
     }
 
     appendCloneToContainer(): void {
-        this.clone?.appendTo(this.container.element);
+        if (this.clone !== undefined) {
+            this.container.appendClone(this.clone);
+        }
     }
 
     replaceImageWithClone(): void {
@@ -73,7 +75,7 @@ export class ZoomDOM {
     }
 
     fixWrapperHeight(): void {
-        this.wrapper.element.style.height = this.image.height();
+        this.wrapper.height = this.image.height();
     }
 
     collapsed(): void {

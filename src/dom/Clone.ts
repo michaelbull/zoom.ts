@@ -18,6 +18,10 @@ export class Clone {
         this.config = config;
     }
 
+    appendTo<T extends Node>(parent: T): void {
+        parent.appendChild(this.element);
+    }
+
     show(): void {
         this.element.classList.add(this.config.classNames.visible);
     }
@@ -52,9 +56,5 @@ export class Clone {
 
     removeLoadListener(listener: EventListenerOrEventListenerObject): void {
         this.element.removeEventListener('load', listener);
-    }
-
-    appendTo<T extends Node>(parent: T): void {
-        parent.appendChild(this.element);
     }
 }

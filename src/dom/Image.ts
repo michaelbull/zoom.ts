@@ -19,6 +19,10 @@ export class Image {
         this.config = config;
     }
 
+    appendTo<T extends Node>(parent: T): void {
+        parent.appendChild(this.element);
+    }
+
     hide(): void {
         this.element.classList.add(this.config.classNames.hidden);
     }
@@ -64,9 +68,5 @@ export class Image {
 
     bounds(): Bounds {
         return boundsOf(this.element);
-    }
-
-    appendTo<T extends Node>(parent: T): void {
-        parent.appendChild(this.element);
     }
 }

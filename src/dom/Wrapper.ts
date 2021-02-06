@@ -4,6 +4,8 @@ import {
     parsePadding,
     resetStyle
 } from '../style';
+import { Container } from './Container';
+import { Image } from './Image';
 
 export class Wrapper {
     static create(config: WrapperConfig): Wrapper {
@@ -12,12 +14,20 @@ export class Wrapper {
         return new Wrapper(element, config);
     }
 
-    readonly element: HTMLElement;
+    private readonly element: HTMLElement;
     private readonly config: WrapperConfig;
 
     constructor(element: HTMLElement, config: WrapperConfig) {
         this.element = element;
         this.config = config;
+    }
+
+    appendContainer(container: Container): void {
+        container.appendTo(this.element);
+    }
+
+    replaceImage(image: Image): void {
+        image.replaceWith(this.element);
     }
 
     startExpanding(): void {
@@ -74,5 +84,9 @@ export class Wrapper {
             x: rect.left + paddingLeft,
             y: rect.top + paddingTop
         };
+    }
+
+    set height(value: string) {
+        this.element.style.height = value;
     }
 }

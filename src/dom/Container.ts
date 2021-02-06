@@ -12,8 +12,10 @@ import {
     transform3d,
     transformToCentre
 } from '../style';
+import { Clone } from './Clone';
 import { centreOf } from './document';
 import { ignoreTransitions } from './element';
+import { Image } from './Image';
 
 export class Container {
     static create(config: ContainerConfig, features: Features): Container {
@@ -22,12 +24,24 @@ export class Container {
         return new Container(element, features);
     }
 
-    readonly element: HTMLElement;
+    private readonly element: HTMLElement;
     private readonly features: Features;
 
     constructor(element: HTMLElement, features: Features) {
         this.element = element;
         this.features = features;
+    }
+
+    appendTo<T extends Node>(parent: T): void {
+        parent.appendChild(this.element);
+    }
+
+    appendClone(clone: Clone): void {
+        clone.appendTo(this.element);
+    }
+
+    appendImage(image: Image): void {
+        image.appendTo(this.element);
     }
 
     clone(): HTMLImageElement {
