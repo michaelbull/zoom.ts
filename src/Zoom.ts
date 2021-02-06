@@ -162,7 +162,7 @@ export class Zoom {
         this.dom.fixWrapperHeight();
         this.dom.image.activate();
         this.dom.image.clearFixedSizes();
-        this.dom.container.fillViewport(this.dom.wrapper.position(), this.size, this.targetSize);
+        this.dom.container.transformToCentre(this.dom.wrapper.position(), this.size, this.targetSize);
     }
 
     private collapseInstantly(): void {
@@ -184,7 +184,7 @@ export class Zoom {
             this.dom.container.resetStyle(this.features.transformProperty!);
             this.dom.wrapper.finishExpanding();
         } else {
-            this.dom.container.fill(this.targetSize, this.dom.wrapper.position(), this.size);
+            this.dom.container.collapse(this.dom.wrapper.position(), this.size, this.targetSize);
             this.dom.container.resetStyle(this.features.transformProperty!);
             this.dom.container.resetBounds();
             this.dom.wrapper.collapse();

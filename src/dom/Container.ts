@@ -60,7 +60,7 @@ export class Container {
         resetStyle(this.element.style, property);
     }
 
-    fillViewport(position: Vector2, size: Vector2, targetSize: Vector2): void {
+    transformToCentre(position: Vector2, size: Vector2, targetSize: Vector2): void {
         let transformProperty = this.features.transformProperty;
         if (transformProperty === undefined) {
             return;
@@ -102,17 +102,6 @@ export class Container {
         this.element.removeEventListener(event, listener);
     }
 
-    fill(target: Vector2, position: Vector2, size: Vector2): void {
-        let transitionProperty = this.features.transitionProperty;
-        if (transitionProperty === undefined) {
-            return;
-        }
-
-        ignoreTransitions(this.element, transitionProperty, () => {
-            this.fillViewport(position, size, target);
-        });
-    }
-
     expanded(position: Vector2, size: Vector2, targetSize: Vector2): void {
         let transitionProperty = this.features.transitionProperty;
         if (transitionProperty === undefined) {
@@ -122,6 +111,17 @@ export class Container {
         ignoreTransitions(this.element, transitionProperty, () => {
             this.resetStyle(this.features.transformProperty!);
             this.setBounds(centreOf(document, position, size, targetSize));
+        });
+    }
+
+    collapse(position: Vector2, size: Vector2, targetSize: Vector2): void {
+        let transitionProperty = this.features.transitionProperty;
+        if (transitionProperty === undefined) {
+            return;
+        }
+
+        ignoreTransitions(this.element, transitionProperty, () => {
+            this.transformToCentre(position, size, targetSize);
         });
     }
 }

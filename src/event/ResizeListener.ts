@@ -18,7 +18,7 @@ export class ResizeListener implements EventListenerObject {
         let container = this.dom.container;
 
         if (wrapper.isTransitioning()) {
-            container.fillViewport(wrapper.position(), this.size, this.targetSize);
+            container.transformToCentre(wrapper.position(), this.size, this.targetSize);
         } else {
             let centre = centreOf(document, wrapper.position(), this.size, this.targetSize);
             container.setBounds(centre);
