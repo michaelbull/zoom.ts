@@ -12,13 +12,9 @@ export class ZoomDOM {
         let wrapper = new Wrapper(grandparent, config.wrapper);
         let container = new Container(parent);
         let image = new Image(element, config.image);
-
-        if (image.fullSrc === element.src) {
-            return new ZoomDOM(overlay, wrapper, container, image);
-        } else {
-            let clone = new Clone(container.clone(), config.clone);
-            return new ZoomDOM(overlay, wrapper, container, image, clone);
-        }
+        let requiresClone = image.fullSrc() !== element.src;
+        let clone = requiresClone ? new Clone(container.clone(), config.clone) : undefined;
+        return new ZoomDOM(overlay, wrapper, container, image, clone);
     }
 
     static create(element: HTMLImageElement, config: Config): ZoomDOM {
@@ -26,14 +22,10 @@ export class ZoomDOM {
         let wrapper = Wrapper.create(config.wrapper);
         let container = Container.create(config.container);
         let image = new Image(element, config.image);
-        let fullSrc = image.fullSrc;
-
-        if (fullSrc === element.src) {
-            return new ZoomDOM(overlay, wrapper, container, image);
-        } else {
-            let clone = Clone.create(config.clone, fullSrc);
-            return new ZoomDOM(overlay, wrapper, container, image, clone);
-        }
+        let fullSrc = image.fullSrc();
+        let requiresClone = fullSrc !== element.src;
+        let clone = requiresClone ? Clone.create(config.clone, fullSrc) : undefined;
+        return new ZoomDOM(overlay, wrapper, container, image, clone);
     }
 
     readonly overlay: Overlay;

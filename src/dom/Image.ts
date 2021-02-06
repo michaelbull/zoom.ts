@@ -42,7 +42,7 @@ export class Image {
         return targetSize(this.element, attributeNames.width, attributeNames.height);
     }
 
-    get fullSrc(): string {
+    fullSrc(): string {
         return fullSrc(this.element, this.config.attributeNames.src);
     }
 }
