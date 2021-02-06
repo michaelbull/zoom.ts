@@ -16,7 +16,7 @@ export function listen(config: Config = DEFAULT_CONFIG): void {
         let features = detectFeatures(body.style);
 
         let listener = new ZoomListener(config, features, dom => {
-            let zoom = new Zoom(dom, features, config);
+            let zoom = Zoom.create(dom, features, config);
             zoom.expand();
         });
 

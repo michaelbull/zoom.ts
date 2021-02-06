@@ -32,11 +32,6 @@ describe('centreOf', () => {
             y: 300
         };
 
-        let bounds: Bounds = {
-            position,
-            size
-        };
-
         let expected: Bounds = {
             position: {
                 x: 60,
@@ -48,7 +43,7 @@ describe('centreOf', () => {
             }
         };
 
-        let actual = centreOf(document, target, bounds);
+        let actual = centreOf(document, position, size, target);
 
         expect(actual).toEqual(expected);
     });

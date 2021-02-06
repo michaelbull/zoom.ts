@@ -3,19 +3,16 @@ import { CollapseEndListener } from '../../../src/event';
 describe('CollapseEndListener', () => {
     let listener: CollapseEndListener;
     let dom: any;
-    let eventType: string = 'example-event';
 
     beforeEach(() => {
         dom = {
             container: {
-                element: {
-                    removeEventListener: jest.fn()
-                }
+                removeTransitionEndListener: jest.fn()
             },
             collapsed: jest.fn()
         };
 
-        listener = new CollapseEndListener(eventType, dom);
+        listener = new CollapseEndListener(dom);
     });
 
     describe('handleEvent', () => {
@@ -25,7 +22,7 @@ describe('CollapseEndListener', () => {
         });
 
         it('removes this event listener from the container element', () => {
-            expect(dom.container.element.removeEventListener).toHaveBeenCalledWith(eventType, listener);
+            expect(dom.container.removeTransitionEndListener).toHaveBeenCalledWith(listener);
         });
 
         it('does notify the dom that it has been collapsed', () => {

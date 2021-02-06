@@ -1,6 +1,5 @@
 import { viewportSize } from '../dom/document';
 import {
-    Bounds,
     centreTranslation,
     min,
     minDivisor,
@@ -8,11 +7,11 @@ import {
 } from '../math';
 import { Transformation } from './Transformation';
 
-export function transformToCentre(target: Vector2, bounds: Bounds): Transformation {
+export function transformToCentre(position: Vector2, size: Vector2, targetSize: Vector2): Transformation {
     let viewport = viewportSize();
-    let cappedTarget = min(viewport, target);
-    let scale = minDivisor(cappedTarget, bounds.size);
-    let translate = centreTranslation(viewport, bounds, scale);
+    let cappedTarget = min(viewport, targetSize);
+    let scale = minDivisor(cappedTarget, size);
+    let translate = centreTranslation(viewport, position, size, scale);
 
     return {
         scale,

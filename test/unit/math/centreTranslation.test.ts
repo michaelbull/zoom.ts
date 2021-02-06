@@ -1,5 +1,4 @@
 import {
-    Bounds,
     centreTranslation,
     Vector2
 } from '../../../src/math';
@@ -13,15 +12,14 @@ describe('centreTranslation', () => {
 
         let scale = 2;
 
-        let bounds: Bounds = {
-            position: {
-                x: 250,
-                y: 250
-            },
-            size: {
-                x: 1000,
-                y: 1000
-            }
+        let position: Vector2 = {
+            x: 250,
+            y: 250
+        };
+
+        let size: Vector2 = {
+            x: 1000,
+            y: 1000
         };
 
         let expected: Vector2 = {
@@ -29,7 +27,7 @@ describe('centreTranslation', () => {
             y: 100
         };
 
-        let actual = centreTranslation(outer, bounds, scale);
+        let actual = centreTranslation(outer, position, size, scale);
 
         expect(actual).toEqual(expected);
     });

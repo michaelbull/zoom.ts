@@ -69,4 +69,13 @@ export class Image {
     bounds(): Bounds {
         return boundsOf(this.element);
     }
+
+    size(): Vector2 {
+        let rect = this.element.getBoundingClientRect();
+
+        return {
+            x: rect.width,
+            y: rect.height
+        };
+    }
 }

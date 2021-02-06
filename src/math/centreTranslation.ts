@@ -1,4 +1,3 @@
-import { Bounds } from './Bounds';
 import { centreOffset } from './centreOffset';
 import {
     add,
@@ -8,14 +7,9 @@ import {
     Vector2
 } from './Vector2';
 
-export function centreTranslation(outer: Vector2, bounds: Bounds, innerScale: number): Vector2 {
-    let scaled = scale(bounds.size, innerScale);
-    let centredWithinScaled = add(bounds.position, halfMidpoint(scaled, bounds.size));
-
-    let centeredWithinOuter = centreOffset(outer, {
-        position: centredWithinScaled,
-        size: scaled
-    });
-
+export function centreTranslation(outer: Vector2, position: Vector2, size: Vector2, innerScale: number): Vector2 {
+    let scaled = scale(size, innerScale);
+    let centredWithinScaled = add(position, halfMidpoint(scaled, size));
+    let centeredWithinOuter = centreOffset(outer, centredWithinScaled, scaled);
     return shrink(centeredWithinOuter, innerScale);
 }

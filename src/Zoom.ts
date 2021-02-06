@@ -18,10 +18,17 @@ import { Vector2 } from './math';
 import { Features } from './style';
 
 export class Zoom {
+    static create(dom: ZoomDOM, features: Features, config: Config = DEFAULT_CONFIG) {
+        let size = dom.image.size();
+        let targetSize = dom.image.targetSize();
+        let scrollY = pageScrollY();
+        return new Zoom(dom, features, config, size, targetSize, scrollY);
+    }
+
     private readonly dom: ZoomDOM;
     private readonly features: Features;
     private readonly config: Config;
-    private readonly transition: boolean;
+    private readonly size: Vector2;
     private readonly targetSize: Vector2;
 
     private readonly collapseStartListener: CollapseStartListener;
@@ -33,16 +40,15 @@ export class Zoom {
     private expandEndListener?: ExpandEndListener;
     private collapseEndListener?: CollapseEndListener;
 
-    constructor(dom: ZoomDOM, features: Features, config: Config = DEFAULT_CONFIG) {
+    constructor(dom: ZoomDOM, features: Features, config: Config, size: Vector2, targetSize: Vector2, scrollY: number) {
         this.dom = dom;
         this.features = features;
         this.config = config;
-        this.transition = features.transform && features.transitions;
-        this.targetSize = this.dom.image.targetSize();
-
+        this.size = size;
+        this.targetSize = targetSize;
         this.collapseStartListener = new CollapseStartListener(this);
-        this.resizeListener = new ResizeListener(this.dom, this.features, this.targetSize);
-        this.scrollListener = new ScrollListener(pageScrollY(), this.config.scrollDismissPx, this.collapseStartListener);
+        this.resizeListener = new ResizeListener(dom, features, size, targetSize);
+        this.scrollListener = new ScrollListener(scrollY, config.scrollDismissPx, this.collapseStartListener);
         this.escKeyListener = new EscKeyListener(this.collapseStartListener);
     }
 
@@ -58,7 +64,7 @@ export class Zoom {
         if (!this.dom.wrapper.isTransitioning() && !this.dom.wrapper.isExpanded()) {
             this.showClone();
 
-            if (this.transition) {
+            if (this.features.transform && this.features.transitions) {
                 this.expandTransition();
             } else {
                 this.expandInstantly();
@@ -74,7 +80,7 @@ export class Zoom {
         if (this.dom.wrapper.isExpanding() || this.dom.wrapper.isExpanded()) {
             this.removeEventListeners();
 
-            if (this.transition) {
+            if (this.features.transform && this.features.transitions) {
                 this.collapseTransition();
             } else {
                 this.collapseInstantly();
@@ -142,13 +148,13 @@ export class Zoom {
         this.dom.fixWrapperHeight();
         this.dom.image.activate();
         this.dom.image.clearFixedSizes();
-        this.dom.container.setBounds(centreOf(document, this.targetSize, this.resizeListener.bounds));
+        this.dom.container.setBounds(centreOf(document, this.dom.wrapper.position(), this.size, this.targetSize));
     }
 
     private expandTransition(): void {
         this.addDismissListeners();
 
-        this.expandEndListener = new ExpandEndListener(this.dom, this.features, this.targetSize, this.resizeListener);
+        this.expandEndListener = new ExpandEndListener(this.dom, this.features, this.size, this.targetSize, this.resizeListener);
         this.dom.container.addTransitionEndListener(this.expandEndListener);
 
         this.dom.overlay.appendTo(document.body);
@@ -156,7 +162,7 @@ export class Zoom {
         this.dom.fixWrapperHeight();
         this.dom.image.activate();
         this.dom.image.clearFixedSizes();
-        this.dom.container.fillViewport(this.features, this.targetSize, this.resizeListener.bounds);
+        this.dom.container.fillViewport(this.features, this.dom.wrapper.position(), this.size, this.targetSize);
     }
 
     private collapseInstantly(): void {
@@ -178,7 +184,7 @@ export class Zoom {
             this.dom.container.resetStyle(this.features.transformProperty!);
             this.dom.wrapper.finishExpanding();
         } else {
-            this.dom.container.fill(this.targetSize, this.resizeListener.bounds);
+            this.dom.container.fill(this.targetSize, this.dom.wrapper.position(), this.size);
             this.dom.container.resetStyle(this.features.transformProperty!);
             this.dom.container.resetBounds();
             this.dom.wrapper.collapse();

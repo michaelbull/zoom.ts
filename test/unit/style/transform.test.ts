@@ -1,7 +1,4 @@
-import {
-    Bounds,
-    Vector2
-} from '../../../src/math';
+import { Vector2 } from '../../../src/math';
 import {
     transform,
     transform3d,
@@ -63,11 +60,6 @@ describe('transformToCentre', () => {
             y: 200
         };
 
-        let bounds: Bounds = {
-            position,
-            size
-        };
-
         let expected: Transformation = {
             scale: 2,
             translate: {
@@ -76,7 +68,7 @@ describe('transformToCentre', () => {
             }
         };
 
-        let actual = transformToCentre(target, bounds);
+        let actual = transformToCentre(position, size, target);
 
         expect(actual).toEqual(expected);
     });

@@ -1,5 +1,4 @@
 import {
-    Bounds,
     centreOffset,
     Vector2
 } from '../../../src/math';
@@ -11,15 +10,14 @@ describe('centreOffset', () => {
             y: 1080
         };
 
-        let bounds: Bounds = {
-            position: {
-                x: 300,
-                y: 200
-            },
-            size: {
-                x: 500,
-                y: 500
-            }
+        let position: Vector2 = {
+            x: 300,
+            y: 200
+        };
+
+        let size: Vector2 = {
+            x: 500,
+            y: 500
         };
 
         let expected: Vector2 = {
@@ -27,7 +25,7 @@ describe('centreOffset', () => {
             y: 90
         };
 
-        let actual = centreOffset(outer, bounds);
+        let actual = centreOffset(outer, position, size);
 
         expect(actual).toEqual(expected);
     });
