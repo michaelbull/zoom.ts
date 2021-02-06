@@ -10,7 +10,7 @@ export class Clone {
         return new Clone(element, config);
     }
 
-    readonly element: HTMLImageElement;
+    private readonly element: HTMLImageElement;
     private readonly config: CloneConfig;
 
     constructor(element: HTMLImageElement, config: CloneConfig) {
@@ -44,5 +44,17 @@ export class Clone {
 
     isLoading(): boolean {
         return !this.isLoaded();
+    }
+
+    addLoadListener(listener: EventListenerOrEventListenerObject): void {
+        this.element.addEventListener('load', listener);
+    }
+
+    removeLoadListener(listener: EventListenerOrEventListenerObject): void {
+        this.element.removeEventListener('load', listener);
+    }
+
+    appendTo<T extends Node>(parent: T): void {
+        parent.appendChild(this.element);
     }
 }

@@ -14,7 +14,7 @@ export class ShowCloneListener implements EventListenerObject {
 
     handleEvent(evt: Event): void {
         let clone = this.dom.clone!;
-        clone.element.removeEventListener('load', this);
+        clone.removeLoadListener(this);
 
         if (clone.isHidden() && this.dom.wrapper.isExpanded()) {
             this.dom.replaceImageWithClone();

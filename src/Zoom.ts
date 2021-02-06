@@ -99,7 +99,7 @@ export class Zoom {
                 this.dom.replaceImageWithClone();
             } else if (this.showCloneListener === undefined) {
                 this.showCloneListener = new ShowCloneListener(this.dom);
-                this.dom.clone.element.addEventListener('load', this.showCloneListener);
+                this.dom.clone.addLoadListener(this.showCloneListener);
             }
         }
     }
@@ -120,7 +120,7 @@ export class Zoom {
         document.removeEventListener('keyup', this.escKeyListener);
 
         if (this.dom.clone !== undefined && this.showCloneListener !== undefined) {
-            this.dom.clone.element.removeEventListener('load', this.showCloneListener);
+            this.dom.clone.removeLoadListener(this.showCloneListener);
         }
 
         let transitionEnd = this.features.transitionEndEvent;

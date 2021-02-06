@@ -56,9 +56,7 @@ export class ZoomDOM {
     }
 
     appendCloneToContainer(): void {
-        if (this.clone !== undefined) {
-            this.container.element.appendChild(this.clone.element);
-        }
+        this.clone?.appendTo(this.container.element);
     }
 
     replaceImageWithClone(): void {
