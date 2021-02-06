@@ -1,3 +1,4 @@
+import { WrapperConfig } from '../config';
 import { Vector2 } from '../math';
 import {
     parsePadding,
@@ -5,46 +6,43 @@ import {
 } from '../style';
 
 export class Wrapper {
-    static readonly CLASS = 'zoom';
-    static readonly EXPANDING_CLASS = 'zoom--expanding';
-    static readonly EXPANDED_CLASS = 'zoom--expanded';
-    static readonly COLLAPSING_CLASS = 'zoom--collapsing';
-
-    static create(): Wrapper {
+    static create(config: WrapperConfig): Wrapper {
         let element = document.createElement('div');
-        element.className = Wrapper.CLASS;
-        return new Wrapper(element);
+        element.className = config.classNames.base;
+        return new Wrapper(element, config);
     }
 
     readonly element: HTMLElement;
+    private readonly config: WrapperConfig;
 
-    constructor(element: HTMLElement) {
+    constructor(element: HTMLElement, config: WrapperConfig) {
         this.element = element;
+        this.config = config;
     }
 
     startExpanding(): void {
-        this.element.classList.add(Wrapper.EXPANDING_CLASS);
+        this.element.classList.add(this.config.classNames.expanding);
     }
 
     finishExpanding(): void {
-        this.element.classList.remove(Wrapper.EXPANDING_CLASS);
+        this.element.classList.remove(this.config.classNames.expanding);
     }
 
     isExpanding(): boolean {
-        return this.element.classList.contains(Wrapper.EXPANDING_CLASS);
+        return this.element.classList.contains(this.config.classNames.expanding);
     }
 
     startCollapsing() {
-        this.element.classList.add(Wrapper.COLLAPSING_CLASS);
+        this.element.classList.add(this.config.classNames.collapsing);
     }
 
     finishCollapsing(): void {
-        this.element.classList.remove(Wrapper.COLLAPSING_CLASS);
+        this.element.classList.remove(this.config.classNames.collapsing);
         resetStyle(this.element.style, 'height');
     }
 
     isCollapsing(): boolean {
-        return this.element.classList.contains(Wrapper.COLLAPSING_CLASS);
+        return this.element.classList.contains(this.config.classNames.collapsing);
     }
 
     isTransitioning(): boolean {
@@ -52,15 +50,15 @@ export class Wrapper {
     }
 
     expanded(): void {
-        this.element.classList.add(Wrapper.EXPANDED_CLASS);
+        this.element.classList.add(this.config.classNames.expanded);
     }
 
     collapse(): void {
-        this.element.classList.remove(Wrapper.EXPANDED_CLASS);
+        this.element.classList.remove(this.config.classNames.expanded);
     }
 
     isExpanded(): boolean {
-        return this.element.classList.contains(Wrapper.EXPANDED_CLASS);
+        return this.element.classList.contains(this.config.classNames.expanded);
     }
 
     position(): Vector2 {

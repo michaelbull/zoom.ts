@@ -15,10 +15,10 @@ export function listen(config: Config = DEFAULT_CONFIG): void {
         let body = document.body;
         let features = detectFeatures(body.style);
 
-        let listener = new ZoomListener(dom => {
+        let listener = new ZoomListener(config, dom => {
             let zoom = new Zoom(dom, features, config);
             zoom.expand();
-        }, config.attributeNames.src);
+        });
 
         body.addEventListener('click', listener);
     });

@@ -1,34 +1,33 @@
+import { CloneConfig } from '../config';
 import { AddClassListener } from '../event';
 
 export class Clone {
-    static readonly CLASS = 'zoom__clone';
-    static readonly VISIBLE_CLASS = 'zoom__clone--visible';
-    static readonly LOADED_CLASS = 'zoom__clone--loaded';
-
-    static create(src: string): Clone {
+    static create(config: CloneConfig, src: string): Clone {
         let element = document.createElement('img');
-        element.className = Clone.CLASS;
+        element.className = config.classNames.base;
         element.src = src;
-        element.addEventListener('load', new AddClassListener(element, 'load', Clone.LOADED_CLASS));
-        return new Clone(element);
+        element.addEventListener('load', new AddClassListener(element, 'load', config.classNames.loaded));
+        return new Clone(element, config);
     }
 
     readonly element: HTMLImageElement;
+    private readonly config: CloneConfig;
 
-    constructor(element: HTMLImageElement) {
+    constructor(element: HTMLImageElement, config: CloneConfig) {
         this.element = element;
+        this.config = config;
     }
 
     show(): void {
-        this.element.classList.add(Clone.VISIBLE_CLASS);
+        this.element.classList.add(this.config.classNames.visible);
     }
 
     hide(): void {
-        this.element.classList.remove(Clone.VISIBLE_CLASS);
+        this.element.classList.remove(this.config.classNames.visible);
     }
 
     isVisible(): boolean {
-        return this.element.classList.contains(Clone.VISIBLE_CLASS);
+        return this.element.classList.contains(this.config.classNames.visible);
     }
 
     isHidden(): boolean {
@@ -36,11 +35,11 @@ export class Clone {
     }
 
     loaded(): void {
-        this.element.classList.add(Clone.LOADED_CLASS);
+        this.element.classList.add(this.config.classNames.loaded);
     }
 
     isLoaded(): boolean {
-        return this.element.classList.contains(Clone.LOADED_CLASS);
+        return this.element.classList.contains(this.config.classNames.loaded);
     }
 
     isLoading(): boolean {

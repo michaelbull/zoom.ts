@@ -1,3 +1,4 @@
+import { ContainerConfig } from '../config';
 import {
     Bounds,
     Vector2
@@ -13,11 +14,9 @@ import {
 } from '../style';
 
 export class Container {
-    static readonly CLASS = 'zoom__container';
-
-    static create(): Container {
+    static create(config: ContainerConfig): Container {
         let element = document.createElement('div');
-        element.className = Container.CLASS;
+        element.className = config.classNames.base;
         return new Container(element);
     }
 

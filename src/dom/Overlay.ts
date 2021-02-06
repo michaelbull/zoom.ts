@@ -1,19 +1,19 @@
+import { OverlayConfig } from '../config';
 import { repaint } from './element';
 
 export class Overlay {
-    static readonly CLASS = 'zoom__overlay';
-    static readonly VISIBLE_CLASS = 'zoom__overlay--visible';
-
-    static create(): Overlay {
+    static create(config: OverlayConfig): Overlay {
         let element = document.createElement('div');
-        element.className = Overlay.CLASS;
-        return new Overlay(element);
+        element.className = config.classNames.base;
+        return new Overlay(element, config);
     }
 
-    readonly element: HTMLDivElement;
+    private readonly element: HTMLDivElement;
+    private readonly config: OverlayConfig;
 
-    constructor(element: HTMLDivElement) {
+    constructor(element: HTMLDivElement, config: OverlayConfig) {
         this.element = element;
+        this.config = config;
     }
 
     appendTo(node: Node): void {
@@ -27,10 +27,10 @@ export class Overlay {
     }
 
     private show(): void {
-        this.element.classList.add(Overlay.VISIBLE_CLASS);
+        this.element.classList.add(this.config.classNames.visible);
     }
 
     hide() {
-        this.element.classList.remove(Overlay.VISIBLE_CLASS);
+        this.element.classList.remove(this.config.classNames.visible);
     }
 }

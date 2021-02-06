@@ -1,10 +1,9 @@
-import { AttributeNames } from '../../config';
 import { Vector2 } from '../../math';
 import { targetDimension } from './targetDimension';
 
-export function targetSize(element: Element, attributeNames: AttributeNames): Vector2 {
+export function targetSize(element: Element, widthAttribute: string, heightAttribute: string): Vector2 {
     return {
-        x: targetDimension(element, attributeNames.width),
-        y: targetDimension(element, attributeNames.height)
+        x: targetDimension(element, widthAttribute),
+        y: targetDimension(element, heightAttribute)
     };
 }

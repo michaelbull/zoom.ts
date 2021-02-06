@@ -1,16 +1,16 @@
 export class AddClassListener implements EventListenerObject {
     private readonly element: Element;
     private readonly eventType: string;
-    private readonly token: string;
+    private readonly className: string;
 
-    constructor(element: Element, eventType: string, token: string) {
+    constructor(element: Element, eventType: string, className: string) {
         this.element = element;
         this.eventType = eventType;
-        this.token = token;
+        this.className = className;
     }
 
     handleEvent(evt: Event): void {
         this.element.removeEventListener(this.eventType, this);
-        this.element.classList.add(this.token);
+        this.element.classList.add(this.className);
     }
 }

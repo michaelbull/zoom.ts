@@ -1,4 +1,3 @@
-import { DEFAULT_CONFIG } from '../../../../src/config';
 import { targetSize } from '../../../../src/dom/element/targetSize';
 import { Vector2 } from '../../../../src/math';
 
@@ -25,7 +24,7 @@ describe('targetSize', () => {
             y: 200
         };
 
-        let actual = targetSize(div, DEFAULT_CONFIG.attributeNames);
+        let actual = targetSize(div, 'data-width', 'data-height');
 
         expect(actual).toEqual(expected);
     });

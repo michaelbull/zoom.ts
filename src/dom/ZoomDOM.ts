@@ -1,37 +1,38 @@
+import { Config } from '../config';
 import { pixels } from '../math';
 import { Clone } from './Clone';
 import { Container } from './Container';
-import { fullSrc } from './element';
 import { Image } from './Image';
 import { Overlay } from './Overlay';
 import { Wrapper } from './Wrapper';
 
 export class ZoomDOM {
-    static useExisting(element: HTMLImageElement, parent: HTMLElement, grandparent: HTMLElement, srcAttributeName: string): ZoomDOM {
-        let overlay = Overlay.create();
-        let wrapper = new Wrapper(grandparent);
+    static useExisting(element: HTMLImageElement, config: Config, parent: HTMLElement, grandparent: HTMLElement): ZoomDOM {
+        let overlay = Overlay.create(config.overlay);
+        let wrapper = new Wrapper(grandparent, config.wrapper);
         let container = new Container(parent);
-        let image = new Image(element);
-        let src = fullSrc(element, srcAttributeName);
+        let image = new Image(element, config.image);
 
-        if (src === element.src) {
+        if (image.fullSrc === element.src) {
             return new ZoomDOM(overlay, wrapper, container, image);
         } else {
-            return new ZoomDOM(overlay, wrapper, container, image, new Clone(container.clone()));
+            let clone = new Clone(container.clone(), config.clone);
+            return new ZoomDOM(overlay, wrapper, container, image, clone);
         }
     }
 
-    static create(element: HTMLImageElement, srcAttributeName: string): ZoomDOM {
-        let overlay = Overlay.create();
-        let wrapper = Wrapper.create();
-        let container = Container.create();
-        let image = new Image(element);
-        let src = fullSrc(element, srcAttributeName);
+    static create(element: HTMLImageElement, config: Config): ZoomDOM {
+        let overlay = Overlay.create(config.overlay);
+        let wrapper = Wrapper.create(config.wrapper);
+        let container = Container.create(config.container);
+        let image = new Image(element, config.image);
+        let fullSrc = image.fullSrc;
 
-        if (src === element.src) {
+        if (fullSrc === element.src) {
             return new ZoomDOM(overlay, wrapper, container, image);
         } else {
-            return new ZoomDOM(overlay, wrapper, container, image, Clone.create(src));
+            let clone = Clone.create(config.clone, fullSrc);
+            return new ZoomDOM(overlay, wrapper, container, image, clone);
         }
     }
 
