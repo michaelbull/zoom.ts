@@ -1,14 +1,15 @@
+import { DEFAULT_CONFIG } from '../../../../src/config';
 import { targetSize } from '../../../../src/dom/element/targetSize';
 import { Vector2 } from '../../../../src/math';
 
 let div: any = jest.fn();
 
 jest.mock('../../../../src/dom/element/targetDimension', () => ({
-    targetDimension: jest.fn((element: HTMLElement, dimension: string) => {
+    targetDimension: jest.fn((element: HTMLElement, attributeName: string) => {
         if (element === div) {
-            if (dimension === 'width') {
+            if (attributeName === 'data-width') {
                 return 500;
-            } else if (dimension === 'height') {
+            } else if (attributeName === 'data-height') {
                 return 200;
             }
         }
@@ -24,7 +25,7 @@ describe('targetSize', () => {
             y: 200
         };
 
-        let actual = targetSize(div);
+        let actual = targetSize(div, DEFAULT_CONFIG.attributeNames);
 
         expect(actual).toEqual(expected);
     });

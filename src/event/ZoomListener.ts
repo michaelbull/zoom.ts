@@ -12,9 +12,11 @@ import { fullSrc } from '../dom/element';
  */
 export class ZoomListener implements EventListenerObject {
     private readonly callback: (dom: ZoomDOM) => void;
+    private readonly srcAttributeName: string;
 
-    constructor(callback: (dom: ZoomDOM) => void) {
+    constructor(callback: (dom: ZoomDOM) => void, srcAttributeName: string) {
         this.callback = callback;
+        this.srcAttributeName = srcAttributeName;
     }
 
     handleEvent(evt: MouseEvent): void {
@@ -24,16 +26,18 @@ export class ZoomListener implements EventListenerObject {
             if (evt.metaKey || evt.ctrlKey) {
                 evt.preventDefault();
                 evt.stopPropagation();
-                window.open(fullSrc(image), '_blank');
+
+                let src = fullSrc(image, this.srcAttributeName);
+                window.open(src, '_blank');
             } else if (image.parentElement !== null && image.parentElement.parentElement !== null) {
                 let parent = image.parentElement;
                 let grandparent = image.parentElement.parentElement;
 
                 let dom: ZoomDOM;
                 if (parent.classList.contains(Container.CLASS) && grandparent.classList.contains(Wrapper.CLASS)) {
-                    dom = ZoomDOM.useExisting(image, parent, grandparent);
+                    dom = ZoomDOM.useExisting(image, parent, grandparent, this.srcAttributeName);
                 } else {
-                    dom = ZoomDOM.create(image);
+                    dom = ZoomDOM.create(image, this.srcAttributeName);
                     dom.appendContainerToWrapper();
                     dom.replaceImageWithWrapper();
                     dom.appendImageToContainer();

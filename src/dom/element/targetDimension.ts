@@ -1,5 +1,5 @@
-export function targetDimension(element: Element, dimension: string): number {
-    let attribute = element.getAttribute(`data-${dimension}`);
+export function targetDimension(element: Element, attributeName: string): number {
+    let attribute = element.getAttribute(attributeName);
 
     if (attribute === null) {
         return Infinity;

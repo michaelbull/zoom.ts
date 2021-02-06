@@ -1,7 +1,7 @@
 import {
     Config,
     DEFAULT_CONFIG
-} from './Config';
+} from './config';
 import { ready } from './dom/document';
 import { ZoomListener } from './event';
 import { detectFeatures } from './style';
@@ -15,9 +15,11 @@ export function listen(config: Config = DEFAULT_CONFIG): void {
         let body = document.body;
         let features = detectFeatures(body.style);
 
-        body.addEventListener('click', new ZoomListener(dom => {
+        let listener = new ZoomListener(dom => {
             let zoom = new Zoom(dom, features, config);
             zoom.expand();
-        }));
+        }, config.attributeNames.src);
+
+        body.addEventListener('click', listener);
     });
 }

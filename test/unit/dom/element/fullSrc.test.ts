@@ -13,7 +13,7 @@ describe('fullSrc', () => {
             }
         };
 
-        expect(fullSrc(image)).toEqual('example-full-src');
+        expect(fullSrc(image, 'data-src')).toEqual('example-full-src');
     });
 
     it('returns the value of the src attribute if the data-src is null', () => {
@@ -28,6 +28,6 @@ describe('fullSrc', () => {
             }
         };
 
-        expect(fullSrc(image)).toEqual('example-src');
+        expect(fullSrc(image, 'data-src')).toEqual('example-src');
     });
 });

@@ -7,12 +7,12 @@ import { Overlay } from './Overlay';
 import { Wrapper } from './Wrapper';
 
 export class ZoomDOM {
-    static useExisting(element: HTMLImageElement, parent: HTMLElement, grandparent: HTMLElement): ZoomDOM {
+    static useExisting(element: HTMLImageElement, parent: HTMLElement, grandparent: HTMLElement, srcAttributeName: string): ZoomDOM {
         let overlay = Overlay.create();
         let wrapper = new Wrapper(grandparent);
         let container = new Container(parent);
         let image = new Image(element);
-        let src = fullSrc(element);
+        let src = fullSrc(element, srcAttributeName);
 
         if (src === element.src) {
             return new ZoomDOM(overlay, wrapper, container, image);
@@ -21,12 +21,12 @@ export class ZoomDOM {
         }
     }
 
-    static create(element: HTMLImageElement): ZoomDOM {
+    static create(element: HTMLImageElement, srcAttributeName: string): ZoomDOM {
         let overlay = Overlay.create();
         let wrapper = Wrapper.create();
         let container = Container.create();
         let image = new Image(element);
-        let src = fullSrc(element);
+        let src = fullSrc(element, srcAttributeName);
 
         if (src === element.src) {
             return new ZoomDOM(overlay, wrapper, container, image);

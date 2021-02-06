@@ -1,5 +1,5 @@
-export function fullSrc(image: HTMLImageElement): string {
-    let fullSrc = image.getAttribute('data-src');
+export function fullSrc(image: HTMLImageElement, attributeName: string): string {
+    let fullSrc = image.getAttribute(attributeName);
 
     if (fullSrc === null) {
         return image.src;

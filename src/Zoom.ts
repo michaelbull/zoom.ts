@@ -1,7 +1,7 @@
 import {
     Config,
     DEFAULT_CONFIG
-} from './Config';
+} from './config';
 import { ZoomDOM } from './dom';
 import { centreOf } from './dom/document';
 import { ignoreTransitions } from './dom/element';
@@ -40,7 +40,7 @@ export class Zoom {
         this.features = features;
         this.config = config;
         this.transition = features.transform && features.transitions;
-        this.targetSize = targetSize(this.dom.image.element);
+        this.targetSize = targetSize(this.dom.image.element, config.attributeNames);
 
         this.collapseStartListener = new CollapseStartListener(this);
         this.resizeListener = new ResizeListener(this.dom, this.features, this.targetSize);
