@@ -23,36 +23,48 @@ export class ZoomListener implements EventListenerObject {
 
         if (image instanceof HTMLImageElement && image.classList.contains(this.config.image.classNames.base)) {
             if (evt.metaKey || evt.ctrlKey) {
-                evt.preventDefault();
-                evt.stopPropagation();
-
-                let src = fullSrc(image, this.config.image.attributeNames.src);
-                window.open(src, '_blank');
-            } else if (image.parentElement !== null && image.parentElement.parentElement !== null) {
-                let parent = image.parentElement;
-                let grandparent = image.parentElement.parentElement;
-
-                let parentIsContainer = parent.classList.contains(this.config.container.classNames.base);
-                let grandparentIsWrapper = grandparent.classList.contains(this.config.wrapper.classNames.base);
-
-                let dom: ZoomDOM;
-                if (parentIsContainer && grandparentIsWrapper) {
-                    dom = ZoomDOM.useExisting(image, this.config, this.features, parent, grandparent);
-                } else {
-                    dom = ZoomDOM.create(image, this.config, this.features);
-                    dom.appendContainerToWrapper();
-                    dom.replaceImageWithWrapper();
-                    dom.appendImageToContainer();
-                    dom.appendCloneToContainer();
-                }
-
-                let collapsed = !dom.wrapper.isTransitioning() && !dom.wrapper.isExpanded();
-                if (collapsed) {
-                    evt.preventDefault();
-                    evt.stopPropagation();
-                    this.callback(dom);
-                }
+                this.openInNewTab(evt, image);
+            } else {
+                this.zoom(evt, image);
             }
+        }
+    }
+
+    private openInNewTab(evt: MouseEvent, image: HTMLImageElement) {
+        evt.preventDefault();
+        evt.stopPropagation();
+
+        let src = fullSrc(image, this.config.image.attributeNames.src);
+        window.open(src, '_blank');
+    }
+
+    private zoom(evt: MouseEvent, image: HTMLImageElement) {
+        if (image.parentElement === null || image.parentElement.parentElement === null) {
+            return;
+        }
+
+        let parent = image.parentElement;
+        let grandparent = image.parentElement.parentElement;
+
+        let parentIsContainer = parent.classList.contains(this.config.container.classNames.base);
+        let grandparentIsWrapper = grandparent.classList.contains(this.config.wrapper.classNames.base);
+
+        let dom: ZoomDOM;
+        if (parentIsContainer && grandparentIsWrapper) {
+            dom = ZoomDOM.useExisting(image, this.config, this.features, parent, grandparent);
+        } else {
+            dom = ZoomDOM.create(image, this.config, this.features);
+            dom.appendContainerToWrapper();
+            dom.replaceImageWithWrapper();
+            dom.appendImageToContainer();
+            dom.appendCloneToContainer();
+        }
+
+        let collapsed = !dom.wrapper.isTransitioning() && !dom.wrapper.isExpanded();
+        if (collapsed) {
+            evt.preventDefault();
+            evt.stopPropagation();
+            this.callback(dom);
         }
     }
 }
