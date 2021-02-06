@@ -47,7 +47,7 @@ export class Zoom {
         this.size = size;
         this.targetSize = targetSize;
         this.collapseStartListener = new CollapseStartListener(this);
-        this.resizeListener = new ResizeListener(dom, features, size, targetSize);
+        this.resizeListener = new ResizeListener(dom, size, targetSize);
         this.scrollListener = new ScrollListener(scrollY, config.scrollDismissPx, this.collapseStartListener);
         this.escKeyListener = new EscKeyListener(this.collapseStartListener);
     }
@@ -154,7 +154,7 @@ export class Zoom {
     private expandTransition(): void {
         this.addDismissListeners();
 
-        this.expandEndListener = new ExpandEndListener(this.dom, this.features, this.size, this.targetSize, this.resizeListener);
+        this.expandEndListener = new ExpandEndListener(this.dom, this.size, this.targetSize);
         this.dom.container.addTransitionEndListener(this.expandEndListener);
 
         this.dom.overlay.appendTo(document.body);
@@ -162,7 +162,7 @@ export class Zoom {
         this.dom.fixWrapperHeight();
         this.dom.image.activate();
         this.dom.image.clearFixedSizes();
-        this.dom.container.fillViewport(this.features, this.dom.wrapper.position(), this.size, this.targetSize);
+        this.dom.container.fillViewport(this.dom.wrapper.position(), this.size, this.targetSize);
     }
 
     private collapseInstantly(): void {

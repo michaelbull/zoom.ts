@@ -60,12 +60,16 @@ export class Container {
         resetStyle(this.element.style, property);
     }
 
-    fillViewport(features: Features, position: Vector2, size: Vector2, targetSize: Vector2): void {
-        let transformation = transformToCentre(position, size, targetSize);
-        let transformProperty = features.transformProperty!;
+    fillViewport(position: Vector2, size: Vector2, targetSize: Vector2): void {
+        let transformProperty = this.features.transformProperty;
+        if (transformProperty === undefined) {
+            return;
+        }
 
         let style: any = this.element.style;
-        if (features.transform3d) {
+        let transformation = transformToCentre(position, size, targetSize);
+
+        if (this.features.transform3d) {
             style[transformProperty] = transform3d(transformation);
         } else {
             style[transformProperty] = transform(transformation);
@@ -105,7 +109,7 @@ export class Container {
         }
 
         ignoreTransitions(this.element, transitionProperty, () => {
-            this.fillViewport(this.features, position, size, target);
+            this.fillViewport(position, size, target);
         });
     }
 
