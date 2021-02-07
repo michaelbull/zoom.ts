@@ -1,17 +1,15 @@
-import { vendorProperty } from './vendorProperty';
+import { hasVendorProperty } from './vendorProperty';
 
 export function hasTransform3d(style: CSSStyleDeclaration): boolean {
-    let perspectiveProperty = vendorProperty(style, 'perspective');
-
-    if (perspectiveProperty !== undefined) {
+    if (hasVendorProperty(style, 'perspective')) {
         if ('WebkitPerspective' in style) {
             return testWebkitTransform3d();
         } else {
             return true;
         }
+    } else {
+        return false;
     }
-
-    return false;
 }
 
 const TEST3D_ID = 'test3d';

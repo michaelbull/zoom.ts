@@ -5,16 +5,20 @@ export const VENDOR_PREFIXES = [
     'O'
 ];
 
-export function vendorProperties(property: string): string[] {
-    let suffix = `${property.charAt(0).toUpperCase()}${property.substr(1)}`;
-    let vendorProperties = VENDOR_PREFIXES.map(prefix => `${prefix}${suffix}`);
-    return [property].concat(vendorProperties);
+export function vendorProperties(propertyName: string): string[] {
+    let suffix = `${propertyName.charAt(0).toUpperCase()}${propertyName.substr(1)}`;
+    let propertyNames = VENDOR_PREFIXES.map(prefix => `${prefix}${suffix}`);
+    return [propertyName].concat(propertyNames);
 }
 
-export function vendorProperty(style: CSSStyleDeclaration, property: string): string | undefined {
-    for (let vendorProperty of vendorProperties(property)) {
+export function vendorProperty(style: CSSStyleDeclaration, propertyName: string): string | undefined {
+    for (let vendorProperty of vendorProperties(propertyName)) {
         if (vendorProperty in style) {
             return vendorProperty;
         }
     }
+}
+
+export function hasVendorProperty(style: CSSStyleDeclaration, propertyName: string): boolean {
+    return vendorProperty(style, propertyName) !== undefined;
 }
