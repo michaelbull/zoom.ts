@@ -3,7 +3,7 @@ import { hasVendorProperty } from './vendorProperty';
 export function hasTransform3d(style: CSSStyleDeclaration): boolean {
     if (hasVendorProperty(style, 'perspective')) {
         if ('WebkitPerspective' in style) {
-            return testWebkitTransform3d();
+            return hasWebkitTransform3d();
         } else {
             return true;
         }
@@ -21,7 +21,7 @@ const TEST3D_STYLE = `` +
     `#${TEST3D_ID}{width:4px};height:8px}}` +
     `}`;
 
-function testWebkitTransform3d(): boolean {
+function hasWebkitTransform3d(): boolean {
     let element = document.createElement('div');
     element.id = TEST3D_ID;
 
